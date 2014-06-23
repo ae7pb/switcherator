@@ -62,6 +62,8 @@
 #define TWEAK_TIMER_BYTES       4
 #define PWM_DIR_BYTES           3
 #define BRIGHTNESS_BYTES        (NUM_SWITCHES + 2)
+#define SWITCH_PWM_BYTES        3
+#define COLOR_CHANGABLE_BYTES   3
 
 // Timer Variables
 // if F_CPU = 16Mhz then 1 second is 125 cycles counting to 125
@@ -93,14 +95,18 @@
 #define TWEAK_TIMER     (WEEKLY_PROGRAM + (WEEKLY_PROGRAM_BYTES * MAX_PROGRAM) )
 #define PWM_DIR         (TWEAK_TIMER + TWEAK_TIMER_BYTES)
 #define BRIGHTNESS      (PWM_DIR + PWM_DIR_BYTES)
+#define SWITCH_PWM      (BRIGHTNESS + BRIGHTNESS_BYTES)
+#define COLOR_CHANGABLE (SWITCH_PWM + (SWITCH_PWM_BYTES * NUM_SWITCHES))
+
+
 // check to make sure we aren't using too much ram
-#if ((WEEKLY_PROGRAM + WEEKLY_PROGRAM_BYTES + BASE_PROG_RAM) > RAMEND)
+#if ((COLOR_CHANGABLE + COLOR_CHANGABLE_BYTES + BASE_PROG_RAM) > RAMEND)
 #error Too many switches, programs, inputs & limits.  Out of RAM!
 #endif
 
 
 
-#if ((WEEKLY_PROGRAM + WEEKLY_PROGRAM_BYTES) > E2END)
+#if ((COLOR_CHANGABLE + COLOR_CHANGABLE_BYTES) > E2END)
 #error Too many switches, programs, inputs & limits.  Out of EEPROM!
 #endif
 

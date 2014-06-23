@@ -47,7 +47,11 @@ static unsigned long switchStatus[NUM_SWITCHES];
 // 202 = Color changing PWM
 // future - 202 - PWM with other ports. Can't on 328p since radio overlaps pwm pins
 static char switchStuff[NUM_SWITCHES];
-
+// Switch PWM
+// K I wish I did the switch stuff different.  Oh well.  Easier to add another array
+// Switch PWM - which color change that the switch will turn on. So different switches
+// mean different colors.
+static char switchPWM[NUM_SWITCHES];
 
 // strings
 static char receiveBuffer[30];
@@ -63,6 +67,7 @@ static char runColorChanges = 0;
 // PD3, PD5, PD6 or red,green,blue
 static char pwmValues[] = {0, 0, 0};
 static char colorChanges[NUM_COLOR_CHANGES][3];
+static char colorIsChangable[NUM_COLOR_CHANGES];
 static char pwmIsSet = 0; // if we have pwm set up
 static int pwmSwitchNumber = 0;
 
@@ -141,6 +146,7 @@ int main(void) {
         colorChanges[x][0] = 0;
         colorChanges[x][1] = 1;
         colorChanges[x][2] = 0;
+        colorIsChangable[x] = 1;
     }
 
     // just initializing memory
@@ -829,6 +835,7 @@ void switchBrightness(char * commandReceived) {
 
 void pwmSetup(char * commandReceived) {
     int x = 0;
+    // these port/pins are the PWM spots.
     for (x = 0; x < NUM_SWITCHES; x++) {
         if (switchStuff[x] == 70 || switchStuff[x] == 71 || switchStuff[x] == 74 ||
                 switchStuff[x] == 75 || switchStuff[x] == 76 || switchStuff[x] == 77) {
@@ -933,8 +940,8 @@ void pwmValueSet(char * commandReceived) {
 }
 
 // add a color to the color change
-// CC:##,vvv,vvv,vvv
-// 01234567890123456
+// CC:##,vvv,vvv,vvv,p - p = pwm only
+// 0123456789012345678
 
 void colorChangeSet(char * commandReceived) {
     int programNumber = getSwitchNumber(commandReceived);
@@ -945,6 +952,11 @@ void colorChangeSet(char * commandReceived) {
     colorChanges[programNumber][0] = getInt(commandReceived,6,3);
     colorChanges[programNumber][1] = getInt(commandReceived,10,3);
     colorChanges[programNumber][2] = getInt(commandReceived,14,3);
+    if(commandReceived[18] == '1') {
+		colorIsChangable[programNumber] = 0;
+	} else {
+		colorIsChangable[programNumber] = 1;
+	}
     ok();
 }
 
@@ -982,6 +994,11 @@ void pwmSummary(void) {
                 strcat(statusMsg, tempLongString);
             }
         }
+        if(colorIsChangable[x] == 1) {
+			strcat(statusMsg,"Y");
+		} else {
+			strcat(statusMsg,"N");
+		}
         if (strlen(statusMsg) > 20) {
             sendMessage(statusMsg);
             statusMsg[6] = 0;
@@ -1021,18 +1038,24 @@ void runColorFunction(void) {
     colorChangeCount++;
     if (colorChangeCount < colorChangeSpeed)
         return;
-    colorChangeCount = 0;
-    currentColor++;
-    if (currentColor == NUM_COLOR_CHANGES)
-        currentColor = 0;
-    if (colorChanges[currentColor][0] == 0 &&
-            colorChanges[currentColor][1] == 1 &&
-            colorChanges[currentColor][2] == 0) {
-        // this one is blank.
-        if (currentColor == 0)
-            return;
-        currentColor = 0;
-    }
+    int colorTimeouter = 0;
+    while(1) {
+	    colorChangeCount = 0;
+	    currentColor++;
+	    colorTimeouter++;
+	    if (currentColor == NUM_COLOR_CHANGES)
+	        currentColor = 0;
+	    if (colorChanges[currentColor][0] == 0 &&
+	            colorChanges[currentColor][1] == 1 &&
+	            colorChanges[currentColor][2] == 0) {
+	        // this one is blank.
+	        if (currentColor == 0)
+	            return;
+	    } else if (colorIsChangable[currentColor] == 1)
+			break;
+		if(colorTimeouter >= NUM_COLOR_CHANGES)
+			return;
+	}
     red = colorChanges[currentColor][0];
     green = colorChanges[currentColor][1];
     blue = colorChanges[currentColor][2];
@@ -1873,6 +1896,24 @@ void generalInit(void) {
             }
         }
     }
+    
+    // what pwm the switch belongs to
+    for (x = 0; x < NUM_SWITCHES; x++) {
+        memoryMarker = (SWITCH_PWM + (x * SWITCH_PWM_BYTES));
+        if (readEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES) == 1) {
+			switchPWM[x]  = tempStuff[0];
+        }
+    }
+
+    // if the color change is the a color change or just a color
+    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
+        memoryMarker = (COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES));
+        if (readEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES) == 1) {
+			colorIsChangable[x]  = tempStuff[0];
+        }
+    }
+
+    
 }
 
 int readEEPROM(char * data, int memLocation, int memBytes) {
@@ -2031,6 +2072,23 @@ void saveToEEPROM(void) {
             writeEEPROM(tempStuff, memoryMarker, COLOR_CHANGE_BYTES);
         }
     }
+
+
+    // what pwm the switch belongs to
+    for (x = 0; x < NUM_SWITCHES; x++) {
+        memoryMarker = (SWITCH_PWM + (x * SWITCH_PWM_BYTES));
+        tempStuff[0] = switchPWM[x];
+        writeEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES);
+    }
+
+    // if the color change is the a color change or just a color
+    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
+        memoryMarker = (COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES));
+		tempStuff[0] = colorIsChangable[x];
+        writeEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES);
+        
+    }
+
     ok();
 }
 
@@ -2151,6 +2209,35 @@ void memoryDump(void) {
             }
         }
     }
+    linecount++;
+    resetStatus(linecount,"Cc");
+    for (x = 0; x< NUM_COLOR_CHANGES; x++) {
+		if (colorIsChangable[x] == 1)
+			strcat(statusMsg,"Y");
+		else
+			strcat(statusMsg,"N");
+		if(strlen(statusMsg) >= 30) {
+			sendMessage(statusMsg);
+			linecount++;
+			statusMsg[2] = 0;
+			interjectLineNumber(linecount);
+		}
+    }
+    
+    linecount++;
+    resetStatus(linecount,"Ps");
+    for(x = 0; x < NUM_SWITCHES; x++) {
+		returnHexWithout(switchPWM[x],tempLongString);
+		strcat(statusMsg, tempLongString);
+		if (strlen(statusMsg) >= 30) {
+			sendMessage(statusMsg);
+			linecount++;
+			statusMsg[2] = 0;
+			interjectLineNumber(linecount);
+		}
+	}
+		
+    
     linecount++;
     resetStatus(linecount,"END");
     returnHexWithout(globalYear,tempLongString);
