@@ -56,7 +56,6 @@
 #define SWITCH_STUFF_BYTES      (NUM_SWITCHES + 2)
 #define INPUT_BYTES             ( 8 + 2 )
 #define LIMIT_BYTES             ( 3 + 2)
-#define PWM_VALUE_BYTES         ( 3 + 2)
 #define COLOR_CHANGE_BYTES      ( 3 + 2)
 #define WEEKLY_PROGRAM_BYTES    (10 + 2)
 #define TWEAK_TIMER_BYTES       4
@@ -89,8 +88,7 @@
 #define SWITCH_STUFF    48    // 2 byte marker, NUM_SWITCHES byte values
 #define INPUT           (SWITCH_STUFF + SWITCH_STUFF_BYTES)
 #define LIMIT           (INPUT + (INPUT_BYTES * NUM_INPUTS) )
-#define PWM_VALUE       (LIMIT + (LIMIT_BYTES * NUM_LIMITS) )
-#define COLOR_CHANGE    (PWM_VALUE + PWM_VALUE_BYTES)
+#define COLOR_CHANGE    (LIMIT + (LIMIT_BYTES * NUM_LIMITS) )
 #define WEEKLY_PROGRAM  (COLOR_CHANGE + (COLOR_CHANGE_BYTES * NUM_COLOR_CHANGES) )    // The program
 #define TWEAK_TIMER     (WEEKLY_PROGRAM + (WEEKLY_PROGRAM_BYTES * MAX_PROGRAM) )
 #define PWM_DIR         (TWEAK_TIMER + TWEAK_TIMER_BYTES)

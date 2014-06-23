@@ -127,12 +127,11 @@ PA:P#S# - Add switch to program
 PD:P#SMTWTFS - Select days program will run - 1010000 = Sun & Tue
 PT:P#HHMMDur. - program time - changes program time
 PI:P# - program info
-PS:P#S#DH - PWM setup - p# is pwm num, sw #, D (1 = high) then H=Hue, C=color change, 0=static color
+PS:P#S#DH - PWM setup - p# is color change num, sw #, D (1 = high) then H=Hue, C=color change, 0=static color
 CH:P#vvvv - Color Change speed - default 10=1 second in 1/10ths
 HS:xx - Hue Speed - smooth number.  16 default
-PV:P#,vvv,vvv,vvv - set values for status pwm
 PW = PWM summary - 
-CC:##,vvv,vvv,vvv  - color change values - ## is the color change number
+CC:##,vvv,vvv,vvv,p  - color change values - ## is the color change number - p=1 = pwm only
 BS:16 - changes brightness of a pwm switch
 SB S#16 - sets a second brightness for pwm that can be set off by an input
 SS:S#Durat. - start switch

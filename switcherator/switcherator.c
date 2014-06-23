@@ -65,7 +65,6 @@ static char statusMsg[32];
 static char runHue = 0;
 static char runColorChanges = 0;
 // PD3, PD5, PD6 or red,green,blue
-static char pwmValues[] = {0, 0, 0};
 static char colorChanges[NUM_COLOR_CHANGES][3];
 static char colorIsChangable[NUM_COLOR_CHANGES];
 static char pwmIsSet = 0; // if we have pwm set up
@@ -280,9 +279,6 @@ void checkCommand(char * commandReceived) {
             break;
         case 0x4864: //HS
             setHueSpeed(commandReceived);
-            break;
-        case 0x5056: //PV
-            pwmValueSet(commandReceived);
             break;
         case 0x4E50: //NP
             newProgram(commandReceived);
@@ -621,14 +617,12 @@ void switchDisplay(char * commandReceived) {
     // see if this is a pwm switch
     if (switchStuff[switchNumber] >= 200 && switchStuff[switchNumber] <= 220) {
         // yes pwm
-        if (switchStuff[switchNumber] % 2 == 0) {
-            if (switchStuff[switchNumber] == 202) {
-                strcat(statusMsg, "CoC");
-            } else if (switchStuff[switchNumber] == 212) {
-                strcat(statusMsg, "Brt");
-            } else {
-                strcat(statusMsg, "Fix");
-            }
+		if (switchStuff[switchNumber] == 202) {
+			strcat(statusMsg, "CoC");
+		} else if (switchStuff[switchNumber] == 212) {
+			strcat(statusMsg, "Brt");
+		} else if (switchStuff[switchNumber] == 200){
+			strcat(statusMsg, "Fix");
         } else {
             strcat(statusMsg, "Hue");
         }
@@ -678,10 +672,11 @@ void startSwitch(char * commandReceived) {
             && immediateChange == 0) {
         // k it is PWM.  See if it is hue
         if (switchStuff[switchNumber] == 200) {
+			int temp = switchPWM[switchNumber];
             // even number so values, not hue
-            red = pwmValues[0];
-            green = pwmValues[1];
-            blue = pwmValues[2];
+            red = colorChanges[temp][0];
+            green = colorChanges[temp][1];
+            blue = colorChanges[temp][2];
             red = red * bright / 16;
             green = green * bright / 16;
             blue = blue * bright / 16;
@@ -835,6 +830,7 @@ void switchBrightness(char * commandReceived) {
 
 void pwmSetup(char * commandReceived) {
     int x = 0;
+    int whichColorChange;
     // these port/pins are the PWM spots.
     for (x = 0; x < NUM_SWITCHES; x++) {
         if (switchStuff[x] == 70 || switchStuff[x] == 71 || switchStuff[x] == 74 ||
@@ -843,11 +839,10 @@ void pwmSetup(char * commandReceived) {
             return;
         }
     }
-    int switchNumber = 0;
+    whichColorChange = getInt(commandReceived,3,2);
+    int switchNumber;
     // get switch number
-    tempIntString[0] = commandReceived[5];
-    tempIntString[1] = commandReceived[6];
-    switchNumber = atoi(tempIntString);
+    switchNumber = getInt(commandReceived,5,2);
     clearTheSwitch(switchNumber);
     // set up a hue pwm
     if (commandReceived[8] == 'H' || commandReceived[8] == 'h' || commandReceived[8] == '1') {
@@ -856,6 +851,7 @@ void pwmSetup(char * commandReceived) {
         switchStuff[switchNumber] = 202;
     } else {
         switchStuff[switchNumber] = 200;
+        switchPWM[switchNumber] = whichColorChange;
     }
     DDRD |= (1 << PIND3) | (1 << PIND5) | (1 << PIND6);
     // make sure initial values are 0
@@ -930,14 +926,6 @@ void setHueSpeed(char * commandReceived) {
 
 // set up the values for a solid pwm
 // PV:P#,vvv,vvv,vvv
-// 01234567890123456
-
-void pwmValueSet(char * commandReceived) {
-    pwmValues[0] = getInt(commandReceived,6,3);
-    pwmValues[1] = getInt(commandReceived,10,3);
-    pwmValues[2] = getInt(commandReceived,14,3);
-    ok();
-}
 
 // add a color to the color change
 // CC:##,vvv,vvv,vvv,p - p = pwm only
@@ -964,15 +952,8 @@ void colorChangeSet(char * commandReceived) {
 
 void pwmSummary(void) {
     statusMsg[0] = 0;
-    strcat(statusMsg, "Val 0x");
-    int x = 0;
-    for (x = 0; x < 3; x++) {
-        if (x > 0)
-            strcat(statusMsg, ",");
-        returnHexWithout(pwmValues[x], tempLongString);
-        strcat(statusMsg, tempLongString);
-    }
-    strcat(statusMsg, " dir ");
+    int x;
+    strcat(statusMsg, "Dir ");
     returnInt(pwmdir, tempLongString);
     strcat(statusMsg, tempLongString);
     sendMessage(statusMsg);
@@ -1011,13 +992,15 @@ void pwmSummary(void) {
         if ((switchStuff[x] >= 200) && (switchStuff[x] <= 220)) {
             strcat(statusMsg, "PWM ");
             if (switchStuff[x] == 200) {
-                strcat(statusMsg, "static");
+                strcat(statusMsg, "static ");
+                returnInt(switchPWM[x], tempLongString);
+                strcat(statusMsg, tempLongString);
             } else if (switchStuff[x] == 202) {
                 strcat(statusMsg, "ColCh");
             } else {
                 strcat(statusMsg, "hue");
             }
-            strcat(statusMsg, "on sw# ");
+            strcat(statusMsg, " on sw# ");
             returnInt(x, tempLongString);
             strcat(statusMsg, tempLongString);
             sendMessage(statusMsg);
@@ -1028,7 +1011,7 @@ void pwmSummary(void) {
 // HardwarePWM
 //static char runHue = 0;
 // PD3, PD5, PD6 or red,green,blue
-//static char pwmValues[] = {0 , 0 , 0};
+
 
 // Run color function
 // goes through the colors and switches them.
@@ -1880,17 +1863,10 @@ void generalInit(void) {
         TCCR2B = (1 << CS22); // F_CPU/64
     }
 
-    // get the pwm value bytes
-    memoryMarker = (PWM_VALUE);
-    if (readEEPROM(tempStuff, memoryMarker, PWM_VALUE_BYTES) == 1) {
-        pwmValues[0] = tempStuff[0];
-        pwmValues[1] = tempStuff[1];
-        pwmValues[2] = tempStuff[2];
-    }
     // get the color change
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         memoryMarker = (COLOR_CHANGE + (x * COLOR_CHANGE_BYTES));
-        if (readEEPROM(tempStuff, memoryMarker, PWM_VALUE_BYTES) == 1) {
+        if (readEEPROM(tempStuff, memoryMarker, COLOR_CHANGE_BYTES) == 1) {
             for (y = 0; y < 3; y++) {
                 colorChanges[x][y] = tempStuff[y];
             }
@@ -2053,14 +2029,6 @@ void saveToEEPROM(void) {
     }
 
 
-    // save the pwm value bytes
-    memoryMarker = (PWM_VALUE);
-    if (pwmValues[0] != 0 || pwmValues[1] != 0 || pwmValues[2] != 0) {
-        for (y = 0; y < 3; y++) {
-            tempStuff[y] = pwmValues[y];
-        }
-        writeEEPROM(tempStuff, memoryMarker, PWM_VALUE_BYTES);
-    }
 
     // save the color change
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
@@ -2192,10 +2160,6 @@ void memoryDump(void) {
 
     linecount++;
     resetStatus(linecount,"C");
-    for (x = 0; x < 3; x++) {
-        returnHexWithout(pwmValues[x], tempLongString);
-        strcat(statusMsg, tempLongString);
-    }
     // save the color change
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         for (y = 0; y < 3; y++) {
@@ -2284,13 +2248,17 @@ void clearToEEPROM(void) {
         clearEEPROM((INPUT + (x * INPUT_BYTES)));
     for (x = 0; x < NUM_LIMITS; x++)
         clearEEPROM((LIMIT + (x * LIMIT_BYTES)));
-    clearEEPROM(PWM_VALUE);
-    for (x = 0; x < NUM_COLOR_CHANGES; x++)
+    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         clearEEPROM((COLOR_CHANGE + (x * COLOR_CHANGE_BYTES)));
+        clearEEPROM((COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES)));
+	}
     for (x = 0; x < MAX_PROGRAM; x++)
         clearEEPROM((WEEKLY_PROGRAM + (x * WEEKLY_PROGRAM_BYTES)));
+    for (x = 0; x < NUM_SWITCHES; x++)
+		clearEEPROM((SWITCH_PWM + (x * SWITCH_PWM_BYTES)));
     clearEEPROM(TWEAK_TIMER);
     ok();
+
 }
 
 /****************************************************************
@@ -2612,10 +2580,11 @@ void switchOnOff(void) {
                     // turn it on
                     // decide if it is a changing hue or static values
                     if (switchStuff[x] == 200) {
+						int temp = switchPWM[x];
                         // even numbers are static colors;
-                        red = pwmValues[0];
-                        green = pwmValues[1];
-                        blue = pwmValues[2];
+                        red = colorChanges[temp][0];
+                        green = colorChanges[temp][1];
+                        blue = colorChanges[temp][2];
                         red = red * bright / 16;
                         green = green * bright / 16;
                         blue = blue * bright / 16;
@@ -3567,11 +3536,11 @@ void getInput(int inputNumber) {
                     pwmValue = temp;
                     // see if we are changing RGB
                     if (whichRGB & 4)
-                        pwmValues[0] = pwmValue;
+                        Red = pwmValue;
                     if (whichRGB & 2)
-                        pwmValues[1] = pwmValue;
+                        Green = pwmValue;
                     if (whichRGB & 1)
-                        pwmValues[2] = pwmValue;
+                        Blue = pwmValue;
                     if (whichRGB & 7) // if anything changed
                         switchChanged = 1;
                 }
