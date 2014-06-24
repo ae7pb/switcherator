@@ -7,7 +7,7 @@
 *.lss
 *.eep
 *.sym
-/nbproject/private/
+/nbproject/
 *.d
 *.lst
 
