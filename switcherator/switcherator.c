@@ -2632,12 +2632,12 @@ void switchOnOff(void) {
                         red = colorChanges[temp][0];
                         green = colorChanges[temp][1];
                         blue = colorChanges[temp][2];
-                        if (bright < 16) {
-                            red = red * bright / 16;
-                            green = green * bright / 16;
-                            blue = blue * bright / 16;
-                            sendMessage("uh");
-                        }
+                        red = red * bright;
+                        red = red / 16;
+                        green = green * bright;
+                        green = green / 16;
+                        blue = blue * bright;
+                        blue = blue / 16;
                         Red = red;
                         Green = green;
                         Blue = blue;
