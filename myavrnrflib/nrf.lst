@@ -1701,28 +1701,28 @@
  1739               		.file 4 "../myavrnrflib/spi.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 nrf.c
-     /tmp/cc5ptyMk.s:2      *ABS*:0000003e __SP_H__
-     /tmp/cc5ptyMk.s:3      *ABS*:0000003d __SP_L__
-     /tmp/cc5ptyMk.s:4      *ABS*:0000003f __SREG__
-     /tmp/cc5ptyMk.s:5      *ABS*:00000000 __tmp_reg__
-     /tmp/cc5ptyMk.s:6      *ABS*:00000001 __zero_reg__
-     /tmp/cc5ptyMk.s:11     .text:00000000 powerUp
-     /tmp/cc5ptyMk.s:26     .text:00000004 powerDown
-     /tmp/cc5ptyMk.s:40     .text:00000008 readReg
-     /tmp/cc5ptyMk.s:90     .text:0000003c writeReg
-     /tmp/cc5ptyMk.s:141    .text:0000006e stopRx
-     /tmp/cc5ptyMk.s:167    .text:00000082 startRx
-     /tmp/cc5ptyMk.s:193    .text:00000096 stopRadio
-     /tmp/cc5ptyMk.s:216    .text:000000a6 startRadio
-     /tmp/cc5ptyMk.s:239    .text:000000b6 readAddr
-     /tmp/cc5ptyMk.s:371    .text:0000015a writeAddr
-     /tmp/cc5ptyMk.s:522    .text:0000022e getLength
-     /tmp/cc5ptyMk.s:588    .text:0000027c checkRx
-     /tmp/cc5ptyMk.s:613    .text:0000028e dynReceive
-     /tmp/cc5ptyMk.s:829    .text:0000038c receive
-     /tmp/cc5ptyMk.s:952    .text:0000041c transmit
-     /tmp/cc5ptyMk.s:1169   .text:0000052a flushme
-     /tmp/cc5ptyMk.s:1220   .text:00000566 nrfInit
+     /tmp/cc98Zl7V.s:2      *ABS*:0000003e __SP_H__
+     /tmp/cc98Zl7V.s:3      *ABS*:0000003d __SP_L__
+     /tmp/cc98Zl7V.s:4      *ABS*:0000003f __SREG__
+     /tmp/cc98Zl7V.s:5      *ABS*:00000000 __tmp_reg__
+     /tmp/cc98Zl7V.s:6      *ABS*:00000001 __zero_reg__
+     /tmp/cc98Zl7V.s:11     .text:00000000 powerUp
+     /tmp/cc98Zl7V.s:26     .text:00000004 powerDown
+     /tmp/cc98Zl7V.s:40     .text:00000008 readReg
+     /tmp/cc98Zl7V.s:90     .text:0000003c writeReg
+     /tmp/cc98Zl7V.s:141    .text:0000006e stopRx
+     /tmp/cc98Zl7V.s:167    .text:00000082 startRx
+     /tmp/cc98Zl7V.s:193    .text:00000096 stopRadio
+     /tmp/cc98Zl7V.s:216    .text:000000a6 startRadio
+     /tmp/cc98Zl7V.s:239    .text:000000b6 readAddr
+     /tmp/cc98Zl7V.s:371    .text:0000015a writeAddr
+     /tmp/cc98Zl7V.s:522    .text:0000022e getLength
+     /tmp/cc98Zl7V.s:588    .text:0000027c checkRx
+     /tmp/cc98Zl7V.s:613    .text:0000028e dynReceive
+     /tmp/cc98Zl7V.s:829    .text:0000038c receive
+     /tmp/cc98Zl7V.s:952    .text:0000041c transmit
+     /tmp/cc98Zl7V.s:1169   .text:0000052a flushme
+     /tmp/cc98Zl7V.s:1220   .text:00000566 nrfInit
 
 UNDEFINED SYMBOLS
 spi_transaction

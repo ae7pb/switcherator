@@ -167,8 +167,14 @@ void switchOnOff(void);
 void setTimeLimits(char * commandReceived);
 void clockTweak(char * commandReceived);
 // debug and output
-void printVariables(char * commandReceived);
 void generalStatus(char * commandReceived);
+void generalInformation(void);
+void programsProgrammed(void);
+void switchesProgrammed(void);
+void inputsProgrammed(void);
+void switchesOn(void);
+
+
 void returnInt(int number, char * thisString);
 void returnHex(unsigned int number, char * thisString);
 void returnHexWithout(unsigned int number, char * tempMe);

@@ -373,6 +373,21 @@ void checkCommand(char * commandReceived) {
         case 0x4253: //bs
             brightnessSet(commandReceived);
             break;
+        case 0x4749: //GI
+            generalInformation();
+            break;
+        case 0x5050: //PP
+            programsProgrammed();
+            break;
+        case 0x5357: //SW
+            switchesProgrammed();
+            break;
+        case 0x4950: //IP
+            inputsProgrammed();
+            break;
+        case 0x534F: //SO
+            switchesOn();
+            break;
         default:
             break;
     }
@@ -2642,28 +2657,12 @@ void clockTweak(char * commandReceived) {
 
 
 // sends a general status
-// designed for radio but useful otherwise
+// basically an overview of the system
 
 void generalStatus(char * commandReceived) {
     statusMsg[0] = 0;
-    int x = 0;
     tempIntString[0] = commandReceived[2];
     tempIntString[1] = commandReceived[3];
-    int switchNumber = 0;
-    switchNumber = atoi(tempIntString);
-    if (switchNumber > 0 || commandReceived[2] == '0') {
-        strcat(statusMsg, "weekly0x");
-        ltoa(weeklySeconds, tempLongString, 16);
-        strcat(statusMsg, tempLongString);
-        strcat(statusMsg, " Sw0x");
-        ltoa(switchStatus[switchNumber], tempLongString, 16);
-        strcat(statusMsg, tempLongString);
-        strcat(statusMsg, " SS ");
-        itoa(switchStuff[switchNumber], tempLongString, 10);
-        strcat(statusMsg, tempLongString);
-        sendMessage(statusMsg);
-        statusMsg[0] = 0;
-    }
 
     strcat(statusMsg, "S#");
     int serialLength = 0;
@@ -2701,73 +2700,151 @@ void generalStatus(char * commandReceived) {
     statusMsg[0] = 0;
     if (commandReceived[2] == 'q')
         return;
+
+    programsProgrammed();
+    switchesProgrammed();
+    inputsProgrammed();
+    switchesOn();
+}
+
+// returns a basic view of the capabilities
+void generalInformation(void) {
+    statusMsg[0] = 0;
+    strcat(statusMsg,"Pr,");
+    int count = 0;
+    int x;
+    for(x=0;x<MAX_PROGRAM;x++) {
+        if(weeklyProgram[x][0] == 255 && weeklyProgram[x][1] == 255) 
+            count++;
+    }
+    returnInt(count,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,"/");
+    returnInt(MAX_PROGRAM,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,",Sw,");
+    count = 0;
+    for (x = 0; x < NUM_SWITCHES; x++) {
+        if (switchStuff[x] < 255)
+            count ++;
+    }
+    returnInt(count,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,"/");
+    returnInt(NUM_SWITCHES,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,",In,");
+    count = 0;
+    for (x = 0; x < NUM_INPUTS; x++) {
+        if (inputs[x][0] < 255)
+            count ++;
+    }
+    returnInt(count,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,"/");
+    returnInt(NUM_INPUTS,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,",Li,");
+    count = 0;
+    for (x = 0; x < NUM_LIMITS; x++) {
+        if (inputs[x][2] > 0)
+            count ++;
+    }
+    returnInt(count,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,"/");
+    returnInt(NUM_LIMITS,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,",CC,");
+    count = 0;
+    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
+        if (colorChanges[x][0] != 0 || colorChanges[x][1] != 1 || colorChanges[x][2] != 0)
+            count ++;
+    }
+    returnInt(count,tempLongString);
+    strcat(statusMsg,tempLongString);
+    strcat(statusMsg,"/");
+    returnInt(NUM_COLOR_CHANGES,tempLongString);
+    strcat(statusMsg,tempLongString);
+    sendMessage(statusMsg);
+}
+
+// transmits Y or N for which programs have been programmed
+void programsProgrammed(void) {
     strcat(statusMsg, "Progs");
+    int x;
     for (x = 0; x < MAX_PROGRAM; x++) {
-        returnInt(x, tempLongString);
-        strcat(statusMsg, tempLongString);
         if (weeklyProgram[x][0] == 255 && weeklyProgram[x][1] == 255) {
             strcat(statusMsg, "n");
         } else {
             strcat(statusMsg, "y");
         }
         // can only send 32 bytes at a time
-        if (strlen(statusMsg) > 24) {
+        if (strlen(statusMsg) > 30) {
             sendMessage(statusMsg);
             statusMsg[5] = 0;
         }
     }
-    sendMessage(statusMsg);
+    sendMessage(statusMsg);    
+}
+// transmits Y or N for which switches have been programmed
+void switchesProgrammed(void) {
     statusMsg[0] = 0;
-    strcat(statusMsg, "Sw");
+    strcat(statusMsg, "Swi");
+    int x;
     for (x = 0; x < NUM_SWITCHES; x++) {
-        returnInt(x, tempLongString);
-        strcat(statusMsg, tempLongString);
+
         if (switchStuff[x] == 255) {
             strcat(statusMsg, "n");
         } else {
             strcat(statusMsg, "y");
         }
         // can only send 32 bytes at a time
-        if (strlen(statusMsg) > 24) {
+        if (strlen(statusMsg) > 30) {
             sendMessage(statusMsg);
-            statusMsg[2] = 0;
+            statusMsg[3] = 0;
         }
     }
     sendMessage(statusMsg);
+}
+
+// transmits Y or N for which inputs have been programmed
+void inputsProgrammed(void) {
     statusMsg[0] = 0;
     strcat(statusMsg, "In");
+    int x;
     for (x = 0; x < NUM_INPUTS; x++) {
-        returnInt(x, tempLongString);
-        strcat(statusMsg, tempLongString);
         if (inputs[x][0] == 255) {
             strcat(statusMsg, "n");
         } else {
             strcat(statusMsg, "y");
         }
         // can only send 32 bytes at a time
-        if (x % 8 == 0 && x > 0) {
+        if (strlen(statusMsg) > 30) {
             sendMessage(statusMsg);
             statusMsg[2] = 0;
         }
     }
     sendMessage(statusMsg);
+}
+
+// transmits Y or N for which switches are currently turned on
+void switchesOn(void) {
     statusMsg[0] = 0;
-    strcat(statusMsg, "SwOn?");
+    strcat(statusMsg, "SwOn");
+    int x;
     for (x = 0; x < NUM_SWITCHES; x++) {
-        returnInt(x, tempLongString);
-        strcat(statusMsg, tempLongString);
         if (switchStatus[x] > 0) {
             strcat(statusMsg, "y");
         } else {
             strcat(statusMsg, "n");
         }
-        if (strlen(statusMsg) > 24) {
+        if (strlen(statusMsg) > 30) {
             sendMessage(statusMsg);
-            statusMsg[5] = 0;
+            statusMsg[4] = 0;
         }
     }
     sendMessage(statusMsg);
-    statusMsg[0] = 0;
 }
 
 void returnInt(int number, char * thisString) {
@@ -2845,7 +2922,9 @@ int radioTest(void) {
         failCondition = 1;
         return -1;
     }
-    return 0;
+    if(failCondition == 1 || failCondition == 2)
+        clearFail();
+    return 1;
 }
 
 // Take in an address and return a long long with the number
@@ -2876,35 +2955,27 @@ void radioDisplayAddress(char * commandReceived) {
     int x = 0;
     char tempRadioString[6];
     statusMsg[0] = 0;
-    switch (commandReceived[3]) {
-        case '1':
+    if(commandReceived[3] == '1') {
             unformatAddress(rx_addr_p1, tempRadioString);
             strcat(statusMsg, "r1-0x");
-            break;
-        case '2':
+    } else if(commandReceived[3] == '2') {
             unformatAddress(rx_addr_p2, tempRadioString);
             strcat(statusMsg, "r2-0x");
-            break;
-        case '3':
+    } else if(commandReceived[3] == '3') {
             unformatAddress(rx_addr_p3, tempRadioString);
             strcat(statusMsg, "r3-0x");
-            break;
-        case '4':
+    } else if(commandReceived[3] == '4') {
             unformatAddress(rx_addr_p4, tempRadioString);
             strcat(statusMsg, "r4-0x");
-            break;
-        case '5':
+    } else if (commandReceived[3] == '5') {
             unformatAddress(rx_addr_p5, tempRadioString);
             strcat(statusMsg, "r5-0x");
-            break;
-        case 'T':
+    } else if (commandReceived[3] == 'T') {
             unformatAddress(tx_addr, tempRadioString);
             strcat(statusMsg, "t-0x");
-            break;
-        default:
+    } else {
             unformatAddress(rx_addr_p0, tempRadioString);
             strcat(statusMsg, "r0-0x");
-            break;
     }
     for (x = 0; x < 5; x++) {
         returnHexWithout(tempRadioString[x], tempLongString);
@@ -3027,6 +3098,7 @@ void unformatAddress(uint64_t oldAddress, char * formattedAddress) {
 }
 
 void sendMessage(char * myResponse) {
+    stopRx();
     _delay_us(100);
     int transmitLength = strlen(myResponse);
     if(!transmit(myResponse, transmitLength)) {

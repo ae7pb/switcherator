@@ -297,12 +297,12 @@
  129               		.file 3 "/usr/lib/gcc/avr/4.7.2/../../../avr/include/stdint.h"
 DEFINED SYMBOLS
                             *ABS*:00000000 spi.c
-     /tmp/cc6nIu2z.s:2      *ABS*:0000003e __SP_H__
-     /tmp/cc6nIu2z.s:3      *ABS*:0000003d __SP_L__
-     /tmp/cc6nIu2z.s:4      *ABS*:0000003f __SREG__
-     /tmp/cc6nIu2z.s:5      *ABS*:00000000 __tmp_reg__
-     /tmp/cc6nIu2z.s:6      *ABS*:00000001 __zero_reg__
-     /tmp/cc6nIu2z.s:11     .text:00000000 spi_init
-     /tmp/cc6nIu2z.s:35     .text:00000010 spi_transaction
+     /tmp/ccKnbK6U.s:2      *ABS*:0000003e __SP_H__
+     /tmp/ccKnbK6U.s:3      *ABS*:0000003d __SP_L__
+     /tmp/ccKnbK6U.s:4      *ABS*:0000003f __SREG__
+     /tmp/ccKnbK6U.s:5      *ABS*:00000000 __tmp_reg__
+     /tmp/ccKnbK6U.s:6      *ABS*:00000001 __zero_reg__
+     /tmp/ccKnbK6U.s:11     .text:00000000 spi_init
+     /tmp/ccKnbK6U.s:35     .text:00000010 spi_transaction
 
 NO UNDEFINED SYMBOLS
