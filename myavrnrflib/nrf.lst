@@ -1,0 +1,1731 @@
+   1               		.file	"nrf.c"
+   2               	__SP_H__ = 0x3e
+   3               	__SP_L__ = 0x3d
+   4               	__SREG__ = 0x3f
+   5               	__tmp_reg__ = 0
+   6               	__zero_reg__ = 1
+   7               		.text
+   8               	.Ltext0:
+   9               	.global	powerUp
+  11               	powerUp:
+  12               	.LFB9:
+  13               		.file 1 "../myavrnrflib/nrf.c"
+   1:../myavrnrflib/nrf.c **** #include "nrf.h"
+   2:../myavrnrflib/nrf.c **** #include "nRF24L01.h"
+   3:../myavrnrflib/nrf.c **** #include "spi.h"
+   4:../myavrnrflib/nrf.c **** #include <avr/io.h>
+   5:../myavrnrflib/nrf.c **** #include <avr/interrupt.h>
+   6:../myavrnrflib/nrf.c **** #include <util/delay.h>
+   7:../myavrnrflib/nrf.c **** 
+   8:../myavrnrflib/nrf.c **** // connect to the radio and get the party started
+   9:../myavrnrflib/nrf.c **** void nrfInit(void) 
+  10:../myavrnrflib/nrf.c **** {
+  11:../myavrnrflib/nrf.c ****    spi_init();
+  12:../myavrnrflib/nrf.c **** 
+  13:../myavrnrflib/nrf.c ****    // Set up the CSN and CE as outputs
+  14:../myavrnrflib/nrf.c ****    CE_DDR |= (1<<CE_PIN);
+  15:../myavrnrflib/nrf.c ****    CSN_DDR |= (1<<CSN_PIN);
+  16:../myavrnrflib/nrf.c ****    flushme(); // start with clean buffers
+  17:../myavrnrflib/nrf.c **** }
+  18:../myavrnrflib/nrf.c **** 
+  19:../myavrnrflib/nrf.c **** // Power on the radio to standby mode (radio config register)
+  20:../myavrnrflib/nrf.c **** void startRadio(void) {
+  21:../myavrnrflib/nrf.c ****    char config = readReg(CONFIG);
+  22:../myavrnrflib/nrf.c ****    config |= (1 << PWR_UP);
+  23:../myavrnrflib/nrf.c ****    writeReg(CONFIG,config);
+  24:../myavrnrflib/nrf.c **** }
+  25:../myavrnrflib/nrf.c **** 
+  26:../myavrnrflib/nrf.c **** // Powers off the radio from standby mode
+  27:../myavrnrflib/nrf.c **** void stopRadio(void) {
+  28:../myavrnrflib/nrf.c ****    char config = readReg(CONFIG);
+  29:../myavrnrflib/nrf.c ****    config &= ~(1 << PWR_UP);
+  30:../myavrnrflib/nrf.c ****    writeReg(CONFIG,config);
+  31:../myavrnrflib/nrf.c **** }
+  32:../myavrnrflib/nrf.c **** 
+  33:../myavrnrflib/nrf.c **** // Powers up the radio - turns on CE pin
+  34:../myavrnrflib/nrf.c **** void powerUp(void) {
+  14               		.loc 1 34 0
+  15               	/* prologue: function */
+  16               	/* frame size = 0 */
+  17               	/* stack size = 0 */
+  18               	.L__stack_usage = 0
+  35:../myavrnrflib/nrf.c ****    CE_PORT |= (1<<CE_PIN);
+  19               		.loc 1 35 0
+  20 0000 299A      		sbi 0x5,1
+  21 0002 0895      		ret
+  22               	.LFE9:
+  24               	.global	powerDown
+  26               	powerDown:
+  27               	.LFB10:
+  36:../myavrnrflib/nrf.c **** }
+  37:../myavrnrflib/nrf.c **** 
+  38:../myavrnrflib/nrf.c **** // Power down the radio - turn off CE pin
+  39:../myavrnrflib/nrf.c **** void powerDown(void) {
+  28               		.loc 1 39 0
+  29               	/* prologue: function */
+  30               	/* frame size = 0 */
+  31               	/* stack size = 0 */
+  32               	.L__stack_usage = 0
+  40:../myavrnrflib/nrf.c ****    CE_PORT &= ~(1 << CE_PIN);
+  33               		.loc 1 40 0
+  34 0004 2998      		cbi 0x5,1
+  35 0006 0895      		ret
+  36               	.LFE10:
+  38               	.global	readReg
+  40               	readReg:
+  41               	.LFB13:
+  41:../myavrnrflib/nrf.c **** }
+  42:../myavrnrflib/nrf.c **** 
+  43:../myavrnrflib/nrf.c **** // Put the radio in receive mode
+  44:../myavrnrflib/nrf.c **** void startRx(void) {
+  45:../myavrnrflib/nrf.c ****    powerUp();
+  46:../myavrnrflib/nrf.c ****    char config = readReg(CONFIG);
+  47:../myavrnrflib/nrf.c ****    config |= (1 << PRIM_RX);
+  48:../myavrnrflib/nrf.c ****    writeReg(CONFIG, config);
+  49:../myavrnrflib/nrf.c **** }
+  50:../myavrnrflib/nrf.c **** 
+  51:../myavrnrflib/nrf.c **** // Cancel receive mode
+  52:../myavrnrflib/nrf.c **** void stopRx(void) {
+  53:../myavrnrflib/nrf.c ****    powerDown();
+  54:../myavrnrflib/nrf.c ****    char config = readReg(CONFIG);
+  55:../myavrnrflib/nrf.c ****    config &= ~(1 << PRIM_RX);
+  56:../myavrnrflib/nrf.c ****    writeReg(CONFIG, config);
+  57:../myavrnrflib/nrf.c **** }
+  58:../myavrnrflib/nrf.c **** 
+  59:../myavrnrflib/nrf.c **** // Read a register and return an uint8_t result
+  60:../myavrnrflib/nrf.c **** char readReg(char reg) {
+  42               		.loc 1 60 0
+  43               	.LVL0:
+  44 0008 CF93      		push r28
+  45               	.LCFI0:
+  46 000a DF93      		push r29
+  47               	.LCFI1:
+  48 000c 00D0      		rcall .
+  49 000e 00D0      		rcall .
+  50               	.LCFI2:
+  51 0010 CDB7      		in r28,__SP_L__
+  52 0012 DEB7      		in r29,__SP_H__
+  53               	.LCFI3:
+  54               	/* prologue: function */
+  55               	/* frame size = 4 */
+  56               	/* stack size = 6 */
+  57               	.L__stack_usage = 6
+  58               	.LVL1:
+  61:../myavrnrflib/nrf.c ****    char datain[2];
+  62:../myavrnrflib/nrf.c ****    reg &= REGISTER_MASK;  // make sure command bits are clean
+  59               		.loc 1 62 0
+  60 0014 8F71      		andi r24,lo8(31)
+  61               	.LVL2:
+  63:../myavrnrflib/nrf.c ****    reg |= R_REGISTER;
+  64:../myavrnrflib/nrf.c ****    char dataout[] = {reg, NOP};
+  62               		.loc 1 64 0
+  63 0016 8983      		std Y+1,r24
+  64 0018 8FEF      		ldi r24,lo8(-1)
+  65               	.LVL3:
+  66 001a 8A83      		std Y+2,r24
+  65:../myavrnrflib/nrf.c ****    spi_transaction(dataout, datain, 2);
+  67               		.loc 1 65 0
+  68 001c 42E0      		ldi r20,lo8(2)
+  69 001e BE01      		movw r22,r28
+  70 0020 6D5F      		subi r22,-3
+  71 0022 7F4F      		sbci r23,-1
+  72 0024 CE01      		movw r24,r28
+  73 0026 0196      		adiw r24,1
+  74 0028 0E94 0000 		call spi_transaction
+  75               	.LVL4:
+  66:../myavrnrflib/nrf.c ****    char output = datain[1];
+  67:../myavrnrflib/nrf.c ****    return output;
+  68:../myavrnrflib/nrf.c **** }
+  76               		.loc 1 68 0
+  77 002c 8C81      		ldd r24,Y+4
+  78               	/* epilogue start */
+  79 002e 0F90      		pop __tmp_reg__
+  80 0030 0F90      		pop __tmp_reg__
+  81 0032 0F90      		pop __tmp_reg__
+  82 0034 0F90      		pop __tmp_reg__
+  83 0036 DF91      		pop r29
+  84 0038 CF91      		pop r28
+  85 003a 0895      		ret
+  86               	.LFE13:
+  88               	.global	writeReg
+  90               	writeReg:
+  91               	.LFB14:
+  69:../myavrnrflib/nrf.c **** 
+  70:../myavrnrflib/nrf.c **** // Write a register
+  71:../myavrnrflib/nrf.c **** void writeReg(char reg, char data) {
+  92               		.loc 1 71 0
+  93               	.LVL5:
+  94 003c CF93      		push r28
+  95               	.LCFI4:
+  96 003e DF93      		push r29
+  97               	.LCFI5:
+  98 0040 00D0      		rcall .
+  99 0042 00D0      		rcall .
+ 100               	.LCFI6:
+ 101 0044 CDB7      		in r28,__SP_L__
+ 102 0046 DEB7      		in r29,__SP_H__
+ 103               	.LCFI7:
+ 104               	/* prologue: function */
+ 105               	/* frame size = 4 */
+ 106               	/* stack size = 6 */
+ 107               	.L__stack_usage = 6
+  72:../myavrnrflib/nrf.c ****    char datain[2];
+  73:../myavrnrflib/nrf.c ****    reg &= REGISTER_MASK;
+ 108               		.loc 1 73 0
+ 109 0048 8F71      		andi r24,lo8(31)
+ 110               	.LVL6:
+  74:../myavrnrflib/nrf.c ****    reg |= W_REGISTER;
+ 111               		.loc 1 74 0
+ 112 004a 8062      		ori r24,lo8(32)
+ 113               	.LVL7:
+  75:../myavrnrflib/nrf.c ****    char dataout[] = {reg , data};
+ 114               		.loc 1 75 0
+ 115 004c 8983      		std Y+1,r24
+ 116 004e 6A83      		std Y+2,r22
+  76:../myavrnrflib/nrf.c ****    spi_transaction(dataout, datain, 2);
+ 117               		.loc 1 76 0
+ 118 0050 42E0      		ldi r20,lo8(2)
+ 119 0052 BE01      		movw r22,r28
+ 120               	.LVL8:
+ 121 0054 6D5F      		subi r22,-3
+ 122 0056 7F4F      		sbci r23,-1
+ 123 0058 CE01      		movw r24,r28
+ 124               	.LVL9:
+ 125 005a 0196      		adiw r24,1
+ 126 005c 0E94 0000 		call spi_transaction
+ 127               	.LVL10:
+ 128               	/* epilogue start */
+  77:../myavrnrflib/nrf.c **** }
+ 129               		.loc 1 77 0
+ 130 0060 0F90      		pop __tmp_reg__
+ 131 0062 0F90      		pop __tmp_reg__
+ 132 0064 0F90      		pop __tmp_reg__
+ 133 0066 0F90      		pop __tmp_reg__
+ 134 0068 DF91      		pop r29
+ 135 006a CF91      		pop r28
+ 136 006c 0895      		ret
+ 137               	.LFE14:
+ 139               	.global	stopRx
+ 141               	stopRx:
+ 142               	.LFB12:
+  52:../myavrnrflib/nrf.c **** void stopRx(void) {
+ 143               		.loc 1 52 0
+ 144               	/* prologue: function */
+ 145               	/* frame size = 0 */
+ 146               	/* stack size = 0 */
+ 147               	.L__stack_usage = 0
+  53:../myavrnrflib/nrf.c ****    powerDown();
+ 148               		.loc 1 53 0
+ 149 006e 0E94 0000 		call powerDown
+ 150               	.LVL11:
+  54:../myavrnrflib/nrf.c ****    char config = readReg(CONFIG);
+ 151               		.loc 1 54 0
+ 152 0072 80E0      		ldi r24,0
+ 153 0074 0E94 0000 		call readReg
+ 154               	.LVL12:
+  55:../myavrnrflib/nrf.c ****    config &= ~(1 << PRIM_RX);
+ 155               		.loc 1 55 0
+ 156 0078 682F      		mov r22,r24
+ 157 007a 6E7F      		andi r22,lo8(-2)
+ 158               	.LVL13:
+  56:../myavrnrflib/nrf.c ****    writeReg(CONFIG, config);
+ 159               		.loc 1 56 0
+ 160 007c 80E0      		ldi r24,0
+ 161 007e 0C94 0000 		jmp writeReg
+ 162               	.LVL14:
+ 163               	.LFE12:
+ 165               	.global	startRx
+ 167               	startRx:
+ 168               	.LFB11:
+  44:../myavrnrflib/nrf.c **** void startRx(void) {
+ 169               		.loc 1 44 0
+ 170               	/* prologue: function */
+ 171               	/* frame size = 0 */
+ 172               	/* stack size = 0 */
+ 173               	.L__stack_usage = 0
+  45:../myavrnrflib/nrf.c ****    powerUp();
+ 174               		.loc 1 45 0
+ 175 0082 0E94 0000 		call powerUp
+ 176               	.LVL15:
+  46:../myavrnrflib/nrf.c ****    char config = readReg(CONFIG);
+ 177               		.loc 1 46 0
+ 178 0086 80E0      		ldi r24,0
+ 179 0088 0E94 0000 		call readReg
+ 180               	.LVL16:
+  47:../myavrnrflib/nrf.c ****    config |= (1 << PRIM_RX);
+ 181               		.loc 1 47 0
+ 182 008c 682F      		mov r22,r24
+ 183 008e 6160      		ori r22,lo8(1)
+ 184               	.LVL17:
+  48:../myavrnrflib/nrf.c ****    writeReg(CONFIG, config);
+ 185               		.loc 1 48 0
+ 186 0090 80E0      		ldi r24,0
+ 187 0092 0C94 0000 		jmp writeReg
+ 188               	.LVL18:
+ 189               	.LFE11:
+ 191               	.global	stopRadio
+ 193               	stopRadio:
+ 194               	.LFB8:
+  27:../myavrnrflib/nrf.c **** void stopRadio(void) {
+ 195               		.loc 1 27 0
+ 196               	/* prologue: function */
+ 197               	/* frame size = 0 */
+ 198               	/* stack size = 0 */
+ 199               	.L__stack_usage = 0
+  28:../myavrnrflib/nrf.c ****    char config = readReg(CONFIG);
+ 200               		.loc 1 28 0
+ 201 0096 80E0      		ldi r24,0
+ 202 0098 0E94 0000 		call readReg
+ 203               	.LVL19:
+  29:../myavrnrflib/nrf.c ****    config &= ~(1 << PWR_UP);
+ 204               		.loc 1 29 0
+ 205 009c 682F      		mov r22,r24
+ 206 009e 6D7F      		andi r22,lo8(-3)
+ 207               	.LVL20:
+  30:../myavrnrflib/nrf.c ****    writeReg(CONFIG,config);
+ 208               		.loc 1 30 0
+ 209 00a0 80E0      		ldi r24,0
+ 210 00a2 0C94 0000 		jmp writeReg
+ 211               	.LVL21:
+ 212               	.LFE8:
+ 214               	.global	startRadio
+ 216               	startRadio:
+ 217               	.LFB7:
+  20:../myavrnrflib/nrf.c **** void startRadio(void) {
+ 218               		.loc 1 20 0
+ 219               	/* prologue: function */
+ 220               	/* frame size = 0 */
+ 221               	/* stack size = 0 */
+ 222               	.L__stack_usage = 0
+  21:../myavrnrflib/nrf.c ****    char config = readReg(CONFIG);
+ 223               		.loc 1 21 0
+ 224 00a6 80E0      		ldi r24,0
+ 225 00a8 0E94 0000 		call readReg
+ 226               	.LVL22:
+  22:../myavrnrflib/nrf.c ****    config |= (1 << PWR_UP);
+ 227               		.loc 1 22 0
+ 228 00ac 682F      		mov r22,r24
+ 229 00ae 6260      		ori r22,lo8(2)
+ 230               	.LVL23:
+  23:../myavrnrflib/nrf.c ****    writeReg(CONFIG,config);
+ 231               		.loc 1 23 0
+ 232 00b0 80E0      		ldi r24,0
+ 233 00b2 0C94 0000 		jmp writeReg
+ 234               	.LVL24:
+ 235               	.LFE7:
+ 237               	.global	readAddr
+ 239               	readAddr:
+ 240               	.LFB15:
+  78:../myavrnrflib/nrf.c **** 
+  79:../myavrnrflib/nrf.c **** // Read the address specified by "reg" (which address) and return an
+  80:../myavrnrflib/nrf.c **** // integer of the address (40 bytes)
+  81:../myavrnrflib/nrf.c **** uint64_t readAddr( char reg) {
+ 241               		.loc 1 81 0
+ 242               	.LVL25:
+ 243 00b6 0F93      		push r16
+ 244               	.LCFI8:
+ 245 00b8 1F93      		push r17
+ 246               	.LCFI9:
+ 247 00ba CF93      		push r28
+ 248               	.LCFI10:
+ 249 00bc DF93      		push r29
+ 250               	.LCFI11:
+ 251 00be CDB7      		in r28,__SP_L__
+ 252 00c0 DEB7      		in r29,__SP_H__
+ 253               	.LCFI12:
+ 254 00c2 2C97      		sbiw r28,12
+ 255               	.LCFI13:
+ 256 00c4 0FB6      		in __tmp_reg__,__SREG__
+ 257 00c6 F894      		cli
+ 258 00c8 DEBF      		out __SP_H__,r29
+ 259 00ca 0FBE      		out __SREG__,__tmp_reg__
+ 260 00cc CDBF      		out __SP_L__,r28
+ 261               	/* prologue: function */
+ 262               	/* frame size = 12 */
+ 263               	/* stack size = 16 */
+ 264               	.L__stack_usage = 16
+ 265               	.LVL26:
+  82:../myavrnrflib/nrf.c ****    char datain[6];
+  83:../myavrnrflib/nrf.c ****    uint64_t address = 0;
+  84:../myavrnrflib/nrf.c ****    reg &= REGISTER_MASK;
+ 266               		.loc 1 84 0
+ 267 00ce 182F      		mov r17,r24
+ 268 00d0 1F71      		andi r17,lo8(31)
+ 269               	.LVL27:
+  85:../myavrnrflib/nrf.c ****    reg |= R_REGISTER;
+  86:../myavrnrflib/nrf.c ****    // set up data out to get all 5 chars
+  87:../myavrnrflib/nrf.c ****    char dataout[] = {reg, NOP, NOP, NOP, NOP, NOP};
+ 270               		.loc 1 87 0
+ 271 00d2 1983      		std Y+1,r17
+ 272 00d4 9FEF      		ldi r25,lo8(-1)
+ 273 00d6 9A83      		std Y+2,r25
+ 274 00d8 9B83      		std Y+3,r25
+ 275 00da 9C83      		std Y+4,r25
+ 276 00dc 9D83      		std Y+5,r25
+ 277 00de 9E83      		std Y+6,r25
+  88:../myavrnrflib/nrf.c ****    // 3 addresses are 5 bytes but 4 are only 1 byte. Deal with the 4
+  89:../myavrnrflib/nrf.c ****    if ( (reg == (R_REGISTER | RX_ADDR_P2 )) ||
+  90:../myavrnrflib/nrf.c ****       (reg == (R_REGISTER | RX_ADDR_P3 )) ||
+  91:../myavrnrflib/nrf.c ****       (reg == (R_REGISTER | RX_ADDR_P4 )) ||
+ 278               		.loc 1 91 0
+ 279 00e0 812F      		mov r24,r17
+ 280 00e2 8C50      		subi r24,lo8(-(-12))
+  89:../myavrnrflib/nrf.c ****    if ( (reg == (R_REGISTER | RX_ADDR_P2 )) ||
+ 281               		.loc 1 89 0
+ 282 00e4 8430      		cpi r24,lo8(4)
+ 283 00e6 00F4      		brsh .L10
+ 284               	.LBB12:
+  92:../myavrnrflib/nrf.c ****       (reg == (R_REGISTER | RX_ADDR_P5 ))) { // all the 1 byte returns
+  93:../myavrnrflib/nrf.c ****       dataout[0] = (R_REGISTER | RX_ADDR_P1); // MSB equal here 
+ 285               		.loc 1 93 0
+ 286 00e8 8BE0      		ldi r24,lo8(11)
+ 287 00ea 8983      		std Y+1,r24
+  94:../myavrnrflib/nrf.c ****       spi_transaction(dataout, datain, 6); // get the MSBs
+ 288               		.loc 1 94 0
+ 289 00ec 46E0      		ldi r20,lo8(6)
+ 290 00ee BE01      		movw r22,r28
+ 291 00f0 695F      		subi r22,-7
+ 292 00f2 7F4F      		sbci r23,-1
+ 293 00f4 CE01      		movw r24,r28
+ 294 00f6 0196      		adiw r24,1
+ 295 00f8 0E94 0000 		call spi_transaction
+ 296               	.LVL28:
+  95:../myavrnrflib/nrf.c ****       char lsb = readReg(reg);
+ 297               		.loc 1 95 0
+ 298 00fc 812F      		mov r24,r17
+ 299 00fe 0E94 0000 		call readReg
+ 300               	.LVL29:
+  96:../myavrnrflib/nrf.c ****       datain[1] = lsb;
+ 301               		.loc 1 96 0
+ 302 0102 8887      		std Y+8,r24
+ 303 0104 00C0      		rjmp .L11
+ 304               	.LVL30:
+ 305               	.L10:
+ 306               	.LBE12:
+  97:../myavrnrflib/nrf.c ****    } else { // just get the 5 byte address
+  98:../myavrnrflib/nrf.c ****       spi_transaction(dataout, datain, 6);
+ 307               		.loc 1 98 0
+ 308 0106 46E0      		ldi r20,lo8(6)
+ 309 0108 BE01      		movw r22,r28
+ 310 010a 695F      		subi r22,-7
+ 311 010c 7F4F      		sbci r23,-1
+ 312 010e CE01      		movw r24,r28
+ 313 0110 0196      		adiw r24,1
+ 314 0112 0E94 0000 		call spi_transaction
+ 315               	.LVL31:
+ 316               	.L11:
+ 317 0116 FE01      		movw r30,r28
+ 318 0118 3D96      		adiw r30,13
+  81:../myavrnrflib/nrf.c **** uint64_t readAddr( char reg) {
+ 319               		.loc 1 81 0
+ 320 011a DE01      		movw r26,r28
+ 321 011c 1996      		adiw r26,9
+  83:../myavrnrflib/nrf.c ****    uint64_t address = 0;
+ 322               		.loc 1 83 0
+ 323 011e 10E0      		ldi r17,0
+ 324               	.LVL32:
+ 325 0120 30E0      		ldi r19,0
+ 326 0122 40E0      		ldi r20,0
+ 327 0124 50E0      		ldi r21,0
+ 328 0126 60E0      		ldi r22,0
+ 329 0128 70E0      		ldi r23,0
+ 330 012a 80E0      		ldi r24,0
+ 331 012c 90E0      		ldi r25,0
+ 332               	.LVL33:
+ 333               	.L12:
+ 334               	.LBB13:
+  99:../myavrnrflib/nrf.c ****    }
+ 100:../myavrnrflib/nrf.c ****    // nrf addresses are LSB first
+ 101:../myavrnrflib/nrf.c ****    for (int x = 5; x > 1; x--) {
+ 102:../myavrnrflib/nrf.c ****       address |= datain[x];
+ 335               		.loc 1 102 0 discriminator 2
+ 336 012e 2291      		ld r18,-Z
+ 337 0130 212B      		or r18,r17
+ 338               	.LVL34:
+ 103:../myavrnrflib/nrf.c ****       address = address << 8;
+ 339               		.loc 1 103 0 discriminator 2
+ 340 0132 08E0      		ldi r16,lo8(8)
+ 341 0134 0E94 0000 		call __ashldi3
+ 342               	.LVL35:
+ 343 0138 122F      		mov r17,r18
+ 344               	.LVL36:
+ 101:../myavrnrflib/nrf.c ****    for (int x = 5; x > 1; x--) {
+ 345               		.loc 1 101 0 discriminator 2
+ 346 013a EA17      		cp r30,r26
+ 347 013c FB07      		cpc r31,r27
+ 348 013e 01F4      		brne .L12
+ 349               	.LBE13:
+ 104:../myavrnrflib/nrf.c ****    }
+ 105:../myavrnrflib/nrf.c ****    address |= datain[1];
+ 350               		.loc 1 105 0
+ 351 0140 2885      		ldd r18,Y+8
+ 352 0142 212B      		or r18,r17
+ 353               	.LVL37:
+ 354               	/* epilogue start */
+ 106:../myavrnrflib/nrf.c ****    return address;
+ 107:../myavrnrflib/nrf.c **** }
+ 355               		.loc 1 107 0
+ 356 0144 2C96      		adiw r28,12
+ 357 0146 0FB6      		in __tmp_reg__,__SREG__
+ 358 0148 F894      		cli
+ 359 014a DEBF      		out __SP_H__,r29
+ 360 014c 0FBE      		out __SREG__,__tmp_reg__
+ 361 014e CDBF      		out __SP_L__,r28
+ 362 0150 DF91      		pop r29
+ 363 0152 CF91      		pop r28
+ 364 0154 1F91      		pop r17
+ 365 0156 0F91      		pop r16
+ 366 0158 0895      		ret
+ 367               	.LFE15:
+ 369               	.global	writeAddr
+ 371               	writeAddr:
+ 372               	.LFB16:
+ 108:../myavrnrflib/nrf.c **** 
+ 109:../myavrnrflib/nrf.c **** // Write the address specified. 
+ 110:../myavrnrflib/nrf.c **** void writeAddr( char reg, uint64_t address) {
+ 373               		.loc 1 110 0
+ 374               	.LVL38:
+ 375 015a DF92      		push r13
+ 376               	.LCFI14:
+ 377 015c EF92      		push r14
+ 378               	.LCFI15:
+ 379 015e FF92      		push r15
+ 380               	.LCFI16:
+ 381 0160 0F93      		push r16
+ 382               	.LCFI17:
+ 383 0162 1F93      		push r17
+ 384               	.LCFI18:
+ 385 0164 CF93      		push r28
+ 386               	.LCFI19:
+ 387 0166 DF93      		push r29
+ 388               	.LCFI20:
+ 389 0168 CDB7      		in r28,__SP_L__
+ 390 016a DEB7      		in r29,__SP_H__
+ 391               	.LCFI21:
+ 392 016c 2C97      		sbiw r28,12
+ 393               	.LCFI22:
+ 394 016e 0FB6      		in __tmp_reg__,__SREG__
+ 395 0170 F894      		cli
+ 396 0172 DEBF      		out __SP_H__,r29
+ 397 0174 0FBE      		out __SREG__,__tmp_reg__
+ 398 0176 CDBF      		out __SP_L__,r28
+ 399               	/* prologue: function */
+ 400               	/* frame size = 12 */
+ 401               	/* stack size = 19 */
+ 402               	.L__stack_usage = 19
+ 403 0178 E02F      		mov r30,r16
+ 404 017a D22E      		mov r13,r18
+ 405 017c E32E      		mov r14,r19
+ 406 017e F42E      		mov r15,r20
+ 407 0180 B52F      		mov r27,r21
+ 408 0182 A62F      		mov r26,r22
+ 409 0184 F72F      		mov r31,r23
+ 111:../myavrnrflib/nrf.c ****    if( (reg == RX_ADDR_P0) || (reg == RX_ADDR_P1) || (reg == TX_ADDR) ) {
+ 410               		.loc 1 111 0
+ 411 0186 982F      		mov r25,r24
+ 412 0188 9A50      		subi r25,lo8(-(-10))
+ 413 018a 9230      		cpi r25,lo8(2)
+ 414 018c 00F0      		brlo .L15
+ 415               		.loc 1 111 0 is_stmt 0 discriminator 2
+ 416 018e 8031      		cpi r24,lo8(16)
+ 417 0190 01F4      		brne .L16
+ 418               	.L15:
+ 419               	.LBB14:
+ 112:../myavrnrflib/nrf.c ****       char datain[6];
+ 113:../myavrnrflib/nrf.c ****       reg &= REGISTER_MASK;
+ 420               		.loc 1 113 0 is_stmt 1 discriminator 1
+ 421 0192 8F71      		andi r24,lo8(31)
+ 422               	.LVL39:
+ 114:../myavrnrflib/nrf.c ****       reg |= W_REGISTER;
+ 423               		.loc 1 114 0 discriminator 1
+ 424 0194 8062      		ori r24,lo8(32)
+ 425               	.LVL40:
+ 115:../myavrnrflib/nrf.c ****       // nrf addresses are LSB first
+ 116:../myavrnrflib/nrf.c ****       char dataout[] = {reg , (address & 0xff), ((address >> 8) & 0xff), 
+ 426               		.loc 1 116 0 discriminator 1
+ 427 0196 8983      		std Y+1,r24
+ 428 0198 EA83      		std Y+2,r30
+ 429 019a 2E2F      		mov r18,r30
+ 430 019c 312F      		mov r19,r17
+ 431 019e 4D2D      		mov r20,r13
+ 432 01a0 5E2D      		mov r21,r14
+ 433 01a2 6F2D      		mov r22,r15
+ 434 01a4 7B2F      		mov r23,r27
+ 435 01a6 8A2F      		mov r24,r26
+ 436               	.LVL41:
+ 437 01a8 9F2F      		mov r25,r31
+ 438 01aa 08E0      		ldi r16,lo8(8)
+ 439               	.LVL42:
+ 440 01ac 0E94 0000 		call __lshrdi3
+ 441 01b0 2B83      		std Y+3,r18
+ 117:../myavrnrflib/nrf.c ****          ((address >> 16) & 0xff), ((address >> 24) & 0xff), (address >> 32)};
+ 442               		.loc 1 117 0 discriminator 1
+ 443 01b2 2E2F      		mov r18,r30
+ 444 01b4 312F      		mov r19,r17
+ 445 01b6 4D2D      		mov r20,r13
+ 446 01b8 5E2D      		mov r21,r14
+ 447 01ba 6F2D      		mov r22,r15
+ 448 01bc 7B2F      		mov r23,r27
+ 449 01be 8A2F      		mov r24,r26
+ 450 01c0 9F2F      		mov r25,r31
+ 451 01c2 00E1      		ldi r16,lo8(16)
+ 452 01c4 0E94 0000 		call __lshrdi3
+ 116:../myavrnrflib/nrf.c ****       char dataout[] = {reg , (address & 0xff), ((address >> 8) & 0xff), 
+ 453               		.loc 1 116 0 discriminator 1
+ 454 01c8 2C83      		std Y+4,r18
+ 455               		.loc 1 117 0 discriminator 1
+ 456 01ca 2E2F      		mov r18,r30
+ 457 01cc 312F      		mov r19,r17
+ 458 01ce 4D2D      		mov r20,r13
+ 459 01d0 5E2D      		mov r21,r14
+ 460 01d2 6F2D      		mov r22,r15
+ 461 01d4 7B2F      		mov r23,r27
+ 462 01d6 8A2F      		mov r24,r26
+ 463 01d8 9F2F      		mov r25,r31
+ 464 01da 08E1      		ldi r16,lo8(24)
+ 465 01dc 0E94 0000 		call __lshrdi3
+ 116:../myavrnrflib/nrf.c ****       char dataout[] = {reg , (address & 0xff), ((address >> 8) & 0xff), 
+ 466               		.loc 1 116 0 discriminator 1
+ 467 01e0 2D83      		std Y+5,r18
+ 468               		.loc 1 117 0 discriminator 1
+ 469 01e2 2E2F      		mov r18,r30
+ 470 01e4 312F      		mov r19,r17
+ 471 01e6 4D2D      		mov r20,r13
+ 472 01e8 5E2D      		mov r21,r14
+ 473 01ea 6F2D      		mov r22,r15
+ 474 01ec 7B2F      		mov r23,r27
+ 475 01ee 8A2F      		mov r24,r26
+ 476 01f0 9F2F      		mov r25,r31
+ 477 01f2 00E2      		ldi r16,lo8(32)
+ 478 01f4 0E94 0000 		call __lshrdi3
+ 116:../myavrnrflib/nrf.c ****       char dataout[] = {reg , (address & 0xff), ((address >> 8) & 0xff), 
+ 479               		.loc 1 116 0 discriminator 1
+ 480 01f8 2E83      		std Y+6,r18
+ 118:../myavrnrflib/nrf.c ****       spi_transaction(dataout, datain, 6);
+ 481               		.loc 1 118 0 discriminator 1
+ 482 01fa 46E0      		ldi r20,lo8(6)
+ 483 01fc BE01      		movw r22,r28
+ 484 01fe 695F      		subi r22,-7
+ 485 0200 7F4F      		sbci r23,-1
+ 486 0202 CE01      		movw r24,r28
+ 487 0204 0196      		adiw r24,1
+ 488 0206 0E94 0000 		call spi_transaction
+ 489               	.LVL43:
+ 490               	.LBE14:
+ 111:../myavrnrflib/nrf.c ****    if( (reg == RX_ADDR_P0) || (reg == RX_ADDR_P1) || (reg == TX_ADDR) ) {
+ 491               		.loc 1 111 0 discriminator 1
+ 492 020a 00C0      		rjmp .L14
+ 493               	.LVL44:
+ 494               	.L16:
+ 495               	.LBB15:
+ 119:../myavrnrflib/nrf.c ****    } else {
+ 120:../myavrnrflib/nrf.c ****       char lastByte = (address & 0xff);
+ 121:../myavrnrflib/nrf.c ****       writeReg(reg, lastByte);
+ 496               		.loc 1 121 0
+ 497 020c 602F      		mov r22,r16
+ 498 020e 0E94 0000 		call writeReg
+ 499               	.LVL45:
+ 500               	.L14:
+ 501               	/* epilogue start */
+ 502               	.LBE15:
+ 122:../myavrnrflib/nrf.c ****    }
+ 123:../myavrnrflib/nrf.c **** }
+ 503               		.loc 1 123 0
+ 504 0212 2C96      		adiw r28,12
+ 505 0214 0FB6      		in __tmp_reg__,__SREG__
+ 506 0216 F894      		cli
+ 507 0218 DEBF      		out __SP_H__,r29
+ 508 021a 0FBE      		out __SREG__,__tmp_reg__
+ 509 021c CDBF      		out __SP_L__,r28
+ 510 021e DF91      		pop r29
+ 511 0220 CF91      		pop r28
+ 512 0222 1F91      		pop r17
+ 513 0224 0F91      		pop r16
+ 514 0226 FF90      		pop r15
+ 515 0228 EF90      		pop r14
+ 516 022a DF90      		pop r13
+ 517 022c 0895      		ret
+ 518               	.LFE16:
+ 520               	.global	getLength
+ 522               	getLength:
+ 523               	.LFB17:
+ 124:../myavrnrflib/nrf.c **** 
+ 125:../myavrnrflib/nrf.c **** // Returns the dynamic payload length
+ 126:../myavrnrflib/nrf.c **** uint8_t getLength(void) {
+ 524               		.loc 1 126 0
+ 525 022e CF93      		push r28
+ 526               	.LCFI23:
+ 527 0230 DF93      		push r29
+ 528               	.LCFI24:
+ 529 0232 00D0      		rcall .
+ 530 0234 00D0      		rcall .
+ 531               	.LCFI25:
+ 532 0236 CDB7      		in r28,__SP_L__
+ 533 0238 DEB7      		in r29,__SP_H__
+ 534               	.LCFI26:
+ 535               	/* prologue: function */
+ 536               	/* frame size = 4 */
+ 537               	/* stack size = 6 */
+ 538               	.L__stack_usage = 6
+ 127:../myavrnrflib/nrf.c ****    char dataout[] = {R_RX_PL_WID, NOP};
+ 539               		.loc 1 127 0
+ 540 023a 80E6      		ldi r24,lo8(96)
+ 541 023c 8B83      		std Y+3,r24
+ 542 023e 8FEF      		ldi r24,lo8(-1)
+ 543 0240 8C83      		std Y+4,r24
+ 128:../myavrnrflib/nrf.c ****    char datain[2];
+ 129:../myavrnrflib/nrf.c ****    uint8_t payloadLength;
+ 130:../myavrnrflib/nrf.c ****    spi_transaction(dataout, datain, 2);
+ 544               		.loc 1 130 0
+ 545 0242 42E0      		ldi r20,lo8(2)
+ 546 0244 BE01      		movw r22,r28
+ 547 0246 6F5F      		subi r22,-1
+ 548 0248 7F4F      		sbci r23,-1
+ 549 024a CE01      		movw r24,r28
+ 550 024c 0396      		adiw r24,3
+ 551 024e 0E94 0000 		call spi_transaction
+ 552               	.LVL46:
+ 131:../myavrnrflib/nrf.c ****    payloadLength = datain[1];
+ 553               		.loc 1 131 0
+ 554 0252 8A81      		ldd r24,Y+2
+ 555               	.LVL47:
+ 132:../myavrnrflib/nrf.c ****    // if this returns more than 32 then there is a problem. flush it
+ 133:../myavrnrflib/nrf.c ****    if (payloadLength > 32) {
+ 556               		.loc 1 133 0
+ 557 0254 8132      		cpi r24,lo8(33)
+ 558 0256 00F0      		brlo .L19
+ 134:../myavrnrflib/nrf.c ****       dataout[0] = FLUSH_RX;
+ 559               		.loc 1 134 0
+ 560 0258 82EE      		ldi r24,lo8(-30)
+ 561               	.LVL48:
+ 562 025a 8B83      		std Y+3,r24
+ 135:../myavrnrflib/nrf.c ****       spi_transaction(dataout, datain, 1);
+ 563               		.loc 1 135 0
+ 564 025c 41E0      		ldi r20,lo8(1)
+ 565 025e BE01      		movw r22,r28
+ 566 0260 6F5F      		subi r22,-1
+ 567 0262 7F4F      		sbci r23,-1
+ 568 0264 CE01      		movw r24,r28
+ 569 0266 0396      		adiw r24,3
+ 570 0268 0E94 0000 		call spi_transaction
+ 571               	.LVL49:
+ 136:../myavrnrflib/nrf.c ****       return 0;
+ 572               		.loc 1 136 0
+ 573 026c 80E0      		ldi r24,0
+ 574               	.L19:
+ 575               	/* epilogue start */
+ 137:../myavrnrflib/nrf.c ****    }
+ 138:../myavrnrflib/nrf.c ****    return payloadLength;
+ 139:../myavrnrflib/nrf.c **** }
+ 576               		.loc 1 139 0
+ 577 026e 0F90      		pop __tmp_reg__
+ 578 0270 0F90      		pop __tmp_reg__
+ 579 0272 0F90      		pop __tmp_reg__
+ 580 0274 0F90      		pop __tmp_reg__
+ 581 0276 DF91      		pop r29
+ 582 0278 CF91      		pop r28
+ 583 027a 0895      		ret
+ 584               	.LFE17:
+ 586               	.global	checkRx
+ 588               	checkRx:
+ 589               	.LFB18:
+ 140:../myavrnrflib/nrf.c **** 
+ 141:../myavrnrflib/nrf.c **** // check and see if anything is in the receive buffer
+ 142:../myavrnrflib/nrf.c **** uint8_t checkRx(void) {
+ 590               		.loc 1 142 0
+ 591               	/* prologue: function */
+ 592               	/* frame size = 0 */
+ 593               	/* stack size = 0 */
+ 594               	.L__stack_usage = 0
+ 143:../myavrnrflib/nrf.c ****    char status = readReg(STATUS);
+ 595               		.loc 1 143 0
+ 596 027c 87E0      		ldi r24,lo8(7)
+ 597 027e 0E94 0000 		call readReg
+ 598               	.LVL50:
+ 144:../myavrnrflib/nrf.c ****    if (status & 0x0E) { // 0x0E = RX FIFO empty
+ 599               		.loc 1 144 0
+ 600 0282 982F      		mov r25,r24
+ 601 0284 9E70      		andi r25,lo8(14)
+ 602 0286 81E0      		ldi r24,lo8(1)
+ 603               	.LVL51:
+ 604 0288 01F0      		breq .L21
+ 605 028a 80E0      		ldi r24,0
+ 606               	.L21:
+ 145:../myavrnrflib/nrf.c ****       return 0;
+ 146:../myavrnrflib/nrf.c ****    } else {
+ 147:../myavrnrflib/nrf.c ****       return 1;
+ 148:../myavrnrflib/nrf.c ****    }
+ 149:../myavrnrflib/nrf.c **** }
+ 607               		.loc 1 149 0
+ 608 028c 0895      		ret
+ 609               	.LFE18:
+ 611               	.global	dynReceive
+ 613               	dynReceive:
+ 614               	.LFB19:
+ 150:../myavrnrflib/nrf.c **** 
+ 151:../myavrnrflib/nrf.c **** // Receive a payload with a dynamic length - returns length
+ 152:../myavrnrflib/nrf.c **** // char * payload MUST BE 33 bytes. NO LESS
+ 153:../myavrnrflib/nrf.c **** uint8_t dynReceive(char * payload) {
+ 615               		.loc 1 153 0
+ 616               	.LVL52:
+ 617 028e 9F92      		push r9
+ 618               	.LCFI27:
+ 619 0290 AF92      		push r10
+ 620               	.LCFI28:
+ 621 0292 BF92      		push r11
+ 622               	.LCFI29:
+ 623 0294 CF92      		push r12
+ 624               	.LCFI30:
+ 625 0296 DF92      		push r13
+ 626               	.LCFI31:
+ 627 0298 EF92      		push r14
+ 628               	.LCFI32:
+ 629 029a FF92      		push r15
+ 630               	.LCFI33:
+ 631 029c 0F93      		push r16
+ 632               	.LCFI34:
+ 633 029e 1F93      		push r17
+ 634               	.LCFI35:
+ 635 02a0 CF93      		push r28
+ 636               	.LCFI36:
+ 637 02a2 DF93      		push r29
+ 638               	.LCFI37:
+ 639 02a4 CDB7      		in r28,__SP_L__
+ 640 02a6 DEB7      		in r29,__SP_H__
+ 641               	.LCFI38:
+ 642               	/* prologue: function */
+ 643               	/* frame size = 0 */
+ 644               	/* stack size = 11 */
+ 645               	.L__stack_usage = 11
+ 646 02a8 7C01      		movw r14,r24
+ 154:../myavrnrflib/nrf.c ****    uint8_t rxcheck = checkRx();
+ 155:../myavrnrflib/nrf.c ****    if (rxcheck == 0) {
+ 156:../myavrnrflib/nrf.c ****       return 0;
+ 157:../myavrnrflib/nrf.c ****    }   
+ 158:../myavrnrflib/nrf.c ****    _delay_ms(3); // small delay so entire message is ready first
+ 159:../myavrnrflib/nrf.c ****    uint8_t payloadLength = getLength();
+ 160:../myavrnrflib/nrf.c ****    if (payloadLength == 0) {
+ 161:../myavrnrflib/nrf.c ****       return 0;
+ 162:../myavrnrflib/nrf.c ****    }
+ 163:../myavrnrflib/nrf.c ****    char dataout[(payloadLength + 1)];
+ 164:../myavrnrflib/nrf.c ****    char datain[(payloadLength + 1)];
+ 165:../myavrnrflib/nrf.c ****    dataout[0] = R_RX_PAYLOAD;
+ 166:../myavrnrflib/nrf.c ****    // set up dataout
+ 167:../myavrnrflib/nrf.c ****    for (int x = 0; x < payloadLength; x++) {
+ 168:../myavrnrflib/nrf.c ****       dataout[(x + 1)] = NOP;
+ 169:../myavrnrflib/nrf.c ****    }
+ 170:../myavrnrflib/nrf.c ****    spi_transaction(dataout, datain, (payloadLength + 1));
+ 171:../myavrnrflib/nrf.c ****    // Assign the data to the payload pointer. dataout[0] = status so skip it
+ 172:../myavrnrflib/nrf.c ****    for (int y = 0; y < payloadLength; y++) {
+ 173:../myavrnrflib/nrf.c ****       payload[y] = datain[(y + 1)];
+ 174:../myavrnrflib/nrf.c ****    }
+ 175:../myavrnrflib/nrf.c ****    char status = readReg(STATUS);
+ 176:../myavrnrflib/nrf.c ****    status |= 0x40; // writing to the rx fifo to clear it
+ 177:../myavrnrflib/nrf.c ****    writeReg(STATUS,status);
+ 178:../myavrnrflib/nrf.c ****    payload[payloadLength] = 0;
+ 179:../myavrnrflib/nrf.c ****    return payloadLength;
+ 180:../myavrnrflib/nrf.c **** }
+ 647               		.loc 1 180 0
+ 648 02aa ADB6      		in r10,__SP_L__
+ 649 02ac BEB6      		in r11,__SP_H__
+ 154:../myavrnrflib/nrf.c ****    uint8_t rxcheck = checkRx();
+ 650               		.loc 1 154 0
+ 651 02ae 0E94 0000 		call checkRx
+ 652               	.LVL53:
+ 155:../myavrnrflib/nrf.c ****    if (rxcheck == 0) {
+ 653               		.loc 1 155 0
+ 654 02b2 8111      		cpse r24,__zero_reg__
+ 655 02b4 00C0      		rjmp .L26
+ 656               	.LVL54:
+ 657               	.L28:
+ 658               	.LBB16:
+ 156:../myavrnrflib/nrf.c ****       return 0;
+ 659               		.loc 1 156 0
+ 660 02b6 912C      		mov r9,__zero_reg__
+ 661 02b8 00C0      		rjmp .L27
+ 662               	.LVL55:
+ 663               	.L26:
+ 664               	.LBE16:
+ 665               	.LBB17:
+ 666               	.LBB18:
+ 667               		.file 2 "/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h"
+   1:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** /* Copyright (c) 2002, Marek Michalkiewicz
+   2:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    Copyright (c) 2004,2005,2007 Joerg Wunsch
+   3:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    Copyright (c) 2007  Florin-Viorel Petrov
+   4:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    All rights reserved.
+   5:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+   6:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    Redistribution and use in source and binary forms, with or without
+   7:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    modification, are permitted provided that the following conditions are met:
+   8:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+   9:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    * Redistributions of source code must retain the above copyright
+  10:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer.
+  11:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  12:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    * Redistributions in binary form must reproduce the above copyright
+  13:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****      notice, this list of conditions and the following disclaimer in
+  14:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****      the documentation and/or other materials provided with the
+  15:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****      distribution.
+  16:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  17:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    * Neither the name of the copyright holders nor the names of
+  18:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****      contributors may be used to endorse or promote products derived
+  19:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****      from this software without specific prior written permission.
+  20:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  21:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+  22:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+  23:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+  24:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
+  25:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+  26:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+  27:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+  28:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+  29:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+  30:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+  31:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   POSSIBILITY OF SUCH DAMAGE. */
+  32:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  33:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** /* $Id: delay.h.in 2251 2011-09-14 08:20:33Z joerg_wunsch $ */
+  34:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  35:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #ifndef _UTIL_DELAY_H_
+  36:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #define _UTIL_DELAY_H_ 1
+  37:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  38:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #ifndef __HAS_DELAY_CYCLES
+  39:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #define __HAS_DELAY_CYCLES 1
+  40:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #endif
+  41:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  42:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #include <inttypes.h>
+  43:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #include <util/delay_basic.h>
+  44:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #include <math.h>
+  45:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  46:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** /** \file */
+  47:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** /** \defgroup util_delay <util/delay.h>: Convenience functions for busy-wait delay loops
+  48:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     \code
+  49:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     #define F_CPU 1000000UL  // 1 MHz
+  50:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     //#define F_CPU 14.7456E6
+  51:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     #include <util/delay.h>
+  52:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     \endcode
+  53:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  54:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     \note As an alternative method, it is possible to pass the
+  55:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     F_CPU macro down to the compiler from the Makefile.
+  56:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     Obviously, in that case, no \c \#define statement should be
+  57:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     used.
+  58:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  59:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     The functions in this header file are wrappers around the basic
+  60:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     busy-wait functions from <util/delay_basic.h>.  They are meant as
+  61:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     convenience functions where actual time values can be specified
+  62:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     rather than a number of cycles to wait for.  The idea behind is
+  63:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     that compile-time constant expressions will be eliminated by
+  64:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     compiler optimization so floating-point expressions can be used
+  65:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     to calculate the number of delay cycles needed based on the CPU
+  66:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     frequency passed by the macro F_CPU.
+  67:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  68:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     \note In order for these functions to work as intended, compiler
+  69:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     optimizations <em>must</em> be enabled, and the delay time
+  70:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     <em>must</em> be an expression that is a known constant at
+  71:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     compile-time.  If these requirements are not met, the resulting
+  72:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     delay will be much longer (and basically unpredictable), and
+  73:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     applications that otherwise do not use floating-point calculations
+  74:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     will experience severe code bloat by the floating-point library
+  75:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     routines linked into the application.
+  76:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  77:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     The functions available allow the specification of microsecond, and
+  78:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     millisecond delays directly, using the application-supplied macro
+  79:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     F_CPU as the CPU clock frequency (in Hertz).
+  80:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  81:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** */
+  82:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  83:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #if !defined(__DOXYGEN__)
+  84:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** static inline void _delay_us(double __us) __attribute__((always_inline));
+  85:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** static inline void _delay_ms(double __ms) __attribute__((always_inline));
+  86:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #endif
+  87:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  88:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #ifndef F_CPU
+  89:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** /* prevent compiler error by supplying a default */
+  90:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** # warning "F_CPU not defined for <util/delay.h>"
+  91:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** # define F_CPU 1000000UL
+  92:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #endif
+  93:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  94:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #ifndef __OPTIMIZE__
+  95:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** # warning "Compiler optimizations disabled; functions from <util/delay.h> won't work as designed"
+  96:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #endif
+  97:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+  98:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+  99:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 100:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   __STDC_HOSTED__
+ 101:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #  include <math.h>
+ 102:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #endif
+ 103:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 104:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** /**
+ 105:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    \ingroup util_delay
+ 106:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 107:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    Perform a delay of \c __ms milliseconds, using _delay_loop_2().
+ 108:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 109:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    The macro F_CPU is supposed to be defined to a
+ 110:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    constant defining the CPU clock frequency (in Hertz).
+ 111:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 112:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    The maximal possible delay is 262.14 ms / F_CPU in MHz.
+ 113:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 114:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    When the user request delay which exceed the maximum possible one,
+ 115:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    _delay_ms() provides a decreased resolution functionality. In this
+ 116:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    mode _delay_ms() will work with a resolution of 1/10 ms, providing
+ 117:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    delays up to 6.5535 seconds (independent from CPU frequency).  The
+ 118:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    user will not be informed about decreased resolution.
+ 119:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 120:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    If the avr-gcc toolchain has __builtin_avr_delay_cycles(unsigned long)
+ 121:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    support, maximal possible delay is 4294967.295 ms/ F_CPU in MHz. For
+ 122:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    values greater than the maximal possible delay, overflows results in
+ 123:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    no delay i.e., 0ms.
+ 124:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 125:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    Conversion of __us into clock cycles may not always result in integer.
+ 126:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    By default, the clock cycles rounded up to next integer. This ensures that
+ 127:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    the user gets atleast __us microseconds of delay.
+ 128:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 129:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    Alternatively, user can define __DELAY_ROUND_DOWN__ and __DELAY_ROUND_CLOSEST__
+ 130:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    to round down and round to closest integer.
+ 131:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 132:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    Note: The new implementation of _delay_ms(double __ms) with 
+ 133:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****     __builtin_avr_delay_cycles(unsigned long) support is not backward compatible. 
+ 134:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    User can define __DELAY_BACKWARD_COMPATIBLE__ to get a backward compatible delay.
+ 135:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    Also, the backward compatible
+ 136:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    algorithm will be chosen if the code is compiled in a <em>freestanding
+ 137:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    environment</em> (GCC option \c -ffreestanding), as the math functions
+ 138:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****    required for rounding are not available to the compiler then.
+ 139:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 140:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****  */
+ 141:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** void
+ 142:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** _delay_ms(double __ms)
+ 143:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** {
+ 144:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	uint16_t __ticks;
+ 145:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	double __tmp ; 
+ 146:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** #if __HAS_DELAY_CYCLES && defined(__OPTIMIZE__) && \
+ 147:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   !defined(__DELAY_BACKWARD_COMPATIBLE__) &&	   \
+ 148:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h ****   __STDC_HOSTED__
+ 149:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	uint32_t __ticks_dc;
+ 150:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	extern void __builtin_avr_delay_cycles(unsigned long);
+ 151:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	__tmp = ((F_CPU) / 1e3) * __ms;
+ 152:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 153:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	#if defined(__DELAY_ROUND_DOWN__)
+ 154:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)fabs(__tmp);
+ 155:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 156:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	#elif defined(__DELAY_ROUND_CLOSEST__)
+ 157:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(fabs(__tmp)+0.5);
+ 158:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 159:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	#else
+ 160:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 		//round up by default
+ 161:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 		__ticks_dc = (uint32_t)(ceil(fabs(__tmp)));
+ 162:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	#endif
+ 163:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 
+ 164:/usr/lib/gcc/avr/4.7.2/../../../avr/include/util/delay.h **** 	__builtin_avr_delay_cycles(__ticks_dc);
+ 668               		.loc 2 164 0
+ 669 02ba 8FED      		ldi r24,lo8(11999)
+ 670 02bc 9EE2      		ldi r25,hi8(11999)
+ 671 02be 0197      		1: sbiw r24,1
+ 672 02c0 01F4      		brne 1b
+ 673               	.LVL56:
+ 674 02c2 00C0      		rjmp .
+ 675 02c4 0000      		nop
+ 676               	.LBE18:
+ 677               	.LBE17:
+ 159:../myavrnrflib/nrf.c ****    uint8_t payloadLength = getLength();
+ 678               		.loc 1 159 0
+ 679 02c6 0E94 0000 		call getLength
+ 680               	.LVL57:
+ 681 02ca 982E      		mov r9,r24
+ 682               	.LVL58:
+ 160:../myavrnrflib/nrf.c ****    if (payloadLength == 0) {
+ 683               		.loc 1 160 0
+ 684 02cc 8823      		tst r24
+ 685 02ce 01F0      		breq .L28
+ 163:../myavrnrflib/nrf.c ****    char dataout[(payloadLength + 1)];
+ 686               		.loc 1 163 0
+ 687 02d0 082F      		mov r16,r24
+ 688 02d2 10E0      		ldi r17,0
+ 689               	.LVL59:
+ 690 02d4 9801      		movw r18,r16
+ 691 02d6 2F5F      		subi r18,-1
+ 692 02d8 3F4F      		sbci r19,-1
+ 693 02da 8DB7      		in r24,__SP_L__
+ 694 02dc 9EB7      		in r25,__SP_H__
+ 695 02de 821B      		sub r24,r18
+ 696 02e0 930B      		sbc r25,r19
+ 697 02e2 0FB6      		in __tmp_reg__,__SREG__
+ 698 02e4 F894      		cli
+ 699 02e6 9EBF      		out __SP_H__,r25
+ 700 02e8 0FBE      		out __SREG__,__tmp_reg__
+ 701 02ea 8DBF      		out __SP_L__,r24
+ 702 02ec EDB7      		in r30,__SP_L__
+ 703 02ee FEB7      		in r31,__SP_H__
+ 704 02f0 3196      		adiw r30,1
+ 705               	.LVL60:
+ 164:../myavrnrflib/nrf.c ****    char datain[(payloadLength + 1)];
+ 706               		.loc 1 164 0
+ 707 02f2 821B      		sub r24,r18
+ 708 02f4 930B      		sbc r25,r19
+ 709 02f6 0FB6      		in __tmp_reg__,__SREG__
+ 710 02f8 F894      		cli
+ 711 02fa 9EBF      		out __SP_H__,r25
+ 712 02fc 0FBE      		out __SREG__,__tmp_reg__
+ 713 02fe 8DBF      		out __SP_L__,r24
+ 714 0300 CDB6      		in r12,__SP_L__
+ 715 0302 DEB6      		in r13,__SP_H__
+ 716 0304 8FEF      		ldi r24,-1
+ 717 0306 C81A      		sub r12,r24
+ 718 0308 D80A      		sbc r13,r24
+ 719               	.LVL61:
+ 165:../myavrnrflib/nrf.c ****    dataout[0] = R_RX_PAYLOAD;
+ 720               		.loc 1 165 0
+ 721 030a 81E6      		ldi r24,lo8(97)
+ 722 030c 8083      		st Z,r24
+ 723               	.LVL62:
+ 724               	.LBB19:
+ 167:../myavrnrflib/nrf.c ****    for (int x = 0; x < payloadLength; x++) {
+ 725               		.loc 1 167 0
+ 726 030e 20E0      		ldi r18,0
+ 727 0310 30E0      		ldi r19,0
+ 728               	.LVL63:
+ 168:../myavrnrflib/nrf.c ****       dataout[(x + 1)] = NOP;
+ 729               		.loc 1 168 0
+ 730 0312 8FEF      		ldi r24,lo8(-1)
+ 167:../myavrnrflib/nrf.c ****    for (int x = 0; x < payloadLength; x++) {
+ 731               		.loc 1 167 0
+ 732 0314 00C0      		rjmp .L29
+ 733               	.LVL64:
+ 734               	.L30:
+ 168:../myavrnrflib/nrf.c ****       dataout[(x + 1)] = NOP;
+ 735               		.loc 1 168 0 discriminator 2
+ 736 0316 2F5F      		subi r18,-1
+ 737 0318 3F4F      		sbci r19,-1
+ 738               	.LVL65:
+ 153:../myavrnrflib/nrf.c **** uint8_t dynReceive(char * payload) {
+ 739               		.loc 1 153 0 discriminator 2
+ 740 031a DF01      		movw r26,r30
+ 741 031c A20F      		add r26,r18
+ 742 031e B31F      		adc r27,r19
+ 168:../myavrnrflib/nrf.c ****       dataout[(x + 1)] = NOP;
+ 743               		.loc 1 168 0 discriminator 2
+ 744 0320 8C93      		st X,r24
+ 745               	.LVL66:
+ 746               	.L29:
+ 167:../myavrnrflib/nrf.c ****    for (int x = 0; x < payloadLength; x++) {
+ 747               		.loc 1 167 0 discriminator 1
+ 748 0322 2017      		cp r18,r16
+ 749 0324 3107      		cpc r19,r17
+ 750 0326 04F0      		brlt .L30
+ 751               	.LBE19:
+ 170:../myavrnrflib/nrf.c ****    spi_transaction(dataout, datain, (payloadLength + 1));
+ 752               		.loc 1 170 0
+ 753 0328 492D      		mov r20,r9
+ 754 032a 4F5F      		subi r20,lo8(-(1))
+ 755 032c B601      		movw r22,r12
+ 756 032e CF01      		movw r24,r30
+ 757 0330 0E94 0000 		call spi_transaction
+ 758               	.LVL67:
+ 759 0334 F701      		movw r30,r14
+ 760               	.LBB20:
+ 172:../myavrnrflib/nrf.c ****    for (int y = 0; y < payloadLength; y++) {
+ 761               		.loc 1 172 0
+ 762 0336 20E0      		ldi r18,0
+ 763 0338 30E0      		ldi r19,0
+ 764 033a 00C0      		rjmp .L31
+ 765               	.LVL68:
+ 766               	.L32:
+ 173:../myavrnrflib/nrf.c ****       payload[y] = datain[(y + 1)];
+ 767               		.loc 1 173 0 discriminator 2
+ 768 033c 2F5F      		subi r18,-1
+ 769 033e 3F4F      		sbci r19,-1
+ 770               	.LVL69:
+ 153:../myavrnrflib/nrf.c **** uint8_t dynReceive(char * payload) {
+ 771               		.loc 1 153 0 discriminator 2
+ 772 0340 D601      		movw r26,r12
+ 773 0342 A20F      		add r26,r18
+ 774 0344 B31F      		adc r27,r19
+ 173:../myavrnrflib/nrf.c ****       payload[y] = datain[(y + 1)];
+ 775               		.loc 1 173 0 discriminator 2
+ 776 0346 8C91      		ld r24,X
+ 777 0348 8193      		st Z+,r24
+ 778               	.LVL70:
+ 779               	.L31:
+ 172:../myavrnrflib/nrf.c ****    for (int y = 0; y < payloadLength; y++) {
+ 780               		.loc 1 172 0 discriminator 1
+ 781 034a 2017      		cp r18,r16
+ 782 034c 3107      		cpc r19,r17
+ 783 034e 04F0      		brlt .L32
+ 784               	.LBE20:
+ 175:../myavrnrflib/nrf.c ****    char status = readReg(STATUS);
+ 785               		.loc 1 175 0
+ 786 0350 87E0      		ldi r24,lo8(7)
+ 787 0352 0E94 0000 		call readReg
+ 788               	.LVL71:
+ 176:../myavrnrflib/nrf.c ****    status |= 0x40; // writing to the rx fifo to clear it
+ 789               		.loc 1 176 0
+ 790 0356 682F      		mov r22,r24
+ 791 0358 6064      		ori r22,lo8(64)
+ 792               	.LVL72:
+ 177:../myavrnrflib/nrf.c ****    writeReg(STATUS,status);
+ 793               		.loc 1 177 0
+ 794 035a 87E0      		ldi r24,lo8(7)
+ 795 035c 0E94 0000 		call writeReg
+ 796               	.LVL73:
+ 178:../myavrnrflib/nrf.c ****    payload[payloadLength] = 0;
+ 797               		.loc 1 178 0
+ 798 0360 F701      		movw r30,r14
+ 799 0362 E90D      		add r30,r9
+ 800 0364 F11D      		adc r31,__zero_reg__
+ 801 0366 1082      		st Z,__zero_reg__
+ 802               	.LVL74:
+ 803               	.L27:
+ 804               		.loc 1 180 0
+ 805 0368 892D      		mov r24,r9
+ 806 036a 0FB6      		in __tmp_reg__,__SREG__
+ 807 036c F894      		cli
+ 808 036e BEBE      		out __SP_H__,r11
+ 809 0370 0FBE      		out __SREG__,__tmp_reg__
+ 810 0372 ADBE      		out __SP_L__,r10
+ 811               	/* epilogue start */
+ 812 0374 DF91      		pop r29
+ 813 0376 CF91      		pop r28
+ 814 0378 1F91      		pop r17
+ 815 037a 0F91      		pop r16
+ 816 037c FF90      		pop r15
+ 817 037e EF90      		pop r14
+ 818               	.LVL75:
+ 819 0380 DF90      		pop r13
+ 820 0382 CF90      		pop r12
+ 821 0384 BF90      		pop r11
+ 822 0386 AF90      		pop r10
+ 823 0388 9F90      		pop r9
+ 824 038a 0895      		ret
+ 825               	.LFE19:
+ 827               	.global	receive
+ 829               	receive:
+ 830               	.LFB20:
+ 181:../myavrnrflib/nrf.c **** 
+ 182:../myavrnrflib/nrf.c **** // Receive a fixed length payload
+ 183:../myavrnrflib/nrf.c **** // char * payload must be DATA_SIZE or larger
+ 184:../myavrnrflib/nrf.c **** uint8_t receive(char * payload) {
+ 831               		.loc 1 184 0
+ 832               	.LVL76:
+ 833 038c CF92      		push r12
+ 834               	.LCFI39:
+ 835 038e DF92      		push r13
+ 836               	.LCFI40:
+ 837 0390 EF92      		push r14
+ 838               	.LCFI41:
+ 839 0392 FF92      		push r15
+ 840               	.LCFI42:
+ 841 0394 0F93      		push r16
+ 842               	.LCFI43:
+ 843 0396 1F93      		push r17
+ 844               	.LCFI44:
+ 845 0398 CF93      		push r28
+ 846               	.LCFI45:
+ 847 039a DF93      		push r29
+ 848               	.LCFI46:
+ 849 039c CDB7      		in r28,__SP_L__
+ 850 039e DEB7      		in r29,__SP_H__
+ 851               	.LCFI47:
+ 852 03a0 C254      		subi r28,66
+ 853 03a2 D109      		sbc r29,__zero_reg__
+ 854               	.LCFI48:
+ 855 03a4 0FB6      		in __tmp_reg__,__SREG__
+ 856 03a6 F894      		cli
+ 857 03a8 DEBF      		out __SP_H__,r29
+ 858 03aa 0FBE      		out __SREG__,__tmp_reg__
+ 859 03ac CDBF      		out __SP_L__,r28
+ 860               	/* prologue: function */
+ 861               	/* frame size = 66 */
+ 862               	/* stack size = 74 */
+ 863               	.L__stack_usage = 74
+ 864 03ae 6C01      		movw r12,r24
+ 185:../myavrnrflib/nrf.c ****    uint8_t rxcheck = checkRx();
+ 865               		.loc 1 185 0
+ 866 03b0 0E94 0000 		call checkRx
+ 867               	.LVL77:
+ 186:../myavrnrflib/nrf.c ****    if (rxcheck == 0) {
+ 868               		.loc 1 186 0
+ 869 03b4 8823      		tst r24
+ 870 03b6 01F0      		breq .L40
+ 187:../myavrnrflib/nrf.c ****       return 0;
+ 188:../myavrnrflib/nrf.c ****    }   
+ 189:../myavrnrflib/nrf.c ****    char dataout[(DATA_SIZE + 1)];
+ 190:../myavrnrflib/nrf.c ****    char datain[(DATA_SIZE + 1)];
+ 191:../myavrnrflib/nrf.c ****    dataout[0] = R_RX_PAYLOAD;
+ 871               		.loc 1 191 0
+ 872 03b8 81E6      		ldi r24,lo8(97)
+ 873               	.LVL78:
+ 874 03ba 8AA3      		std Y+34,r24
+ 875               	.LVL79:
+ 876 03bc 8E01      		movw r16,r28
+ 877 03be 0D5D      		subi r16,-35
+ 878 03c0 1F4F      		sbci r17,-1
+ 184:../myavrnrflib/nrf.c **** uint8_t receive(char * payload) {
+ 879               		.loc 1 184 0
+ 880 03c2 7E01      		movw r14,r28
+ 881 03c4 83E4      		ldi r24,67
+ 882 03c6 E80E      		add r14,r24
+ 883 03c8 F11C      		adc r15,__zero_reg__
+ 884 03ca F801      		movw r30,r16
+ 885               	.LBB21:
+ 192:../myavrnrflib/nrf.c ****    // set up dataout
+ 193:../myavrnrflib/nrf.c ****    for (int x = 0; x < DATA_SIZE; x++) {
+ 194:../myavrnrflib/nrf.c ****       dataout[(x + 1)] = NOP;
+ 886               		.loc 1 194 0
+ 887 03cc 8FEF      		ldi r24,lo8(-1)
+ 888               	.LVL80:
+ 889               	.L38:
+ 890               		.loc 1 194 0 is_stmt 0 discriminator 2
+ 891 03ce 8193      		st Z+,r24
+ 193:../myavrnrflib/nrf.c ****    for (int x = 0; x < DATA_SIZE; x++) {
+ 892               		.loc 1 193 0 is_stmt 1 discriminator 2
+ 893 03d0 EE15      		cp r30,r14
+ 894 03d2 FF05      		cpc r31,r15
+ 895 03d4 01F4      		brne .L38
+ 896               	.LBE21:
+ 195:../myavrnrflib/nrf.c ****    }
+ 196:../myavrnrflib/nrf.c ****    spi_transaction(dataout, datain, (DATA_SIZE + 1 ));
+ 897               		.loc 1 196 0
+ 898 03d6 41E2      		ldi r20,lo8(33)
+ 899 03d8 BE01      		movw r22,r28
+ 900 03da 6F5F      		subi r22,-1
+ 901 03dc 7F4F      		sbci r23,-1
+ 902 03de CE01      		movw r24,r28
+ 903 03e0 8296      		adiw r24,34
+ 904 03e2 0E94 0000 		call spi_transaction
+ 905               	.LVL81:
+ 906 03e6 F601      		movw r30,r12
+ 907               	.LVL82:
+ 908               	.L39:
+ 909               	.LBB22:
+ 197:../myavrnrflib/nrf.c ****    // Assign the data to the payload pointer. dataout[0] = status so skip it
+ 198:../myavrnrflib/nrf.c ****    for (int y = 0; y < DATA_SIZE; y++) {
+ 199:../myavrnrflib/nrf.c ****       payload[y] = dataout[(y + 1)];
+ 910               		.loc 1 199 0 discriminator 2
+ 911 03e8 D801      		movw r26,r16
+ 912 03ea 8D91      		ld r24,X+
+ 913 03ec 8D01      		movw r16,r26
+ 914 03ee 8193      		st Z+,r24
+ 198:../myavrnrflib/nrf.c ****    for (int y = 0; y < DATA_SIZE; y++) {
+ 915               		.loc 1 198 0 discriminator 2
+ 916 03f0 AE15      		cp r26,r14
+ 917 03f2 BF05      		cpc r27,r15
+ 918 03f4 01F4      		brne .L39
+ 200:../myavrnrflib/nrf.c ****    }
+ 201:../myavrnrflib/nrf.c ****    return 1;
+ 919               		.loc 1 201 0
+ 920 03f6 81E0      		ldi r24,lo8(1)
+ 921 03f8 00C0      		rjmp .L37
+ 922               	.LVL83:
+ 923               	.L40:
+ 924               	.LBE22:
+ 187:../myavrnrflib/nrf.c ****       return 0;
+ 925               		.loc 1 187 0
+ 926 03fa 80E0      		ldi r24,0
+ 927               	.LVL84:
+ 928               	.L37:
+ 929               	/* epilogue start */
+ 202:../myavrnrflib/nrf.c **** }
+ 930               		.loc 1 202 0
+ 931 03fc CE5B      		subi r28,-66
+ 932 03fe DF4F      		sbci r29,-1
+ 933 0400 0FB6      		in __tmp_reg__,__SREG__
+ 934 0402 F894      		cli
+ 935 0404 DEBF      		out __SP_H__,r29
+ 936 0406 0FBE      		out __SREG__,__tmp_reg__
+ 937 0408 CDBF      		out __SP_L__,r28
+ 938 040a DF91      		pop r29
+ 939 040c CF91      		pop r28
+ 940 040e 1F91      		pop r17
+ 941 0410 0F91      		pop r16
+ 942 0412 FF90      		pop r15
+ 943 0414 EF90      		pop r14
+ 944 0416 DF90      		pop r13
+ 945 0418 CF90      		pop r12
+ 946               	.LVL85:
+ 947 041a 0895      		ret
+ 948               	.LFE20:
+ 950               	.global	transmit
+ 952               	transmit:
+ 953               	.LFB21:
+ 203:../myavrnrflib/nrf.c **** 
+ 204:../myavrnrflib/nrf.c **** // Send something.  Make sure you turn off receive first
+ 205:../myavrnrflib/nrf.c **** uint8_t transmit(char * payload, uint8_t datasize) {
+ 954               		.loc 1 205 0
+ 955               	.LVL86:
+ 956 041c CF92      		push r12
+ 957               	.LCFI49:
+ 958 041e DF92      		push r13
+ 959               	.LCFI50:
+ 960 0420 EF92      		push r14
+ 961               	.LCFI51:
+ 962 0422 FF92      		push r15
+ 963               	.LCFI52:
+ 964 0424 0F93      		push r16
+ 965               	.LCFI53:
+ 966 0426 1F93      		push r17
+ 967               	.LCFI54:
+ 968 0428 CF93      		push r28
+ 969               	.LCFI55:
+ 970 042a DF93      		push r29
+ 971               	.LCFI56:
+ 972 042c 00D0      		rcall .
+ 973               	.LCFI57:
+ 974 042e CDB7      		in r28,__SP_L__
+ 975 0430 DEB7      		in r29,__SP_H__
+ 976               	.LCFI58:
+ 977               	/* prologue: function */
+ 978               	/* frame size = 2 */
+ 979               	/* stack size = 10 */
+ 980               	.L__stack_usage = 10
+ 981 0432 462F      		mov r20,r22
+ 206:../myavrnrflib/nrf.c ****    char dataout[(datasize + 1)];
+ 207:../myavrnrflib/nrf.c ****    char datain[(datasize + 1)];
+ 208:../myavrnrflib/nrf.c ****    char status;
+ 209:../myavrnrflib/nrf.c ****    char flush[] = {FLUSH_TX}; // flush tx command
+ 210:../myavrnrflib/nrf.c ****    char dontcare[1]; // need a variable to receive
+ 211:../myavrnrflib/nrf.c ****    dataout[0] = W_TX_PAYLOAD;
+ 212:../myavrnrflib/nrf.c ****    for (int x = 0; x < datasize; x++) {
+ 213:../myavrnrflib/nrf.c ****       dataout[(x+1)] = payload[x];
+ 214:../myavrnrflib/nrf.c ****    }
+ 215:../myavrnrflib/nrf.c ****    // fill the tx buffer
+ 216:../myavrnrflib/nrf.c ****    spi_transaction(dataout, datain, (datasize +1));
+ 217:../myavrnrflib/nrf.c ****    powerUp();
+ 218:../myavrnrflib/nrf.c ****    // self induced time out loop incase it doesn't respond
+ 219:../myavrnrflib/nrf.c ****    for (int y = 0; y < 100; y ++) {
+ 220:../myavrnrflib/nrf.c ****       _delay_ms(2); // wait some arbitrary time
+ 221:../myavrnrflib/nrf.c ****       // get tx status and see if it worked
+ 222:../myavrnrflib/nrf.c ****       status = readReg(STATUS);
+ 223:../myavrnrflib/nrf.c ****       if ((status & (1 << TX_DS)) == (1 << TX_DS)) { // it worked
+ 224:../myavrnrflib/nrf.c ****          writeReg(STATUS, status); // clear the status
+ 225:../myavrnrflib/nrf.c ****          powerDown();
+ 226:../myavrnrflib/nrf.c ****          _delay_ms(2); // let receiver keep up
+ 227:../myavrnrflib/nrf.c ****          return 1;
+ 228:../myavrnrflib/nrf.c ****       } else if ((status & (1 << MAX_RT)) == (1 << MAX_RT)) { // radio time out
+ 229:../myavrnrflib/nrf.c ****          writeReg(STATUS, status);
+ 230:../myavrnrflib/nrf.c ****          spi_transaction(flush,dontcare,1); // clear the buffer
+ 231:../myavrnrflib/nrf.c ****          powerDown();
+ 232:../myavrnrflib/nrf.c ****          return 0;
+ 233:../myavrnrflib/nrf.c ****       }
+ 234:../myavrnrflib/nrf.c ****    }
+ 235:../myavrnrflib/nrf.c ****    // if we are here we timed out
+ 236:../myavrnrflib/nrf.c ****    spi_transaction(flush,dontcare,1);
+ 237:../myavrnrflib/nrf.c ****    powerDown();
+ 238:../myavrnrflib/nrf.c ****    return 0;
+ 239:../myavrnrflib/nrf.c **** }
+ 982               		.loc 1 239 0
+ 983 0434 EDB6      		in r14,__SP_L__
+ 984 0436 FEB6      		in r15,__SP_H__
+ 206:../myavrnrflib/nrf.c ****    char dataout[(datasize + 1)];
+ 985               		.loc 1 206 0
+ 986 0438 062F      		mov r16,r22
+ 987 043a 10E0      		ldi r17,0
+ 988               	.LVL87:
+ 989 043c 9801      		movw r18,r16
+ 990 043e 2F5F      		subi r18,-1
+ 991 0440 3F4F      		sbci r19,-1
+ 992 0442 6DB7      		in r22,__SP_L__
+ 993 0444 7EB7      		in r23,__SP_H__
+ 994               	.LVL88:
+ 995 0446 621B      		sub r22,r18
+ 996 0448 730B      		sbc r23,r19
+ 997 044a 0FB6      		in __tmp_reg__,__SREG__
+ 998 044c F894      		cli
+ 999 044e 7EBF      		out __SP_H__,r23
+ 1000 0450 0FBE      		out __SREG__,__tmp_reg__
+ 1001 0452 6DBF      		out __SP_L__,r22
+ 1002 0454 ADB7      		in r26,__SP_L__
+ 1003 0456 BEB7      		in r27,__SP_H__
+ 1004 0458 1196      		adiw r26,1
+ 1005               	.LVL89:
+ 207:../myavrnrflib/nrf.c ****    char datain[(datasize + 1)];
+ 1006               		.loc 1 207 0
+ 1007 045a EDB7      		in r30,__SP_L__
+ 1008 045c FEB7      		in r31,__SP_H__
+ 1009 045e E21B      		sub r30,r18
+ 1010 0460 F30B      		sbc r31,r19
+ 1011 0462 0FB6      		in __tmp_reg__,__SREG__
+ 1012 0464 F894      		cli
+ 1013 0466 FEBF      		out __SP_H__,r31
+ 1014 0468 0FBE      		out __SREG__,__tmp_reg__
+ 1015 046a EDBF      		out __SP_L__,r30
+ 1016 046c 2DB7      		in r18,__SP_L__
+ 1017 046e 3EB7      		in r19,__SP_H__
+ 1018               	.LVL90:
+ 1019 0470 2F5F      		subi r18,-1
+ 1020 0472 3F4F      		sbci r19,-1
+ 1021 0474 B901      		movw r22,r18
+ 1022               	.LVL91:
+ 209:../myavrnrflib/nrf.c ****    char flush[] = {FLUSH_TX}; // flush tx command
+ 1023               		.loc 1 209 0
+ 1024 0476 21EE      		ldi r18,lo8(-31)
+ 1025 0478 2A83      		std Y+2,r18
+ 211:../myavrnrflib/nrf.c ****    dataout[0] = W_TX_PAYLOAD;
+ 1026               		.loc 1 211 0
+ 1027 047a 20EA      		ldi r18,lo8(-96)
+ 1028 047c 2C93      		st X,r18
+ 1029               	.LVL92:
+ 1030 047e 6C01      		movw r12,r24
+ 1031               	.LBB23:
+ 212:../myavrnrflib/nrf.c ****    for (int x = 0; x < datasize; x++) {
+ 1032               		.loc 1 212 0
+ 1033 0480 20E0      		ldi r18,0
+ 1034 0482 30E0      		ldi r19,0
+ 1035 0484 00C0      		rjmp .L44
+ 1036               	.LVL93:
+ 1037               	.L45:
+ 213:../myavrnrflib/nrf.c ****       dataout[(x+1)] = payload[x];
+ 1038               		.loc 1 213 0 discriminator 2
+ 1039 0486 2F5F      		subi r18,-1
+ 1040 0488 3F4F      		sbci r19,-1
+ 1041               	.LVL94:
+ 1042 048a F601      		movw r30,r12
+ 1043 048c 5191      		ld r21,Z+
+ 1044 048e 6F01      		movw r12,r30
+ 205:../myavrnrflib/nrf.c **** uint8_t transmit(char * payload, uint8_t datasize) {
+ 1045               		.loc 1 205 0 discriminator 2
+ 1046 0490 CD01      		movw r24,r26
+ 1047 0492 820F      		add r24,r18
+ 1048 0494 931F      		adc r25,r19
+ 213:../myavrnrflib/nrf.c ****       dataout[(x+1)] = payload[x];
+ 1049               		.loc 1 213 0 discriminator 2
+ 1050 0496 FC01      		movw r30,r24
+ 1051 0498 5083      		st Z,r21
+ 1052               	.LVL95:
+ 1053               	.L44:
+ 212:../myavrnrflib/nrf.c ****    for (int x = 0; x < datasize; x++) {
+ 1054               		.loc 1 212 0 discriminator 1
+ 1055 049a 2017      		cp r18,r16
+ 1056 049c 3107      		cpc r19,r17
+ 1057 049e 04F0      		brlt .L45
+ 1058               	.LBE23:
+ 216:../myavrnrflib/nrf.c ****    spi_transaction(dataout, datain, (datasize +1));
+ 1059               		.loc 1 216 0
+ 1060 04a0 4F5F      		subi r20,lo8(-(1))
+ 1061 04a2 CD01      		movw r24,r26
+ 1062 04a4 0E94 0000 		call spi_transaction
+ 1063               	.LVL96:
+ 217:../myavrnrflib/nrf.c ****    powerUp();
+ 1064               		.loc 1 217 0
+ 1065 04a8 0E94 0000 		call powerUp
+ 1066               	.LVL97:
+ 1067 04ac 04E6      		ldi r16,lo8(100)
+ 1068 04ae 10E0      		ldi r17,0
+ 1069               	.LVL98:
+ 1070               	.L49:
+ 1071               	.LBB24:
+ 1072               	.LBB25:
+ 1073               	.LBB26:
+ 1074               		.loc 2 164 0
+ 1075 04b0 8FE3      		ldi r24,lo8(7999)
+ 1076 04b2 9FE1      		ldi r25,hi8(7999)
+ 1077 04b4 0197      		1: sbiw r24,1
+ 1078 04b6 01F4      		brne 1b
+ 1079 04b8 00C0      		rjmp .
+ 1080 04ba 0000      		nop
+ 1081               	.LBE26:
+ 1082               	.LBE25:
+ 222:../myavrnrflib/nrf.c ****       status = readReg(STATUS);
+ 1083               		.loc 1 222 0
+ 1084 04bc 87E0      		ldi r24,lo8(7)
+ 1085 04be 0E94 0000 		call readReg
+ 1086               	.LVL99:
+ 1087 04c2 682F      		mov r22,r24
+ 1088               	.LVL100:
+ 223:../myavrnrflib/nrf.c ****       if ((status & (1 << TX_DS)) == (1 << TX_DS)) { // it worked
+ 1089               		.loc 1 223 0
+ 1090 04c4 85FF      		sbrs r24,5
+ 1091 04c6 00C0      		rjmp .L46
+ 224:../myavrnrflib/nrf.c ****          writeReg(STATUS, status); // clear the status
+ 1092               		.loc 1 224 0
+ 1093 04c8 87E0      		ldi r24,lo8(7)
+ 1094 04ca 0E94 0000 		call writeReg
+ 1095               	.LVL101:
+ 225:../myavrnrflib/nrf.c ****          powerDown();
+ 1096               		.loc 1 225 0
+ 1097 04ce 0E94 0000 		call powerDown
+ 1098               	.LVL102:
+ 1099               	.LBB27:
+ 1100               	.LBB28:
+ 1101               		.loc 2 164 0
+ 1102 04d2 EFE3      		ldi r30,lo8(7999)
+ 1103 04d4 FFE1      		ldi r31,hi8(7999)
+ 1104 04d6 3197      		1: sbiw r30,1
+ 1105 04d8 01F4      		brne 1b
+ 1106 04da 00C0      		rjmp .
+ 1107 04dc 0000      		nop
+ 227:../myavrnrflib/nrf.c ****          return 1;
+ 1108               		.loc 1 227 0
+ 1109 04de 81E0      		ldi r24,lo8(1)
+ 1110 04e0 00C0      		rjmp .L47
+ 1111               	.LVL103:
+ 1112               	.L46:
+ 1113               	.LBE28:
+ 1114               	.LBE27:
+ 228:../myavrnrflib/nrf.c ****       } else if ((status & (1 << MAX_RT)) == (1 << MAX_RT)) { // radio time out
+ 1115               		.loc 1 228 0
+ 1116 04e2 84FF      		sbrs r24,4
+ 1117 04e4 00C0      		rjmp .L48
+ 229:../myavrnrflib/nrf.c ****          writeReg(STATUS, status);
+ 1118               		.loc 1 229 0
+ 1119 04e6 87E0      		ldi r24,lo8(7)
+ 1120 04e8 0E94 0000 		call writeReg
+ 1121               	.LVL104:
+ 1122 04ec 00C0      		rjmp .L51
+ 1123               	.LVL105:
+ 1124               	.L48:
+ 1125 04ee 0150      		subi r16,1
+ 1126 04f0 1109      		sbc r17,__zero_reg__
+ 219:../myavrnrflib/nrf.c ****    for (int y = 0; y < 100; y ++) {
+ 1127               		.loc 1 219 0
+ 1128 04f2 01F4      		brne .L49
+ 1129               	.LVL106:
+ 1130               	.L51:
+ 1131               	.LBE24:
+ 236:../myavrnrflib/nrf.c ****    spi_transaction(flush,dontcare,1);
+ 1132               		.loc 1 236 0
+ 1133 04f4 41E0      		ldi r20,lo8(1)
+ 1134 04f6 BE01      		movw r22,r28
+ 1135 04f8 6F5F      		subi r22,-1
+ 1136 04fa 7F4F      		sbci r23,-1
+ 1137 04fc CE01      		movw r24,r28
+ 1138 04fe 0296      		adiw r24,2
+ 1139 0500 0E94 0000 		call spi_transaction
+ 1140               	.LVL107:
+ 237:../myavrnrflib/nrf.c ****    powerDown();
+ 1141               		.loc 1 237 0
+ 1142 0504 0E94 0000 		call powerDown
+ 1143               	.LVL108:
+ 238:../myavrnrflib/nrf.c ****    return 0;
+ 1144               		.loc 1 238 0
+ 1145 0508 80E0      		ldi r24,0
+ 1146               	.L47:
+ 1147               		.loc 1 239 0
+ 1148 050a 0FB6      		in __tmp_reg__,__SREG__
+ 1149 050c F894      		cli
+ 1150 050e FEBE      		out __SP_H__,r15
+ 1151 0510 0FBE      		out __SREG__,__tmp_reg__
+ 1152 0512 EDBE      		out __SP_L__,r14
+ 1153               	/* epilogue start */
+ 1154 0514 0F90      		pop __tmp_reg__
+ 1155 0516 0F90      		pop __tmp_reg__
+ 1156 0518 DF91      		pop r29
+ 1157 051a CF91      		pop r28
+ 1158 051c 1F91      		pop r17
+ 1159 051e 0F91      		pop r16
+ 1160 0520 FF90      		pop r15
+ 1161 0522 EF90      		pop r14
+ 1162 0524 DF90      		pop r13
+ 1163 0526 CF90      		pop r12
+ 1164 0528 0895      		ret
+ 1165               	.LFE21:
+ 1167               	.global	flushme
+ 1169               	flushme:
+ 1170               	.LFB22:
+ 240:../myavrnrflib/nrf.c **** 
+ 241:../myavrnrflib/nrf.c **** // flush the buffers
+ 242:../myavrnrflib/nrf.c **** void flushme(void) {
+ 1171               		.loc 1 242 0
+ 1172 052a CF93      		push r28
+ 1173               	.LCFI59:
+ 1174 052c DF93      		push r29
+ 1175               	.LCFI60:
+ 1176 052e 00D0      		rcall .
+ 1177               	.LCFI61:
+ 1178 0530 CDB7      		in r28,__SP_L__
+ 1179 0532 DEB7      		in r29,__SP_H__
+ 1180               	.LCFI62:
+ 1181               	/* prologue: function */
+ 1182               	/* frame size = 2 */
+ 1183               	/* stack size = 4 */
+ 1184               	.L__stack_usage = 4
+ 243:../myavrnrflib/nrf.c ****    char flush[] = {FLUSH_TX};
+ 1185               		.loc 1 243 0
+ 1186 0534 81EE      		ldi r24,lo8(-31)
+ 1187 0536 8A83      		std Y+2,r24
+ 244:../myavrnrflib/nrf.c ****    char dontcare[1];
+ 245:../myavrnrflib/nrf.c ****    spi_transaction(flush, dontcare, 1);
+ 1188               		.loc 1 245 0
+ 1189 0538 41E0      		ldi r20,lo8(1)
+ 1190 053a BE01      		movw r22,r28
+ 1191 053c 6F5F      		subi r22,-1
+ 1192 053e 7F4F      		sbci r23,-1
+ 1193 0540 CE01      		movw r24,r28
+ 1194 0542 0296      		adiw r24,2
+ 1195 0544 0E94 0000 		call spi_transaction
+ 1196               	.LVL109:
+ 246:../myavrnrflib/nrf.c ****    flush[0] = FLUSH_RX;
+ 1197               		.loc 1 246 0
+ 1198 0548 82EE      		ldi r24,lo8(-30)
+ 1199 054a 8A83      		std Y+2,r24
+ 247:../myavrnrflib/nrf.c ****    spi_transaction(flush, dontcare, 1);
+ 1200               		.loc 1 247 0
+ 1201 054c 41E0      		ldi r20,lo8(1)
+ 1202 054e BE01      		movw r22,r28
+ 1203 0550 6F5F      		subi r22,-1
+ 1204 0552 7F4F      		sbci r23,-1
+ 1205 0554 CE01      		movw r24,r28
+ 1206 0556 0296      		adiw r24,2
+ 1207 0558 0E94 0000 		call spi_transaction
+ 1208               	.LVL110:
+ 1209               	/* epilogue start */
+ 248:../myavrnrflib/nrf.c **** }
+ 1210               		.loc 1 248 0
+ 1211 055c 0F90      		pop __tmp_reg__
+ 1212 055e 0F90      		pop __tmp_reg__
+ 1213 0560 DF91      		pop r29
+ 1214 0562 CF91      		pop r28
+ 1215 0564 0895      		ret
+ 1216               	.LFE22:
+ 1218               	.global	nrfInit
+ 1220               	nrfInit:
+ 1221               	.LFB6:
+  10:../myavrnrflib/nrf.c **** {
+ 1222               		.loc 1 10 0
+ 1223               	/* prologue: function */
+ 1224               	/* frame size = 0 */
+ 1225               	/* stack size = 0 */
+ 1226               	.L__stack_usage = 0
+  11:../myavrnrflib/nrf.c ****    spi_init();
+ 1227               		.loc 1 11 0
+ 1228 0566 0E94 0000 		call spi_init
+ 1229               	.LVL111:
+  14:../myavrnrflib/nrf.c ****    CE_DDR |= (1<<CE_PIN);
+ 1230               		.loc 1 14 0
+ 1231 056a 219A      		sbi 0x4,1
+  15:../myavrnrflib/nrf.c ****    CSN_DDR |= (1<<CSN_PIN);
+ 1232               		.loc 1 15 0
+ 1233 056c 229A      		sbi 0x4,2
+  16:../myavrnrflib/nrf.c ****    flushme(); // start with clean buffers
+ 1234               		.loc 1 16 0
+ 1235 056e 0C94 0000 		jmp flushme
+ 1236               	.LVL112:
+ 1237               	.LFE6:
+ 1737               	.Letext0:
+ 1738               		.file 3 "/usr/lib/gcc/avr/4.7.2/../../../avr/include/stdint.h"
+ 1739               		.file 4 "../myavrnrflib/spi.h"
+DEFINED SYMBOLS
+                            *ABS*:00000000 nrf.c
+     /tmp/cc5ptyMk.s:2      *ABS*:0000003e __SP_H__
+     /tmp/cc5ptyMk.s:3      *ABS*:0000003d __SP_L__
+     /tmp/cc5ptyMk.s:4      *ABS*:0000003f __SREG__
+     /tmp/cc5ptyMk.s:5      *ABS*:00000000 __tmp_reg__
+     /tmp/cc5ptyMk.s:6      *ABS*:00000001 __zero_reg__
+     /tmp/cc5ptyMk.s:11     .text:00000000 powerUp
+     /tmp/cc5ptyMk.s:26     .text:00000004 powerDown
+     /tmp/cc5ptyMk.s:40     .text:00000008 readReg
+     /tmp/cc5ptyMk.s:90     .text:0000003c writeReg
+     /tmp/cc5ptyMk.s:141    .text:0000006e stopRx
+     /tmp/cc5ptyMk.s:167    .text:00000082 startRx
+     /tmp/cc5ptyMk.s:193    .text:00000096 stopRadio
+     /tmp/cc5ptyMk.s:216    .text:000000a6 startRadio
+     /tmp/cc5ptyMk.s:239    .text:000000b6 readAddr
+     /tmp/cc5ptyMk.s:371    .text:0000015a writeAddr
+     /tmp/cc5ptyMk.s:522    .text:0000022e getLength
+     /tmp/cc5ptyMk.s:588    .text:0000027c checkRx
+     /tmp/cc5ptyMk.s:613    .text:0000028e dynReceive
+     /tmp/cc5ptyMk.s:829    .text:0000038c receive
+     /tmp/cc5ptyMk.s:952    .text:0000041c transmit
+     /tmp/cc5ptyMk.s:1169   .text:0000052a flushme
+     /tmp/cc5ptyMk.s:1220   .text:00000566 nrfInit
+
+UNDEFINED SYMBOLS
+spi_transaction
+__ashldi3
+__lshrdi3
+spi_init
