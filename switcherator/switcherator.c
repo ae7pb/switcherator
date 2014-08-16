@@ -381,9 +381,9 @@ void drawInterface(void) {
 
 void fail(int failCode) {
     statusMsg[0] = 0;
-    strcat(statusMsg, "fail 0x");
-    returnHex(failCode, tempIntString);
-    strcat(statusMsg, tempIntString);
+    strcat(statusMsg, "fail:");
+    returnHex(failCode, tempLongString);
+    strcat(statusMsg, tempLongString);
     sendMessage(statusMsg);
 }
 
@@ -990,22 +990,30 @@ void pwmSummary(void) {
     strcat(statusMsg, tempLongString);
     sendMessage(statusMsg);
     statusMsg[0] = 0;
-    strcat(statusMsg, "Col Ch");
+    strcat(statusMsg, "ColCh:");
     int y = 0;
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         if (x > 0)
             strcat(statusMsg, ",");
         strcat(statusMsg, "0x");
-        for (y = 0; y < 3; y++) {
-            returnHexWithout(colorChanges[x][y], tempLongString);
-            strcat(statusMsg, tempLongString);
+        if(colorChanges[x][0] == 0 && colorChanges[x][1] == 1 &&
+                colorChanges[x][2] == 0)
+            strcat(statusMsg,"--");
+        else {
+            for (y = 0; y < 3; y++) {
+                if (y > 0)
+                    strcat(statusMsg,",");
+                returnHexWithout(colorChanges[x][y], tempLongString);
+                strcat(statusMsg, tempLongString);
+            }
         }
-        if (strlen(statusMsg) > 25 && (x + 1) < NUM_COLOR_CHANGES) {
+        if (strlen(statusMsg) > 20) {
             sendMessage(statusMsg);
             statusMsg[6] = 0;
         }
     }
-    sendMessage(statusMsg);
+    if(strlen(statusMsg)> 6)
+        sendMessage(statusMsg);
     statusMsg[0] = 0;
     for (x = 0; x < NUM_SWITCHES; x++) {
         if ((switchStuff[x] >= 200) && (switchStuff[x] <= 220)) {
@@ -1486,7 +1494,7 @@ void programDisplay(char * commandReceived) {
     programNumber = atoi(tempIntString);
     statusMsg[0] = 0;
     if (weeklyProgram[programNumber][0] == 255 && weeklyProgram[programNumber][1] == 255) {
-        strcat(statusMsg, "P#");
+        strcat(statusMsg, "Prog#");
         returnInt(programNumber, tempIntString);
         strcat(statusMsg, tempIntString);
         strcat(statusMsg, "blank.");
@@ -1507,6 +1515,10 @@ void programDisplay(char * commandReceived) {
         int temp = 0;
         strcat(statusMsg, "S");
         for (x = 0; x < switchCount; x++) {
+            if(strlen(statusMsg)>30) {
+                sendMessage(statusMsg);
+                statusMsg[6] = 0;
+            }
             strcat(statusMsg, ":");
             temp = switches[x];
             itoa(temp, tempIntString, 10);
@@ -1527,7 +1539,7 @@ void programDisplay(char * commandReceived) {
     int duration = (time / 60);
     char weekdays = 0;
     weekdays = weeklyProgram[programNumber][0];
-    strcat(statusMsg, "T:");
+    strcat(statusMsg, "T-");
     itoa(hours, tempIntString, 10);
     strcat(statusMsg, tempIntString);
     strcat(statusMsg, ":");
@@ -1536,7 +1548,7 @@ void programDisplay(char * commandReceived) {
     strcat(statusMsg, " Dur:");
     itoa(duration, tempLongString, 10);
     strcat(statusMsg, tempLongString);
-    strcat(statusMsg, "Days:");
+    strcat(statusMsg, " D:");
     if (weekdays == 255) {
         strcat(statusMsg, "-------");
         sendMessage(statusMsg);
@@ -1687,7 +1699,7 @@ void generalInit(void) {
         rx_addr_p0 = formatAddress(tempStuff);
         writeAddr(RX_ADDR_P0, rx_addr_p0);
     }
-     
+
     if (readEEPROM(tempStuff, RADIO_ADDR_R1, RADIO_ADDR_R1_BYTES) == 1) {
         rx_addr_p1 = formatAddress(tempStuff);
         writeAddr(RX_ADDR_P1, rx_addr_p1);
@@ -2272,7 +2284,7 @@ void advanceDay(void) {
     }
     // possibly advancing a month
     switch (globalMonth) {
-            // 30 days have september, april, june and november
+        // 30 days have september, april, june and november
         case 4:
         case 6:
         case 9:
@@ -2720,7 +2732,8 @@ void generalInformation(void) {
 
 // transmits Y or N for which programs have been programmed
 void programsProgrammed(void) {
-    strcat(statusMsg, "Progs");
+    statusMsg[0] = 0;
+    strcat(statusMsg, "Progs:");
     int x;
     for (x = 0; x < MAX_PROGRAM; x++) {
         if (weeklyProgram[x][0] == 255 && weeklyProgram[x][1] == 255) {
@@ -2731,7 +2744,7 @@ void programsProgrammed(void) {
         // can only send 32 bytes at a time
         if (strlen(statusMsg) > 30) {
             sendMessage(statusMsg);
-            statusMsg[5] = 0;
+            statusMsg[6] = 0;
         }
     }
     sendMessage(statusMsg);    
@@ -2739,7 +2752,7 @@ void programsProgrammed(void) {
 // transmits Y or N for which switches have been programmed
 void switchesProgrammed(void) {
     statusMsg[0] = 0;
-    strcat(statusMsg, "Swi");
+    strcat(statusMsg, "Swi:");
     int x;
     for (x = 0; x < NUM_SWITCHES; x++) {
 
@@ -2751,7 +2764,7 @@ void switchesProgrammed(void) {
         // can only send 32 bytes at a time
         if (strlen(statusMsg) > 30) {
             sendMessage(statusMsg);
-            statusMsg[3] = 0;
+            statusMsg[4] = 0;
         }
     }
     sendMessage(statusMsg);
@@ -2760,7 +2773,7 @@ void switchesProgrammed(void) {
 // transmits Y or N for which inputs have been programmed
 void inputsProgrammed(void) {
     statusMsg[0] = 0;
-    strcat(statusMsg, "In");
+    strcat(statusMsg, "Inp:");
     int x;
     for (x = 0; x < NUM_INPUTS; x++) {
         if (inputs[x][0] == 255) {
@@ -2771,7 +2784,7 @@ void inputsProgrammed(void) {
         // can only send 32 bytes at a time
         if (strlen(statusMsg) > 30) {
             sendMessage(statusMsg);
-            statusMsg[2] = 0;
+            statusMsg[4] = 0;
         }
     }
     sendMessage(statusMsg);
@@ -2780,7 +2793,7 @@ void inputsProgrammed(void) {
 // transmits Y or N for which switches are currently turned on
 void switchesOn(void) {
     statusMsg[0] = 0;
-    strcat(statusMsg, "SwOn");
+    strcat(statusMsg, "SwOn:");
     int x;
     for (x = 0; x < NUM_SWITCHES; x++) {
         if (switchStatus[x] > 0) {
@@ -2790,7 +2803,7 @@ void switchesOn(void) {
         }
         if (strlen(statusMsg) > 30) {
             sendMessage(statusMsg);
-            statusMsg[4] = 0;
+            statusMsg[5] = 0;
         }
     }
     sendMessage(statusMsg);
@@ -2857,7 +2870,7 @@ void radioInit(void) {
 
     // We've written the address - now see if we get the same result
     radioTest();
-    
+
     startRadio();
 
 }
@@ -2905,26 +2918,26 @@ void radioDisplayAddress(char * commandReceived) {
     char tempRadioString[6];
     statusMsg[0] = 0;
     if(commandReceived[3] == '1') {
-            unformatAddress(rx_addr_p1, tempRadioString);
-            strcat(statusMsg, "r1-0x");
+        unformatAddress(rx_addr_p1, tempRadioString);
+        strcat(statusMsg, "r1-0x");
     } else if(commandReceived[3] == '2') {
-            unformatAddress(rx_addr_p2, tempRadioString);
-            strcat(statusMsg, "r2-0x");
+        unformatAddress(rx_addr_p2, tempRadioString);
+        strcat(statusMsg, "r2-0x");
     } else if(commandReceived[3] == '3') {
-            unformatAddress(rx_addr_p3, tempRadioString);
-            strcat(statusMsg, "r3-0x");
+        unformatAddress(rx_addr_p3, tempRadioString);
+        strcat(statusMsg, "r3-0x");
     } else if(commandReceived[3] == '4') {
-            unformatAddress(rx_addr_p4, tempRadioString);
-            strcat(statusMsg, "r4-0x");
+        unformatAddress(rx_addr_p4, tempRadioString);
+        strcat(statusMsg, "r4-0x");
     } else if (commandReceived[3] == '5') {
-            unformatAddress(rx_addr_p5, tempRadioString);
-            strcat(statusMsg, "r5-0x");
+        unformatAddress(rx_addr_p5, tempRadioString);
+        strcat(statusMsg, "r5-0x");
     } else if (commandReceived[3] == 'T') {
-            unformatAddress(tx_addr, tempRadioString);
-            strcat(statusMsg, "t-0x");
+        unformatAddress(tx_addr, tempRadioString);
+        strcat(statusMsg, "t-0x");
     } else {
-            unformatAddress(rx_addr_p0, tempRadioString);
-            strcat(statusMsg, "r0-0x");
+        unformatAddress(rx_addr_p0, tempRadioString);
+        strcat(statusMsg, "r0-0x");
     }
     for (x = 0; x < 5; x++) {
         returnHexWithout(tempRadioString[x], tempLongString);
@@ -3694,7 +3707,7 @@ void flashFail(void) {
             INDICATOR_PORT &= ~(INDICATOR_PIN);
         } else if (failTimer == 36)
             failTimer = 0;
-        }
+    }
 }
 
 // turns off the indicator pin

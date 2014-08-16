@@ -90,7 +90,7 @@ AVR_STATUS_REG	/usr/lib/avr/include/avr/common.h	214
 AW	../myavrnrflib/nRF24L01.h	50
 BADISR_vect	/usr/lib/avr/include/avr/interrupt.h	278
 BADISR_vect	/usr/lib/avr/include/avr/interrupt.h	280
-BASE_PROG_RAM	switcherator.h	6
+BASE_PROG_RAM	switcherator.h	18
 BLB0_MODE_1	/usr/lib/avr/include/avr/lock.h	208
 BLB0_MODE_2	/usr/lib/avr/include/avr/lock.h	209
 BLB0_MODE_3	/usr/lib/avr/include/avr/lock.h	210
@@ -109,9 +109,9 @@ BLBSET	/usr/lib/avr/include/avr/iom328p.h	345
 BODS	/usr/lib/avr/include/avr/iom328p.h	339
 BODSE	/usr/lib/avr/include/avr/iom328p.h	338
 BORF	/usr/lib/avr/include/avr/iom328p.h	331
-BRIGHTNESS	switcherator.h	82
-BRIGHTNESS_BYTES	switcherator.h	51
-Blue	switcherator.c	102
+BRIGHTNESS	switcherator.h	94
+BRIGHTNESS_BYTES	switcherator.h	63
+Blue	switcherator.c	81
 CAL0	/usr/lib/avr/include/avr/iom328p.h	377
 CAL1	/usr/lib/avr/include/avr/iom328p.h	378
 CAL2	/usr/lib/avr/include/avr/iom328p.h	379
@@ -129,8 +129,8 @@ CLKPS0	/usr/lib/avr/include/avr/iom328p.h	361
 CLKPS1	/usr/lib/avr/include/avr/iom328p.h	362
 CLKPS2	/usr/lib/avr/include/avr/iom328p.h	363
 CLKPS3	/usr/lib/avr/include/avr/iom328p.h	364
-COLOR_CHANGE	switcherator.h	78
-COLOR_CHANGE_BYTES	switcherator.h	47
+COLOR_CHANGE	switcherator.h	90
+COLOR_CHANGE_BYTES	switcherator.h	59
 COM0A0	/usr/lib/avr/include/avr/iom328p.h	226
 COM0A1	/usr/lib/avr/include/avr/iom328p.h	227
 COM0B0	/usr/lib/avr/include/avr/iom328p.h	224
@@ -160,10 +160,10 @@ CS22	/usr/lib/avr/include/avr/iom328p.h	624
 CSN_DDR	../myavrnrflib/nrf.h	12
 CSN_PIN	../myavrnrflib/nrf.h	8
 CSN_PORT	../myavrnrflib/nrf.h	11
-DATA_SIZE	switcherator.c	18
+DATA_SIZE	switcherator.h	10
 DATA_SIZE	../myavrnrflib/nrf.h	15
-DAYLIGHT_SAVE	switcherator.h	64
-DAYLIGHT_SAVE_BYTES	switcherator.h	40
+DAYLIGHT_SAVE	switcherator.h	76
+DAYLIGHT_SAVE_BYTES	switcherator.h	52
 DD0	/usr/lib/avr/include/avr/portpins.h	62
 DD1	/usr/lib/avr/include/avr/portpins.h	61
 DD2	/usr/lib/avr/include/avr/portpins.h	60
@@ -350,7 +350,7 @@ GPIOR25	/usr/lib/avr/include/avr/iom328p.h	283
 GPIOR26	/usr/lib/avr/include/avr/iom328p.h	284
 GPIOR27	/usr/lib/avr/include/avr/iom328p.h	285
 GTCCR	/usr/lib/avr/include/avr/iom328p.h	216
-Green	switcherator.c	101
+Green	switcherator.c	80
 HFUSE_DEFAULT	/usr/lib/avr/include/avr/iom328p.h	904
 ICES1	/usr/lib/avr/include/avr/iom328p.h	518
 ICF1	/usr/lib/avr/include/avr/iom328p.h	150
@@ -375,12 +375,12 @@ ICR1L4	/usr/lib/avr/include/avr/iom328p.h	554
 ICR1L5	/usr/lib/avr/include/avr/iom328p.h	555
 ICR1L6	/usr/lib/avr/include/avr/iom328p.h	556
 ICR1L7	/usr/lib/avr/include/avr/iom328p.h	557
-INDICATOR_DDR	switcherator.c	58
-INDICATOR_PIN	switcherator.c	57
-INDICATOR_PORT	switcherator.c	56
+INDICATOR_DDR	switcherator.c	40
+INDICATOR_PIN	switcherator.c	39
+INDICATOR_PORT	switcherator.c	38
 INFINITY	/usr/lib/avr/include/math.h	113
-INPUT	switcherator.h	75
-INPUT_BYTES	switcherator.h	44
+INPUT	switcherator.h	87
+INPUT_BYTES	switcherator.h	56
 INT0	/usr/lib/avr/include/avr/iom328p.h	167
 INT0_vect	/usr/lib/avr/include/avr/iom328p.h	791
 INT0_vect_num	/usr/lib/avr/include/avr/iom328p.h	790
@@ -455,15 +455,15 @@ LB_MODE_1	/usr/lib/avr/include/avr/lock.h	202
 LB_MODE_2	/usr/lib/avr/include/avr/lock.h	203
 LB_MODE_3	/usr/lib/avr/include/avr/lock.h	204
 LFUSE_DEFAULT	/usr/lib/avr/include/avr/iom328p.h	893
-LIMIT	switcherator.h	76
-LIMIT_BYTES	switcherator.h	45
+LIMIT	switcherator.h	88
+LIMIT_BYTES	switcherator.h	57
 LOCKBITS	/usr/lib/avr/include/avr/lock.h	194
 LOCKBITS_DEFAULT	/usr/lib/avr/include/avr/lock.h	237
 LOCKMEM	/usr/lib/avr/include/avr/lock.h	190
 MASK_MAX_RT	../myavrnrflib/nRF24L01.h	33
 MASK_RX_DR	../myavrnrflib/nRF24L01.h	31
 MASK_TX_DS	../myavrnrflib/nRF24L01.h	32
-MAX_PROGRAM	switcherator.h	7
+MAX_PROGRAM	switcherator.h	19
 MAX_RT	../myavrnrflib/nRF24L01.h	60
 MCUCR	/usr/lib/avr/include/avr/iom328p.h	334
 MCUSR	/usr/lib/avr/include/avr/iom328p.h	328
@@ -493,10 +493,10 @@ NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	398
 NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	400
 NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	403
 NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	405
-NUM_COLOR_CHANGES	switcherator.h	11
-NUM_INPUTS	switcherator.h	9
-NUM_LIMITS	switcherator.h	10
-NUM_SWITCHES	switcherator.h	8
+NUM_COLOR_CHANGES	switcherator.h	23
+NUM_INPUTS	switcherator.h	21
+NUM_LIMITS	switcherator.h	22
+NUM_SWITCHES	switcherator.h	20
 OBSERVE_TX	../myavrnrflib/nRF24L01.h	11
 OCF0A	/usr/lib/avr/include/avr/iom328p.h	143
 OCF0B	/usr/lib/avr/include/avr/iom328p.h	144
@@ -983,25 +983,25 @@ PSTR	/usr/lib/avr/include/avr/pgmspace.h	/^# define PSTR(s) (__extension__({stat
 PTRDIFF_MAX	/usr/lib/avr/include/stdint.h	555
 PTRDIFF_MIN	/usr/lib/avr/include/stdint.h	560
 PUD	/usr/lib/avr/include/avr/iom328p.h	337
-PWM_DIR	switcherator.h	81
-PWM_DIR_BYTES	switcherator.h	50
-PWM_VALUE	switcherator.h	77
-PWM_VALUE_BYTES	switcherator.h	46
+PWM_DIR	switcherator.h	93
+PWM_DIR_BYTES	switcherator.h	62
+PWM_VALUE	switcherator.h	89
+PWM_VALUE_BYTES	switcherator.h	58
 PWR_UP	../myavrnrflib/nRF24L01.h	36
-RADIO_ADDR_R0	switcherator.h	66
-RADIO_ADDR_R0_BYTES	switcherator.h	34
-RADIO_ADDR_R1	switcherator.h	67
-RADIO_ADDR_R1_BYTES	switcherator.h	35
-RADIO_ADDR_R2	switcherator.h	68
-RADIO_ADDR_R2_BYTES	switcherator.h	36
-RADIO_ADDR_R3	switcherator.h	69
-RADIO_ADDR_R3_BYTES	switcherator.h	37
-RADIO_ADDR_R4	switcherator.h	70
-RADIO_ADDR_R4_BYTES	switcherator.h	38
-RADIO_ADDR_R5	switcherator.h	71
-RADIO_ADDR_R5_BYTES	switcherator.h	39
-RADIO_ADDR_TX	switcherator.h	65
-RADIO_ADDR_TX_BYTES	switcherator.h	33
+RADIO_ADDR_R0	switcherator.h	78
+RADIO_ADDR_R0_BYTES	switcherator.h	46
+RADIO_ADDR_R1	switcherator.h	79
+RADIO_ADDR_R1_BYTES	switcherator.h	47
+RADIO_ADDR_R2	switcherator.h	80
+RADIO_ADDR_R2_BYTES	switcherator.h	48
+RADIO_ADDR_R3	switcherator.h	81
+RADIO_ADDR_R3_BYTES	switcherator.h	49
+RADIO_ADDR_R4	switcherator.h	82
+RADIO_ADDR_R4_BYTES	switcherator.h	50
+RADIO_ADDR_R5	switcherator.h	83
+RADIO_ADDR_R5_BYTES	switcherator.h	51
+RADIO_ADDR_TX	switcherator.h	77
+RADIO_ADDR_TX_BYTES	switcherator.h	45
 RAMEND	/usr/lib/avr/include/avr/iom328p.h	872
 RAMSTART	/usr/lib/avr/include/avr/iom328p.h	871
 RANDOM_MAX	/usr/lib/avr/include/stdlib.h	490
@@ -1041,7 +1041,7 @@ RX_P_NO	../myavrnrflib/nRF24L01.h	61
 R_REGISTER	../myavrnrflib/nRF24L01.h	81
 R_RX_PAYLOAD	../myavrnrflib/nRF24L01.h	84
 R_RX_PL_WID	../myavrnrflib/nRF24L01.h	89
-Red	switcherator.c	100
+Red	switcherator.c	79
 SCNd16	/usr/lib/avr/include/inttypes.h	357
 SCNd32	/usr/lib/avr/include/inttypes.h	378
 SCNd64	/usr/lib/avr/include/inttypes.h	399
@@ -1114,18 +1114,18 @@ SCNxMAX	/usr/lib/avr/include/inttypes.h	513
 SCNxPTR	/usr/lib/avr/include/inttypes.h	525
 SE	/usr/lib/avr/include/avr/iom328p.h	323
 SELFPRGEN	/usr/lib/avr/include/avr/iom328p.h	342
-SERIAL_NUM	switcherator.h	63
-SERIAL_NUM_BYTES	switcherator.h	41
+SERIAL_NUM	switcherator.h	75
+SERIAL_NUM_BYTES	switcherator.h	53
 SETUP_AW	../myavrnrflib/nRF24L01.h	6
 SETUP_RETR	../myavrnrflib/nRF24L01.h	7
-SET_CONFIG	switcherator.h	23
-SET_DYNPD	switcherator.h	19
-SET_FEATURE	switcherator.h	21
-SET_RF_CH	switcherator.h	25
-SET_RF_SETUP	switcherator.h	15
-SET_RX_ADDR_P0	switcherator.h	16
-SET_SETUP_RETR	switcherator.h	27
-SET_TX_ADDR	switcherator.h	17
+SET_CONFIG	switcherator.h	35
+SET_DYNPD	switcherator.h	31
+SET_FEATURE	switcherator.h	33
+SET_RF_CH	switcherator.h	37
+SET_RF_SETUP	switcherator.h	27
+SET_RX_ADDR_P0	switcherator.h	28
+SET_SETUP_RETR	switcherator.h	39
+SET_TX_ADDR	switcherator.h	29
 SIGNAL	/usr/lib/avr/include/avr/interrupt.h	/^#  define SIGNAL(vector)$/
 SIGNAL	/usr/lib/avr/include/avr/interrupt.h	/^#  define SIGNAL(vector)					\\$/
 SIGNAL	/usr/lib/avr/include/avr/interrupt.h	/^#  define SIGNAL(vector)					\\$/
@@ -1181,8 +1181,8 @@ SREG_T	/usr/lib/avr/include/avr/common.h	128
 SREG_V	/usr/lib/avr/include/avr/common.h	119
 SREG_Z	/usr/lib/avr/include/avr/common.h	113
 STATUS	../myavrnrflib/nRF24L01.h	10
-SWITCH_STUFF	switcherator.h	74
-SWITCH_STUFF_BYTES	switcherator.h	43
+SWITCH_STUFF	switcherator.h	86
+SWITCH_STUFF_BYTES	switcherator.h	55
 TCCR0A	/usr/lib/avr/include/avr/iom328p.h	221
 TCCR0B	/usr/lib/avr/include/avr/iom328p.h	229
 TCCR1A	/usr/lib/avr/include/avr/iom328p.h	504
@@ -1253,10 +1253,10 @@ TIMER2_COMPB_vect	/usr/lib/avr/include/avr/iom328p.h	812
 TIMER2_COMPB_vect_num	/usr/lib/avr/include/avr/iom328p.h	811
 TIMER2_OVF_vect	/usr/lib/avr/include/avr/iom328p.h	815
 TIMER2_OVF_vect_num	/usr/lib/avr/include/avr/iom328p.h	814
-TIMER_CLOCK_SEL	switcherator.h	56
-TIMER_RESET	switcherator.h	57
-TIMER_TENTH	switcherator.h	59
-TIMER_TOTAL	switcherator.h	58
+TIMER_CLOCK_SEL	switcherator.h	68
+TIMER_RESET	switcherator.h	69
+TIMER_TENTH	switcherator.h	71
+TIMER_TOTAL	switcherator.h	70
 TIMSK0	/usr/lib/avr/include/avr/iom328p.h	426
 TIMSK1	/usr/lib/avr/include/avr/iom328p.h	431
 TIMSK2	/usr/lib/avr/include/avr/iom328p.h	437
@@ -1303,8 +1303,8 @@ TWD6	/usr/lib/avr/include/avr/iom328p.h	704
 TWD7	/usr/lib/avr/include/avr/iom328p.h	705
 TWDR	/usr/lib/avr/include/avr/iom328p.h	697
 TWEA	/usr/lib/avr/include/avr/iom328p.h	713
-TWEAK_TIMER	switcherator.h	80
-TWEAK_TIMER_BYTES	switcherator.h	49
+TWEAK_TIMER	switcherator.h	92
+TWEAK_TIMER_BYTES	switcherator.h	61
 TWEN	/usr/lib/avr/include/avr/iom328p.h	709
 TWGCE	/usr/lib/avr/include/avr/iom328p.h	688
 TWIE	/usr/lib/avr/include/avr/iom328p.h	708
@@ -1332,17 +1332,6 @@ TX_EMPTY	../myavrnrflib/nRF24L01.h	67
 TX_FULL	../myavrnrflib/nRF24L01.h	62
 TX_REUSE	../myavrnrflib/nRF24L01.h	65
 U2X0	/usr/lib/avr/include/avr/iom328p.h	727
-UART_BAUD_RATE	switcherator.c	23
-UART_BAUD_SELECT	../fleuryUARTlib/uart.h	/^#define UART_BAUD_SELECT(baudRate,xtalCpu)  (((xta/
-UART_BAUD_SELECT_DOUBLE_SPEED	../fleuryUARTlib/uart.h	/^#define UART_BAUD_SELECT_DOUBLE_SPEED(baudRate,xta/
-UART_BUFFER_OVERFLOW	../fleuryUARTlib/uart.h	93
-UART_FRAME_ERROR	../fleuryUARTlib/uart.h	90
-UART_H	../fleuryUARTlib/uart.h	2
-UART_NO_DATA	../fleuryUARTlib/uart.h	94
-UART_OVERRUN_ERROR	../fleuryUARTlib/uart.h	91
-UART_PARITY_ERROR	../fleuryUARTlib/uart.h	92
-UART_RX_BUFFER_SIZE	../fleuryUARTlib/uart.h	75
-UART_TX_BUFFER_SIZE	../fleuryUARTlib/uart.h	79
 UBRR0	/usr/lib/avr/include/avr/iom328p.h	757
 UBRR0H	/usr/lib/avr/include/avr/iom328p.h	769
 UBRR0L	/usr/lib/avr/include/avr/iom328p.h	759
@@ -1426,8 +1415,8 @@ WDRF	/usr/lib/avr/include/avr/iom328p.h	332
 WDTCSR	/usr/lib/avr/include/avr/iom328p.h	350
 WDT_vect	/usr/lib/avr/include/avr/iom328p.h	806
 WDT_vect_num	/usr/lib/avr/include/avr/iom328p.h	805
-WEEKLY_PROGRAM	switcherator.h	79
-WEEKLY_PROGRAM_BYTES	switcherator.h	48
+WEEKLY_PROGRAM	switcherator.h	91
+WEEKLY_PROGRAM_BYTES	switcherator.h	60
 WGM00	/usr/lib/avr/include/avr/iom328p.h	222
 WGM01	/usr/lib/avr/include/avr/iom328p.h	223
 WGM02	/usr/lib/avr/include/avr/iom328p.h	233
@@ -1881,14 +1870,13 @@ abort	/usr/lib/avr/include/stdlib.h	/^extern void abort(void) __ATTR_NORETURN__;
 abs	/usr/lib/avr/include/stdlib.h	/^#define	abs(__i) __builtin_abs(__i)$/
 acosf	/usr/lib/avr/include/math.h	275
 advanceDay	switcherator.c	/^void advanceDay(void) {$/
-ansiCommand	switcherator.c	146
 asinf	/usr/lib/avr/include/math.h	283
 atan2f	/usr/lib/avr/include/math.h	299
 atanf	/usr/lib/avr/include/math.h	290
 bit_is_clear	/usr/lib/avr/include/avr/sfr_defs.h	/^#define bit_is_clear(sfr, bit) (!(_SFR_BYTE(sfr) &/
 bit_is_set	/usr/lib/avr/include/avr/sfr_defs.h	/^#define bit_is_set(sfr, bit) (_SFR_BYTE(sfr) & _BV/
-blue	switcherator.c	105
-bright	switcherator.c	106
+blue	switcherator.c	84
+bright	switcherator.c	85
 brightnessSet	switcherator.c	/^void brightnessSet(char * commandReceived) {$/
 byte	/usr/lib/avr/include/avr/fuse.h	233
 byte	/usr/lib/avr/include/avr/fuse.h	258
@@ -1897,9 +1885,9 @@ ceilf	/usr/lib/avr/include/math.h	217
 checkCommand	switcherator.c	/^void checkCommand(char * commandReceived) {$/
 checkDaylightSavings	switcherator.c	/^void checkDaylightSavings(void) {$/
 clearEEPROM	switcherator.c	/^void clearEEPROM(int memLocation) {$/
+clearFail	switcherator.c	/^void clearFail(void) {$/
 clearInput	switcherator.c	/^void clearInput(char * commandReceived) {$/
 clearProgram	switcherator.c	/^void clearProgram(char * commandReceived) {$/
-clearStatus	switcherator.c	/^void clearStatus(void) {$/
 clearTheProgram	switcherator.c	/^void clearTheProgram(int programNumber) {$/
 clearTheSwitch	switcherator.c	/^void clearTheSwitch(int switchNumber) {$/
 clearToEEPROM	switcherator.c	/^void clearToEEPROM(void) {$/
@@ -1908,22 +1896,21 @@ cli	/usr/lib/avr/include/avr/interrupt.h	/^# define cli()  __asm__ __volatile__ 
 clockInit	switcherator.c	/^void clockInit(void) {$/
 clockString	switcherator.c	/^void clockString(void) {$/
 clockTweak	switcherator.c	/^void clockTweak(char * commandReceived) {$/
-colorChangeCount	switcherator.c	98
+colorChangeCount	switcherator.c	77
 colorChangeSet	switcherator.c	/^void colorChangeSet(char * commandReceived) {$/
-colorChangeSpeed	switcherator.c	97
-colorChanges	switcherator.c	89
+colorChangeSpeed	switcherator.c	76
+colorChanges	switcherator.c	68
 copysign	/usr/lib/avr/include/math.h	/^__ATTR_CONST__ static inline double copysign (doub/
 copysignf	/usr/lib/avr/include/math.h	367
 cos	/usr/lib/avr/include/math.h	/^extern double cos(double __x) __ATTR_CONST__;$/
 cosf	/usr/lib/avr/include/math.h	128
 coshf	/usr/lib/avr/include/math.h	255
-currentColor	switcherator.c	99
-currentHue	switcherator.c	93
+currentColor	switcherator.c	78
+currentHue	switcherator.c	72
 cycleHue	switcherator.c	/^void cycleHue(char * commandReceived) {$/
-daylightSavings	switcherator.c	47
-displayRadio	switcherator.c	54
+daylightSavings	switcherator.c	29
 div_t	/usr/lib/avr/include/stdlib.h	71
-dow	switcherator.c	41
+dow	switcherator.c	24
 drawInterface	switcherator.c	/^void drawInterface(void) {$/
 eeprom_busy_wait	/usr/lib/avr/include/avr/eeprom.h	/^#define eeprom_busy_wait() do {} while (!eeprom_is/
 eeprom_is_ready	/usr/lib/avr/include/avr/eeprom.h	/^# define eeprom_is_ready()$/
@@ -1950,7 +1937,9 @@ eeprom_write_word	/usr/lib/avr/include/avr/eeprom.h	413
 expf	/usr/lib/avr/include/math.h	249
 extended	/usr/lib/avr/include/avr/fuse.h	243
 fabsf	/usr/lib/avr/include/math.h	147
-failCondition	switcherator.c	55
+fail	switcherator.c	/^void fail(int failCode) {$/
+failCondition	switcherator.c	36
+failTimer	switcherator.c	37
 fdimf	/usr/lib/avr/include/math.h	384
 ffs	/usr/lib/avr/include/string.h	/^extern int ffs (int __val) __ATTR_CONST__;$/
 findOpenSwitch	switcherator.c	/^int findOpenSwitch(int programNumber) {$/
@@ -1962,28 +1951,30 @@ fminf	/usr/lib/avr/include/math.h	409
 fmodf	/usr/lib/avr/include/math.h	154
 formatAddress	switcherator.c	/^uint64_t formatAddress(char * address) {$/
 frexpf	/usr/lib/avr/include/math.h	235
+generalInformation	switcherator.c	/^void generalInformation(void) {$/
 generalInit	switcherator.c	/^void generalInit(void) {$/
 generalStatus	switcherator.c	/^void generalStatus(char * commandReceived) {$/
 getDayofYear	switcherator.c	/^int getDayofYear(int year, int month, int day) {$/
 getInput	switcherator.c	/^void getInput(int inputNumber) {$/
 getPort	switcherator.c	/^void getPort(int switchNumber, char * port, char */
+getSwitchNumber	switcherator.c	/^int getSwitchNumber(char * commandReceived) {$/
 getWeekday	switcherator.c	/^int getWeekday(int year, int month, int day) {$/
-globalDay	switcherator.c	41
-globalHour	switcherator.c	41
-globalMinute	switcherator.c	41
-globalMonth	switcherator.c	41
-globalSecond	switcherator.c	41
-globalYear	switcherator.c	41
-green	switcherator.c	104
-haveRadio	switcherator.c	113
+globalDay	switcherator.c	24
+globalHour	switcherator.c	24
+globalMinute	switcherator.c	24
+globalMonth	switcherator.c	24
+globalSecond	switcherator.c	24
+globalYear	switcherator.c	24
+green	switcherator.c	83
 high	/usr/lib/avr/include/avr/fuse.h	242
 high	/usr/lib/avr/include/avr/fuse.h	251
-hueCount	switcherator.c	95
-hueSpeed	switcherator.c	94
+hueCount	switcherator.c	74
+hueSpeed	switcherator.c	73
 hypotf	/usr/lib/avr/include/math.h	195
 inputCheck	switcherator.c	/^void inputCheck(void) {$/
 inputTenthCheck	switcherator.c	/^void inputTenthCheck(void) {$/
-inputs	switcherator.c	131
+inputs	switcherator.c	106
+inputsProgrammed	switcherator.c	/^void inputsProgrammed(void) {$/
 int16_t	/usr/lib/avr/include/stdint.h	84
 int16_t	/usr/lib/avr/include/stdint.h	123
 int32_t	/usr/lib/avr/include/stdint.h	94
@@ -2010,7 +2001,7 @@ isnanf	/usr/lib/avr/include/math.h	324
 labs	/usr/lib/avr/include/stdlib.h	/^#define labs(__i) __builtin_labs(__i)$/
 ldexpf	/usr/lib/avr/include/math.h	243
 ldiv_t	/usr/lib/avr/include/stdlib.h	77
-littleCount	switcherator.c	96
+littleCount	switcherator.c	75
 log10f	/usr/lib/avr/include/math.h	311
 logf	/usr/lib/avr/include/math.h	305
 loop_until_bit_is_clear	/usr/lib/avr/include/avr/sfr_defs.h	/^#define loop_until_bit_is_clear(sfr, bit) do { } w/
@@ -2021,12 +2012,13 @@ lrintf	/usr/lib/avr/include/math.h	454
 lroundf	/usr/lib/avr/include/math.h	440
 max_align_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	426
 memchr_P	/usr/lib/avr/include/avr/pgmspace.h	/^extern const void * memchr_P(const void *, int __v/
-newMinute	switcherator.c	51
+newMinute	switcherator.c	33
 newProgram	switcherator.c	/^void newProgram(char * commandReceived) {$/
-newSecond	switcherator.c	50
+newSecond	switcherator.c	32
 offsetof	/usr/lib/gcc/avr/4.7.2/include/stddef.h	/^#define offsetof(TYPE, MEMBER) __builtin_offsetof /
-oldBright	switcherator.c	107
-panicMyClockIsNotSet	switcherator.c	36
+ok	switcherator.c	/^void ok(void) {$/
+oldBright	switcherator.c	86
+panicMyClockIsNotSet	switcherator.c	19
 pgm_get_far_address	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_get_far_address(var)                  /
 pgm_read_byte	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_byte(address_short)    pgm_read_b/
 pgm_read_byte_far	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_byte_far(address_long)  __ELPM((u/
@@ -2041,8 +2033,6 @@ pgm_read_word	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_word(addres
 pgm_read_word_far	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_word_far(address_long)  __ELPM_wo/
 pgm_read_word_near	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_word_near(address_short) __LPM_wo/
 powf	/usr/lib/avr/include/math.h	317
-printTime	switcherator.c	/^void printTime(void) {$/
-printVariables	switcherator.c	/^void printVariables(char * commandReceived) {$/
 prog_char	/usr/lib/avr/include/avr/pgmspace.h	158
 prog_char	/usr/lib/avr/include/avr/pgmspace.h	350
 prog_int16_t	/usr/lib/avr/include/avr/pgmspace.h	230
@@ -2070,23 +2060,24 @@ programDisplay	switcherator.c	/^void programDisplay(char * commandReceived) {$/
 programGetSwitches	switcherator.c	/^int programGetSwitches(int programNumber, char * s/
 programSetDays	switcherator.c	/^void programSetDays(char * commandReceived) {$/
 programSetTime	switcherator.c	/^void programSetTime(char * commandReceived) {$/
+programsProgrammed	switcherator.c	/^void programsProgrammed(void) {$/
 ptrdiff_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	150
 pwmClear	switcherator.c	/^void pwmClear(int switchNumber) {$/
 pwmSetup	switcherator.c	/^void pwmSetup(char * commandReceived) {$/
 pwmSummary	switcherator.c	/^void pwmSummary(void) {$/
 pwmValueSet	switcherator.c	/^void pwmValueSet(char * commandReceived) {$/
-pwmValues	switcherator.c	88
-pwmdir	switcherator.c	109
+pwmValues	switcherator.c	67
+pwmdir	switcherator.c	88
 quot	/usr/lib/avr/include/stdlib.h	69
 quot	/usr/lib/avr/include/stdlib.h	75
 radioChangeAddress	switcherator.c	/^void radioChangeAddress(char * commandReceived) {$/
 radioDisplayAddress	switcherator.c	/^void radioDisplayAddress(char * commandReceived) {/
-radioHelp	switcherator.c	/^void radioHelp(void) {$/
 radioInit	switcherator.c	/^void radioInit(void) {$/
-radioReceiveBuffer	switcherator.c	78
+radioReceiveBuffer	switcherator.c	57
+radioTest	switcherator.c	/^int radioTest(void) {$/
 readEEPROM	switcherator.c	/^int readEEPROM(char * data, int memLocation, int m/
-receiveBuffer	switcherator.c	77
-red	switcherator.c	103
+receiveBuffer	switcherator.c	56
+red	switcherator.c	82
 rem	/usr/lib/avr/include/stdlib.h	70
 rem	/usr/lib/avr/include/stdlib.h	76
 reti	/usr/lib/avr/include/avr/interrupt.h	/^#  define reti()$/
@@ -2095,24 +2086,22 @@ returnHex	switcherator.c	/^void returnHex(unsigned int number, char * thisStr/
 returnHexWithout	switcherator.c	/^void returnHexWithout(unsigned int number, char * /
 returnInt	switcherator.c	/^void returnInt(int number, char * thisString) {$/
 roundf	/usr/lib/avr/include/math.h	427
-runColorChanges	switcherator.c	86
+runColorChanges	switcherator.c	65
 runColorFunction	switcherator.c	/^void runColorFunction(void) {$/
-runHue	switcherator.c	85
+runHue	switcherator.c	64
 runHueFunction	switcherator.c	/^void runHueFunction(void) {$/
 rune_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	294
 rune_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	314
-rx_addr_p0	switcherator.c	144
-rx_addr_p1	switcherator.c	144
-rx_addr_p2	switcherator.c	144
-rx_addr_p3	switcherator.c	144
-rx_addr_p4	switcherator.c	144
-rx_addr_p5	switcherator.c	144
+rx_addr_p0	switcherator.c	119
+rx_addr_p1	switcherator.c	119
+rx_addr_p2	switcherator.c	119
+rx_addr_p3	switcherator.c	119
+rx_addr_p4	switcherator.c	119
+rx_addr_p5	switcherator.c	119
 saveToEEPROM	switcherator.c	/^void saveToEEPROM(void) {$/
 sei	/usr/lib/avr/include/avr/interrupt.h	/^#define sei()$/
 sei	/usr/lib/avr/include/avr/interrupt.h	/^# define sei()  __asm__ __volatile__ ("sei" ::: "m/
-sendMessage	switcherator.c	/^void sendMessage(char * msg) {$/
-serial	switcherator.c	74
-serialNumber	switcherator.c	/^void serialNumber(char * commandReceived) {$/
+sendMessage	switcherator.c	/^void sendMessage(char * myResponse) {$/
 setAnalogInput	switcherator.c	/^void setAnalogInput(char * commandReceived) {$/
 setClock	switcherator.c	/^void setClock(char * commandReceived) {$/
 setDaylightSavings	switcherator.c	/^void setDaylightSavings(char * commandReceived) {$/
@@ -2132,33 +2121,31 @@ startClock	switcherator.c	/^void startClock(void) {$/
 startProgram	switcherator.c	/^void startProgram(char * commandReceived) {$/
 startSwitch	switcherator.c	/^void startSwitch(char * commandReceived) {$/
 startTheProgram	switcherator.c	/^void startTheProgram(int programNumber, int durati/
-statusMsg	switcherator.c	82
+statusMsg	switcherator.c	61
 stopClock	switcherator.c	/^void stopClock(void) {$/
-stringSerial	switcherator.c	73
 strlen_P	/usr/lib/avr/include/avr/pgmspace.h	/^static inline size_t strlen_P(const char *s) {$/
-switchBright	switcherator.c	108
+switchBright	switcherator.c	87
 switchBrightness	switcherator.c	/^void switchBrightness(char * commandReceived) {$/
-switchChanged	switcherator.c	52
+switchChanged	switcherator.c	34
 switchClear	switcherator.c	/^void switchClear(char * commandReceived) {$/
-switchDisplay	switcherator.c	/^void switchDisplay(void) {$/
+switchDisplay	switcherator.c	/^void switchDisplay(char * commandReceived) {$/
 switchOnOff	switcherator.c	/^void switchOnOff(void) {$/
-switchStatus	switcherator.c	61
-switchStuff	switcherator.c	70
+switchStatus	switcherator.c	43
+switchStuff	switcherator.c	52
+switchesOn	switcherator.c	/^void switchesOn(void) {$/
+switchesProgrammed	switcherator.c	/^void switchesProgrammed(void) {$/
 tanf	/usr/lib/avr/include/math.h	140
 tanhf	/usr/lib/avr/include/math.h	267
-tempHugeString	switcherator.c	81
-tempIntString	switcherator.c	79
-tempLongString	switcherator.c	80
-tenthFlag	switcherator.c	53
-ticks	switcherator.c	40
-timeLimits	switcherator.c	135
+tempHugeString	switcherator.c	60
+tempIntString	switcherator.c	58
+tempLongString	switcherator.c	59
+tenthFlag	switcherator.c	35
+ticks	switcherator.c	23
+timeLimits	switcherator.c	110
 timerCheck	switcherator.c	/^void timerCheck(void) {$/
-transmitSomething	switcherator.c	/^void transmitSomething(char * myResponse) {$/
 truncf	/usr/lib/avr/include/math.h	416
-tweakTimer	switcherator.c	139
-tx_addr	switcherator.c	144
-uart1_puts_P	../fleuryUARTlib/uart.h	/^#define uart1_puts_P(__s)       uart1_puts_p(PSTR(/
-uart_puts_P	../fleuryUARTlib/uart.h	/^#define uart_puts_P(__s)       uart_puts_p(PSTR(__/
+tweakTimer	switcherator.c	114
+tx_addr	switcherator.c	119
 uint16_t	/usr/lib/avr/include/stdint.h	89
 uint16_t	/usr/lib/avr/include/stdint.h	124
 uint32_t	/usr/lib/avr/include/stdint.h	99
@@ -2180,10 +2167,9 @@ uintmax_t	/usr/lib/avr/include/stdint.h	268
 uintmax_t	/usr/lib/avr/include/stdint.h	278
 uintptr_t	/usr/lib/avr/include/stdint.h	147
 unformatAddress	switcherator.c	/^void unformatAddress(uint64_t oldAddress, char * f/
-wasDaylightSavings	switcherator.c	45
+wasDaylightSavings	switcherator.c	28
 wchar_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	325
-weekday	switcherator.c	46
-weeklyProgram	switcherator.c	122
-weeklySeconds	switcherator.c	43
+weeklyProgram	switcherator.c	97
+weeklySeconds	switcherator.c	26
 wint_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	354
 writeEEPROM	switcherator.c	/^void writeEEPROM(char * data, int memLocation, int/

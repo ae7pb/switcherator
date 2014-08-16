@@ -115,7 +115,7 @@ PP SW IP SO - display which programs / switches / inputs are programmed and on
 
 TI:MMDDYYYYHHMMSS - Time
 DS:MMDD MMDD - Daylight Savings
-TL:##HHMMHHMMdddddd - Time Limits
+TL:##HHMMHHMMdddddd - Time Limits - Replace first H with x to clear or ? to inquire
 NS:S#PpD - New Switch
 SC:S# - Switch Clear
 SD:xx - Switch Display
@@ -146,6 +146,7 @@ CI xx - Clear Input
 GS - General Status
 GI General Information
 PP SW IP SO - display which programs / switches / inputs are programmed and on
+
 Fail Codes:
 01 - Invalid Switch Number
 02 - Invalid Program Number
