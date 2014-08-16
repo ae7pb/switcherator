@@ -74,10 +74,6 @@ Start Switch - turns on switch num S# for the duration.  This duration is in sec
 SP:P#Durat.
 Start Program - turns on program num P# for the duration in seconds
 
-
-SE:nnnnnn
-SE - Serial number.  Sets the serial number for the radio so you can communicate with it individualy.
-
 SA
 Save - save all to eeprom
 
@@ -111,6 +107,12 @@ Help / Radio Help - shows a summary of commands
 
 GS
 Display general status.  Indicates the serial number and time and which programs / switches are set.
+
+GI 
+Display general information
+
+PP SW IP SO - display which programs / switches / inputs are programmed and on
+
 
 Fail Codes:
 01 - Invalid Switch Number

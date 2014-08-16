@@ -25,8 +25,8 @@
 
 // Radio settings
 #define SET_RF_SETUP    (0 << RF_DR_HIGH | 3 << RF_PWR) // 1Mbps & high power
-#define SET_RX_ADDR_P0  0xf0f0f0f002
-#define SET_TX_ADDR     0xf0f0f0f002
+#define SET_RX_ADDR_P0  0xf0f0f0f001
+#define SET_TX_ADDR     0xf0f0f0f001
 // dynamic payload all pipes
 #define SET_DYNPD       (1 << DPL_P5)|(1 << DPL_P4)|(1 << DPL_P3)|(1<< DPL_P2)|(1<<DPL_P1)|(1 << DPL_P0)
 // enable dynamic payload
@@ -185,7 +185,6 @@ void radioInit(void);
 int radioTest(void);
 void radioDisplayAddress(char * commandReceived);
 void radioChangeAddress(char * commandReceived);
-void serialNumber(char * commandReceived);
 void setRadioMode(char * commandReceived);
 void sendMessage(char * msg);
 // input related
@@ -198,38 +197,4 @@ void clearInput(char * commandReceived);
 
 void flashFail(void);
 void clearFail(void);
-//void checkCommand(char * receiveBuffer);
-//void timerCheck(void);
-//void addProgram(char * buffer);
-//void addSwitchtoProgram(char * buffer);
-//void addDaytoProgram(char * buffer);
-//void clearProgram(char * buffer);
-//void displayProgram(char * buffer);
-//void listPrograms(void);
-//void changeAddress(char * buffer);
-//void displayAddress(char * buffer);
-//void displayStats(void);
-//void changeSerial(char * buffer);
-//void getSerial(void);
-//void saveToEEPROM(void);
-//void clearAllEEPROM(void);
-//void sendPong(void);
 
-//void showSwitches(void);
-//void setupSwitch(char * buffer);
-//void clearSwitches(void);
-//void turnonCommand(char * buffer);
-
-//void setDDR(int switchNum);
-//void turnonSwitch(int switchNum);
-//void turnoffSwitch(long switchNum);
-//void turnAllOff(void);
-//void tryToGetTheTime(void);
-//void cycleRGB(void);
-//void setCycle(char * data);
-//void setAnalog(char * data);
-//void setInput(char * data);
-//void analogInputCheck(void);
-//long analogInputTenthCheck(void);
-//void digitalInputCheck(void);
-//void turnOnProgram(int program, int duration);

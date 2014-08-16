@@ -51,9 +51,6 @@ static unsigned long switchStatus[NUM_SWITCHES];
 // future - 202 - PWM with other ports. Can't on 328p since radio overlaps pwm pins
 static char switchStuff[NUM_SWITCHES];
 
-// serial number
-static char stringSerial[] = "000000";
-static long serial = 0;
 
 // strings
 static char receiveBuffer[30];
@@ -172,9 +169,6 @@ int main(void) {
 
 
     // radio related
-    char radioCommand[32];
-    radioCommand[0] = 0;
-    char tempRadioSerialIn[] = "000000";
     int payloadLength = 0;
 
     
@@ -216,41 +210,15 @@ int main(void) {
         }
         // check for radio instructions
         payloadLength = dynReceive(radioReceiveBuffer);
-        if (payloadLength > 2) {
+        if (payloadLength > 1) {
             // wait so the receiver won't miss our response
             _delay_ms(90);
-            // just a command to preceed the serial number
-            if (radioReceiveBuffer[0] == 'z') {
-                // radio is sending a serial number to compare to
-                for (x = 0; x < 6; x++) {
-                    tempRadioSerialIn[x] = radioReceiveBuffer[(x + 1)];
-                }
-                // compare the strings
-                if (strcmp(tempRadioSerialIn, stringSerial) == 0) {
-                    for (x = 7; x < payloadLength; x++) {
-                        radioCommand[(x - 7)] = radioReceiveBuffer[x];
-                    }
-                    // command is from the radio
-                    checkCommand(radioCommand);
-                } // endif - serial doesn't match so ignore it
-            } else if (radioReceiveBuffer[0] == 'b') { // radio isn't sending a serial number b=broadcast
-                for (x = 1; x < payloadLength; x++) {
-                    radioCommand[(x - 1)] = radioReceiveBuffer[x];
-                }
-                // we are only going to set the serial number in a broadcast if we don't have one
-                if (strncmp(radioCommand, "SE", 2) == 0 || strncmp(radioCommand, "se", 2) == 0) {
-                    if (serial == 0) {
-                        checkCommand(radioCommand);
-                    }
-                } else {
-                    checkCommand(radioCommand);
-                }
-            }
-            // nothing we care about so do nothing
+            checkCommand(radioReceiveBuffer);
+            
+            // clear the buffer
             for (x = 0; x < 30; x++) {
                 radioReceiveBuffer[x] = 0;
                 receiveBuffer[x] = 0;
-                radioCommand[x] = 0;
             }
         }
     }
@@ -324,9 +292,6 @@ void checkCommand(char * commandReceived) {
             break;
         case 0x5350: //SP
             startProgram(commandReceived);
-            break;
-        case 0x5345: //SE
-            serialNumber(commandReceived);
             break;
         case 0x5341: //SA
             saveToEEPROM();
@@ -1762,10 +1727,6 @@ void generalInit(void) {
         daylightSavings[1][1] = ((tempStuff[6] << 8) | (tempStuff[7]));
     }
 
-    if (readEEPROM(tempStuff, SERIAL_NUM, SERIAL_NUM_BYTES) == 1) {
-        serial = atol(tempStuff);
-        ltoa(serial, stringSerial, 10);
-    }
 
     // switches
     if (readEEPROM(switchStuff, SWITCH_STUFF, SWITCH_STUFF_BYTES) == 1) {
@@ -2002,10 +1963,6 @@ void saveToEEPROM(void) {
         tempStuff[7] = (daylightSavings[1][1] & 0xff);
         writeEEPROM(tempStuff, DAYLIGHT_SAVE, DAYLIGHT_SAVE_BYTES);
     }
-    if (serial > 0) {
-        ltoa(serial, tempStuff, 10);
-        writeEEPROM(tempStuff, SERIAL_NUM, SERIAL_NUM_BYTES);
-    }
     char setupaSwitch = 0;
     char setupPWM = 0;
 
@@ -2086,7 +2043,6 @@ void saveToEEPROM(void) {
 
 void clearToEEPROM(void) {
     int x = 0;
-    clearEEPROM(SERIAL_NUM);
     clearEEPROM(DAYLIGHT_SAVE);
     clearEEPROM(RADIO_ADDR_TX);
     clearEEPROM(RADIO_ADDR_R0);
@@ -2664,15 +2620,6 @@ void generalStatus(char * commandReceived) {
     tempIntString[0] = commandReceived[2];
     tempIntString[1] = commandReceived[3];
 
-    strcat(statusMsg, "S#");
-    int serialLength = 0;
-    //since a 0 serial number is not valid that means to return the serial number
-    serialLength = strlen(stringSerial);
-    while (serialLength < 6) {
-        strcat(statusMsg, "0");
-        serialLength++;
-    }
-    strcat(statusMsg, stringSerial);
 
     if (panicMyClockIsNotSet == 1) {
         strcat(statusMsg, " T:xx/xx/xxxx xx:xx:xx");
@@ -2714,7 +2661,7 @@ void generalInformation(void) {
     int count = 0;
     int x;
     for(x=0;x<MAX_PROGRAM;x++) {
-        if(weeklyProgram[x][0] == 255 && weeklyProgram[x][1] == 255) 
+        if(weeklyProgram[x][0] < 255 || weeklyProgram[x][1] < 255) 
             count++;
     }
     returnInt(count,tempLongString);
@@ -2733,6 +2680,8 @@ void generalInformation(void) {
     strcat(statusMsg,"/");
     returnInt(NUM_SWITCHES,tempLongString);
     strcat(statusMsg,tempLongString);
+    sendMessage(statusMsg);
+    statusMsg[0] = 0;
     strcat(statusMsg,",In,");
     count = 0;
     for (x = 0; x < NUM_INPUTS; x++) {
@@ -3051,36 +3000,6 @@ void radioChangeAddress(char * commandReceived) {
     sendMessage(statusMsg);
 }
 
-// sets or views the serial number
-// SE nnnnnn
-// 012345678
-
-void serialNumber(char * commandReceived) {
-    tempHugeString[0] = commandReceived[3];
-    tempHugeString[1] = commandReceived[4];
-    tempHugeString[2] = commandReceived[5];
-    tempHugeString[3] = commandReceived[6];
-    tempHugeString[4] = commandReceived[7];
-    tempHugeString[5] = commandReceived[8];
-    long temp = atol(tempHugeString);
-    int serialLength = 0;
-    statusMsg[0] = 0;
-    //since a 0 serial number is not valid that means to return the serial number
-    strcat(statusMsg, "Ser#");
-    if (temp > 0) {
-        // new serial number
-        serial = temp;
-        ltoa(serial, stringSerial, 10);
-
-    }
-    serialLength = strlen(stringSerial);
-    while (serialLength < 6) {
-        strcat(statusMsg, "0");
-        serialLength++;
-    }
-    strcat(statusMsg, stringSerial);
-    sendMessage(statusMsg);
-}
 
 // take the int and return the array
 
