@@ -113,7 +113,39 @@ Display general information
 
 PP SW IP SO - display which programs / switches / inputs are programmed and on
 
-
+TI:MMDDYYYYHHMMSS - Time
+DS:MMDD MMDD - Daylight Savings
+TL:##HHMMHHMMdddddd - Time Limits
+NS:S#PpD - New Switch
+SC:S# - Switch Clear
+SD:xx - Switch Display
+NP:HHMMDur. - New Program. Duration in minutes
+CP:P# - Clear Program
+PA:P#S# - Add switch to program
+PD:P#SMTWTFS - Select days program will run - 1010000 = Sun & Tue
+PT:P#HHMMDur. - program time - changes program time
+PI:P# - program info
+PS:P#S#DH - PWM setup - p# is pwm num, sw #, D (1 = high) then H=Hue, C=color change, 0=static color
+CH:P#vvvv - Color Change speed - default 10=1 second in 1/10ths
+HS:xx - Hue Speed - smooth number.  16 default
+PV:P#,vvv,vvv,vvv - set values for status pwm
+PW = PWM summary - 
+CC:##,vvv,vvv,vvv  - color change values - ## is the color change number
+BS:16 - changes brightness of a pwm switch
+SB S#16 - sets a second brightness for pwm that can be set off by an input
+SS:S#Durat. - start switch
+SP:P#Durat. - start progam
+SA - Save
+CL - clear saved
+CT:xxxx - sets amount to adjust the timer.  15625? is default
+RD:N - radio display address
+RC:N 0xnnnnnnnnnn Radio change address
+AI:##PpLLLHHH?##DuraPO - Analog input - ## input num, port/pin, LLL%,HHH%,? = (s)witch or (p)rogram, ## num, dur/poll time in seconds
+DI:##Ppx?##DuraPO - Digital input. ?=H/L for what activates switch
+CI xx - Clear Input
+GS - General Status
+GI General Information
+PP SW IP SO - display which programs / switches / inputs are programmed and on
 Fail Codes:
 01 - Invalid Switch Number
 02 - Invalid Program Number
