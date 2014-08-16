@@ -65,6 +65,7 @@ $db->exec("CREATE TABLE IF NOT EXISTS radios (
     programCount int,
     inputCount int,
     timeLimitCount int,
+    colorChangeCount int,
     txAddress text,
     rxAddress0 text,
     rxAddress1 text,
@@ -127,14 +128,20 @@ $db->exec("CREATE TABLE IF NOT EXISTS timeLimits (
 
 getRadioInfo("100001");
 
-function radioCommand($radioID,$command,$desiredLine) {
+function radioCommand($radioID,$command,$desiredLine = "") {
     global $db;
     $statement = $db->prepare("SELECT * FROM radios WHERE id = :id");
     $statement->bindValue(":id",$radioID,SQLITE3_INTEGER);
     $result = $statement->execute();
     $radio = $result->fetchArray(SQLITE3_ASSOC);
     $commandToRun = "nrfcl -t ".$radio['rxAddress0']." -r ".$radio['txAddress']." ".$command;
-    // TODO: you are here
+    // Sometimes we want more than one line of the result or we don't care
+    if($desiredLine == "") {
+        $returnArray = array();
+        exec($command, $returnArray);
+        return $returnArray;
+    }
+    
     $attempts = 0;
     while ($attempts < 10){
         $attempts++;
@@ -151,31 +158,70 @@ function radioCommand($radioID,$command,$desiredLine) {
     return false;
 }
 
-function getRadioInfo($serialNum) {
-    global $nl, $db;
-    if (strlen($serialNum) < 6)
-        return "invalid serial number$nl";
-    $attempts = 0;
-    $time = 0;
-    // Read a general status
-    $command = "nrfcl z" . $serialNum . "gs";
-    if(!$line = parseCommand($command,"S#")) {
-        echo "Cannot reach radio.  Sorry.";
-        exit;
+// Get the basic information of a new radio and assign it its very own address
+function newRadio() {
+    //First see if there is a radio there using default address
+    $returnArray = array();
+    exec("nrfcl -t f0f0f0f001 -r f0f0f0f001 gi",$returnArray);
+    if(strpos($returnArray[0],"ok") === false)
+        return false;
+    $returnString = "";
+    foreach($returnArray as $line) {
+        if(strpos($line,"Transmitting")===false)
+            $returnString .= $line;
     }
-
-    $timeString = substr($line,11,19);
-    $time = strtotime($timeString);
-
-
-    echo date("Y:m:d H:i:s",$time).$nl;
-
-    $command = "nrfcl z".$serialNum."gi";
-    if(!$Line = parseCommand($command,"S")) {
-        echo "Can't get summary info$nl";
+    //Make sure we got the whole message
+    if(strpos($returnString,"Pr") === false or
+        strpos($returnString,"Sw") === false or
+        strpos($returnString,"In") === false or
+        strpos($returnString,"Li") === false or
+        strpos($returnString,"CC") === false)
+        return false;
+    // k cool. We have all the info
+    $radioParams = explode( ",",$returnString);
+    for($x=0;$x<count($radioParams);$x+=2) {
+        $number = explode("/",$radioParams[$x+1]);
+        $programmed= $number[0];
+        $total = $number[1];
+        switch($radioParams[$x]) {
+        case "Pr":
+            $programs = $total;
+            break;
+        case "Sw":
+            $switches = $total;
+            break;
+        case "In":
+            $inputs = $total;
+            break;
+        case "Li":
+            $limits = $total;
+            break;
+        case "CC":
+            $colorChanges = $total;
+            break;
+        }
+    }
+    $sql = "SELECT max(rxAddress0) from radios";
+    $result = $db->query($sql);
+    if($result == false)
+        $freq = "F0F0F0F002";
+    else {
+        $row = $result->fetchArray(SQLITE3_NUM);
+        if($row == false)
+            $freq = "F0F0F0F002";
+        else{
+            $lastFreq = $row[0];
+            $freqNum = "0x".substr($lastFreq,6);
+            $thisFreq = intval($freqNum) + 1;
+            $newFreq = dechex($thisFreq);
+            while(strlen($newFreq) < 4)
+                $newFreq = "0".$newFreq;
+            $freq = substr($lastFreq,0,6) . $newFreq;
+        }
     }
 
 }
+
 
 
 ?>
