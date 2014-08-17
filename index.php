@@ -125,8 +125,9 @@ $db->exec("CREATE TABLE IF NOT EXISTS timeLimits (
 
 //  TODO: colorful layout, switches side by side showing how many it has and if they are programmed or not.
 
-
-getRadioInfo("100001");
+newRadio("frank","awesome","there");
+newRadio("molly","cool","here");
+newRadio("henriette","uh","huh");
 
 function radioCommand($radioID,$command,$desiredLine = "") {
     global $db;
@@ -159,7 +160,8 @@ function radioCommand($radioID,$command,$desiredLine = "") {
 }
 
 // Get the basic information of a new radio and assign it its very own address
-function newRadio() {
+function newRadio($name = "", $description = "",$location = "") {
+    global $db;
     //First see if there is a radio there using default address
     $returnArray = array();
     exec("nrfcl -t f0f0f0f001 -r f0f0f0f001 gi",$returnArray);
@@ -204,21 +206,34 @@ function newRadio() {
     $sql = "SELECT max(rxAddress0) from radios";
     $result = $db->query($sql);
     if($result == false)
-        $freq = "F0F0F0F002";
+        $freq = "f0f0f0f002";
     else {
         $row = $result->fetchArray(SQLITE3_NUM);
-        if($row == false)
-            $freq = "F0F0F0F002";
+        if($row[0] == NULL)
+            $freq = "f0f0f0f002";
         else{
             $lastFreq = $row[0];
             $freqNum = "0x".substr($lastFreq,6);
-            $thisFreq = intval($freqNum) + 1;
+            $thisFreq = intval($freqNum,16) + 1;
             $newFreq = dechex($thisFreq);
             while(strlen($newFreq) < 4)
                 $newFreq = "0".$newFreq;
             $freq = substr($lastFreq,0,6) . $newFreq;
         }
     }
+    $sql = "INSERT INTO radios (name, description, location, switchCount, 
+        programCount, inputCount, timeLimitCount, colorChangeCount, txAddress, 
+        rxAddress0) values (:name, :description, :location, $switches, 
+        $programs, $inputs, $limits, $colorChanges, '$freq', '$freq')";
+    $statement = $db->prepare($sql);
+    if(!$statement->bindValue(":name",$name,SQLITE3_TEXT))
+        echo $db->lastErrorMsg();
+    $statement->bindValue(":description",$description,SQLITE3_TEXT);
+    $statement->bindValue(":location",$location,SQLITE3_TEXT);
+    $result = $statement->execute();
+    if(!$result)
+        echo $db->lastErrorMsg();
+    //TODO: you are here. Now actually program the new address
 
 }
 
