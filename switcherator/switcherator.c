@@ -8,11 +8,6 @@
 
 #include "switcherator.h"
 
-// Uncomment if you want the print variables command available (costs 1K in program memory)
-// warning - probably way to big.
-//#define debug
-//#define help
-
 // globals and such
 
 // First time we are turned on and we have the wrong time
@@ -66,7 +61,13 @@ static char runColorChanges = 0;
 // PD3, PD5, PD6 or red,green,blue
 static char pwmValues[] = {0, 0, 0};
 static char colorChanges[NUM_COLOR_CHANGES][3];
+static char pwmIsSet = 0; // if we have pwm set up
+static char pwmSwitchNumber = 0;
 
+// PWM Override for immediate change
+static unsigned long immediateChange = 0;
+static char pwmOldValues[] = {0,0,0};
+static char pwmChangeValues[] = {0,0,0};
 
 // rotating hue
 static unsigned int currentHue = 0;
@@ -185,12 +186,18 @@ int main(void) {
             switchChanged = 0;
             switchOnOff();
         }
-        if (runHue == 1) {
+        if (runHue == 1 && immediateChange == 0) {
             runHueFunction();
         }
-        if (runColorChanges == 1) {
+        if (runColorChanges == 1 && immediateChange == 0) {
             runColorFunction();
         }
+
+        // override for immediate change in color
+        if (immediateChange > 0 && weeklySeconds > immediateChange) {
+            clearImmediateChange();
+        }
+
         if (tenthFlag == 1) {
             tenthFlag = 0;
             inputTenthCheck();
@@ -320,14 +327,8 @@ void checkCommand(char * commandReceived) {
         case 0x5057: //PW
             pwmSummary();
             break;
-        case 0x4845: //HE
-            drawInterface();
-            break;
         case 0x4753: //GS
             generalStatus(commandReceived);
-            break;
-        case 0x5248: //RH
-            drawInterface();
             break;
         case 0x4343: //CC
             colorChangeSet(commandReceived);
@@ -353,31 +354,14 @@ void checkCommand(char * commandReceived) {
         case 0x534F: //SO
             switchesOn();
             break;
+        case 0x4943: //IC
+            setImmediateChange(commandReceived);
+            break;
         default:
             break;
     }
 }
 
-void drawInterface(void) {
-#ifdef help
-    sendMessage("TI:MMDDYYYYHHMMSS");
-    sendMessage("DS:MMDD MMDD");
-    sendMessage("TL:##HHMMHHMMdddddd");
-    sendMessage("NS:S#PpD,SC:S# SD NP:HHMMDur.");
-    sendMessage("CP:P# PA:P#S# PD:P#SMTWTFS");
-    sendMessage("PT:P#HHMMDur. PI:P#");
-    sendMessage("PS:P#S#DH CH:P#vvvv ");
-    sendMessage("PV:P#,vvv,vvv,vvv PW");
-    sendMessage("CC:##,vvv,vvv,vvv PW (sum)");
-    sendMessage("BS:16 SB S#16 HS:16");
-    sendMessage("SS S#Durat. SP P#Durat.");
-    sendMessage("SE nnnnnn SA CL CTvvv");
-    sendMessage("RD:N RC:N 0xnnnnnnnnnn");
-    sendMessage("AI:##PpLLLHHH?##DuraPO");
-    sendMessage("DI:##Ppx?##DuraPO  CI xx");
-    sendMessage("HE RH GS");
-#endif
-}
 
 void fail(int failCode) {
     statusMsg[0] = 0;
@@ -871,6 +855,8 @@ void pwmSetup(char * commandReceived) {
     TCCR0B = (1 << CS01) | (1 << CS00);
 
     TCCR2B = (1 << CS22); // F_CPU/64
+    pwmIsSet = 1;
+    pwmSwitchNumber = switchNumber;
     // pwm to output
     ok();
 }
@@ -891,7 +877,9 @@ void pwmClear(int switchNumber) {
         DDRD &= ~((1 << PIND3)&(1 << PIND5)&(1 << PIND6));
         runHue = 0;
         runColorChanges = 0;
+        pwmIsSet = 0;
     }
+
 }
 
 // This just sets up the times for the PWM hues
@@ -1159,6 +1147,56 @@ void brightnessSet(char * commandReceived) {
         ok();
     }
 }
+
+// sometimes you might want the lights to act like they
+// are being controlled via DMX or something.  this is how
+// ic:xxx,xxx,xxx
+// 01234567890123
+void setImmediateChange(char * commandReceived) {
+    tempLongString[3] = 0;
+    tempLongString[0] = commandReceived[3];
+    tempLongString[1] = commandReceived[4];
+    tempLongString[2] = commandReceived[5];
+    pwmChangeValues[0] = atoi(tempLongString);
+    tempLongString[0] = commandReceived[7];
+    tempLongString[1] = commandReceived[8];
+    tempLongString[2] = commandReceived[9];
+    pwmChangeValues[1] = atoi(tempLongString);
+    tempLongString[0] = commandReceived[11];
+    tempLongString[1] = commandReceived[12];
+    tempLongString[2] = commandReceived[13];
+    pwmChangeValues[2] = atoi(tempLongString);
+    if(pwmChangeValues[0] == 0 && pwmChangeValues[1] == 0 &&
+            pwmChangeValues[2] == 0) {
+        fail(0x13);
+        return;
+    }
+     if(pwmIsSet == 1) {
+        immediateChange = (weeklySeconds + 5);
+        if(switchStatus[pwmSwitchNumber] < immediateChange)
+            switchStatus[pwmSwitchNumber] = immediateChange;
+        pwmOldValues[0] = Red;
+        pwmOldValues[1] = Green;
+        pwmOldValues[2] = Blue;
+        Red = pwmChangeValues[0];
+        Green = pwmChangeValues[1];
+        Blue = pwmChangeValues[2];
+        switchChanged = 1;
+        ok();
+    } else {
+        fail(0x14);
+        return;
+    }
+}
+
+
+void clearImmediateChange(void) {
+    immediateChange = 0;
+    Red = pwmOldValues[0];
+    Green = pwmOldValues[1];
+    Blue = pwmOldValues[2];
+}
+
 
 
 /****************************************************************

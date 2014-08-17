@@ -113,6 +113,8 @@ Display general information
 
 PP SW IP SO - display which programs / switches / inputs are programmed and on
 
+IC:xxx,xxx,xxx - immediately set the pwm colors
+
 TI:MMDDYYYYHHMMSS - Time
 DS:MMDD MMDD - Daylight Savings
 TL:##HHMMHHMMdddddd - Time Limits - Replace first H with x to clear or ? to inquire
@@ -146,6 +148,7 @@ CI xx - Clear Input
 GS - General Status
 GI General Information
 PP SW IP SO - display which programs / switches / inputs are programmed and on
+IC:xxx,xxx,xxx
 
 Fail Codes:
 01 - Invalid Switch Number
@@ -166,3 +169,6 @@ Fail Codes:
 10 - Invalid time limit number
 11 - Invalid Input
 12 - Pin already set as output
+13 - No colors Indicated
+14 - PWM not set up
+

@@ -107,7 +107,6 @@ int main(void);
 
 // command and interface
 void checkCommand(char * commandReceived);
-void drawInterface(void);
 void fail(int failCode);
 void ok(void);
 int getSwitchNumber(char * commandReceived);
@@ -131,6 +130,10 @@ void pwmSummary(void);
 void runColorFunction(void);
 void runHueFunction(void);
 void brightnessSet(char * commandReceived);
+void setImmediateChange(char * commandReceived);
+void clearImmediateChange(void);
+
+
 // all things program
 void newProgram(char * commandReceived);
 int findOpenSwitch(int programNumber);
