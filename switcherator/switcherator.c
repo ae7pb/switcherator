@@ -62,7 +62,7 @@ static char runColorChanges = 0;
 static char pwmValues[] = {0, 0, 0};
 static char colorChanges[NUM_COLOR_CHANGES][3];
 static char pwmIsSet = 0; // if we have pwm set up
-static char pwmSwitchNumber = 0;
+static int pwmSwitchNumber = 0;
 
 // PWM Override for immediate change
 static unsigned long immediateChange = 0;
