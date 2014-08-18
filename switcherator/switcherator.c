@@ -652,8 +652,9 @@ void startSwitch(char * commandReceived) {
     if ((weeklySeconds + duration) > switchStatus[switchNumber])
         switchStatus[switchNumber] = (weeklySeconds + duration);
 
-    // see if it is PWM
-    if (switchStuff[switchNumber] >= 200 && switchStuff[switchNumber] <= 220) {
+    // see if it is PWM - also won't override immediate change
+    if (switchStuff[switchNumber] >= 200 && switchStuff[switchNumber] <= 220
+            && immediateChange == 0) {
         // k it is PWM.  See if it is hue
         if (switchStuff[switchNumber] == 200) {
             // even number so values, not hue
@@ -1181,7 +1182,6 @@ void setImmediateChange(char * commandReceived) {
         Red = pwmChangeValues[0];
         Green = pwmChangeValues[1];
         Blue = pwmChangeValues[2];
-        switchChanged = 1;
         ok();
     } else {
         fail(0x14);
@@ -1195,6 +1195,7 @@ void clearImmediateChange(void) {
     Red = pwmOldValues[0];
     Green = pwmOldValues[1];
     Blue = pwmOldValues[2];
+    switchChanged = 1;
 }
 
 
@@ -2461,7 +2462,8 @@ void switchOnOff(void) {
                     } else if (switchStuff[x] == 212) {
                         bright = oldBright;
                     }
-                } else {
+                    // now don't override if we are changing it ourselves
+                } else if (immediateChange == 0){
                     // turn it on
                     // decide if it is a changing hue or static values
                     if (switchStuff[x] == 200) {
