@@ -125,9 +125,14 @@ $db->exec("CREATE TABLE IF NOT EXISTS timeLimits (
 
 //  TODO: colorful layout, switches side by side showing how many it has and if they are programmed or not.
 
-newRadio("frank","awesome","there");
-newRadio("molly","cool","here");
-newRadio("henriette","uh","huh");
+
+
+if(!newRadio("radio1","desc","porch"))
+    echo "fail";
+else
+    echo "yeah";
+
+
 
 function radioCommand($radioID,$command,$desiredLine = "") {
     global $db;
@@ -221,6 +226,24 @@ function newRadio($name = "", $description = "",$location = "") {
             $freq = substr($lastFreq,0,6) . $newFreq;
         }
     }
+
+    // Now actually send the changes to the radio
+    // set the receive frequency to the new frequency
+    $command = "nrfcl -t f0f0f0f001 -r f0f0f0f001 RC:0:0x$freq";
+    $returnArray = 0;
+    exec($command,$returnArray);
+    if(count($returnArray) < 2)
+        return false;
+    // set the transmit frequency to the new frequency
+    $command = "nrfcl -t $freq -r $freq RC:T:0x$freq";
+    $returnArray = 0;
+    exec($command,$returnArray);
+    if(count($returnArray) < 2)
+        return false;
+    $command = "nrfcl -t $freq -r $freq SA";
+    exec($command,$returnArray);
+
+
     $sql = "INSERT INTO radios (name, description, location, switchCount, 
         programCount, inputCount, timeLimitCount, colorChangeCount, txAddress, 
         rxAddress0) values (:name, :description, :location, $switches, 
@@ -233,8 +256,7 @@ function newRadio($name = "", $description = "",$location = "") {
     $result = $statement->execute();
     if(!$result)
         echo $db->lastErrorMsg();
-    //TODO: you are here. Now actually program the new address
-
+    return true;
 }
 
 
