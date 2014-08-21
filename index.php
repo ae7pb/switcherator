@@ -133,7 +133,10 @@ else
     echo "yeah";
 
 
-
+/*
+ * Run a radio command. Either returns the array output from the command
+ * or if you specify a desiredLine it just sends that line.
+ */
 function radioCommand($radioID,$command,$desiredLine = "") {
     global $db;
     $statement = $db->prepare("SELECT * FROM radios WHERE id = :id");
