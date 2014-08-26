@@ -5,6 +5,8 @@
 #define F_CPU 16000000
 #endif
 
+// TODO: set up way to send feedback from switches
+// TODO: deal with pulse width sonar thingie
 
 #include "switcherator.h"
 
