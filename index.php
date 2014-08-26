@@ -55,6 +55,9 @@ else
 global $db;
 $db = new SQLite3('myradiodb.php');
 
+
+
+
 // Radio table.  Has the radio, serial numbers and switch capabilities
 $db->exec("CREATE TABLE IF NOT EXISTS radios (
     id int PRIMARY KEY,
@@ -262,7 +265,37 @@ function newRadio($name = "", $description = "",$location = "") {
     return true;
 }
 
-
+function discoverSwitches($radioID) {
+    global $db;
+    $response = radioCommand($radioID,"sw");
+    $switches = "";
+    foreach($response as $line) {
+        if(strpos($line,"Swi")!== false) {
+            $littleArray = explode(":",$line);
+            $switches .= $littleArray[1];
+        }
+    }
+    $switchList = str_split($switches);
+    for($x=0;$x<count($switches);$x++) {
+        if($switches[$x] == "n") {
+            /* If the switch isn't setup then I'll delete it. I really
+             * don't care if it is in the database since it won't hurt
+             * just to delete it anyway.
+             */
+            $sql = "DELETE FROM switches WHERE radioID = $radioID and ".
+                "id = $x";
+            $db->exec($sql);
+        } else {
+            /* ok switches can be a regular switch or PWM-color change
+             * PWM-rotating hue, PWM-fixed value, or brightness setting
+             */
+            $command = "SD:".$x;
+            $response = radioCommand($radioID,$command);
+            // COC,Brt,Fix,Hue,Port-Pin-Direction
+        }
+    }
+    // TODO: you are here. iterate through the list and see what you get
+}
 
 ?>
     <div><a href="#"><span class="link blue"></span></a></div>
