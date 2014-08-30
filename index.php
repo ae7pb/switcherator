@@ -77,9 +77,12 @@ $db->exec("CREATE TABLE IF NOT EXISTS radios (
     rxAddress4 text,
     rxAddress5 text
 )");
-// Switch table.  Which radio it has, switch number on radio, type of switch and details.
-// Types: Binary, PWM Single Color, PWM Color Change, PWM Hue change
-// Details as appropriate
+/* Switch table.  Which radio it has, switch number on radio, type of switch and details.
+ * Types: Switch, PWM Single Color, PWM Color Change, PWM Hue change
+ * Details - Switch Port,pin,direction - PWM color - pwm#,direction,red,green,blue
+ * color change: pwm#,# color changes,direction,color change time,red,green,blue,...
+ * hue change - pwm#,hue speed,direction
+ */
 $db->exec("CREATE TABLE IF NOT EXISTS switches (
     id int PRIMARY KEY,
     radioID int,
@@ -265,6 +268,16 @@ function newRadio($name = "", $description = "",$location = "") {
     return true;
 }
 
+/* Get the information for the switches
+ * Applicable Database:
+ * CREATE TABLE IF NOT EXISTS switches (id int PRIMARY KEY,
+ *   radioID int,switchNumber int,type text,details text
+ * Details - Switch Port,pin,direction - PWM color - pwm#,direction,red,green,blue
+ * color change: pwm#,number color changes,direction,color change time,red,green,blue,...
+ * hue change - pwm#,hue speed,direction 
+ * brightness - brightness value (1-16)
+ */
+
 function discoverSwitches($radioID) {
     global $db;
     $response = radioCommand($radioID,"sw");
@@ -292,9 +305,40 @@ function discoverSwitches($radioID) {
             $command = "SD:".$x;
             $response = radioCommand($radioID,$command);
             // COC,Brt,Fix,Hue,Port-Pin-Direction
+            if(count($response)>=2)
+                $result = $response[1];
+            else
+                return false;
+            switch ($result) {
+                case "Fix":
+                    $type = "FixedPWM";
+                    $getPWM = true;
+                    break;
+                case "CoC":
+                    $type = "ColorChange";
+                    $getPWM = true;
+                    break;
+                case "Brt":
+                    $type = "Brightness";
+                    $getPWM = true;
+                    break;
+                case "Hue":
+                    $type = "ChangingHue";
+                    $getPWM = true;
+                    break;
+                default:
+                    // Make sure there is a real response
+                    if(strlen($result)!== 3)
+                        return false;
+                    $type = "Switch";
+                    $stuff = str_split($result);
+                    $getPWM = false;
+                    $details = implode(",",$stuff);
+            }
+        // TODO: you are here. figure out database schema and go for it
+            
         }
     }
-    // TODO: you are here. iterate through the list and see what you get
 }
 
 ?>
