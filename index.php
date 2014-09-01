@@ -340,6 +340,15 @@ function discoverSwitches($radioID) {
         }
     }
 }
+/* Get the information for the switches
+ * Applicable Database:
+ * CREATE TABLE IF NOT EXISTS switches (id int PRIMARY KEY,
+ *   radioID int,switchNumber int,type text,details text
+ * Details - Switch Port,pin,direction - PWM color - pwm#,direction,red,green,blue
+ * color change: pwm#,number color changes,direction,color change time,red,green,blue,...
+ * hue change - pwm#,hue speed,direction 
+ * brightness - brightness value (1-16)
+ */
 
 ?>
     <div><a href="#"><span class="link blue"></span></a></div>
