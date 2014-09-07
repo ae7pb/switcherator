@@ -21,6 +21,7 @@
 #define NUM_INPUTS              4
 #define NUM_LIMITS              4
 #define NUM_COLOR_CHANGES       6
+#define NUM_PWM                 1
 
 
 // Radio settings
@@ -154,6 +155,8 @@ void writeEEPROM(char * data, int memLocation, int memBytes);
 void clearEEPROM(int memLocation);
 void saveToEEPROM(void);// **
 void clearToEEPROM(void);// **
+void memoryDump(void); // dump out the memory
+interjectLineNumber(int lineNumber);
 // all things clock
 void clockInit(void);
 void setClock(char * commandReceived);

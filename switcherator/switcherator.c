@@ -68,8 +68,8 @@ static int pwmSwitchNumber = 0;
 
 // PWM Override for immediate change
 static unsigned long immediateChange = 0;
-static char pwmOldValues[] = {0,0,0};
-static char pwmChangeValues[] = {0,0,0};
+static char pwmOldValues[] = {0, 0, 0};
+static char pwmChangeValues[] = {0, 0, 0};
 
 // rotating hue
 static unsigned int currentHue = 0;
@@ -174,7 +174,7 @@ int main(void) {
     // radio related
     int payloadLength = 0;
 
-    
+
 
     while (1) {
         // what to run every second
@@ -223,7 +223,7 @@ int main(void) {
             // wait so the receiver won't miss our response
             _delay_ms(90);
             checkCommand(radioReceiveBuffer);
-            
+
             // clear the buffer
             for (x = 0; x < 30; x++) {
                 radioReceiveBuffer[x] = 0;
@@ -360,10 +360,12 @@ void checkCommand(char * commandReceived) {
             setImmediateChange(commandReceived);
             break;
         default:
+        case 0x4455: //DU
+            memoryDump();
+            break;
             break;
     }
 }
-
 
 void fail(int failCode) {
     statusMsg[0] = 0;
@@ -987,13 +989,13 @@ void pwmSummary(void) {
         if (x > 0)
             strcat(statusMsg, ",");
         strcat(statusMsg, "0x");
-        if(colorChanges[x][0] == 0 && colorChanges[x][1] == 1 &&
+        if (colorChanges[x][0] == 0 && colorChanges[x][1] == 1 &&
                 colorChanges[x][2] == 0)
-            strcat(statusMsg,"--");
+            strcat(statusMsg, "--");
         else {
             for (y = 0; y < 3; y++) {
                 if (y > 0)
-                    strcat(statusMsg,",");
+                    strcat(statusMsg, ",");
                 returnHexWithout(colorChanges[x][y], tempLongString);
                 strcat(statusMsg, tempLongString);
             }
@@ -1003,7 +1005,7 @@ void pwmSummary(void) {
             statusMsg[6] = 0;
         }
     }
-    if(strlen(statusMsg)> 6)
+    if (strlen(statusMsg) > 6)
         sendMessage(statusMsg);
     statusMsg[0] = 0;
     for (x = 0; x < NUM_SWITCHES; x++) {
@@ -1155,6 +1157,7 @@ void brightnessSet(char * commandReceived) {
 // are being controlled via DMX or something.  this is how
 // ic:xxx,xxx,xxx
 // 01234567890123
+
 void setImmediateChange(char * commandReceived) {
     tempLongString[3] = 0;
     tempLongString[0] = commandReceived[3];
@@ -1169,14 +1172,14 @@ void setImmediateChange(char * commandReceived) {
     tempLongString[1] = commandReceived[12];
     tempLongString[2] = commandReceived[13];
     pwmChangeValues[2] = atoi(tempLongString);
-    if(pwmChangeValues[0] == 0 && pwmChangeValues[1] == 0 &&
+    if (pwmChangeValues[0] == 0 && pwmChangeValues[1] == 0 &&
             pwmChangeValues[2] == 0) {
         fail(0x13);
         return;
     }
-     if(pwmIsSet == 1) {
+    if (pwmIsSet == 1) {
         immediateChange = (weeklySeconds + 5);
-        if(switchStatus[pwmSwitchNumber] < immediateChange)
+        if (switchStatus[pwmSwitchNumber] < immediateChange)
             switchStatus[pwmSwitchNumber] = immediateChange;
         pwmOldValues[0] = Red;
         pwmOldValues[1] = Green;
@@ -1190,7 +1193,6 @@ void setImmediateChange(char * commandReceived) {
         return;
     }
 }
-
 
 void clearImmediateChange(void) {
     immediateChange = 0;
@@ -1556,7 +1558,7 @@ void programDisplay(char * commandReceived) {
         int temp = 0;
         strcat(statusMsg, "S");
         for (x = 0; x < switchCount; x++) {
-            if(strlen(statusMsg)>30) {
+            if (strlen(statusMsg) > 30) {
                 sendMessage(statusMsg);
                 statusMsg[6] = 0;
             }
@@ -2086,12 +2088,153 @@ void saveToEEPROM(void) {
         memoryMarker = (COLOR_CHANGE + (x * COLOR_CHANGE_BYTES));
         if (colorChanges[0][0] != 0 || colorChanges[0][1] != 1 || colorChanges[0][2] != 0) {
             for (y = 0; y < 3; y++) {
-                tempStuff[y] = inputs[x][y];
+                tempStuff[y] = colorChanges[x][y];
             }
             writeEEPROM(tempStuff, memoryMarker, COLOR_CHANGE_BYTES);
         }
     }
     ok();
+}
+
+/* dump the contents of the memory across the radio
+ */
+void memoryDump(void) {
+    statusMsg[0] = 0;
+    char tempStuff[14];
+    int x = 0;
+    int linecount = 0;
+
+    // First line is miscellaneous stoff
+    // Tweaktimer, daylightsavings (4 bytes), brightness, pwm direction
+    strcat(statusMsg, "M00-");
+    returnHexWithout(tweakTimer, tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(daylightSavings[0][0], tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(daylightSavings[0][1], tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(daylightSavings[1][0], tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(daylightSavings[0][1], tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(switchBright, tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(pwmdir, tempLongString);
+    strcat(statusMsg, tempLongString);
+
+    sendMessage(statusMsg);
+    statusMsg[0] = 0;
+    linecount++;
+
+    strcat(statusMsg, "S");
+    interjectLineNumber(linecount);
+
+    for (x = 0; x < NUM_SWITCHES; x++) {
+        itoa(switchStuff[x], tempLongString);
+        strcat(statusMsg, tempLongString);
+        if (strlen(statusMsg) >= 30 && (x + 1) < NUM_SWITCHES) {
+            sendMessage(statusMsg);
+            linecount++;
+            statusMsg[1] = 0;
+            interjectLineNumber(linecount);
+        }
+    }
+    sendMessage(statusMsg);
+    statusMsg[0] = 0;
+    linecount++;
+    strcat(statusMsg, "P");
+    interjectLineNumber(linecount);
+
+
+    // now dump the programs a byte at a time.
+    int y = 0;
+    for (x = 0; x < MAX_PROGRAM; x++) {
+
+        for (y = 0; y < 10; y++) {
+            returnHexWithout(weeklyProgram[x][y], tempLongString);
+            strcat(statusMsg, tempLongString);
+            if (strlen(statusMsg) >= 30) {
+                sendMessage(statusMsg);
+                linecount++;
+                statusMsg[1] = 0;
+                interjectLineNumber(linecount);
+            }
+        }
+    }
+
+    sendMessage(statusMsg);
+    statusMsg[0] = 0;
+    linecount++;
+    strcat(statusMsg, "I");
+    interjectLineNumber(linecount);
+    // input bytes now
+    for (x = 0; x < NUM_INPUTS; x++) {
+
+        for (y = 0; y < 8; y++) {
+            returnHexWithout(inputs[x][y], tempLongString);
+            strcat(statusMsg, tempLongString);
+            if (strlen(statusMsg) >= 30) {
+                sendMessage(statusMsg);
+                linecount++;
+                statusMsg[1] = 0;
+                interjectLineNumber(linecount);
+            }
+        }
+    }
+
+    sendMessage(statusMsg);
+    statusMsg[0] = 0;
+    linecount++;
+    strcat(statusMsg, "T");
+    interjectLineNumber(linecount);
+    // time limits
+    for (x = 0; x < NUM_LIMITS; x++) {
+        for (y = 0; y < 3; y++) {
+            returnHexWithout(timeLimits[x][y], tempLongString);
+            strcat(statusMsg, tempLongString);
+            if (strlen(statusMsg) >= 30) {
+                sendMessage(statusMsg);
+                linecount++;
+                statusMsg[1] = 0;
+                interjectLineNumber(linecount);
+            }
+        }
+    }
+
+    sendMessage(statusMsg);
+    statusMsg[0] = 0;
+    linecount++;
+    strcat(statusMsg, "C");
+    interjectLineNumber(linecount);
+    for (x = 0; x < 3; x++) {
+        returnHexWithout(pwmValues[x], tempLongString);
+        strcat(statusMsg, tempLongString);
+    }
+    // save the color change
+    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
+        for (y = 0; y < 3; y++) {
+            returnHexWithout(colorChanges[x][y], tempLongString);
+            strcat(statusMsg, tempLongString);
+            if (strlen(statusMsg) >= 30) {
+                sendMessage(statusMsg);
+                linecount++;
+                statusMsg[1] = 0;
+                interjectLineNumber(linecount);
+            }
+        }
+    }
+    sendMessage(statusMsg);
+    statusMsg[0] = 0;
+    linecount++;
+    strcat(statusMsg, "END:lines:");
+    interjectLineNumber(linecount);
+    sendMessage(statusMsg);
+}
+
+interjectLineNumber(int lineNumber) {
+    returnHexWithout(lineNumber, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "-");
 }
 
 void clearToEEPROM(void) {
@@ -2190,8 +2333,8 @@ void setClock(char * commandReceived) {
     stopClock();
     startClock();
     panicMyClockIsNotSet = 0;
-    if(failCondition == 3) {
-        clearFail();      
+    if (failCondition == 3) {
+        clearFail();
     }
 }
 
@@ -2325,7 +2468,7 @@ void advanceDay(void) {
     }
     // possibly advancing a month
     switch (globalMonth) {
-        // 30 days have september, april, june and november
+            // 30 days have september, april, june and november
         case 4:
         case 6:
         case 9:
@@ -2465,7 +2608,7 @@ void switchOnOff(void) {
                         bright = oldBright;
                     }
                     // now don't override if we are changing it ourselves
-                } else if (immediateChange == 0){
+                } else if (immediateChange == 0) {
                     // turn it on
                     // decide if it is a changing hue or static values
                     if (switchStuff[x] == 200) {
@@ -2709,70 +2852,72 @@ void generalStatus(char * commandReceived) {
 }
 
 // returns a basic view of the capabilities
+
 void generalInformation(void) {
     statusMsg[0] = 0;
-    strcat(statusMsg,"Pr,");
+    strcat(statusMsg, "Pr,");
     int count = 0;
     int x;
-    for(x=0;x<MAX_PROGRAM;x++) {
-        if(weeklyProgram[x][0] < 255 || weeklyProgram[x][1] < 255) 
+    for (x = 0; x < MAX_PROGRAM; x++) {
+        if (weeklyProgram[x][0] < 255 || weeklyProgram[x][1] < 255)
             count++;
     }
-    returnInt(count,tempLongString);
-    strcat(statusMsg,tempLongString);
-    strcat(statusMsg,"/");
-    returnInt(MAX_PROGRAM,tempLongString);
-    strcat(statusMsg,tempLongString);
-    strcat(statusMsg,",Sw,");
+    returnInt(count, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "/");
+    returnInt(MAX_PROGRAM, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, ",Sw,");
     count = 0;
     for (x = 0; x < NUM_SWITCHES; x++) {
         if (switchStuff[x] < 255)
-            count ++;
+            count++;
     }
-    returnInt(count,tempLongString);
-    strcat(statusMsg,tempLongString);
-    strcat(statusMsg,"/");
-    returnInt(NUM_SWITCHES,tempLongString);
-    strcat(statusMsg,tempLongString);
+    returnInt(count, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "/");
+    returnInt(NUM_SWITCHES, tempLongString);
+    strcat(statusMsg, tempLongString);
     sendMessage(statusMsg);
     statusMsg[0] = 0;
-    strcat(statusMsg,",In,");
+    strcat(statusMsg, ",In,");
     count = 0;
     for (x = 0; x < NUM_INPUTS; x++) {
         if (inputs[x][0] < 255)
-            count ++;
+            count++;
     }
-    returnInt(count,tempLongString);
-    strcat(statusMsg,tempLongString);
-    strcat(statusMsg,"/");
-    returnInt(NUM_INPUTS,tempLongString);
-    strcat(statusMsg,tempLongString);
-    strcat(statusMsg,",Li,");
+    returnInt(count, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "/");
+    returnInt(NUM_INPUTS, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, ",Li,");
     count = 0;
     for (x = 0; x < NUM_LIMITS; x++) {
         if (inputs[x][2] > 0)
-            count ++;
+            count++;
     }
-    returnInt(count,tempLongString);
-    strcat(statusMsg,tempLongString);
-    strcat(statusMsg,"/");
-    returnInt(NUM_LIMITS,tempLongString);
-    strcat(statusMsg,tempLongString);
-    strcat(statusMsg,",CC,");
+    returnInt(count, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "/");
+    returnInt(NUM_LIMITS, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, ",CC,");
     count = 0;
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         if (colorChanges[x][0] != 0 || colorChanges[x][1] != 1 || colorChanges[x][2] != 0)
-            count ++;
+            count++;
     }
-    returnInt(count,tempLongString);
-    strcat(statusMsg,tempLongString);
-    strcat(statusMsg,"/");
-    returnInt(NUM_COLOR_CHANGES,tempLongString);
-    strcat(statusMsg,tempLongString);
+    returnInt(count, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "/");
+    returnInt(NUM_COLOR_CHANGES, tempLongString);
+    strcat(statusMsg, tempLongString);
     sendMessage(statusMsg);
 }
 
 // transmits Y or N for which programs have been programmed
+
 void programsProgrammed(void) {
     statusMsg[0] = 0;
     strcat(statusMsg, "Progs:");
@@ -2789,9 +2934,10 @@ void programsProgrammed(void) {
             statusMsg[6] = 0;
         }
     }
-    sendMessage(statusMsg);    
+    sendMessage(statusMsg);
 }
 // transmits Y or N for which switches have been programmed
+
 void switchesProgrammed(void) {
     statusMsg[0] = 0;
     strcat(statusMsg, "Swi:");
@@ -2813,6 +2959,7 @@ void switchesProgrammed(void) {
 }
 
 // transmits Y or N for which inputs have been programmed
+
 void inputsProgrammed(void) {
     statusMsg[0] = 0;
     strcat(statusMsg, "Inp:");
@@ -2833,6 +2980,7 @@ void inputsProgrammed(void) {
 }
 
 // transmits Y or N for which switches are currently turned on
+
 void switchesOn(void) {
     statusMsg[0] = 0;
     strcat(statusMsg, "SwOn:");
@@ -2918,15 +3066,16 @@ void radioInit(void) {
 }
 
 // radio test - just make sure it is still working
+
 int radioTest(void) {
     uint64_t test_addr;
-    test_addr = readAddr(RX_ADDR_P0);    
+    test_addr = readAddr(RX_ADDR_P0);
     if (test_addr != rx_addr_p0) {
         // nope.  broken
         failCondition = 1;
         return -1;
     }
-    if(failCondition == 1 || failCondition == 2)
+    if (failCondition == 1 || failCondition == 2)
         clearFail();
     return 1;
 }
@@ -2959,16 +3108,16 @@ void radioDisplayAddress(char * commandReceived) {
     int x = 0;
     char tempRadioString[6];
     statusMsg[0] = 0;
-    if(commandReceived[3] == '1') {
+    if (commandReceived[3] == '1') {
         unformatAddress(rx_addr_p1, tempRadioString);
         strcat(statusMsg, "r1-0x");
-    } else if(commandReceived[3] == '2') {
+    } else if (commandReceived[3] == '2') {
         unformatAddress(rx_addr_p2, tempRadioString);
         strcat(statusMsg, "r2-0x");
-    } else if(commandReceived[3] == '3') {
+    } else if (commandReceived[3] == '3') {
         unformatAddress(rx_addr_p3, tempRadioString);
         strcat(statusMsg, "r3-0x");
-    } else if(commandReceived[3] == '4') {
+    } else if (commandReceived[3] == '4') {
         unformatAddress(rx_addr_p4, tempRadioString);
         strcat(statusMsg, "r4-0x");
     } else if (commandReceived[3] == '5') {
@@ -3075,7 +3224,7 @@ void sendMessage(char * myResponse) {
     stopRx();
     _delay_us(100);
     int transmitLength = strlen(myResponse);
-    if(!transmit(myResponse, transmitLength)) {
+    if (!transmit(myResponse, transmitLength)) {
         failCondition = 2;
     } else {
         failCondition = 0;
@@ -3753,6 +3902,7 @@ void flashFail(void) {
 }
 
 // turns off the indicator pin
+
 void clearFail(void) {
     failTimer = 0;
     INDICATOR_PORT |= (INDICATOR_PIN);
