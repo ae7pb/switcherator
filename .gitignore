@@ -8,3 +8,5 @@
 *.eep
 *.sym
 /nbproject/private/
+*.d
+*.lst

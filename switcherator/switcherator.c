@@ -2120,12 +2120,8 @@ void memoryDump(void) {
     returnHexWithout(pwmdir, tempLongString);
     strcat(statusMsg, tempLongString);
 
-    sendMessage(statusMsg);
-    statusMsg[0] = 0;
     linecount++;
-
-    strcat(statusMsg, "S");
-    interjectLineNumber(linecount);
+    resetStatus(linecount,"S");
 
     for (x = 0; x < NUM_SWITCHES; x++) {
         imAnInt = switchStuff[x];
@@ -2140,11 +2136,9 @@ void memoryDump(void) {
             interjectLineNumber(linecount);
         }
     }
-    sendMessage(statusMsg);
-    statusMsg[0] = 0;
+    
     linecount++;
-    strcat(statusMsg, "P");
-    interjectLineNumber(linecount);
+    resetStatus(linecount,"P");
 
 
     // now dump the programs a byte at a time.
@@ -2163,11 +2157,8 @@ void memoryDump(void) {
         }
     }
 
-    sendMessage(statusMsg);
-    statusMsg[0] = 0;
     linecount++;
-    strcat(statusMsg, "I");
-    interjectLineNumber(linecount);
+    resetStatus(linecount,"I");
     // input bytes now
     for (x = 0; x < NUM_INPUTS; x++) {
 
@@ -2183,11 +2174,8 @@ void memoryDump(void) {
         }
     }
 
-    sendMessage(statusMsg);
-    statusMsg[0] = 0;
     linecount++;
-    strcat(statusMsg, "T");
-    interjectLineNumber(linecount);
+    resetStatus(linecount,"T");
     // time limits
     for (x = 0; x < NUM_LIMITS; x++) {
         for (y = 0; y < 3; y++) {
@@ -2202,11 +2190,8 @@ void memoryDump(void) {
         }
     }
 
-    sendMessage(statusMsg);
-    statusMsg[0] = 0;
     linecount++;
-    strcat(statusMsg, "C");
-    interjectLineNumber(linecount);
+    resetStatus(linecount,"C");
     for (x = 0; x < 3; x++) {
         returnHexWithout(pwmValues[x], tempLongString);
         strcat(statusMsg, tempLongString);
@@ -2227,7 +2212,7 @@ void memoryDump(void) {
     sendMessage(statusMsg);
     statusMsg[0] = 0;
     linecount++;
-    strcat(statusMsg, "END:lines:");
+    strcat(statusMsg, "E:l:");
     interjectLineNumber(linecount);
     sendMessage(statusMsg);
 }
@@ -2238,6 +2223,12 @@ void interjectLineNumber(int lineNumber) {
     strcat(statusMsg, "-");
 }
 
+void resetStatus(int linecount, char * letter) {
+    sendMessage(statusMsg);
+    statusMsg[0] = 0;
+    strcat(statusMsg, letter);
+    interjectLineNumber(linecount);
+}
 void clearToEEPROM(void) {
     int x = 0;
     clearEEPROM(DAYLIGHT_SAVE);
