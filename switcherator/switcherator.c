@@ -2100,10 +2100,10 @@ void saveToEEPROM(void) {
  */
 void memoryDump(void) {
     statusMsg[0] = 0;
-    char tempStuff[14];
     int x = 0;
     int linecount = 0;
-
+    int imAnInt = 0;
+    
     // First line is miscellaneous stoff
     // Tweaktimer, daylightsavings (4 bytes), brightness, pwm direction
     strcat(statusMsg, "M00-");
@@ -2117,8 +2117,6 @@ void memoryDump(void) {
     strcat(statusMsg, tempLongString);
     returnHexWithout(daylightSavings[0][1], tempLongString);
     strcat(statusMsg, tempLongString);
-    returnHexWithout(switchBright, tempLongString);
-    strcat(statusMsg, tempLongString);
     returnHexWithout(pwmdir, tempLongString);
     strcat(statusMsg, tempLongString);
 
@@ -2130,9 +2128,12 @@ void memoryDump(void) {
     interjectLineNumber(linecount);
 
     for (x = 0; x < NUM_SWITCHES; x++) {
-        itoa(switchStuff[x], tempLongString);
+        imAnInt = switchStuff[x];
+        returnHexWithout(imAnInt, tempLongString);
         strcat(statusMsg, tempLongString);
-        if (strlen(statusMsg) >= 30 && (x + 1) < NUM_SWITCHES) {
+        returnHexWithout(switchBright[x], tempLongString);
+        strcat(statusMsg, tempLongString);
+        if (strlen(statusMsg) >= 8 && (x + 1) < NUM_SWITCHES) {
             sendMessage(statusMsg);
             linecount++;
             statusMsg[1] = 0;
@@ -2231,7 +2232,7 @@ void memoryDump(void) {
     sendMessage(statusMsg);
 }
 
-interjectLineNumber(int lineNumber) {
+void interjectLineNumber(int lineNumber) {
     returnHexWithout(lineNumber, tempLongString);
     strcat(statusMsg, tempLongString);
     strcat(statusMsg, "-");

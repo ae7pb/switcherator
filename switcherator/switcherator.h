@@ -156,7 +156,7 @@ void clearEEPROM(int memLocation);
 void saveToEEPROM(void);// **
 void clearToEEPROM(void);// **
 void memoryDump(void); // dump out the memory
-interjectLineNumber(int lineNumber);
+void interjectLineNumber(int lineNumber);
 // all things clock
 void clockInit(void);
 void setClock(char * commandReceived);
