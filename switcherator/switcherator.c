@@ -379,6 +379,23 @@ void ok(void) {
     sendMessage("ok");
 }
 
+/* Little helpers to turn the command received in to an int or a long
+ * 
+ */
+int getInt(char * commandReceived, int first, int chars) {
+    tempHugeString[0] = 0;
+    strncat(tempHugeString,&commandReceived[first],chars);
+    int output;
+    output = atoi(tempLongString);
+    return output;
+}
+long getLong(char * commandReceived, int first, int chars) {
+    tempHugeString[0] = 0;
+    strncat(tempHugeString,&commandReceived[first],chars);
+    long output;
+    output = atol(tempLongString);
+    return output;
+}
 
 // Helper function to get the switch number from char 3 and 4 of an array
 
@@ -640,14 +657,8 @@ void startSwitch(char * commandReceived) {
         fail(1);
         return;
     }
-    // get duration
-    tempHugeString[0] = commandReceived[5];
-    tempHugeString[1] = commandReceived[6];
-    tempHugeString[2] = commandReceived[7];
-    tempHugeString[3] = commandReceived[8];
-    tempHugeString[4] = commandReceived[9];
-    tempHugeString[5] = commandReceived[10];
-    duration = atol(tempHugeString);
+    // get duration.
+    duration = getLong(commandReceived,5,6);
     if (duration == 0) {
         fail(5);
         return;
@@ -785,9 +796,8 @@ void switchBrightness(char * commandReceived) {
         fail(1);
         return;
     }
-    tempIntString[0] = commandReceived[5];
-    tempIntString[1] = commandReceived[6];
-    char brightValue = atoi(tempIntString);
+    int brightValue;
+    brightValue = getInt(commandReceived,5,2);
     if (brightValue == 0) {
         tempBright = switchBright[switchNumber];
         itoa(tempBright, tempIntString, 10);
@@ -893,12 +903,8 @@ void pwmClear(int switchNumber) {
 
 void cycleHue(char * commandReceived) {
     // right now we just have 1 pwm but I could add more
-    tempLongString[0] = commandReceived[5];
-    tempLongString[1] = commandReceived[6];
-    tempLongString[2] = commandReceived[7];
-    tempLongString[3] = commandReceived[8];
     int programNumber = 0;
-    programNumber = atoi(tempLongString);
+    programNumber = getInt(commandReceived,5,4);
     if (programNumber > 0)
         colorChangeSpeed = programNumber;
     ok();
@@ -908,10 +914,7 @@ void cycleHue(char * commandReceived) {
 // HS:xx
 
 void setHueSpeed(char * commandReceived) {
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    int programNumber = 0;
-    programNumber = atoi(tempIntString);
+    int programNumber = getSwitchNumber(commandReceived);
     if (programNumber > 0)
         hueSpeed = programNumber;
     ok();
@@ -923,20 +926,9 @@ void setHueSpeed(char * commandReceived) {
 // 01234567890123456
 
 void pwmValueSet(char * commandReceived) {
-    tempLongString[3] = 0;
-    tempLongString[0] = commandReceived[6];
-    tempLongString[1] = commandReceived[7];
-    tempLongString[2] = commandReceived[8];
-    pwmValues[0] = atoi(tempLongString);
-    tempLongString[0] = commandReceived[10];
-    tempLongString[1] = commandReceived[11];
-    tempLongString[2] = commandReceived[12];
-    pwmValues[1] = atoi(tempLongString);
-    tempLongString[0] = commandReceived[14];
-    tempLongString[1] = commandReceived[15];
-    tempLongString[2] = commandReceived[16];
-    pwmValues[2] = atoi(tempLongString);
-    statusMsg[0] = 0;
+    pwmValues[0] = getInt(commandReceived,6,3);
+    pwmValues[1] = getInt(commandReceived,10,3);
+    pwmValues[2] = getInt(commandReceived,14,3);
     ok();
 }
 
@@ -950,19 +942,9 @@ void colorChangeSet(char * commandReceived) {
         fail(7);
         return;
     }
-    tempLongString[3] = 0;
-    tempLongString[0] = commandReceived[6];
-    tempLongString[1] = commandReceived[7];
-    tempLongString[2] = commandReceived[8];
-    colorChanges[programNumber][0] = atoi(tempLongString);
-    tempLongString[0] = commandReceived[10];
-    tempLongString[1] = commandReceived[11];
-    tempLongString[2] = commandReceived[12];
-    colorChanges[programNumber][1] = atoi(tempLongString);
-    tempLongString[0] = commandReceived[14];
-    tempLongString[1] = commandReceived[15];
-    tempLongString[2] = commandReceived[16];
-    colorChanges[programNumber][2] = atoi(tempLongString);
+    colorChanges[programNumber][0] = getInt(commandReceived,6,3);
+    colorChanges[programNumber][1] = getInt(commandReceived,10,3);
+    colorChanges[programNumber][2] = getInt(commandReceived,14,3);
     ok();
 }
 
@@ -1159,19 +1141,9 @@ void brightnessSet(char * commandReceived) {
 // 01234567890123
 
 void setImmediateChange(char * commandReceived) {
-    tempLongString[3] = 0;
-    tempLongString[0] = commandReceived[3];
-    tempLongString[1] = commandReceived[4];
-    tempLongString[2] = commandReceived[5];
-    pwmChangeValues[0] = atoi(tempLongString);
-    tempLongString[0] = commandReceived[7];
-    tempLongString[1] = commandReceived[8];
-    tempLongString[2] = commandReceived[9];
-    pwmChangeValues[1] = atoi(tempLongString);
-    tempLongString[0] = commandReceived[11];
-    tempLongString[1] = commandReceived[12];
-    tempLongString[2] = commandReceived[13];
-    pwmChangeValues[2] = atoi(tempLongString);
+    pwmChangeValues[0] = getInt(commandReceived,3,3);
+    pwmChangeValues[1] = getInt(commandReceived,7,3);
+    pwmChangeValues[2] = getInt(commandReceived,11,3);
     if (pwmChangeValues[0] == 0 && pwmChangeValues[1] == 0 &&
             pwmChangeValues[2] == 0) {
         fail(0x13);
@@ -1247,17 +1219,9 @@ void newProgram(char * commandReceived) {
         return;
     }
     clearTheProgram(programNumber);
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    hours = atoi(tempIntString);
-    tempIntString[0] = commandReceived[5];
-    tempIntString[1] = commandReceived[6];
-    minutes = atoi(tempIntString);
-    tempLongString[0] = commandReceived[7];
-    tempLongString[1] = commandReceived[8];
-    tempLongString[2] = commandReceived[9];
-    tempLongString[3] = commandReceived[10];
-    duration = atoi(tempLongString);
+    hours = getInt(commandReceived,3,2);
+    minutes = getInt(commandReceived,5,2);
+    duration = getInt(commandReceived,7,4);
     if (hours >= 24 || (hours == 0 && commandReceived[4] != '0')) {
         fail(9);
         return;
@@ -1327,12 +1291,8 @@ void clearTheProgram(int programNumber) {
 void programAddSwitch(char * commandReceived) {
     int programNumber = 0;
     int switchNumber = 0;
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    programNumber = atoi(tempIntString);
-    tempIntString[0] = commandReceived[5];
-    tempIntString[1] = commandReceived[6];
-    switchNumber = atoi(tempIntString);
+    programNumber = getInt(commandReceived,3,2);
+    switchNumber = getInt(commandReceived,5,2);
     char switches[NUM_SWITCHES];
     switches[0] = 0;
     int switchCount = programGetSwitches(programNumber, switches);
@@ -1433,9 +1393,7 @@ void programSetDays(char * commandReceived) {
     char tempReallyLongString[] = "0000000";
     int programNumber = 0;
     long weekLong = 0;
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    programNumber = atoi(tempIntString);
+    programNumber = getInt(tempIntString,3,2);
     tempReallyLongString[0] = commandReceived[5];
     tempReallyLongString[1] = commandReceived[6];
     tempReallyLongString[2] = commandReceived[7];
@@ -1476,9 +1434,7 @@ void programSetTime(char * commandReceived) {
     int minutes = 0;
     int startTime = 0;
     int duration = 0;
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    programNumber = atoi(tempIntString);
+    programNumber = getInt(commandReceived,3,2);
     if (programNumber >= MAX_PROGRAM || (programNumber == 0 && commandReceived[4] != '0')) {
         fail(2);
         return;
@@ -1491,17 +1447,9 @@ void programSetTime(char * commandReceived) {
         fail(0x0d);
         return;
     }
-    tempIntString[0] = commandReceived[5];
-    tempIntString[1] = commandReceived[6];
-    hours = atoi(tempIntString);
-    tempIntString[0] = commandReceived[7];
-    tempIntString[1] = commandReceived[8];
-    minutes = atoi(tempIntString);
-    tempLongString[0] = commandReceived[9];
-    tempLongString[1] = commandReceived[10];
-    tempLongString[2] = commandReceived[11];
-    tempLongString[3] = commandReceived[12];
-    duration = atoi(tempLongString);
+    hours = getInt(commandReceived,5,2);
+    minutes = getInt(commandReceived,7,2);
+    duration = getInt(commandReceived,9,4);
     if (hours >= 24 || (hours == 0 && commandReceived[6] != '0')) {
         fail(9);
         return;
@@ -1532,9 +1480,7 @@ void programSetTime(char * commandReceived) {
 void programDisplay(char * commandReceived) {
     int x = 0;
     int programNumber = 0;
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    programNumber = atoi(tempIntString);
+    programNumber = getInt(commandReceived,3,2);
     statusMsg[0] = 0;
     if (weeklyProgram[programNumber][0] == 255 && weeklyProgram[programNumber][1] == 255) {
         strcat(statusMsg, "Prog#");
@@ -1673,21 +1619,13 @@ void startProgram(char * commandReceived) {
     unsigned long duration;
     int programNumber = 0;
     // get switch number
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    programNumber = atoi(tempIntString);
+    programNumber = getInt(commandReceived,3,2);
     if (programNumber >= MAX_PROGRAM) {
         fail(2);
         return;
     }
     // get duration
-    tempHugeString[0] = commandReceived[5];
-    tempHugeString[1] = commandReceived[6];
-    tempHugeString[2] = commandReceived[7];
-    tempHugeString[3] = commandReceived[8];
-    tempHugeString[4] = commandReceived[9];
-    tempHugeString[5] = commandReceived[10];
-    duration = atol(tempHugeString);
+    duration = getLong(commandReceived,5,6);
     startTheProgram(programNumber, duration, 0);
     ok();
 }
@@ -2104,7 +2042,7 @@ void memoryDump(void) {
     int linecount = 0;
     int imAnInt = 0;
     
-    // First line is miscellaneous stoff
+    // First line is miscellaneous stuff
     // Tweaktimer, daylightsavings (4 bytes), brightness, pwm direction
     strcat(statusMsg, "M00-");
     returnHexWithout(tweakTimer, tempLongString);
@@ -2280,35 +2218,18 @@ void clockInit(void) {
 void setClock(char * commandReceived) {
     long tempInt;
     // iterate through and get the times.
-    tempLongString[0] = '0';
-    tempLongString[1] = '0';
-    // Can't see a good loop so just get to it.
     // Month
-    tempLongString[2] = commandReceived[3];
-    tempLongString[3] = commandReceived[4];
-    globalMonth = atoi(tempLongString);
+    globalMonth = getInt(commandReceived,3,2);
     // Day
-    tempLongString[2] = commandReceived[5];
-    tempLongString[3] = commandReceived[6];
-    globalDay = atoi(tempLongString);
+    globalDay = getInt(commandReceived,5,2);
     // hour
-    tempLongString[2] = commandReceived[11];
-    tempLongString[3] = commandReceived[12];
-    globalHour = atoi(tempLongString);
+    globalHour = getInt(commandReceived,11,2);
     // minute
-    tempLongString[2] = commandReceived[13];
-    tempLongString[3] = commandReceived[14];
-    globalMinute = atoi(tempLongString);
+    globalMinute = getInt(commandReceived,13,2);
     // second
-    tempLongString[2] = commandReceived[15];
-    tempLongString[3] = commandReceived[16];
-    globalSecond = atoi(tempLongString);
+    globalSecond = getInt(commandReceived,15,2);
     // year
-    tempLongString[0] = commandReceived[7];
-    tempLongString[1] = commandReceived[8];
-    tempLongString[2] = commandReceived[9];
-    tempLongString[3] = commandReceived[10];
-    globalYear = atoi(tempLongString);
+    globalYear = getInt(commandReceived,7,4);
     dow = getWeekday(globalYear, globalMonth, globalDay); // get day of week
     tempInt = dow;
     tempInt = tempInt * 24 * 60 * 60;
@@ -2399,23 +2320,10 @@ int getDayofYear(int year, int month, int day) {
 // 012345678901
 
 void setDaylightSavings(char * commandReceived) {
-    int dlInt;
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    dlInt = atoi(tempIntString);
-    daylightSavings[0][0] = dlInt;
-    tempIntString[0] = commandReceived[5];
-    tempIntString[1] = commandReceived[6];
-    dlInt = atoi(tempIntString);
-    daylightSavings[0][1] = dlInt;
-    tempIntString[0] = commandReceived[8];
-    tempIntString[1] = commandReceived[9];
-    dlInt = atoi(tempIntString);
-    daylightSavings[1][0] = dlInt;
-    tempIntString[0] = commandReceived[10];
-    tempIntString[1] = commandReceived[11];
-    dlInt = atoi(tempIntString);
-    daylightSavings[1][1] = dlInt;
+    daylightSavings[0][0] = getInt(commandReceived,3,2);
+    daylightSavings[0][1] = getInt(commandReceived,5,2);
+    daylightSavings[1][0] = getInt(commandReceived,8,2);
+    daylightSavings[1][1] = getInt(commandReceived,10,2);
     ok();
 }
 
@@ -2736,18 +2644,10 @@ void setTimeLimits(char * commandReceived) {
         tempReallyLongString[x] = commandReceived[x + 13];
     }
     weekLong = strtol(tempReallyLongString, 0, 2);
-    tempIntString[0] = commandReceived[5];
-    tempIntString[1] = commandReceived[6];
-    startHour = atoi(tempIntString);
-    tempIntString[0] = commandReceived[7];
-    tempIntString[1] = commandReceived[8];
-    startMinute = atoi(tempIntString);
-    tempIntString[0] = commandReceived[9];
-    tempIntString[1] = commandReceived[10];
-    stopHour = atoi(tempIntString);
-    tempIntString[0] = commandReceived[11];
-    tempIntString[1] = commandReceived[12];
-    stopMinute = atoi(tempIntString);
+    startHour = getInt(commandReceived,5,2);
+    startMinute = getInt(commandReceived,7,2);
+    stopHour = getInt(commandReceived,9,2);
+    stopMinute = getInt(commandReceived,11,2);
     if (startHour > 23 || stopHour > 23) {
         fail(0x09);
         return;
@@ -2773,11 +2673,7 @@ void setTimeLimits(char * commandReceived) {
 // CT xxxx
 
 void clockTweak(char * commandReceived) {
-    int x = 0;
-    for (x = 0; x < 4; x++) {
-        tempLongString[x] = commandReceived[(x + 3)];
-    }
-    int adjustment = atoi(tempLongString);
+    int adjustment = getInt(commandReceived,3,4);
     if (adjustment == 0) {
         itoa(tweakTimer, tempLongString, 10);
         statusMsg[0] = 0;
@@ -3247,48 +3143,26 @@ void setAnalogInput(char * commandReceived) {
     int switchNumber = 0;
     long temp = 0;
     char whichRGB = 0;
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    inputNumber = atoi(tempIntString);
+    inputNumber = getInt(commandReceived,3,2);
     if (inputNumber >= NUM_INPUTS) {
         fail(0x11);
         return;
     }
-    tempIntString[0] = '0';
-    tempIntString[1] = commandReceived[6];
-    pin = atoi(tempIntString);
+    pin = getInt(commandReceived,6,1);
     if (pin > 7) {
         fail(0x04);
         return;
     }
 
-    tempIntString[0] = commandReceived[14];
-    tempIntString[1] = commandReceived[15];
-    switchNumber = atoi(tempIntString);
+    switchNumber = getInt(commandReceived,14,2);
 
-    tempIntString[0] = commandReceived[20];
-    tempIntString[1] = commandReceived[21];
-    pollTime = atoi(tempIntString);
+    pollTime = getInt(commandReceived,20,2);
+    whichRGB = getInt(commandReceived,22,1);
 
-    tempIntString[0] = '0';
-    tempIntString[1] = commandReceived[22];
-    whichRGB = atoi(tempIntString);
+    lowPercent = getInt(commandReceived,7,3);
+    highPercent = getInt(commandReceived,10,3);
 
-    tempLongString[0] = '0';
-    tempLongString[1] = commandReceived[7];
-    tempLongString[2] = commandReceived[8];
-    tempLongString[3] = commandReceived[9];
-    lowPercent = atoi(tempLongString);
-    tempLongString[1] = commandReceived[10];
-    tempLongString[2] = commandReceived[11];
-    tempLongString[3] = commandReceived[12];
-    highPercent = atoi(tempLongString);
-
-    tempLongString[0] = commandReceived[16];
-    tempLongString[1] = commandReceived[17];
-    tempLongString[2] = commandReceived[18];
-    tempLongString[3] = commandReceived[19];
-    duration = atoi(tempLongString);
+    duration = getInt(commandReceived,16,4);
 
     // pLHsDDP p int pin/port like sw, L%,H% (0,255 - digital), s - 0-127=switch, 128-255 = prog
     // 0123456
@@ -3373,34 +3247,22 @@ void setDigitalInput(char * commandReceived) {
     inputNumber = pollTime = outputNum = duration = 0;
     int switchNumber = 0;
     int temp = 0;
-    tempIntString[0] = commandReceived[3];
-    tempIntString[1] = commandReceived[4];
-    inputNumber = atoi(tempIntString);
+    inputNumber = getInt(commandReceived,3,2);
     if (inputNumber >= NUM_INPUTS) {
         fail(0x11);
         return;
     }
-    tempIntString[0] = '0';
-    tempIntString[1] = commandReceived[6];
-    pin = atoi(tempIntString);
+    pin = getInt(commandReceived,6,1);
     if (pin > 7) {
         fail(0x04);
         return;
     }
 
-    tempIntString[0] = commandReceived[9];
-    tempIntString[1] = commandReceived[10];
-    switchNumber = atoi(tempIntString);
+    switchNumber = getInt(commandReceived,9,2);;
 
-    tempIntString[0] = commandReceived[15];
-    tempIntString[1] = commandReceived[16];
-    pollTime = atoi(tempIntString);
+    pollTime = getInt(commandReceived,15,2);
 
-    tempLongString[0] = commandReceived[11];
-    tempLongString[1] = commandReceived[12];
-    tempLongString[2] = commandReceived[13];
-    tempLongString[3] = commandReceived[14];
-    duration = atoi(tempLongString);
+    duration = getInt(commandReceived,11,4);
     // if we are activating a program
     if (commandReceived[8] == 'P' || commandReceived[8] == 'p') {
         switchNumber += 128;

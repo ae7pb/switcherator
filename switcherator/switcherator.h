@@ -110,6 +110,10 @@ int main(void);
 void checkCommand(char * commandReceived);
 void fail(int failCode);
 void ok(void);
+int getInt(char * commandReceived, int first, int chars);
+long getLong(char * commandReceived, int first, int chars);
+
+
 int getSwitchNumber(char * commandReceived);
 // switch related
 void setNewSwitch(char * commandReceived);
