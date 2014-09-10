@@ -386,14 +386,14 @@ int getInt(char * commandReceived, int first, int chars) {
     tempHugeString[0] = 0;
     strncat(tempHugeString,&commandReceived[first],chars);
     int output;
-    output = atoi(tempLongString);
+    output = atoi(tempHugeString);
     return output;
 }
 long getLong(char * commandReceived, int first, int chars) {
     tempHugeString[0] = 0;
     strncat(tempHugeString,&commandReceived[first],chars);
     long output;
-    output = atol(tempLongString);
+    output = atol(tempHugeString);
     return output;
 }
 
@@ -2047,14 +2047,19 @@ void memoryDump(void) {
     strcat(statusMsg, "M00-");
     returnHexWithout(tweakTimer, tempLongString);
     strcat(statusMsg, tempLongString);
+    strcat(statusMsg,"|");
     returnHexWithout(daylightSavings[0][0], tempLongString);
     strcat(statusMsg, tempLongString);
+    strcat(statusMsg,"|");
     returnHexWithout(daylightSavings[0][1], tempLongString);
     strcat(statusMsg, tempLongString);
+    strcat(statusMsg,"|");
     returnHexWithout(daylightSavings[1][0], tempLongString);
     strcat(statusMsg, tempLongString);
+    strcat(statusMsg,"|");
     returnHexWithout(daylightSavings[0][1], tempLongString);
     strcat(statusMsg, tempLongString);
+    strcat(statusMsg,"|");
     returnHexWithout(pwmdir, tempLongString);
     strcat(statusMsg, tempLongString);
 
@@ -2067,14 +2072,13 @@ void memoryDump(void) {
         strcat(statusMsg, tempLongString);
         returnHexWithout(switchBright[x], tempLongString);
         strcat(statusMsg, tempLongString);
-        if (strlen(statusMsg) >= 8 && (x + 1) < NUM_SWITCHES) {
+        if (strlen(statusMsg) >= 28 && (x + 1) < NUM_SWITCHES) {
             sendMessage(statusMsg);
             linecount++;
             statusMsg[1] = 0;
             interjectLineNumber(linecount);
         }
     }
-    
     linecount++;
     resetStatus(linecount,"P");
 
@@ -2147,11 +2151,20 @@ void memoryDump(void) {
             }
         }
     }
-    sendMessage(statusMsg);
-    statusMsg[0] = 0;
     linecount++;
-    strcat(statusMsg, "E:l:");
-    interjectLineNumber(linecount);
+    resetStatus(linecount,"END");
+    returnHexWithout(globalYear,tempLongString);
+    strcat(statusMsg,tempLongString);
+    returnHexWithout(globalMonth,tempLongString);
+    strcat(statusMsg,tempLongString);
+    returnHexWithout(globalDay,tempLongString);
+    strcat(statusMsg,tempLongString);
+    returnHexWithout(globalHour,tempLongString);
+    strcat(statusMsg,tempLongString);
+    returnHexWithout(globalMinute,tempLongString);
+    strcat(statusMsg,tempLongString);
+    returnHexWithout(globalSecond,tempLongString);
+    strcat(statusMsg,tempLongString);
     sendMessage(statusMsg);
 }
 
@@ -3110,7 +3123,7 @@ void unformatAddress(uint64_t oldAddress, char * formattedAddress) {
 
 void sendMessage(char * myResponse) {
     stopRx();
-    _delay_us(100);
+    _delay_us(10);
     int transmitLength = strlen(myResponse);
     if (!transmit(myResponse, transmitLength)) {
         failCondition = 2;

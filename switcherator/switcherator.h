@@ -20,7 +20,7 @@
 #define NUM_SWITCHES            16
 #define NUM_INPUTS              4
 #define NUM_LIMITS              4
-#define NUM_COLOR_CHANGES       6
+#define NUM_COLOR_CHANGES       10
 #define NUM_PWM                 1
 
 
