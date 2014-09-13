@@ -1744,12 +1744,12 @@ void generalInit(void) {
         tweakTimer += adjustment;
     }
 
-    
+
     // if we are receiving input messages and what time
-    if(readEEPROM(tempStuff,INP_MESS_TIME,INP_MESS_TIME_BYTES) == 1) {
-    inputMessageTiming = tempStuff[0];
-    inputMessageTiming <<= 8;
-    inputMessageTiming += tempStuff[1];
+    if (readEEPROM(tempStuff, INP_MESS_TIME, INP_MESS_TIME_BYTES) == 1) {
+        inputMessageTiming = tempStuff[0];
+        inputMessageTiming <<= 8;
+        inputMessageTiming += tempStuff[1];
     }
 
     // process daylight savings
@@ -2098,8 +2098,8 @@ void saveToEEPROM(void) {
     // if we are receiving input messages and what time
     tempStuff[0] = (inputMessageTiming >> 8);
     tempStuff[1] = (inputMessageTiming & 0xff);
-    writeEEPROM(tempStuff,INP_MESS_TIME,INP_MESS_TIME_BYTES);
-    
+    writeEEPROM(tempStuff, INP_MESS_TIME, INP_MESS_TIME_BYTES);
+
     ok();
 }
 
@@ -2130,6 +2130,9 @@ void memoryDump(void) {
     strcat(statusMsg, tempLongString);
     strcat(statusMsg, "|");
     returnHexWithout(pwmdir, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "|");
+    returnHexWithout(inputMessageTiming, tempLongString);
     strcat(statusMsg, tempLongString);
 
     linecount++;
@@ -2629,9 +2632,12 @@ void switchOnOff(void) {
                         red = colorChanges[temp][0];
                         green = colorChanges[temp][1];
                         blue = colorChanges[temp][2];
-                        red = red * bright / 16;
-                        green = green * bright / 16;
-                        blue = blue * bright / 16;
+                        if (bright < 16) {
+                            red = red * bright / 16;
+                            green = green * bright / 16;
+                            blue = blue * bright / 16;
+                            sendMessage("uh");
+                        }
                         Red = red;
                         Green = green;
                         Blue = blue;
@@ -3728,7 +3734,7 @@ void getInput(int inputNumber) {
                 yeaOurInputIsOn = 1;
         }
         if (yeaOurInputIsOn == 1) {
-            possibleInputMessage(inputNumber);            
+            possibleInputMessage(inputNumber);
             if (switchNumber < 128) { // this is a switch
                 if (switchStatus[switchNumber] == 0) // the switch is off
                     switchChanged = 1;
@@ -3806,7 +3812,7 @@ void possibleInputMessage(int inputNumber) {
  * 0123456
  */
 void setInputMessageTiming(char * commandReceived) {
-    inputMessageTiming = getInt(commandReceived,3,4);
+    inputMessageTiming = getInt(commandReceived, 3, 4);
     ok();
 }
 
