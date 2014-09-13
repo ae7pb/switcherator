@@ -50,6 +50,7 @@
 #define RADIO_ADDR_R3_BYTES      3
 #define RADIO_ADDR_R4_BYTES      3
 #define RADIO_ADDR_R5_BYTES      3
+#define INPUT_ADDR_BYTES         7
 #define DAYLIGHT_SAVE_BYTES     10
 #define SERIAL_NUM_BYTES         8
 // these depend on options above
@@ -84,9 +85,10 @@
 #define RADIO_ADDR_R3   38    // marker + 1 byte address
 #define RADIO_ADDR_R4   41    // marker + 1 byte address
 #define RADIO_ADDR_R5   44    // marker + 1 byte address
+#define INPUT_ADDR      48    // marker + 5 byte address
                               // skip 1 cause I hate odd numbers
 // these depend on items above
-#define SWITCH_STUFF    48    // 2 byte marker, NUM_SWITCHES byte values
+#define SWITCH_STUFF    56    // 2 byte marker, NUM_SWITCHES byte values
 #define INPUT           (SWITCH_STUFF + SWITCH_STUFF_BYTES)
 #define LIMIT           (INPUT + (INPUT_BYTES * NUM_INPUTS) )
 #define COLOR_CHANGE    (LIMIT + (LIMIT_BYTES * NUM_LIMITS) )
@@ -203,7 +205,7 @@ void radioDisplayAddress(char * commandReceived);
 void radioChangeAddress(char * commandReceived);
 void setRadioMode(char * commandReceived);
 void sendMessage(char * msg);
-void sendSwitchMessage(void);
+void sendInputMessage(void);
 // input related
 void setAnalogInput(char * commandReceived); 
 void setDigitalInput(char * commandReceived);

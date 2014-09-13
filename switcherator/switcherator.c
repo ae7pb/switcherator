@@ -132,6 +132,7 @@ static int inputMessageTiming = 0;
 
 // send receive addresses
 static uint64_t rx_addr_p0, rx_addr_p1, rx_addr_p2, rx_addr_p3, rx_addr_p4, rx_addr_p5, tx_addr;
+static uint64_t inputAddr;
 
 int main(void) {
     receiveBuffer[0] = 0;
@@ -204,7 +205,7 @@ int main(void) {
                     inputMessageAttempts = 0;
                     inputMessage[0] = 0;
                 } else {
-                    sendSwitchMessage();
+                    sendInputMessage();
                 }
             }
         }
@@ -1736,6 +1737,9 @@ void generalInit(void) {
         rx_addr_p5 = tempStuff[0];
         writeAddr(RX_ADDR_P5, rx_addr_p5);
     }
+    if (readEEPROM(tempStuff, INPUT_ADDR, INPUT_ADDR_BYTES) == 1) {
+        inputAddr = formatAddress(tempStuff);
+    }
     int adjustment;
     if (readEEPROM(tempStuff, TWEAK_TIMER, TWEAK_TIMER_BYTES) == 1) {
         adjustment = tempStuff[0];
@@ -1990,6 +1994,10 @@ void saveToEEPROM(void) {
     if (rx_addr_p5 > 0) {
         tempStuff[0] = rx_addr_p5;
         writeEEPROM(tempStuff, RADIO_ADDR_R5, RADIO_ADDR_R5_BYTES);
+    }
+    if (inputAddr > 0) {
+        unformatAddress(inputAddr, tempStuff);
+        writeEEPROM(tempStuff, INPUT_ADDR, INPUT_ADDR_BYTES);
     }
 
     if (adjustment != 0) {
@@ -3137,6 +3145,9 @@ void radioDisplayAddress(char * commandReceived) {
     } else if (commandReceived[3] == 'T') {
         unformatAddress(tx_addr, tempRadioString);
         strcat(statusMsg, "t-0x");
+    } else if (commandReceived[3] == 'F') {
+        unformatAddress(inputAddr, tempRadioString);
+        strcat(statusMsg, "i-0x");
     } else {
         unformatAddress(rx_addr_p0, tempRadioString);
         strcat(statusMsg, "r0-0x");
@@ -3206,6 +3217,10 @@ void radioChangeAddress(char * commandReceived) {
             strcat(statusMsg, "t 0x");
             writeAddr(TX_ADDR, newAddress);
             break;
+        case 'F':
+            inputAddr = newAddress;
+            strcat(statusMsg, "f 0x");
+            break;
     }
     unformatAddress(newAddress, tempRadioString);
     for (x = 0; x < 5; x++) {
@@ -3246,15 +3261,23 @@ void sendMessage(char * myResponse) {
 
 // we need to track if the sending worked or not so here goes
 
-void sendSwitchMessage(void) {
+void sendInputMessage(void) {
     stopRx();
     _delay_us(10);
+    if(inputAddr > 0) {
+        writeAddr(TX_ADDR,inputAddr);
+        writeAddr(RX_ADDR_P0,inputAddr);
+    }
     int transmitLength = strlen(inputMessage);
-    if (!transmit(inputMessage, transmitLength))
+    if (!transmit(inputMessage, transmitLength)) {
+        writeAddr(TX_ADDR,tx_addr);
+        writeAddr(RX_ADDR_P0,rx_addr_p0);
         return;
-    else {
+    } else {
         inputMessageAttempts = 0;
         inputMessage[0] = 0;
+        writeAddr(TX_ADDR,tx_addr);
+        writeAddr(RX_ADDR_P0,rx_addr_p0);
     }
 }
 
