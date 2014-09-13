@@ -7,6 +7,8 @@
 
 // TODO: set up way to send feedback from switches
 // TODO: deal with pulse width sonar thingie
+// TODO: add duration to IC
+// TODO: transmit switch results. store in global variable. Retry 20 times every 10 secs until an awk is received.
 
 #include "switcherator.h"
 
@@ -119,6 +121,7 @@ static unsigned long timeLimits[NUM_LIMITS][3];
 
 // adjust the timer so it can be accurate
 static long tweakTimer = TIMER_TOTAL;
+static int adjustment = 0;
 
 
 
@@ -1143,8 +1146,8 @@ void brightnessSet(char * commandReceived) {
 
 // sometimes you might want the lights to act like they
 // are being controlled via DMX or something.  this is how
-// ic:xxx,xxx,xxx
-// 01234567890123
+// ic:xxx,xxx,xxx,dura
+// 0123456789012345678
 
 void setImmediateChange(char * commandReceived) {
     pwmChangeValues[0] = getInt(commandReceived,3,3);
@@ -1155,8 +1158,13 @@ void setImmediateChange(char * commandReceived) {
         fail(0x13);
         return;
     }
+    int duration = getInt(commandReceived,15,4);
     if (pwmIsSet == 1) {
-        immediateChange = (weeklySeconds + 5);
+        // want to set a duration.
+        if(duration == 0)
+            immediateChange = (weeklySeconds + 5);
+        else
+            immediateChange = (weeklySeconds + duration);
         if (switchStatus[pwmSwitchNumber] < immediateChange)
             switchStatus[pwmSwitchNumber] = immediateChange;
         pwmOldValues[0] = Red;
@@ -1707,10 +1715,12 @@ void generalInit(void) {
         rx_addr_p5 = tempStuff[0];
         writeAddr(RX_ADDR_P5, rx_addr_p5);
     }
+    int adjustment;
     if (readEEPROM(tempStuff, TWEAK_TIMER, TWEAK_TIMER_BYTES) == 1) {
-        tweakTimer = tempStuff[0];
-        tweakTimer <<= 8;
-        tweakTimer |= tempStuff[1];
+        adjustment = tempStuff[0];
+        adjustment <<= 8;
+        adjustment |= tempStuff[1];
+        tweakTimer += adjustment;
     }
 
 
@@ -1954,9 +1964,9 @@ void saveToEEPROM(void) {
         writeEEPROM(tempStuff, RADIO_ADDR_R5, RADIO_ADDR_R5_BYTES);
     }
 
-    if (tweakTimer != 0) {
-        tempStuff[0] = tweakTimer >> 8;
-        tempStuff[1] = (tweakTimer & 0xff);
+    if (adjustment != 0) {
+        tempStuff[0] = adjustment >> 8;
+        tempStuff[1] = (adjustment & 0xff);
         writeEEPROM(tempStuff, TWEAK_TIMER, TWEAK_TIMER_BYTES);
     }
 
@@ -2742,16 +2752,20 @@ void setTimeLimits(char * commandReceived) {
 // CT xxxx
 
 void clockTweak(char * commandReceived) {
-    int adjustment = getInt(commandReceived,3,4);
-    if (adjustment == 0) {
+    int tempnum = getInt(commandReceived,3,4);
+    if (tempnum == 0) {
         itoa(tweakTimer, tempLongString, 10);
         statusMsg[0] = 0;
-        strcat(statusMsg, "Curr Tweak:");
+        strcat(statusMsg, "T:");
         strcat(statusMsg, tempLongString);
+        itoa(adjustment, tempLongString, 10);
+        strcat(statusMsg,"A:");
+        strcat(statusMsg,tempLongString);
         sendMessage(statusMsg);
         return;
     }
-    tweakTimer += adjustment;
+    tweakTimer += tempnum;
+    adjustment = tempnum;
     ok();
 }
 

@@ -147,9 +147,7 @@ CI xx - Clear Input
 GS - General Status
 GI General Information
 PP SW IP SO - display which programs / switches / inputs are programmed and on
-IC:xxx,xxx,xxx - Instant change - switch on PWM instantly
-TODO: add duration to IC
-TODO: transmit switch results. store in global variable. Retry 20 times every 10 secs until an awk is received.
+IC:xxx,xxx,xxx,dura - Instant change - switch on PWM instantly duration in seconds
 
 Fail Codes:
 01 - Invalid Switch Number
