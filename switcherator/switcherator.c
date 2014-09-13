@@ -3145,7 +3145,7 @@ void radioDisplayAddress(char * commandReceived) {
     } else if (commandReceived[3] == 'T') {
         unformatAddress(tx_addr, tempRadioString);
         strcat(statusMsg, "t-0x");
-    } else if (commandReceived[3] == 'F') {
+    } else if (commandReceived[3] == 'I') {
         unformatAddress(inputAddr, tempRadioString);
         strcat(statusMsg, "i-0x");
     } else {
@@ -3217,9 +3217,9 @@ void radioChangeAddress(char * commandReceived) {
             strcat(statusMsg, "t 0x");
             writeAddr(TX_ADDR, newAddress);
             break;
-        case 'F':
+        case 'I':
             inputAddr = newAddress;
-            strcat(statusMsg, "f 0x");
+            strcat(statusMsg, "i 0x");
             break;
     }
     unformatAddress(newAddress, tempRadioString);
