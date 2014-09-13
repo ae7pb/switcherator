@@ -63,6 +63,7 @@
 #define BRIGHTNESS_BYTES        (NUM_SWITCHES + 2)
 #define SWITCH_PWM_BYTES        3
 #define COLOR_CHANGABLE_BYTES   3
+#define INP_MESS_TIME_BYTES     4
 
 // Timer Variables
 // if F_CPU = 16Mhz then 1 second is 125 cycles counting to 125
@@ -95,16 +96,16 @@
 #define BRIGHTNESS      (PWM_DIR + PWM_DIR_BYTES)
 #define SWITCH_PWM      (BRIGHTNESS + BRIGHTNESS_BYTES)
 #define COLOR_CHANGABLE (SWITCH_PWM + (SWITCH_PWM_BYTES * NUM_SWITCHES))
-
+#define INP_MESS_TIME   (COLOR_CHANGABLE + (NUM_COLOR_CHANGES * COLOR_CHANGABLE_BYTES))
 
 // check to make sure we aren't using too much ram
-#if ((COLOR_CHANGABLE + COLOR_CHANGABLE_BYTES + BASE_PROG_RAM) > RAMEND)
+#if ((INP_MESS_TIME + INP_MESS_TIME_BYTES + BASE_PROG_RAM) > RAMEND)
 #error Too many switches, programs, inputs & limits.  Out of RAM!
 #endif
 
 
 
-#if ((COLOR_CHANGABLE + COLOR_CHANGABLE_BYTES) > E2END)
+#if ((INP_MESS_TIME + INP_MESS_TIME_BYTES) > E2END)
 #error Too many switches, programs, inputs & limits.  Out of EEPROM!
 #endif
 
@@ -202,12 +203,15 @@ void radioDisplayAddress(char * commandReceived);
 void radioChangeAddress(char * commandReceived);
 void setRadioMode(char * commandReceived);
 void sendMessage(char * msg);
+void sendSwitchMessage(void);
 // input related
 void setAnalogInput(char * commandReceived); 
 void setDigitalInput(char * commandReceived);
 void inputCheck(void);
 void inputTenthCheck(void);
 void getInput(int inputNumber);
+void possibleInputMessage(int inputNumber);
+void setInputMessageTiming(char * commandReceived);
 void clearInput(char * commandReceived);
 
 void flashFail(void);

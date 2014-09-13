@@ -148,6 +148,7 @@ GS - General Status
 GI General Information
 PP SW IP SO - display which programs / switches / inputs are programmed and on
 IC:xxx,xxx,xxx,dura - Instant change - switch on PWM instantly duration in seconds
+IT:xxxx - start receiving input messages and setting the timing between positive inputs and next message
 
 Fail Codes:
 01 - Invalid Switch Number

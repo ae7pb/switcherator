@@ -7,7 +7,6 @@
 
 // TODO: set up way to send feedback from switches
 // TODO: deal with pulse width sonar thingie
-// TODO: add duration to IC
 // TODO: transmit switch results. store in global variable. Retry 20 times every 10 secs until an awk is received.
 
 #include "switcherator.h"
@@ -124,6 +123,12 @@ static long tweakTimer = TIMER_TOTAL;
 static int adjustment = 0;
 
 
+// We need to be able to send feedback with switches
+static char inputMessage[30];
+static char inputMessageAttempts = 0;
+static long inputMessageGathered[NUM_INPUTS];
+static int inputMessageTiming = 0;
+
 
 // send receive addresses
 static uint64_t rx_addr_p0, rx_addr_p1, rx_addr_p2, rx_addr_p3, rx_addr_p4, rx_addr_p5, tx_addr;
@@ -132,6 +137,7 @@ int main(void) {
     receiveBuffer[0] = 0;
     radioReceiveBuffer[0] = 0;
     int x = 0;
+    inputMessage[0] = 0;
 
     INDICATOR_DDR |= INDICATOR_PIN;
     for (x = 0; x < 4; x++) {
@@ -160,6 +166,7 @@ int main(void) {
     }
     for (x = 0; x < NUM_INPUTS; x++) {
         inputs[x][0] = 255;
+        inputMessageGathered[x] = 0;
     }
     sei();
 
@@ -190,6 +197,16 @@ int main(void) {
             newSecond = 0;
             timerCheck();
             inputCheck();
+            // every 5 seconds we try to send a response about a switch
+            if (globalSecond % 5 == 0 && strlen(inputMessage) > 0) {
+                inputMessageAttempts++;
+                if (inputMessageAttempts >= 20) {
+                    inputMessageAttempts = 0;
+                    inputMessage[0] = 0;
+                } else {
+                    sendSwitchMessage();
+                }
+            }
         }
         // runs only if a switch changed
         if (switchChanged == 1) {
@@ -364,6 +381,9 @@ void checkCommand(char * commandReceived) {
         case 0x4943: //IC
             setImmediateChange(commandReceived);
             break;
+        case 0x4954: //IT
+            setInputMessageTiming(commandReceived);
+            break;
         default:
         case 0x4455: //DU
             memoryDump();
@@ -389,14 +409,15 @@ void ok(void) {
  */
 int getInt(char * commandReceived, int first, int chars) {
     tempHugeString[0] = 0;
-    strncat(tempHugeString,&commandReceived[first],chars);
+    strncat(tempHugeString, &commandReceived[first], chars);
     int output;
     output = atoi(tempHugeString);
     return output;
 }
+
 long getLong(char * commandReceived, int first, int chars) {
     tempHugeString[0] = 0;
-    strncat(tempHugeString,&commandReceived[first],chars);
+    strncat(tempHugeString, &commandReceived[first], chars);
     long output;
     output = atol(tempHugeString);
     return output;
@@ -620,12 +641,12 @@ void switchDisplay(char * commandReceived) {
     // see if this is a pwm switch
     if (switchStuff[switchNumber] >= 200 && switchStuff[switchNumber] <= 220) {
         // yes pwm
-		if (switchStuff[switchNumber] == 202) {
-			strcat(statusMsg, "CoC");
-		} else if (switchStuff[switchNumber] == 212) {
-			strcat(statusMsg, "Brt");
-		} else if (switchStuff[switchNumber] == 200){
-			strcat(statusMsg, "Fix");
+        if (switchStuff[switchNumber] == 202) {
+            strcat(statusMsg, "CoC");
+        } else if (switchStuff[switchNumber] == 212) {
+            strcat(statusMsg, "Brt");
+        } else if (switchStuff[switchNumber] == 200) {
+            strcat(statusMsg, "Fix");
         } else {
             strcat(statusMsg, "Hue");
         }
@@ -661,7 +682,7 @@ void startSwitch(char * commandReceived) {
         return;
     }
     // get duration.
-    duration = getLong(commandReceived,5,6);
+    duration = getLong(commandReceived, 5, 6);
     if (duration == 0) {
         fail(5);
         return;
@@ -675,7 +696,7 @@ void startSwitch(char * commandReceived) {
             && immediateChange == 0) {
         // k it is PWM.  See if it is hue
         if (switchStuff[switchNumber] == 200) {
-			int temp = switchPWM[switchNumber];
+            int temp = switchPWM[switchNumber];
             // even number so values, not hue
             red = colorChanges[temp][0];
             green = colorChanges[temp][1];
@@ -801,7 +822,7 @@ void switchBrightness(char * commandReceived) {
         return;
     }
     int brightValue;
-    brightValue = getInt(commandReceived,5,2);
+    brightValue = getInt(commandReceived, 5, 2);
     if (brightValue == 0) {
         tempBright = switchBright[switchNumber];
         itoa(tempBright, tempIntString, 10);
@@ -842,10 +863,10 @@ void pwmSetup(char * commandReceived) {
             return;
         }
     }
-    whichColorChange = getInt(commandReceived,3,2);
+    whichColorChange = getInt(commandReceived, 3, 2);
     int switchNumber;
     // get switch number
-    switchNumber = getInt(commandReceived,5,2);
+    switchNumber = getInt(commandReceived, 5, 2);
     clearTheSwitch(switchNumber);
     // set up a hue pwm
     if (commandReceived[8] == 'H' || commandReceived[8] == 'h' || commandReceived[8] == '1') {
@@ -910,7 +931,7 @@ void pwmClear(int switchNumber) {
 void cycleHue(char * commandReceived) {
     // right now we just have 1 pwm but I could add more
     int programNumber = 0;
-    programNumber = getInt(commandReceived,5,4);
+    programNumber = getInt(commandReceived, 5, 4);
     if (programNumber > 0)
         colorChangeSpeed = programNumber;
     ok();
@@ -940,14 +961,14 @@ void colorChangeSet(char * commandReceived) {
         fail(7);
         return;
     }
-    colorChanges[programNumber][0] = getInt(commandReceived,6,3);
-    colorChanges[programNumber][1] = getInt(commandReceived,10,3);
-    colorChanges[programNumber][2] = getInt(commandReceived,14,3);
-    if(commandReceived[18] == '1') {
-		colorIsChangable[programNumber] = 0;
-	} else {
-		colorIsChangable[programNumber] = 1;
-	}
+    colorChanges[programNumber][0] = getInt(commandReceived, 6, 3);
+    colorChanges[programNumber][1] = getInt(commandReceived, 10, 3);
+    colorChanges[programNumber][2] = getInt(commandReceived, 14, 3);
+    if (commandReceived[18] == '1') {
+        colorIsChangable[programNumber] = 0;
+    } else {
+        colorIsChangable[programNumber] = 1;
+    }
     ok();
 }
 
@@ -978,11 +999,11 @@ void pwmSummary(void) {
                 strcat(statusMsg, tempLongString);
             }
         }
-        if(colorIsChangable[x] == 1) {
-			strcat(statusMsg,"Y");
-		} else {
-			strcat(statusMsg,"N");
-		}
+        if (colorIsChangable[x] == 1) {
+            strcat(statusMsg, "Y");
+        } else {
+            strcat(statusMsg, "N");
+        }
         if (strlen(statusMsg) > 20) {
             sendMessage(statusMsg);
             statusMsg[6] = 0;
@@ -1025,23 +1046,23 @@ void runColorFunction(void) {
     if (colorChangeCount < colorChangeSpeed)
         return;
     int colorTimeouter = 0;
-    while(1) {
-	    colorChangeCount = 0;
-	    currentColor++;
-	    colorTimeouter++;
-	    if (currentColor == NUM_COLOR_CHANGES)
-	        currentColor = 0;
-	    if (colorChanges[currentColor][0] == 0 &&
-	            colorChanges[currentColor][1] == 1 &&
-	            colorChanges[currentColor][2] == 0) {
-	        // this one is blank.
-	        if (currentColor == 0)
-	            return;
-	    } else if (colorIsChangable[currentColor] == 1)
-			break;
-		if(colorTimeouter >= NUM_COLOR_CHANGES)
-			return;
-	}
+    while (1) {
+        colorChangeCount = 0;
+        currentColor++;
+        colorTimeouter++;
+        if (currentColor == NUM_COLOR_CHANGES)
+            currentColor = 0;
+        if (colorChanges[currentColor][0] == 0 &&
+                colorChanges[currentColor][1] == 1 &&
+                colorChanges[currentColor][2] == 0) {
+            // this one is blank.
+            if (currentColor == 0)
+                return;
+        } else if (colorIsChangable[currentColor] == 1)
+            break;
+        if (colorTimeouter >= NUM_COLOR_CHANGES)
+            return;
+    }
     red = colorChanges[currentColor][0];
     green = colorChanges[currentColor][1];
     blue = colorChanges[currentColor][2];
@@ -1150,18 +1171,18 @@ void brightnessSet(char * commandReceived) {
 // 0123456789012345678
 
 void setImmediateChange(char * commandReceived) {
-    pwmChangeValues[0] = getInt(commandReceived,3,3);
-    pwmChangeValues[1] = getInt(commandReceived,7,3);
-    pwmChangeValues[2] = getInt(commandReceived,11,3);
+    pwmChangeValues[0] = getInt(commandReceived, 3, 3);
+    pwmChangeValues[1] = getInt(commandReceived, 7, 3);
+    pwmChangeValues[2] = getInt(commandReceived, 11, 3);
     if (pwmChangeValues[0] == 0 && pwmChangeValues[1] == 0 &&
             pwmChangeValues[2] == 0) {
         fail(0x13);
         return;
     }
-    int duration = getInt(commandReceived,15,4);
+    int duration = getInt(commandReceived, 15, 4);
     if (pwmIsSet == 1) {
         // want to set a duration.
-        if(duration == 0)
+        if (duration == 0)
             immediateChange = (weeklySeconds + 5);
         else
             immediateChange = (weeklySeconds + duration);
@@ -1233,9 +1254,9 @@ void newProgram(char * commandReceived) {
         return;
     }
     clearTheProgram(programNumber);
-    hours = getInt(commandReceived,3,2);
-    minutes = getInt(commandReceived,5,2);
-    duration = getInt(commandReceived,7,4);
+    hours = getInt(commandReceived, 3, 2);
+    minutes = getInt(commandReceived, 5, 2);
+    duration = getInt(commandReceived, 7, 4);
     if (hours >= 24 || (hours == 0 && commandReceived[4] != '0')) {
         fail(9);
         return;
@@ -1305,8 +1326,8 @@ void clearTheProgram(int programNumber) {
 void programAddSwitch(char * commandReceived) {
     int programNumber = 0;
     int switchNumber = 0;
-    programNumber = getInt(commandReceived,3,2);
-    switchNumber = getInt(commandReceived,5,2);
+    programNumber = getInt(commandReceived, 3, 2);
+    switchNumber = getInt(commandReceived, 5, 2);
     char switches[NUM_SWITCHES];
     switches[0] = 0;
     int switchCount = programGetSwitches(programNumber, switches);
@@ -1407,7 +1428,7 @@ void programSetDays(char * commandReceived) {
     char tempReallyLongString[] = "0000000";
     int programNumber = 0;
     long weekLong = 0;
-    programNumber = getInt(tempIntString,3,2);
+    programNumber = getInt(tempIntString, 3, 2);
     tempReallyLongString[0] = commandReceived[5];
     tempReallyLongString[1] = commandReceived[6];
     tempReallyLongString[2] = commandReceived[7];
@@ -1448,7 +1469,7 @@ void programSetTime(char * commandReceived) {
     int minutes = 0;
     int startTime = 0;
     int duration = 0;
-    programNumber = getInt(commandReceived,3,2);
+    programNumber = getInt(commandReceived, 3, 2);
     if (programNumber >= MAX_PROGRAM || (programNumber == 0 && commandReceived[4] != '0')) {
         fail(2);
         return;
@@ -1461,9 +1482,9 @@ void programSetTime(char * commandReceived) {
         fail(0x0d);
         return;
     }
-    hours = getInt(commandReceived,5,2);
-    minutes = getInt(commandReceived,7,2);
-    duration = getInt(commandReceived,9,4);
+    hours = getInt(commandReceived, 5, 2);
+    minutes = getInt(commandReceived, 7, 2);
+    duration = getInt(commandReceived, 9, 4);
     if (hours >= 24 || (hours == 0 && commandReceived[6] != '0')) {
         fail(9);
         return;
@@ -1494,7 +1515,7 @@ void programSetTime(char * commandReceived) {
 void programDisplay(char * commandReceived) {
     int x = 0;
     int programNumber = 0;
-    programNumber = getInt(commandReceived,3,2);
+    programNumber = getInt(commandReceived, 3, 2);
     statusMsg[0] = 0;
     if (weeklyProgram[programNumber][0] == 255 && weeklyProgram[programNumber][1] == 255) {
         strcat(statusMsg, "Prog#");
@@ -1633,13 +1654,13 @@ void startProgram(char * commandReceived) {
     unsigned long duration;
     int programNumber = 0;
     // get switch number
-    programNumber = getInt(commandReceived,3,2);
+    programNumber = getInt(commandReceived, 3, 2);
     if (programNumber >= MAX_PROGRAM) {
         fail(2);
         return;
     }
     // get duration
-    duration = getLong(commandReceived,5,6);
+    duration = getLong(commandReceived, 5, 6);
     startTheProgram(programNumber, duration, 0);
     ok();
 }
@@ -1723,6 +1744,13 @@ void generalInit(void) {
         tweakTimer += adjustment;
     }
 
+    
+    // if we are receiving input messages and what time
+    if(readEEPROM(tempStuff,INP_MESS_TIME,INP_MESS_TIME_BYTES) == 1) {
+    inputMessageTiming = tempStuff[0];
+    inputMessageTiming <<= 8;
+    inputMessageTiming += tempStuff[1];
+    }
 
     // process daylight savings
     if (readEEPROM(tempStuff, DAYLIGHT_SAVE, DAYLIGHT_SAVE_BYTES) == 1) {
@@ -1882,12 +1910,12 @@ void generalInit(void) {
             }
         }
     }
-    
+
     // what pwm the switch belongs to
     for (x = 0; x < NUM_SWITCHES; x++) {
         memoryMarker = (SWITCH_PWM + (x * SWITCH_PWM_BYTES));
         if (readEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES) == 1) {
-			switchPWM[x]  = tempStuff[0];
+            switchPWM[x] = tempStuff[0];
         }
     }
 
@@ -1895,11 +1923,11 @@ void generalInit(void) {
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         memoryMarker = (COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES));
         if (readEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES) == 1) {
-			colorIsChangable[x]  = tempStuff[0];
+            colorIsChangable[x] = tempStuff[0];
         }
     }
 
-    
+
 }
 
 int readEEPROM(char * data, int memLocation, int memBytes) {
@@ -2062,11 +2090,16 @@ void saveToEEPROM(void) {
     // if the color change is the a color change or just a color
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         memoryMarker = (COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES));
-		tempStuff[0] = colorIsChangable[x];
+        tempStuff[0] = colorIsChangable[x];
         writeEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES);
-        
+
     }
 
+    // if we are receiving input messages and what time
+    tempStuff[0] = (inputMessageTiming >> 8);
+    tempStuff[1] = (inputMessageTiming & 0xff);
+    writeEEPROM(tempStuff,INP_MESS_TIME,INP_MESS_TIME_BYTES);
+    
     ok();
 }
 
@@ -2077,30 +2110,30 @@ void memoryDump(void) {
     int x = 0;
     int linecount = 0;
     int imAnInt = 0;
-    
+
     // First line is miscellaneous stuff
     // Tweaktimer, daylightsavings (4 bytes), brightness, pwm direction
     strcat(statusMsg, "M00-");
     returnHexWithout(tweakTimer, tempLongString);
     strcat(statusMsg, tempLongString);
-    strcat(statusMsg,"|");
+    strcat(statusMsg, "|");
     returnHexWithout(daylightSavings[0][0], tempLongString);
     strcat(statusMsg, tempLongString);
-    strcat(statusMsg,"|");
+    strcat(statusMsg, "|");
     returnHexWithout(daylightSavings[0][1], tempLongString);
     strcat(statusMsg, tempLongString);
-    strcat(statusMsg,"|");
+    strcat(statusMsg, "|");
     returnHexWithout(daylightSavings[1][0], tempLongString);
     strcat(statusMsg, tempLongString);
-    strcat(statusMsg,"|");
+    strcat(statusMsg, "|");
     returnHexWithout(daylightSavings[0][1], tempLongString);
     strcat(statusMsg, tempLongString);
-    strcat(statusMsg,"|");
+    strcat(statusMsg, "|");
     returnHexWithout(pwmdir, tempLongString);
     strcat(statusMsg, tempLongString);
 
     linecount++;
-    resetStatus(linecount,"S");
+    resetStatus(linecount, "S");
 
     for (x = 0; x < NUM_SWITCHES; x++) {
         imAnInt = switchStuff[x];
@@ -2116,7 +2149,7 @@ void memoryDump(void) {
         }
     }
     linecount++;
-    resetStatus(linecount,"P");
+    resetStatus(linecount, "P");
 
 
     // now dump the programs a byte at a time.
@@ -2136,7 +2169,7 @@ void memoryDump(void) {
     }
 
     linecount++;
-    resetStatus(linecount,"I");
+    resetStatus(linecount, "I");
     // input bytes now
     for (x = 0; x < NUM_INPUTS; x++) {
 
@@ -2153,7 +2186,7 @@ void memoryDump(void) {
     }
 
     linecount++;
-    resetStatus(linecount,"T");
+    resetStatus(linecount, "T");
     // time limits
     for (x = 0; x < NUM_LIMITS; x++) {
         for (y = 0; y < 3; y++) {
@@ -2169,7 +2202,7 @@ void memoryDump(void) {
     }
 
     linecount++;
-    resetStatus(linecount,"C");
+    resetStatus(linecount, "C");
     // save the color change
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         for (y = 0; y < 3; y++) {
@@ -2184,48 +2217,48 @@ void memoryDump(void) {
         }
     }
     linecount++;
-    resetStatus(linecount,"Cc");
-    for (x = 0; x< NUM_COLOR_CHANGES; x++) {
-		if (colorIsChangable[x] == 1)
-			strcat(statusMsg,"Y");
-		else
-			strcat(statusMsg,"N");
-		if(strlen(statusMsg) >= 30) {
-			sendMessage(statusMsg);
-			linecount++;
-			statusMsg[2] = 0;
-			interjectLineNumber(linecount);
-		}
+    resetStatus(linecount, "Cc");
+    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
+        if (colorIsChangable[x] == 1)
+            strcat(statusMsg, "Y");
+        else
+            strcat(statusMsg, "N");
+        if (strlen(statusMsg) >= 30) {
+            sendMessage(statusMsg);
+            linecount++;
+            statusMsg[2] = 0;
+            interjectLineNumber(linecount);
+        }
     }
-    
+
     linecount++;
-    resetStatus(linecount,"Ps");
-    for(x = 0; x < NUM_SWITCHES; x++) {
-		returnHexWithout(switchPWM[x],tempLongString);
-		strcat(statusMsg, tempLongString);
-		if (strlen(statusMsg) >= 30) {
-			sendMessage(statusMsg);
-			linecount++;
-			statusMsg[2] = 0;
-			interjectLineNumber(linecount);
-		}
-	}
-		
-    
+    resetStatus(linecount, "Ps");
+    for (x = 0; x < NUM_SWITCHES; x++) {
+        returnHexWithout(switchPWM[x], tempLongString);
+        strcat(statusMsg, tempLongString);
+        if (strlen(statusMsg) >= 30) {
+            sendMessage(statusMsg);
+            linecount++;
+            statusMsg[2] = 0;
+            interjectLineNumber(linecount);
+        }
+    }
+
+
     linecount++;
-    resetStatus(linecount,"END");
-    returnHexWithout(globalYear,tempLongString);
-    strcat(statusMsg,tempLongString);
-    returnHexWithout(globalMonth,tempLongString);
-    strcat(statusMsg,tempLongString);
-    returnHexWithout(globalDay,tempLongString);
-    strcat(statusMsg,tempLongString);
-    returnHexWithout(globalHour,tempLongString);
-    strcat(statusMsg,tempLongString);
-    returnHexWithout(globalMinute,tempLongString);
-    strcat(statusMsg,tempLongString);
-    returnHexWithout(globalSecond,tempLongString);
-    strcat(statusMsg,tempLongString);
+    resetStatus(linecount, "END");
+    returnHexWithout(globalYear, tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(globalMonth, tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(globalDay, tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(globalHour, tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(globalMinute, tempLongString);
+    strcat(statusMsg, tempLongString);
+    returnHexWithout(globalSecond, tempLongString);
+    strcat(statusMsg, tempLongString);
     sendMessage(statusMsg);
 }
 
@@ -2241,6 +2274,7 @@ void resetStatus(int linecount, char * letter) {
     strcat(statusMsg, letter);
     interjectLineNumber(linecount);
 }
+
 void clearToEEPROM(void) {
     int x = 0;
     clearEEPROM(DAYLIGHT_SAVE);
@@ -2261,11 +2295,11 @@ void clearToEEPROM(void) {
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         clearEEPROM((COLOR_CHANGE + (x * COLOR_CHANGE_BYTES)));
         clearEEPROM((COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES)));
-	}
+    }
     for (x = 0; x < MAX_PROGRAM; x++)
         clearEEPROM((WEEKLY_PROGRAM + (x * WEEKLY_PROGRAM_BYTES)));
     for (x = 0; x < NUM_SWITCHES; x++)
-		clearEEPROM((SWITCH_PWM + (x * SWITCH_PWM_BYTES)));
+        clearEEPROM((SWITCH_PWM + (x * SWITCH_PWM_BYTES)));
     clearEEPROM(TWEAK_TIMER);
     ok();
 
@@ -2297,17 +2331,17 @@ void setClock(char * commandReceived) {
     long tempInt;
     // iterate through and get the times.
     // Month
-    globalMonth = getInt(commandReceived,3,2);
+    globalMonth = getInt(commandReceived, 3, 2);
     // Day
-    globalDay = getInt(commandReceived,5,2);
+    globalDay = getInt(commandReceived, 5, 2);
     // hour
-    globalHour = getInt(commandReceived,11,2);
+    globalHour = getInt(commandReceived, 11, 2);
     // minute
-    globalMinute = getInt(commandReceived,13,2);
+    globalMinute = getInt(commandReceived, 13, 2);
     // second
-    globalSecond = getInt(commandReceived,15,2);
+    globalSecond = getInt(commandReceived, 15, 2);
     // year
-    globalYear = getInt(commandReceived,7,4);
+    globalYear = getInt(commandReceived, 7, 4);
     dow = getWeekday(globalYear, globalMonth, globalDay); // get day of week
     tempInt = dow;
     tempInt = tempInt * 24 * 60 * 60;
@@ -2369,11 +2403,11 @@ void stopClock(void) {
 // returns the weekday - sunday = 0
 
 int getWeekday(int year, int month, int day) {
-    int adjustment, mm, yy;
+    int adj, mm, yy;
 
-    adjustment = (14 - month) / 12; // Jan is 13, feb is 14 in calculation
-    mm = month + 12 * adjustment - 2;
-    yy = globalYear - adjustment;
+    adj = (14 - month) / 12; // Jan is 13, feb is 14 in calculation
+    mm = month + 12 * adj - 2;
+    yy = globalYear - adj;
     return ((day + (13 * mm - 1) / 5 + yy + yy / 4 - yy / 100 + yy / 400) % 7);
 }
 
@@ -2398,10 +2432,10 @@ int getDayofYear(int year, int month, int day) {
 // 012345678901
 
 void setDaylightSavings(char * commandReceived) {
-    daylightSavings[0][0] = getInt(commandReceived,3,2);
-    daylightSavings[0][1] = getInt(commandReceived,5,2);
-    daylightSavings[1][0] = getInt(commandReceived,8,2);
-    daylightSavings[1][1] = getInt(commandReceived,10,2);
+    daylightSavings[0][0] = getInt(commandReceived, 3, 2);
+    daylightSavings[0][1] = getInt(commandReceived, 5, 2);
+    daylightSavings[1][0] = getInt(commandReceived, 8, 2);
+    daylightSavings[1][1] = getInt(commandReceived, 10, 2);
     ok();
 }
 
@@ -2590,7 +2624,7 @@ void switchOnOff(void) {
                     // turn it on
                     // decide if it is a changing hue or static values
                     if (switchStuff[x] == 200) {
-						int temp = switchPWM[x];
+                        int temp = switchPWM[x];
                         // even numbers are static colors;
                         red = colorChanges[temp][0];
                         green = colorChanges[temp][1];
@@ -2723,10 +2757,10 @@ void setTimeLimits(char * commandReceived) {
         tempReallyLongString[x] = commandReceived[x + 13];
     }
     weekLong = strtol(tempReallyLongString, 0, 2);
-    startHour = getInt(commandReceived,5,2);
-    startMinute = getInt(commandReceived,7,2);
-    stopHour = getInt(commandReceived,9,2);
-    stopMinute = getInt(commandReceived,11,2);
+    startHour = getInt(commandReceived, 5, 2);
+    startMinute = getInt(commandReceived, 7, 2);
+    stopHour = getInt(commandReceived, 9, 2);
+    stopMinute = getInt(commandReceived, 11, 2);
     if (startHour > 23 || stopHour > 23) {
         fail(0x09);
         return;
@@ -2752,15 +2786,15 @@ void setTimeLimits(char * commandReceived) {
 // CT xxxx
 
 void clockTweak(char * commandReceived) {
-    int tempnum = getInt(commandReceived,3,4);
+    int tempnum = getInt(commandReceived, 3, 4);
     if (tempnum == 0) {
         itoa(tweakTimer, tempLongString, 10);
         statusMsg[0] = 0;
         strcat(statusMsg, "T:");
         strcat(statusMsg, tempLongString);
         itoa(adjustment, tempLongString, 10);
-        strcat(statusMsg,"A:");
-        strcat(statusMsg,tempLongString);
+        strcat(statusMsg, "A:");
+        strcat(statusMsg, tempLongString);
         sendMessage(statusMsg);
         return;
     }
@@ -3204,6 +3238,20 @@ void sendMessage(char * myResponse) {
     startRx();
 }
 
+// we need to track if the sending worked or not so here goes
+
+void sendSwitchMessage(void) {
+    stopRx();
+    _delay_us(10);
+    int transmitLength = strlen(inputMessage);
+    if (!transmit(inputMessage, transmitLength))
+        return;
+    else {
+        inputMessageAttempts = 0;
+        inputMessage[0] = 0;
+    }
+}
+
 
 /****************************************************************
  *
@@ -3226,26 +3274,26 @@ void setAnalogInput(char * commandReceived) {
     int switchNumber = 0;
     long temp = 0;
     char whichRGB = 0;
-    inputNumber = getInt(commandReceived,3,2);
+    inputNumber = getInt(commandReceived, 3, 2);
     if (inputNumber >= NUM_INPUTS) {
         fail(0x11);
         return;
     }
-    pin = getInt(commandReceived,6,1);
+    pin = getInt(commandReceived, 6, 1);
     if (pin > 7) {
         fail(0x04);
         return;
     }
 
-    switchNumber = getInt(commandReceived,14,2);
+    switchNumber = getInt(commandReceived, 14, 2);
 
-    pollTime = getInt(commandReceived,20,2);
-    whichRGB = getInt(commandReceived,22,1);
+    pollTime = getInt(commandReceived, 20, 2);
+    whichRGB = getInt(commandReceived, 22, 1);
 
-    lowPercent = getInt(commandReceived,7,3);
-    highPercent = getInt(commandReceived,10,3);
+    lowPercent = getInt(commandReceived, 7, 3);
+    highPercent = getInt(commandReceived, 10, 3);
 
-    duration = getInt(commandReceived,16,4);
+    duration = getInt(commandReceived, 16, 4);
 
     // pLHsDDP p int pin/port like sw, L%,H% (0,255 - digital), s - 0-127=switch, 128-255 = prog
     // 0123456
@@ -3330,22 +3378,23 @@ void setDigitalInput(char * commandReceived) {
     inputNumber = pollTime = outputNum = duration = 0;
     int switchNumber = 0;
     int temp = 0;
-    inputNumber = getInt(commandReceived,3,2);
+    inputNumber = getInt(commandReceived, 3, 2);
     if (inputNumber >= NUM_INPUTS) {
         fail(0x11);
         return;
     }
-    pin = getInt(commandReceived,6,1);
+    pin = getInt(commandReceived, 6, 1);
     if (pin > 7) {
         fail(0x04);
         return;
     }
 
-    switchNumber = getInt(commandReceived,9,2);;
+    switchNumber = getInt(commandReceived, 9, 2);
+    ;
 
-    pollTime = getInt(commandReceived,15,2);
+    pollTime = getInt(commandReceived, 15, 2);
 
-    duration = getInt(commandReceived,11,4);
+    duration = getInt(commandReceived, 11, 4);
     // if we are activating a program
     if (commandReceived[8] == 'P' || commandReceived[8] == 'p') {
         switchNumber += 128;
@@ -3535,6 +3584,7 @@ void getInput(int inputNumber) {
         ADCSRA |= (1 << ADIF); // clear the ADC
         // see if we are turning on the switch
         if (temp > low && temp < (high + 1)) {
+            possibleInputMessage(inputNumber);
             // see if it is a PWM switch (not a program)
             if (switchNumber < 128 && switchStuff[switchNumber] == 200) {
                 // this is a PWM so we're doing it based on the relative ADC value
@@ -3678,6 +3728,7 @@ void getInput(int inputNumber) {
                 yeaOurInputIsOn = 1;
         }
         if (yeaOurInputIsOn == 1) {
+            possibleInputMessage(inputNumber);            
             if (switchNumber < 128) { // this is a switch
                 if (switchStatus[switchNumber] == 0) // the switch is off
                     switchChanged = 1;
@@ -3724,6 +3775,39 @@ void getInput(int inputNumber) {
             }
         }
     }
+}
+
+/*
+ * An input has turned on.  Figure out if we need to send a message
+ */
+void possibleInputMessage(int inputNumber) {
+    // send a switch message
+    if (inputMessageTiming > 0 && weeklySeconds > inputMessageGathered[inputNumber]) {
+        char tempRadioString[6];
+        unformatAddress(rx_addr_p0, tempRadioString);
+        strcat(inputMessage, "Rad: 0x");
+        int x;
+        for (x = 0; x < 5; x++) {
+            returnHexWithout(tempRadioString[x], tempLongString);
+            strcat(inputMessage, tempLongString);
+        }
+
+        returnHex(inputNumber, tempLongString);
+        inputMessageGathered[inputNumber] = weeklySeconds + inputMessageTiming;
+        strcat(inputMessage, "Inp: 0x");
+        strcat(inputMessage, tempLongString);
+    }
+}
+
+/*
+ * Input message - this is the number of seconds between when we get a positive input
+ * for a message and we wait until we get a positive again.  0 = no messages
+ * IT:xxxx
+ * 0123456
+ */
+void setInputMessageTiming(char * commandReceived) {
+    inputMessageTiming = getInt(commandReceived,3,4);
+    ok();
 }
 
 // clears an input
