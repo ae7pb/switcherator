@@ -2605,6 +2605,7 @@ void switchOnOff(void) {
     char pin[1];
     int realPin = 0;
     int x = 0;
+    char activePWM = 0;
     char direction[1];
     volatile unsigned char *thisPort = 0;
     for (x = 0; x < NUM_SWITCHES; x++) {
@@ -2613,7 +2614,7 @@ void switchOnOff(void) {
             // find out if this is pwm
             if (switchStuff[x] >= 200 && switchStuff[x] <= 220) {
                 // are we turning it on or off
-                if (switchStatus[x] == 0) {
+                if (switchStatus[x] == 0 && activePWM == 0) {
                     // turning it off
                     if (switchStuff[x] == 200) {
                         Red = 0;
@@ -2634,6 +2635,7 @@ void switchOnOff(void) {
                     }
                     // now don't override if we are changing it ourselves
                 } else if (immediateChange == 0) {
+                    activePWM = 1;
                     // turn it on
                     // decide if it is a changing hue or static values
                     if (switchStuff[x] == 200) {
