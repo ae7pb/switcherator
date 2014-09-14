@@ -2608,6 +2608,15 @@ void switchOnOff(void) {
     char activePWM = 0;
     char direction[1];
     volatile unsigned char *thisPort = 0;
+    // need a second quick loop to see if an active pwm is going on so we don't turn it off
+    for (x=0;x<NUM_SWITCHES;x++) {
+        if (switchStuff[x] >= 200 && switchStuff[x] <= 220) {
+            if(switchStatus[x] > 0)
+                // we have a pwm switch turned on with more time left.
+                activePWM = 1;
+        }
+    }
+    
     for (x = 0; x < NUM_SWITCHES; x++) {
         // see if a switch is set up
         if (switchStuff[x] != 255) {
