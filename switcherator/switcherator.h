@@ -16,11 +16,11 @@
 // Max program - depends on ram & EEPROM
 // As it is the program uses 605 bytes of RAM with all of these set to zero
 #define BASE_PROG_RAM           605     // so we can make sure we aren't using too much ram
-#define MAX_PROGRAM             20
-#define NUM_SWITCHES            16
-#define NUM_INPUTS              4
-#define NUM_LIMITS              4
-#define NUM_COLOR_CHANGES       10
+#define MAX_PROGRAM             24
+#define NUM_SWITCHES            24
+#define NUM_INPUTS              8
+#define NUM_LIMITS              8
+#define NUM_COLOR_CHANGES       20
 #define NUM_PWM                 1
 
 
