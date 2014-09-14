@@ -880,9 +880,9 @@ void pwmSetup(char * commandReceived) {
     }
     DDRD |= (1 << PIND3) | (1 << PIND5) | (1 << PIND6);
     // make sure initial values are 0
-    Red = 0;
-    Green = 0;
-    Blue = 0;
+    //Red = 0;
+    //Green = 0;
+    //Blue = 0;
     // Set output phase correct whatevers
     // set it to inverted if the direction is 0
     if (commandReceived[7] == '0') {
@@ -2643,8 +2643,7 @@ void switchOnOff(void) {
                         bright = oldBright;
                     }
                     // now don't override if we are changing it ourselves
-                } else if (immediateChange == 0) {
-                    activePWM = 1;
+                } else if (switchStatus[x] > 0 && immediateChange == 0) {
                     // turn it on
                     // decide if it is a changing hue or static values
                     if (switchStuff[x] == 200) {
