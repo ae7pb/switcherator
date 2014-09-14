@@ -1429,7 +1429,7 @@ void programSetDays(char * commandReceived) {
     char tempReallyLongString[] = "0000000";
     int programNumber = 0;
     long weekLong = 0;
-    programNumber = getInt(tempIntString, 3, 2);
+    programNumber = getInt(commandReceived, 3, 2);
     tempReallyLongString[0] = commandReceived[5];
     tempReallyLongString[1] = commandReceived[6];
     tempReallyLongString[2] = commandReceived[7];
