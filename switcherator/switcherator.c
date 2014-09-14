@@ -2296,6 +2296,7 @@ void clearToEEPROM(void) {
     clearEEPROM(RADIO_ADDR_R3);
     clearEEPROM(RADIO_ADDR_R4);
     clearEEPROM(RADIO_ADDR_R5);
+    clearEEPROM(INPUT_ADDR);
     clearEEPROM(SWITCH_STUFF);
     clearEEPROM(PWM_DIR);
     clearEEPROM(BRIGHTNESS);
@@ -2312,6 +2313,7 @@ void clearToEEPROM(void) {
     for (x = 0; x < NUM_SWITCHES; x++)
         clearEEPROM((SWITCH_PWM + (x * SWITCH_PWM_BYTES)));
     clearEEPROM(TWEAK_TIMER);
+    clearEEPROM(INP_MESS_TIME);
     ok();
 
 }
