@@ -2152,6 +2152,8 @@ void memoryDump(void) {
         strcat(statusMsg, tempLongString);
         returnHexWithout(switchBright[x], tempLongString);
         strcat(statusMsg, tempLongString);
+        returnHexWithout(switchPWM[x], tempLongString);
+        strcat(statusMsg, tempLongString);
         if (strlen(statusMsg) >= 28 && (x + 1) < NUM_SWITCHES) {
             sendMessage(statusMsg);
             linecount++;
@@ -2219,6 +2221,10 @@ void memoryDump(void) {
         for (y = 0; y < 3; y++) {
             returnHexWithout(colorChanges[x][y], tempLongString);
             strcat(statusMsg, tempLongString);
+        if (colorIsChangable[x] == 1)
+            strcat(statusMsg, "Y");
+        else
+            strcat(statusMsg, "N");
             if (strlen(statusMsg) >= 30) {
                 sendMessage(statusMsg);
                 linecount++;
@@ -2227,34 +2233,6 @@ void memoryDump(void) {
             }
         }
     }
-    linecount++;
-    resetStatus(linecount, "Cc");
-    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
-        if (colorIsChangable[x] == 1)
-            strcat(statusMsg, "Y");
-        else
-            strcat(statusMsg, "N");
-        if (strlen(statusMsg) >= 30) {
-            sendMessage(statusMsg);
-            linecount++;
-            statusMsg[2] = 0;
-            interjectLineNumber(linecount);
-        }
-    }
-
-    linecount++;
-    resetStatus(linecount, "Ps");
-    for (x = 0; x < NUM_SWITCHES; x++) {
-        returnHexWithout(switchPWM[x], tempLongString);
-        strcat(statusMsg, tempLongString);
-        if (strlen(statusMsg) >= 30) {
-            sendMessage(statusMsg);
-            linecount++;
-            statusMsg[2] = 0;
-            interjectLineNumber(linecount);
-        }
-    }
-
 
     linecount++;
     resetStatus(linecount, "END");
