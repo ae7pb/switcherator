@@ -98,7 +98,8 @@
     switchStuff int,
     switchBright int,
     switchPWM int,
-    details text
+    details text,
+    unique(radioID, switchNumber)
 )");
 // Program table.  Which radio, program number, start time, duration in minutes, 
 // days and which switches it uses.  So it is searchable the days will be
@@ -111,7 +112,8 @@
     time int,
     duration int,
     switches text,
-    rollover int
+    rollover int,
+    unique(radioID,programNumber)
 )");
 // Input table. Which radio, input number, details is port / pin / percentages of on off,
 // program is the program or switch that it turns on, duration is time in seconds that 
@@ -128,7 +130,8 @@
     whichSwitchOrProgram int,
     duration int,
     pollTime int,
-    whichRGB int
+    whichRGB int,
+    unique(radioID,inputNumber)
 )");
     /*
      * Time limit table.  This sets up when a program will react to an input
@@ -140,7 +143,8 @@
     limitNumber int,
     startTime int,
     stopTime int,
-    days int
+    days int,
+    unique(radioID,limitNumber)
 )");
     /*
      * Color Changes table
@@ -153,9 +157,10 @@
     red int,
     green int,
     blue int,
-    ifChangable int
+    ifChangable int,
+    unique(radioID,colorChangeNumber)
     )");
-    
+
 //  TODO: colorful layout, switches side by side showing how many it has and if they are programmed or not.
 //newRadio("radio1","desc","porch");
     if (!processRadio(1))
@@ -339,15 +344,15 @@
         foreach ($response as $line) {
             if (strpos($line, "Transm") === 0)
                 continue;
-            $lineArray = explode("-",$line);
-            $letter = substr($lineArray[0],0,1);
-            if ($letter == "M") 
+            $lineArray = explode("-", $line);
+            $letter = substr($lineArray[0], 0, 1);
+            if ($letter == "M")
                 $misc .= $lineArray[1];
             else if ($letter == "S")
                 $switches .= $lineArray[1];
             else if ($letter == "P")
                 $programs .= $lineArray[1];
-            else if ($letter == "I") 
+            else if ($letter == "I")
                 $inputs .= $lineArray[1];
             else if ($letter == "T")
                 $timeLimits .= $lineArray[1];
@@ -360,14 +365,52 @@
             else
                 $radioTime = $lineArray[1];
         }
-        echo $misc;
-        $stuff = explode("|",$misc);
-        $sql = "update radios set clockTweak = \"{$stuff[0]}\", daylightSavingsStartMonth = \"{$stuff[1]}\", ".
-                "daylightSavingsStartDay = \"{$stuff[2]}\", daylightSavingsStopMonth = \"{$stuff[3]}\", ".
-                "daylightSavingsStopDay = \"{$stuff[4]}\", pwmDirection = \"{$stuff[5]}\", ".
+        $stuff = explode("|", $misc);
+        $sql = "update radios set clockTweak = \"{$stuff[0]}\", daylightSavingsStartMonth = \"{$stuff[1]}\", " .
+                "daylightSavingsStartDay = \"{$stuff[2]}\", daylightSavingsStopMonth = \"{$stuff[3]}\", " .
+                "daylightSavingsStopDay = \"{$stuff[4]}\", pwmDirection = \"{$stuff[5]}\", " .
                 "inputMessageTiming = \"{$stuff[6]}\" where id = $radioID";
-        echo $sql;
-        $db->exec($sql);
+        if (!$db->exec($sql))
+            echo $db->lastErrorMsg();
+        $switchDetails = str_split($switches, 6);
+        for ($x = 0; $x < count($switchDetails); $x++) {
+            $thisSwitch = str_split($switchDetails[$x], 2);
+            $thisSwitchStuff = hexdec($thisSwitch[0]);
+            $thisSwitchBright = hexdec($thisSwitch[1]);
+            $thisSwitchPWM = hexdec($thisSwitch[2]);
+            $sql = "insert or ignore into switches (radioID, switchNumber, switchStuff, switchBright, switchPWM) values " .
+                    "($radioID, $x, $thisSwitchStuff, $thisSwitchBright, $thisSwitchPWM)";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+            $sql = "update switches set switchStuff = $thisSwitchStuff, switchBright = $thisSwitchBright, ".
+                    "switchPWM = $thisSwitchPWM where radioID = $radioID and switchNumber = $x";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+        }
+        $programDetails = str_split($programs,20);
+        for($x=0;$x<count($programDetails);$x++) {
+            $thisProgram = str_split($programDetails[$x],2);
+            $thisDays = hexdec($thisProgram[0]);
+            $thisStart = hexdec($thisProgram[1].$thisProgram[2]);
+            $thisDuration = hexdec($thisProgram[3].$thisProgram[4]);
+            $thisSwitches = "";
+            for($y=5;$y<=8;$y++) {
+                if($thisProgram[$y] != "FF") {
+                    if($thisSwitches != "")
+                        $thisSwitches .= ",";
+                    $thisSwitches .= $thisProgram[$y];
+                }
+            }
+            $thisRollover = hexdec($thisProgram[9]);
+            $sql = "insert or ignore into programs (radioID, programNumber, days, time, duration, switches, rollover) values ".
+                    "($radioID, $x, $thisDays, $thisStart, $thisDuration, \"$thisSwitches\", $thisRollover)";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+            $sql = "update programs set days = $thisDays, time = $thisStart, duration = $thisDuration, switches = ".
+                    "\"$thisSwitches\", rollover = $thisRollover where radioID = $radioID and programNumber = $x";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+        }
     }
 
     /* Get the information for the switches
