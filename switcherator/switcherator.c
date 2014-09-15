@@ -2221,17 +2221,17 @@ void memoryDump(void) {
         for (y = 0; y < 3; y++) {
             returnHexWithout(colorChanges[x][y], tempLongString);
             strcat(statusMsg, tempLongString);
+        }
         if (colorIsChangable[x] == 1)
             strcat(statusMsg, "Y");
         else
             strcat(statusMsg, "N");
-            if (strlen(statusMsg) >= 30) {
+            if (strlen(statusMsg) >= 24) {
                 sendMessage(statusMsg);
                 linecount++;
                 statusMsg[1] = 0;
                 interjectLineNumber(linecount);
             }
-        }
     }
 
     linecount++;
