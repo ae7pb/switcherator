@@ -1309,6 +1309,10 @@ void clearProgram(char * commandReceived) {
 
 void clearTheProgram(int programNumber) {
     int x = 0;
+    // get rid of overflow programs
+    if(weeklyProgram[programNumber][9] != 255) {
+        clearTheProgram(weeklyProgram[programNumber][9]);
+    }
     // some of these "0" is a valid option so make it 255
     for (x = 0; x < 10; x++) {
         weeklyProgram[programNumber][x] = 255;
@@ -1327,6 +1331,7 @@ void clearTheProgram(int programNumber) {
 void programAddSwitch(char * commandReceived) {
     int programNumber = 0;
     int switchNumber = 0;
+    int usingOverflow = 0;
     programNumber = getInt(commandReceived, 3, 2);
     switchNumber = getInt(commandReceived, 5, 2);
     char switches[NUM_SWITCHES];
@@ -1368,6 +1373,8 @@ void programAddSwitch(char * commandReceived) {
             // our program is full.  Find or make another one
             // first check if we already are overflowing.
             overflowProgram = weeklyProgram[programNumber][9];
+            // mark this is an overflow so we can mark it as not blank later
+            usingOverflow = 1;
             if (overflowProgram == 255) {
                 // no overflow.  Need to create one.
                 // find blank program slot
@@ -1401,6 +1408,10 @@ void programAddSwitch(char * commandReceived) {
         }
     }
     weeklyProgram[programNumber][blankSwitch] = switchNumber;
+    // just marking so it will no longer register as blank.
+    if(usingOverflow == 1) {
+        weeklyProgram[programNumber][0] = 0xfe;
+    }
     ok();
 }
 
