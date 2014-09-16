@@ -1370,18 +1370,20 @@ void programAddSwitch(char * commandReceived) {
             // our program is full.  Find or make another one
             // first check if we already are overflowing.
             overflowProgram = weeklyProgram[programNumber][9];
+            itoa(overflowProgram,tempLongString,10);
+            sendMessage(tempLongString);
             if (overflowProgram == 255) {
                 // no overflow.  Need to create one.
                 // find blank program slot
                 int possibleBlank = 255;
                 // yeah I know but programNumber 0 won't be an overflow so there
-                for (int y = (MAX_PROGRAM - 1); y > 0; y--) {
+                for (x = (MAX_PROGRAM - 1); x > 0; x--) {
                     // dont want it to wrap though 0 is a valid program
-                    if (weeklyProgram[y][0] == 255 && weeklyProgram[y][5] == 255) {
+                    if (weeklyProgram[x][0] == 255 && weeklyProgram[x][5] == 255) {
                         // this is blank
-                        possibleBlank = y;
+                        possibleBlank = x;
                         // end the loop
-                        y = 0;
+                        x = 0;
                     }
                 }
                 if (possibleBlank == 255) {
@@ -1390,13 +1392,7 @@ void programAddSwitch(char * commandReceived) {
                     return;
                 }
                 // now record the overflow and move forward
-                statusMsg[0] = 0;
-                strcat(statusMsg, "h");
-                sendMessage(statusMsg);
                 weeklyProgram[programNumber][9] = possibleBlank;
-                statusMsg[0] = 0;
-                strcat(statusMsg, "i");
-                sendMessage(statusMsg);
                 programNumber = possibleBlank;
                 // and now we loop again...
             } else {
