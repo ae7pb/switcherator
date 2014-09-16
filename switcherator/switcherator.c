@@ -171,9 +171,12 @@ int main(void) {
     }
     sei();
 
+    int y;
     // initialize programs
     for (x = 0; x < MAX_PROGRAM; x++) {
-        clearTheProgram(x);
+        for(y = 0; y<10;y++) {
+            weeklyProgram[x][y] = 255;
+        }
     }
 
 
@@ -1309,6 +1312,9 @@ void clearProgram(char * commandReceived) {
 
 void clearTheProgram(int programNumber) {
     int x = 0;
+    if(weeklyProgram[programNumber][9] != 255) {
+        clearTheProgram((int)weeklyProgram[programNumber][9]);
+    }
     // some of these "0" is a valid option so make it 255
     for (x = 0; x < 10; x++) {
         weeklyProgram[programNumber][x] = 255;
@@ -1399,6 +1405,10 @@ void programAddSwitch(char * commandReceived) {
             // we have a program and a slot.  move on.
             noSwitchYet = 0;
         }
+    }
+    char test = weeklyProgram[programNumber][1];
+    if(test == 255){
+        weeklyProgram[programNumber][1] = 0xfe;
     }
     weeklyProgram[programNumber][blankSwitch] = switchNumber;
     ok();
