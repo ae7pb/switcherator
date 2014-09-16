@@ -1361,17 +1361,13 @@ void programAddSwitch(char * commandReceived) {
     int noSwitchYet = 1;
     int blankSwitch = 0;
     int overflowProgram = 255;
-    // prepare number string for output later
-    itoa(programNumber, tempIntString, 10);
+    while (noSwitchYet == 1) {
     // see if our program has a valid switch
     blankSwitch = findOpenSwitch(programNumber);
-    while (noSwitchYet == 1) {
         if (blankSwitch == 0) {
             // our program is full.  Find or make another one
             // first check if we already are overflowing.
             overflowProgram = weeklyProgram[programNumber][9];
-            itoa(overflowProgram,tempLongString,10);
-            sendMessage(tempLongString);
             if (overflowProgram == 255) {
                 // no overflow.  Need to create one.
                 // find blank program slot
