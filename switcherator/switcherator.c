@@ -1309,9 +1309,6 @@ void clearProgram(char * commandReceived) {
 
 void clearTheProgram(int programNumber) {
     int x = 0;
-    if(weeklyProgram[programNumber][9] != 255) {
-        clearTheProgram(weeklyProgram[programNumber][9]);
-    }
     // some of these "0" is a valid option so make it 255
     for (x = 0; x < 10; x++) {
         weeklyProgram[programNumber][x] = 255;
@@ -1404,9 +1401,6 @@ void programAddSwitch(char * commandReceived) {
         }
     }
     weeklyProgram[programNumber][blankSwitch] = switchNumber;
-    if(weeklyProgram[programNumber][0] == 255) {
-        weeklyProgram[programNumber][0] = 254;
-    }
     ok();
 }
 
