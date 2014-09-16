@@ -1374,14 +1374,22 @@ void programAddSwitch(char * commandReceived) {
                 // no overflow.  Need to create one.
                 // find blank program slot
                 int possibleBlank = 255;
+                // DEBUG
+                statusMsg[0] = 0;
+                strcat(statusMSG,"hi");
+                sendMessage(statusMsg);
                 // yeah I know but programNumber 0 won't be an overflow so there
                 for (x = (MAX_PROGRAM - 1); x > 0; x--) {
                     // dont want it to wrap though 0 is a valid program
                     if (weeklyProgram[x][0] == 255 && weeklyProgram[x][5] == 255) {
                         // this is blank
                         possibleBlank = x;
+                        // DEBUG
+                        returnHexWithout(x,tempLongString);
+                        strcat(statusMsg,tempLongString);
+                        sendMessage(statusMsg);
                         // end the loop
-                        x = 0;
+                        break;
                     }
                 }
                 if (possibleBlank == 255) {
