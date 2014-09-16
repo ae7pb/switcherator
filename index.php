@@ -157,7 +157,7 @@
     red int,
     green int,
     blue int,
-    ifChangable int,
+    ifChangeable int,
     unique(radioID,colorChangeNumber)
     )");
 
@@ -358,10 +358,6 @@
                 $timeLimits .= $lineArray[1];
             else if ($letter == "C")
                 $colorChanges .= $lineArray[1];
-            else if ($letter == "C")
-                $colorChangable .= $lineArray[1];
-            else if ($letter == "P")
-                $pwmSwitch .= $lineArray[1];
             else
                 $radioTime = $lineArray[1];
         }
@@ -411,6 +407,63 @@
             if (!$db->exec($sql))
                 echo $db->lastErrorMsg();
         }
+        $inputDetails = str_split($inputs,16);
+        for($x=0;$x<count($inputDetails);$x++) {
+            $thisInput = str_split($inputDetails[$x],2);
+            $thisPinStuff = hexdec($thisInput[0]);
+            $thisLowPercent = hexdec($thisInput[1]);
+            $thisHighPercent = hexdec($thisInput[2]);
+            $thisWhichSwitchOrProgram = hexdec($thisInput[3]);
+            $thisDuration = hexdec($thisInput[4].$thisInput[5]);
+            $thisPollTime = hexdec($thisInput[6]);
+            $thisWhichRGB = hexdec($thisInput[7]);
+            $sql = "insert or ignore into inputs (radioID, inputNumber, pinStuff, lowPercent, highPercent, ".
+                    "whichSwitchOrProgram, duration, pollTime, whichRGB) values ".
+                    "($radioID, $x, $thisPinStuff, $thisLowPercent, $thisHighPercent, ".
+                    "$thisWhichSwitchOrProgram, $thisDuration, $thisPollTime, $thisWhichRGB)";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+            $sql = "update inputs set pinStuff = $thisPinStuff, lowPercent = $thisLowPercent, highPercent = ".
+                    "$thisHighPercent, whichSwitchOrProgram = $thisWhichSwitchOrProgram, duration = $thisDuration, ".
+                    "pollTime = $thisPollTime, whichRGB = $thisWhichRGB where radioID = $radioID and inputNumber = $x";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+        }
+        $timeLimitsDetails = str_split($timeLimits, 3);
+        for($x=0;$x<count($timeLimitsDetails);$x++) {
+            $thisTimeLimit = str_split($timeLimitsDetails[$x]);
+            $thisStartTime = $thisTimeLimit[0];
+            $thisStopTime = $thisTimeLimit[1];
+            $thisDays = $thisTimeLimit[2];
+            $sql = "insert or ignore into timeLimits (radioID, limitNumber, startTime, stopTime, ".
+                    "days) values ($radioID, $x, $thisStartTime, $thisStopTime, $thisDays)";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+            $sql = "update timeLimits set startTime = $thisStartTime, stopTime = $thisStopTime, ".
+                    "days = $thisDays where radioID = $radioID and limitNumber = $x";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+        }
+        $colorChangeDetails = str_split($colorChanges, 7);
+        for($x=0;$x<count($colorChangeDetails);$x++) {
+            $thisColorChange = str_split($colorChangeDetails[$x]);
+            $thisRed = dechex($thisColorChange[0].$thisColorChange[1]);
+            $thisGreen = dechex($thisColorChange[2].$thisColorChange[3]);
+            $thisBlue = dechex($thisColorChange[4].$thisColorChange[5]);
+            if($thisColorChange[6] == "Y")
+                $thisChangeable = 1;
+            else
+                $thisChangeable = 0;
+            $sql = "insert or ignore into colorChanges (radioID, colorChangeNumber, red, green, blue, "
+                    . "ifChangeable) values ($radioID, $x, $thisRed, $thisGreen, $thisBlue, $thisChangeable)";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+            $sql = "update colorchanges set red = $thisRed, green = $thisGreen, blue = $thisBlue, "
+                    . "ifChangeable = $thisChangeable where radioID = $radioID and colorChangeNumber = $x";
+            if (!$db->exec($sql))
+                echo $db->lastErrorMsg();
+        }
+        return true;
     }
 
     /* Get the information for the switches
