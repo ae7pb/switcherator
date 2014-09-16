@@ -1376,7 +1376,7 @@ void programAddSwitch(char * commandReceived) {
                 int possibleBlank = 255;
                 // DEBUG
                 statusMsg[0] = 0;
-                strcat(statusMSG,"hi");
+                strcat(statusMsg,"hi");
                 sendMessage(statusMsg);
                 // yeah I know but programNumber 0 won't be an overflow so there
                 for (x = (MAX_PROGRAM - 1); x > 0; x--) {
