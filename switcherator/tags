@@ -1,0 +1,2180 @@
+ACBG	/usr/lib/avr/include/avr/iom328p.h	319
+ACD	/usr/lib/avr/include/avr/iom328p.h	320
+ACI	/usr/lib/avr/include/avr/iom328p.h	317
+ACIC	/usr/lib/avr/include/avr/iom328p.h	315
+ACIE	/usr/lib/avr/include/avr/iom328p.h	316
+ACIS0	/usr/lib/avr/include/avr/iom328p.h	313
+ACIS1	/usr/lib/avr/include/avr/iom328p.h	314
+ACME	/usr/lib/avr/include/avr/iom328p.h	481
+ACO	/usr/lib/avr/include/avr/iom328p.h	318
+ACSR	/usr/lib/avr/include/avr/iom328p.h	312
+ADATE	/usr/lib/avr/include/avr/iom328p.h	473
+ADC	/usr/lib/avr/include/avr/iom328p.h	443
+ADC0D	/usr/lib/avr/include/avr/iom328p.h	493
+ADC1D	/usr/lib/avr/include/avr/iom328p.h	494
+ADC2D	/usr/lib/avr/include/avr/iom328p.h	495
+ADC3D	/usr/lib/avr/include/avr/iom328p.h	496
+ADC4D	/usr/lib/avr/include/avr/iom328p.h	497
+ADC5D	/usr/lib/avr/include/avr/iom328p.h	498
+ADCH	/usr/lib/avr/include/avr/iom328p.h	457
+ADCH0	/usr/lib/avr/include/avr/iom328p.h	458
+ADCH1	/usr/lib/avr/include/avr/iom328p.h	459
+ADCH2	/usr/lib/avr/include/avr/iom328p.h	460
+ADCH3	/usr/lib/avr/include/avr/iom328p.h	461
+ADCH4	/usr/lib/avr/include/avr/iom328p.h	462
+ADCH5	/usr/lib/avr/include/avr/iom328p.h	463
+ADCH6	/usr/lib/avr/include/avr/iom328p.h	464
+ADCH7	/usr/lib/avr/include/avr/iom328p.h	465
+ADCL	/usr/lib/avr/include/avr/iom328p.h	447
+ADCL0	/usr/lib/avr/include/avr/iom328p.h	448
+ADCL1	/usr/lib/avr/include/avr/iom328p.h	449
+ADCL2	/usr/lib/avr/include/avr/iom328p.h	450
+ADCL3	/usr/lib/avr/include/avr/iom328p.h	451
+ADCL4	/usr/lib/avr/include/avr/iom328p.h	452
+ADCL5	/usr/lib/avr/include/avr/iom328p.h	453
+ADCL6	/usr/lib/avr/include/avr/iom328p.h	454
+ADCL7	/usr/lib/avr/include/avr/iom328p.h	455
+ADCSRA	/usr/lib/avr/include/avr/iom328p.h	467
+ADCSRB	/usr/lib/avr/include/avr/iom328p.h	477
+ADCW	/usr/lib/avr/include/avr/iom328p.h	445
+ADC_vect	/usr/lib/avr/include/avr/iom328p.h	851
+ADC_vect_num	/usr/lib/avr/include/avr/iom328p.h	850
+ADEN	/usr/lib/avr/include/avr/iom328p.h	475
+ADIE	/usr/lib/avr/include/avr/iom328p.h	471
+ADIF	/usr/lib/avr/include/avr/iom328p.h	472
+ADLAR	/usr/lib/avr/include/avr/iom328p.h	488
+ADMUX	/usr/lib/avr/include/avr/iom328p.h	483
+ADPS0	/usr/lib/avr/include/avr/iom328p.h	468
+ADPS1	/usr/lib/avr/include/avr/iom328p.h	469
+ADPS2	/usr/lib/avr/include/avr/iom328p.h	470
+ADSC	/usr/lib/avr/include/avr/iom328p.h	474
+ADTS0	/usr/lib/avr/include/avr/iom328p.h	478
+ADTS1	/usr/lib/avr/include/avr/iom328p.h	479
+ADTS2	/usr/lib/avr/include/avr/iom328p.h	480
+AIN0D	/usr/lib/avr/include/avr/iom328p.h	501
+AIN1D	/usr/lib/avr/include/avr/iom328p.h	502
+ANALOG_COMP_vect	/usr/lib/avr/include/avr/iom328p.h	857
+ANALOG_COMP_vect_num	/usr/lib/avr/include/avr/iom328p.h	856
+ARC	../myavrnrflib/nRF24L01.h	52
+ARC_CNT	../myavrnrflib/nRF24L01.h	64
+ARD	../myavrnrflib/nRF24L01.h	51
+AS2	/usr/lib/avr/include/avr/iom328p.h	665
+ASSR	/usr/lib/avr/include/avr/iom328p.h	659
+AVR_EXTENDED_INDIRECT_ADDR	/usr/lib/avr/include/avr/common.h	297
+AVR_EXTENDED_INDIRECT_ADDR	/usr/lib/avr/include/avr/common.h	299
+AVR_EXTENDED_INDIRECT_REG	/usr/lib/avr/include/avr/common.h	295
+AVR_RAMPD_ADDR	/usr/lib/avr/include/avr/common.h	257
+AVR_RAMPD_ADDR	/usr/lib/avr/include/avr/common.h	259
+AVR_RAMPD_REG	/usr/lib/avr/include/avr/common.h	255
+AVR_RAMPX_ADDR	/usr/lib/avr/include/avr/common.h	267
+AVR_RAMPX_ADDR	/usr/lib/avr/include/avr/common.h	269
+AVR_RAMPX_REG	/usr/lib/avr/include/avr/common.h	265
+AVR_RAMPY_ADDR	/usr/lib/avr/include/avr/common.h	277
+AVR_RAMPY_ADDR	/usr/lib/avr/include/avr/common.h	279
+AVR_RAMPY_REG	/usr/lib/avr/include/avr/common.h	275
+AVR_RAMPZ_ADDR	/usr/lib/avr/include/avr/common.h	287
+AVR_RAMPZ_ADDR	/usr/lib/avr/include/avr/common.h	289
+AVR_RAMPZ_REG	/usr/lib/avr/include/avr/common.h	285
+AVR_STACK_POINTER_ADDR	/usr/lib/avr/include/avr/common.h	226
+AVR_STACK_POINTER_ADDR	/usr/lib/avr/include/avr/common.h	228
+AVR_STACK_POINTER_HI_ADDR	/usr/lib/avr/include/avr/common.h	237
+AVR_STACK_POINTER_HI_ADDR	/usr/lib/avr/include/avr/common.h	239
+AVR_STACK_POINTER_HI_REG	/usr/lib/avr/include/avr/common.h	235
+AVR_STACK_POINTER_LO_ADDR	/usr/lib/avr/include/avr/common.h	247
+AVR_STACK_POINTER_LO_ADDR	/usr/lib/avr/include/avr/common.h	249
+AVR_STACK_POINTER_LO_REG	/usr/lib/avr/include/avr/common.h	245
+AVR_STACK_POINTER_REG	/usr/lib/avr/include/avr/common.h	224
+AVR_STATUS_ADDR	/usr/lib/avr/include/avr/common.h	216
+AVR_STATUS_ADDR	/usr/lib/avr/include/avr/common.h	218
+AVR_STATUS_REG	/usr/lib/avr/include/avr/common.h	214
+AW	../myavrnrflib/nRF24L01.h	50
+BADISR_vect	/usr/lib/avr/include/avr/interrupt.h	278
+BADISR_vect	/usr/lib/avr/include/avr/interrupt.h	280
+BASE_PROG_RAM	switcherator.h	18
+BLB0_MODE_1	/usr/lib/avr/include/avr/lock.h	208
+BLB0_MODE_2	/usr/lib/avr/include/avr/lock.h	209
+BLB0_MODE_3	/usr/lib/avr/include/avr/lock.h	210
+BLB0_MODE_4	/usr/lib/avr/include/avr/lock.h	211
+BLB1_MODE_1	/usr/lib/avr/include/avr/lock.h	215
+BLB1_MODE_2	/usr/lib/avr/include/avr/lock.h	216
+BLB1_MODE_3	/usr/lib/avr/include/avr/lock.h	217
+BLB1_MODE_4	/usr/lib/avr/include/avr/lock.h	218
+BLBA0	/usr/lib/avr/include/avr/lock.h	227
+BLBA1	/usr/lib/avr/include/avr/lock.h	228
+BLBAT0	/usr/lib/avr/include/avr/lock.h	222
+BLBAT1	/usr/lib/avr/include/avr/lock.h	223
+BLBB0	/usr/lib/avr/include/avr/lock.h	232
+BLBB1	/usr/lib/avr/include/avr/lock.h	233
+BLBSET	/usr/lib/avr/include/avr/iom328p.h	345
+BODS	/usr/lib/avr/include/avr/iom328p.h	339
+BODSE	/usr/lib/avr/include/avr/iom328p.h	338
+BORF	/usr/lib/avr/include/avr/iom328p.h	331
+BRIGHTNESS	switcherator.h	94
+BRIGHTNESS_BYTES	switcherator.h	63
+Blue	switcherator.c	82
+CAL0	/usr/lib/avr/include/avr/iom328p.h	377
+CAL1	/usr/lib/avr/include/avr/iom328p.h	378
+CAL2	/usr/lib/avr/include/avr/iom328p.h	379
+CAL3	/usr/lib/avr/include/avr/iom328p.h	380
+CAL4	/usr/lib/avr/include/avr/iom328p.h	381
+CAL5	/usr/lib/avr/include/avr/iom328p.h	382
+CAL6	/usr/lib/avr/include/avr/iom328p.h	383
+CAL7	/usr/lib/avr/include/avr/iom328p.h	384
+CE_DDR	../myavrnrflib/nrf.h	10
+CE_PIN	../myavrnrflib/nrf.h	7
+CE_PORT	../myavrnrflib/nrf.h	9
+CLKPCE	/usr/lib/avr/include/avr/iom328p.h	365
+CLKPR	/usr/lib/avr/include/avr/iom328p.h	360
+CLKPS0	/usr/lib/avr/include/avr/iom328p.h	361
+CLKPS1	/usr/lib/avr/include/avr/iom328p.h	362
+CLKPS2	/usr/lib/avr/include/avr/iom328p.h	363
+CLKPS3	/usr/lib/avr/include/avr/iom328p.h	364
+COLOR_CHANGE	switcherator.h	90
+COLOR_CHANGE_BYTES	switcherator.h	59
+COM0A0	/usr/lib/avr/include/avr/iom328p.h	226
+COM0A1	/usr/lib/avr/include/avr/iom328p.h	227
+COM0B0	/usr/lib/avr/include/avr/iom328p.h	224
+COM0B1	/usr/lib/avr/include/avr/iom328p.h	225
+COM1A0	/usr/lib/avr/include/avr/iom328p.h	509
+COM1A1	/usr/lib/avr/include/avr/iom328p.h	510
+COM1B0	/usr/lib/avr/include/avr/iom328p.h	507
+COM1B1	/usr/lib/avr/include/avr/iom328p.h	508
+COM2A0	/usr/lib/avr/include/avr/iom328p.h	618
+COM2A1	/usr/lib/avr/include/avr/iom328p.h	619
+COM2B0	/usr/lib/avr/include/avr/iom328p.h	616
+COM2B1	/usr/lib/avr/include/avr/iom328p.h	617
+CONFIG	../myavrnrflib/nRF24L01.h	3
+CONT_WAVE	../myavrnrflib/nRF24L01.h	53
+CPHA	/usr/lib/avr/include/avr/iom328p.h	290
+CPOL	/usr/lib/avr/include/avr/iom328p.h	291
+CRCO	../myavrnrflib/nRF24L01.h	35
+CS00	/usr/lib/avr/include/avr/iom328p.h	230
+CS01	/usr/lib/avr/include/avr/iom328p.h	231
+CS02	/usr/lib/avr/include/avr/iom328p.h	232
+CS10	/usr/lib/avr/include/avr/iom328p.h	513
+CS11	/usr/lib/avr/include/avr/iom328p.h	514
+CS12	/usr/lib/avr/include/avr/iom328p.h	515
+CS20	/usr/lib/avr/include/avr/iom328p.h	622
+CS21	/usr/lib/avr/include/avr/iom328p.h	623
+CS22	/usr/lib/avr/include/avr/iom328p.h	624
+CSN_DDR	../myavrnrflib/nrf.h	12
+CSN_PIN	../myavrnrflib/nrf.h	8
+CSN_PORT	../myavrnrflib/nrf.h	11
+DATA_SIZE	switcherator.h	10
+DATA_SIZE	../myavrnrflib/nrf.h	15
+DAYLIGHT_SAVE	switcherator.h	76
+DAYLIGHT_SAVE_BYTES	switcherator.h	52
+DD0	/usr/lib/avr/include/avr/portpins.h	62
+DD1	/usr/lib/avr/include/avr/portpins.h	61
+DD2	/usr/lib/avr/include/avr/portpins.h	60
+DD3	/usr/lib/avr/include/avr/portpins.h	59
+DD4	/usr/lib/avr/include/avr/portpins.h	58
+DD5	/usr/lib/avr/include/avr/portpins.h	57
+DD6	/usr/lib/avr/include/avr/portpins.h	56
+DD7	/usr/lib/avr/include/avr/portpins.h	55
+DDB0	/usr/lib/avr/include/avr/iom328p.h	65
+DDB1	/usr/lib/avr/include/avr/iom328p.h	66
+DDB2	/usr/lib/avr/include/avr/iom328p.h	67
+DDB3	/usr/lib/avr/include/avr/iom328p.h	68
+DDB4	/usr/lib/avr/include/avr/iom328p.h	69
+DDB5	/usr/lib/avr/include/avr/iom328p.h	70
+DDB6	/usr/lib/avr/include/avr/iom328p.h	71
+DDB7	/usr/lib/avr/include/avr/iom328p.h	72
+DDC0	/usr/lib/avr/include/avr/iom328p.h	94
+DDC1	/usr/lib/avr/include/avr/iom328p.h	95
+DDC2	/usr/lib/avr/include/avr/iom328p.h	96
+DDC3	/usr/lib/avr/include/avr/iom328p.h	97
+DDC4	/usr/lib/avr/include/avr/iom328p.h	98
+DDC5	/usr/lib/avr/include/avr/iom328p.h	99
+DDC6	/usr/lib/avr/include/avr/iom328p.h	100
+DDD0	/usr/lib/avr/include/avr/iom328p.h	122
+DDD1	/usr/lib/avr/include/avr/iom328p.h	123
+DDD2	/usr/lib/avr/include/avr/iom328p.h	124
+DDD3	/usr/lib/avr/include/avr/iom328p.h	125
+DDD4	/usr/lib/avr/include/avr/iom328p.h	126
+DDD5	/usr/lib/avr/include/avr/iom328p.h	127
+DDD6	/usr/lib/avr/include/avr/iom328p.h	128
+DDD7	/usr/lib/avr/include/avr/iom328p.h	129
+DDRB	/usr/lib/avr/include/avr/iom328p.h	64
+DDRC	/usr/lib/avr/include/avr/iom328p.h	93
+DDRD	/usr/lib/avr/include/avr/iom328p.h	121
+DIDR0	/usr/lib/avr/include/avr/iom328p.h	492
+DIDR1	/usr/lib/avr/include/avr/iom328p.h	500
+DOR0	/usr/lib/avr/include/avr/iom328p.h	729
+DORD	/usr/lib/avr/include/avr/iom328p.h	293
+DPL_P0	../myavrnrflib/nRF24L01.h	75
+DPL_P1	../myavrnrflib/nRF24L01.h	74
+DPL_P2	../myavrnrflib/nRF24L01.h	73
+DPL_P3	../myavrnrflib/nRF24L01.h	72
+DPL_P4	../myavrnrflib/nRF24L01.h	71
+DPL_P5	../myavrnrflib/nRF24L01.h	70
+DTOSTR_ALWAYS_SIGN	/usr/lib/avr/include/stdlib.h	531
+DTOSTR_PLUS_SIGN	/usr/lib/avr/include/stdlib.h	534
+DTOSTR_UPPERCASE	/usr/lib/avr/include/stdlib.h	537
+DYNPD	../myavrnrflib/nRF24L01.h	27
+E2END	/usr/lib/avr/include/avr/iom328p.h	875
+E2PAGESIZE	/usr/lib/avr/include/avr/iom328p.h	876
+EEAR	/usr/lib/avr/include/avr/iom328p.h	198
+EEAR	/usr/lib/avr/include/avr/common.h	167
+EEAR0	/usr/lib/avr/include/avr/iom328p.h	201
+EEAR1	/usr/lib/avr/include/avr/iom328p.h	202
+EEAR2	/usr/lib/avr/include/avr/iom328p.h	203
+EEAR3	/usr/lib/avr/include/avr/iom328p.h	204
+EEAR4	/usr/lib/avr/include/avr/iom328p.h	205
+EEAR5	/usr/lib/avr/include/avr/iom328p.h	206
+EEAR6	/usr/lib/avr/include/avr/iom328p.h	207
+EEAR7	/usr/lib/avr/include/avr/iom328p.h	208
+EEAR8	/usr/lib/avr/include/avr/iom328p.h	211
+EEAR9	/usr/lib/avr/include/avr/iom328p.h	212
+EEARH	/usr/lib/avr/include/avr/iom328p.h	210
+EEARH	/usr/lib/avr/include/avr/common.h	173
+EEARL	/usr/lib/avr/include/avr/iom328p.h	200
+EEARL	/usr/lib/avr/include/avr/common.h	170
+EECR	/usr/lib/avr/include/avr/iom328p.h	180
+EECR	/usr/lib/avr/include/avr/common.h	157
+EEDR	/usr/lib/avr/include/avr/iom328p.h	188
+EEDR	/usr/lib/avr/include/avr/common.h	162
+EEDR0	/usr/lib/avr/include/avr/iom328p.h	189
+EEDR1	/usr/lib/avr/include/avr/iom328p.h	190
+EEDR2	/usr/lib/avr/include/avr/iom328p.h	191
+EEDR3	/usr/lib/avr/include/avr/iom328p.h	192
+EEDR4	/usr/lib/avr/include/avr/iom328p.h	193
+EEDR5	/usr/lib/avr/include/avr/iom328p.h	194
+EEDR6	/usr/lib/avr/include/avr/iom328p.h	195
+EEDR7	/usr/lib/avr/include/avr/iom328p.h	196
+EEMEM	/usr/lib/avr/include/avr/eeprom.h	485
+EEMPE	/usr/lib/avr/include/avr/iom328p.h	183
+EEMWE	/usr/lib/avr/include/avr/common.h	184
+EEPE	/usr/lib/avr/include/avr/iom328p.h	182
+EEPM0	/usr/lib/avr/include/avr/iom328p.h	185
+EEPM1	/usr/lib/avr/include/avr/iom328p.h	186
+EERE	/usr/lib/avr/include/avr/iom328p.h	181
+EERE	/usr/lib/avr/include/avr/common.h	178
+EERIE	/usr/lib/avr/include/avr/iom328p.h	184
+EERIE	/usr/lib/avr/include/avr/common.h	187
+EEWE	/usr/lib/avr/include/avr/common.h	181
+EE_READY_vect	/usr/lib/avr/include/avr/iom328p.h	854
+EE_READY_vect_num	/usr/lib/avr/include/avr/iom328p.h	853
+EFUSE_DEFAULT	/usr/lib/avr/include/avr/iom328p.h	910
+EICRA	/usr/lib/avr/include/avr/iom328p.h	391
+EIFR	/usr/lib/avr/include/avr/iom328p.h	162
+EIMSK	/usr/lib/avr/include/avr/iom328p.h	166
+EIND	/usr/lib/avr/include/avr/common.h	140
+EIND	/usr/lib/avr/include/avr/common.h	145
+EMPTY_INTERRUPT	/usr/lib/avr/include/avr/interrupt.h	/^#  define EMPTY_INTERRUPT(vector)$/
+EMPTY_INTERRUPT	/usr/lib/avr/include/avr/interrupt.h	/^#  define EMPTY_INTERRUPT(vector)                \\/
+EMPTY_INTERRUPT	/usr/lib/avr/include/avr/interrupt.h	/^#  define EMPTY_INTERRUPT(vector)                \\/
+ENAA_P0	../myavrnrflib/nRF24L01.h	43
+ENAA_P1	../myavrnrflib/nRF24L01.h	42
+ENAA_P2	../myavrnrflib/nRF24L01.h	41
+ENAA_P3	../myavrnrflib/nRF24L01.h	40
+ENAA_P4	../myavrnrflib/nRF24L01.h	39
+ENAA_P5	../myavrnrflib/nRF24L01.h	38
+EN_AA	../myavrnrflib/nRF24L01.h	4
+EN_ACK_PAY	../myavrnrflib/nRF24L01.h	77
+EN_CRC	../myavrnrflib/nRF24L01.h	34
+EN_DPL	../myavrnrflib/nRF24L01.h	76
+EN_DYN_ACK	../myavrnrflib/nRF24L01.h	78
+EN_RXADDR	../myavrnrflib/nRF24L01.h	5
+ERX_P0	../myavrnrflib/nRF24L01.h	49
+ERX_P1	../myavrnrflib/nRF24L01.h	48
+ERX_P2	../myavrnrflib/nRF24L01.h	47
+ERX_P3	../myavrnrflib/nRF24L01.h	46
+ERX_P4	../myavrnrflib/nRF24L01.h	45
+ERX_P5	../myavrnrflib/nRF24L01.h	44
+EXCLK	/usr/lib/avr/include/avr/iom328p.h	666
+EXTRF	/usr/lib/avr/include/avr/iom328p.h	330
+FE0	/usr/lib/avr/include/avr/iom328p.h	730
+FEATURE	../myavrnrflib/nRF24L01.h	28
+FIFO_FULL	../myavrnrflib/nRF24L01.h	66
+FIFO_STATUS	../myavrnrflib/nRF24L01.h	26
+FLASHEND	/usr/lib/avr/include/avr/iom328p.h	877
+FLUSH_RX	../myavrnrflib/nRF24L01.h	87
+FLUSH_TX	../myavrnrflib/nRF24L01.h	86
+FOC0A	/usr/lib/avr/include/avr/iom328p.h	235
+FOC0B	/usr/lib/avr/include/avr/iom328p.h	234
+FOC1A	/usr/lib/avr/include/avr/iom328p.h	523
+FOC1B	/usr/lib/avr/include/avr/iom328p.h	522
+FOC2A	/usr/lib/avr/include/avr/iom328p.h	627
+FOC2B	/usr/lib/avr/include/avr/iom328p.h	626
+FUSEMEM	/usr/lib/avr/include/avr/fuse.h	226
+FUSES	/usr/lib/avr/include/avr/fuse.h	265
+FUSES	/usr/lib/avr/include/avr/fuse.h	267
+FUSE_BODLEVEL0	/usr/lib/avr/include/avr/iom328p.h	896
+FUSE_BODLEVEL1	/usr/lib/avr/include/avr/iom328p.h	897
+FUSE_BODLEVEL2	/usr/lib/avr/include/avr/iom328p.h	898
+FUSE_BOOTRST	/usr/lib/avr/include/avr/iom328p.h	907
+FUSE_BOOTSZ0	/usr/lib/avr/include/avr/iom328p.h	908
+FUSE_BOOTSZ1	/usr/lib/avr/include/avr/iom328p.h	909
+FUSE_CKDIV8	/usr/lib/avr/include/avr/iom328p.h	892
+FUSE_CKOUT	/usr/lib/avr/include/avr/iom328p.h	891
+FUSE_CKSEL0	/usr/lib/avr/include/avr/iom328p.h	885
+FUSE_CKSEL1	/usr/lib/avr/include/avr/iom328p.h	886
+FUSE_CKSEL2	/usr/lib/avr/include/avr/iom328p.h	887
+FUSE_CKSEL3	/usr/lib/avr/include/avr/iom328p.h	888
+FUSE_DWEN	/usr/lib/avr/include/avr/iom328p.h	902
+FUSE_EESAVE	/usr/lib/avr/include/avr/iom328p.h	899
+FUSE_MEMORY_SIZE	/usr/lib/avr/include/avr/iom328p.h	882
+FUSE_RSTDISBL	/usr/lib/avr/include/avr/iom328p.h	903
+FUSE_SPIEN	/usr/lib/avr/include/avr/iom328p.h	901
+FUSE_SUT0	/usr/lib/avr/include/avr/iom328p.h	889
+FUSE_SUT1	/usr/lib/avr/include/avr/iom328p.h	890
+FUSE_WDTON	/usr/lib/avr/include/avr/iom328p.h	900
+F_CPU	switcherator.c	5
+F_CPU	/usr/lib/avr/include/util/delay.h	91
+GPIOR0	/usr/lib/avr/include/avr/iom328p.h	170
+GPIOR00	/usr/lib/avr/include/avr/iom328p.h	171
+GPIOR01	/usr/lib/avr/include/avr/iom328p.h	172
+GPIOR02	/usr/lib/avr/include/avr/iom328p.h	173
+GPIOR03	/usr/lib/avr/include/avr/iom328p.h	174
+GPIOR04	/usr/lib/avr/include/avr/iom328p.h	175
+GPIOR05	/usr/lib/avr/include/avr/iom328p.h	176
+GPIOR06	/usr/lib/avr/include/avr/iom328p.h	177
+GPIOR07	/usr/lib/avr/include/avr/iom328p.h	178
+GPIOR1	/usr/lib/avr/include/avr/iom328p.h	267
+GPIOR10	/usr/lib/avr/include/avr/iom328p.h	268
+GPIOR11	/usr/lib/avr/include/avr/iom328p.h	269
+GPIOR12	/usr/lib/avr/include/avr/iom328p.h	270
+GPIOR13	/usr/lib/avr/include/avr/iom328p.h	271
+GPIOR14	/usr/lib/avr/include/avr/iom328p.h	272
+GPIOR15	/usr/lib/avr/include/avr/iom328p.h	273
+GPIOR16	/usr/lib/avr/include/avr/iom328p.h	274
+GPIOR17	/usr/lib/avr/include/avr/iom328p.h	275
+GPIOR2	/usr/lib/avr/include/avr/iom328p.h	277
+GPIOR20	/usr/lib/avr/include/avr/iom328p.h	278
+GPIOR21	/usr/lib/avr/include/avr/iom328p.h	279
+GPIOR22	/usr/lib/avr/include/avr/iom328p.h	280
+GPIOR23	/usr/lib/avr/include/avr/iom328p.h	281
+GPIOR24	/usr/lib/avr/include/avr/iom328p.h	282
+GPIOR25	/usr/lib/avr/include/avr/iom328p.h	283
+GPIOR26	/usr/lib/avr/include/avr/iom328p.h	284
+GPIOR27	/usr/lib/avr/include/avr/iom328p.h	285
+GTCCR	/usr/lib/avr/include/avr/iom328p.h	216
+Green	switcherator.c	81
+HFUSE_DEFAULT	/usr/lib/avr/include/avr/iom328p.h	904
+ICES1	/usr/lib/avr/include/avr/iom328p.h	518
+ICF1	/usr/lib/avr/include/avr/iom328p.h	150
+ICIE1	/usr/lib/avr/include/avr/iom328p.h	435
+ICNC1	/usr/lib/avr/include/avr/iom328p.h	519
+ICR1	/usr/lib/avr/include/avr/iom328p.h	547
+ICR1H	/usr/lib/avr/include/avr/iom328p.h	559
+ICR1H0	/usr/lib/avr/include/avr/iom328p.h	560
+ICR1H1	/usr/lib/avr/include/avr/iom328p.h	561
+ICR1H2	/usr/lib/avr/include/avr/iom328p.h	562
+ICR1H3	/usr/lib/avr/include/avr/iom328p.h	563
+ICR1H4	/usr/lib/avr/include/avr/iom328p.h	564
+ICR1H5	/usr/lib/avr/include/avr/iom328p.h	565
+ICR1H6	/usr/lib/avr/include/avr/iom328p.h	566
+ICR1H7	/usr/lib/avr/include/avr/iom328p.h	567
+ICR1L	/usr/lib/avr/include/avr/iom328p.h	549
+ICR1L0	/usr/lib/avr/include/avr/iom328p.h	550
+ICR1L1	/usr/lib/avr/include/avr/iom328p.h	551
+ICR1L2	/usr/lib/avr/include/avr/iom328p.h	552
+ICR1L3	/usr/lib/avr/include/avr/iom328p.h	553
+ICR1L4	/usr/lib/avr/include/avr/iom328p.h	554
+ICR1L5	/usr/lib/avr/include/avr/iom328p.h	555
+ICR1L6	/usr/lib/avr/include/avr/iom328p.h	556
+ICR1L7	/usr/lib/avr/include/avr/iom328p.h	557
+INDICATOR_DDR	switcherator.c	35
+INDICATOR_PIN	switcherator.c	34
+INDICATOR_PORT	switcherator.c	33
+INFINITY	/usr/lib/avr/include/math.h	113
+INPUT	switcherator.h	87
+INPUT_BYTES	switcherator.h	56
+INT0	/usr/lib/avr/include/avr/iom328p.h	167
+INT0_vect	/usr/lib/avr/include/avr/iom328p.h	791
+INT0_vect_num	/usr/lib/avr/include/avr/iom328p.h	790
+INT1	/usr/lib/avr/include/avr/iom328p.h	168
+INT16_C	/usr/lib/avr/include/stdint.h	/^#define INT16_C(value) __CONCAT(value, L)$/
+INT16_C	/usr/lib/avr/include/stdint.h	/^#define INT16_C(value) value$/
+INT16_MAX	/usr/lib/avr/include/stdint.h	314
+INT16_MAX	/usr/lib/avr/include/stdint.h	327
+INT16_MIN	/usr/lib/avr/include/stdint.h	315
+INT16_MIN	/usr/lib/avr/include/stdint.h	332
+INT1_vect	/usr/lib/avr/include/avr/iom328p.h	794
+INT1_vect_num	/usr/lib/avr/include/avr/iom328p.h	793
+INT32_C	/usr/lib/avr/include/stdint.h	/^#define INT32_C(value) ((int32_t) __CONCAT(value, /
+INT32_C	/usr/lib/avr/include/stdint.h	/^#define INT32_C(value) __CONCAT(value, L)$/
+INT32_MAX	/usr/lib/avr/include/stdint.h	318
+INT32_MAX	/usr/lib/avr/include/stdint.h	342
+INT32_MIN	/usr/lib/avr/include/stdint.h	319
+INT32_MIN	/usr/lib/avr/include/stdint.h	347
+INT64_C	/usr/lib/avr/include/stdint.h	/^#define INT64_C(value) __CONCAT(value, LL)$/
+INT64_MAX	/usr/lib/avr/include/stdint.h	359
+INT64_MIN	/usr/lib/avr/include/stdint.h	364
+INT8_C	/usr/lib/avr/include/stdint.h	/^#define INT8_C(value) ((int8_t) value)$/
+INT8_MAX	/usr/lib/avr/include/stdint.h	300
+INT8_MIN	/usr/lib/avr/include/stdint.h	305
+INTF0	/usr/lib/avr/include/avr/iom328p.h	163
+INTF1	/usr/lib/avr/include/avr/iom328p.h	164
+INTMAX_C	/usr/lib/avr/include/stdint.h	/^#define INTMAX_C(value) __CONCAT(value, LL)$/
+INTMAX_MAX	/usr/lib/avr/include/stdint.h	532
+INTMAX_MIN	/usr/lib/avr/include/stdint.h	537
+INTPTR_MAX	/usr/lib/avr/include/stdint.h	511
+INTPTR_MIN	/usr/lib/avr/include/stdint.h	516
+INT_FAST16_MAX	/usr/lib/avr/include/stdint.h	460
+INT_FAST16_MIN	/usr/lib/avr/include/stdint.h	465
+INT_FAST32_MAX	/usr/lib/avr/include/stdint.h	475
+INT_FAST32_MIN	/usr/lib/avr/include/stdint.h	480
+INT_FAST64_MAX	/usr/lib/avr/include/stdint.h	490
+INT_FAST64_MIN	/usr/lib/avr/include/stdint.h	495
+INT_FAST8_MAX	/usr/lib/avr/include/stdint.h	445
+INT_FAST8_MIN	/usr/lib/avr/include/stdint.h	450
+INT_LEAST16_MAX	/usr/lib/avr/include/stdint.h	394
+INT_LEAST16_MIN	/usr/lib/avr/include/stdint.h	399
+INT_LEAST32_MAX	/usr/lib/avr/include/stdint.h	409
+INT_LEAST32_MIN	/usr/lib/avr/include/stdint.h	414
+INT_LEAST64_MAX	/usr/lib/avr/include/stdint.h	424
+INT_LEAST64_MIN	/usr/lib/avr/include/stdint.h	429
+INT_LEAST8_MAX	/usr/lib/avr/include/stdint.h	379
+INT_LEAST8_MIN	/usr/lib/avr/include/stdint.h	384
+ISC00	/usr/lib/avr/include/avr/iom328p.h	392
+ISC01	/usr/lib/avr/include/avr/iom328p.h	393
+ISC10	/usr/lib/avr/include/avr/iom328p.h	394
+ISC11	/usr/lib/avr/include/avr/iom328p.h	395
+ISR	switcherator.c	/^ISR(TIMER1_COMPA_vect) {$/
+ISR	/usr/lib/avr/include/avr/interrupt.h	/^#  define ISR(vector, [attributes])$/
+ISR	/usr/lib/avr/include/avr/interrupt.h	/^#  define ISR(vector, ...)            \\$/
+ISR	/usr/lib/avr/include/avr/interrupt.h	/^#  define ISR(vector, ...)            \\$/
+ISR_ALIAS	/usr/lib/avr/include/avr/interrupt.h	/^#  define ISR_ALIAS(vector, target_vector)$/
+ISR_ALIAS	/usr/lib/avr/include/avr/interrupt.h	/^#    define ISR_ALIAS(vector, tgt) extern "C" void/
+ISR_ALIAS	/usr/lib/avr/include/avr/interrupt.h	/^#    define ISR_ALIAS(vector, tgt) extern "C" void/
+ISR_ALIAS	/usr/lib/avr/include/avr/interrupt.h	/^#  define ISR_ALIAS(vector, tgt) void vector (void/
+ISR_ALIAS	/usr/lib/avr/include/avr/interrupt.h	/^#  define ISR_ALIAS(vector, tgt) void vector (void/
+ISR_ALIASOF	/usr/lib/avr/include/avr/interrupt.h	/^#  define ISR_ALIASOF(target_vector)$/
+ISR_ALIASOF	/usr/lib/avr/include/avr/interrupt.h	/^#  define ISR_ALIASOF(v) __attribute__((alias(__ST/
+ISR_BLOCK	/usr/lib/avr/include/avr/interrupt.h	295
+ISR_BLOCK	/usr/lib/avr/include/avr/interrupt.h	336
+ISR_NAKED	/usr/lib/avr/include/avr/interrupt.h	324
+ISR_NAKED	/usr/lib/avr/include/avr/interrupt.h	338
+ISR_NOBLOCK	/usr/lib/avr/include/avr/interrupt.h	312
+ISR_NOBLOCK	/usr/lib/avr/include/avr/interrupt.h	337
+IVCE	/usr/lib/avr/include/avr/iom328p.h	335
+IVSEL	/usr/lib/avr/include/avr/iom328p.h	336
+LB_MODE_1	/usr/lib/avr/include/avr/lock.h	202
+LB_MODE_2	/usr/lib/avr/include/avr/lock.h	203
+LB_MODE_3	/usr/lib/avr/include/avr/lock.h	204
+LFUSE_DEFAULT	/usr/lib/avr/include/avr/iom328p.h	893
+LIMIT	switcherator.h	88
+LIMIT_BYTES	switcherator.h	57
+LOCKBITS	/usr/lib/avr/include/avr/lock.h	194
+LOCKBITS_DEFAULT	/usr/lib/avr/include/avr/lock.h	237
+LOCKMEM	/usr/lib/avr/include/avr/lock.h	190
+MASK_MAX_RT	../myavrnrflib/nRF24L01.h	33
+MASK_RX_DR	../myavrnrflib/nRF24L01.h	31
+MASK_TX_DS	../myavrnrflib/nRF24L01.h	32
+MAX_PROGRAM	switcherator.h	19
+MAX_RT	../myavrnrflib/nRF24L01.h	60
+MCUCR	/usr/lib/avr/include/avr/iom328p.h	334
+MCUSR	/usr/lib/avr/include/avr/iom328p.h	328
+MPCM0	/usr/lib/avr/include/avr/iom328p.h	726
+MSTR	/usr/lib/avr/include/avr/iom328p.h	292
+MUX0	/usr/lib/avr/include/avr/iom328p.h	484
+MUX1	/usr/lib/avr/include/avr/iom328p.h	485
+MUX2	/usr/lib/avr/include/avr/iom328p.h	486
+MUX3	/usr/lib/avr/include/avr/iom328p.h	487
+M_1_PI	/usr/lib/avr/include/math.h	95
+M_2_PI	/usr/lib/avr/include/math.h	98
+M_2_SQRTPI	/usr/lib/avr/include/math.h	101
+M_E	/usr/lib/avr/include/math.h	71
+M_LN10	/usr/lib/avr/include/math.h	83
+M_LN2	/usr/lib/avr/include/math.h	80
+M_LOG10E	/usr/lib/avr/include/math.h	77
+M_LOG2E	/usr/lib/avr/include/math.h	74
+M_PI	/usr/lib/avr/include/math.h	86
+M_PI_2	/usr/lib/avr/include/math.h	89
+M_PI_4	/usr/lib/avr/include/math.h	92
+M_SQRT1_2	/usr/lib/avr/include/math.h	107
+M_SQRT2	/usr/lib/avr/include/math.h	104
+Mswitcherator	switcherator.c	/^int main(void) {$/
+NAN	/usr/lib/avr/include/math.h	110
+NOP	../myavrnrflib/nRF24L01.h	92
+NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	398
+NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	400
+NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	403
+NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	405
+NUM_COLOR_CHANGES	switcherator.h	23
+NUM_INPUTS	switcherator.h	21
+NUM_LIMITS	switcherator.h	22
+NUM_SWITCHES	switcherator.h	20
+OBSERVE_TX	../myavrnrflib/nRF24L01.h	11
+OCF0A	/usr/lib/avr/include/avr/iom328p.h	143
+OCF0B	/usr/lib/avr/include/avr/iom328p.h	144
+OCF1A	/usr/lib/avr/include/avr/iom328p.h	148
+OCF1B	/usr/lib/avr/include/avr/iom328p.h	149
+OCF2A	/usr/lib/avr/include/avr/iom328p.h	154
+OCF2B	/usr/lib/avr/include/avr/iom328p.h	155
+OCIE0A	/usr/lib/avr/include/avr/iom328p.h	428
+OCIE0B	/usr/lib/avr/include/avr/iom328p.h	429
+OCIE1A	/usr/lib/avr/include/avr/iom328p.h	433
+OCIE1B	/usr/lib/avr/include/avr/iom328p.h	434
+OCIE2A	/usr/lib/avr/include/avr/iom328p.h	439
+OCIE2B	/usr/lib/avr/include/avr/iom328p.h	440
+OCR0A	/usr/lib/avr/include/avr/iom328p.h	247
+OCR0A_0	/usr/lib/avr/include/avr/iom328p.h	248
+OCR0A_1	/usr/lib/avr/include/avr/iom328p.h	249
+OCR0A_2	/usr/lib/avr/include/avr/iom328p.h	250
+OCR0A_3	/usr/lib/avr/include/avr/iom328p.h	251
+OCR0A_4	/usr/lib/avr/include/avr/iom328p.h	252
+OCR0A_5	/usr/lib/avr/include/avr/iom328p.h	253
+OCR0A_6	/usr/lib/avr/include/avr/iom328p.h	254
+OCR0A_7	/usr/lib/avr/include/avr/iom328p.h	255
+OCR0B	/usr/lib/avr/include/avr/iom328p.h	257
+OCR0B_0	/usr/lib/avr/include/avr/iom328p.h	258
+OCR0B_1	/usr/lib/avr/include/avr/iom328p.h	259
+OCR0B_2	/usr/lib/avr/include/avr/iom328p.h	260
+OCR0B_3	/usr/lib/avr/include/avr/iom328p.h	261
+OCR0B_4	/usr/lib/avr/include/avr/iom328p.h	262
+OCR0B_5	/usr/lib/avr/include/avr/iom328p.h	263
+OCR0B_6	/usr/lib/avr/include/avr/iom328p.h	264
+OCR0B_7	/usr/lib/avr/include/avr/iom328p.h	265
+OCR1A	/usr/lib/avr/include/avr/iom328p.h	569
+OCR1AH	/usr/lib/avr/include/avr/iom328p.h	581
+OCR1AH0	/usr/lib/avr/include/avr/iom328p.h	582
+OCR1AH1	/usr/lib/avr/include/avr/iom328p.h	583
+OCR1AH2	/usr/lib/avr/include/avr/iom328p.h	584
+OCR1AH3	/usr/lib/avr/include/avr/iom328p.h	585
+OCR1AH4	/usr/lib/avr/include/avr/iom328p.h	586
+OCR1AH5	/usr/lib/avr/include/avr/iom328p.h	587
+OCR1AH6	/usr/lib/avr/include/avr/iom328p.h	588
+OCR1AH7	/usr/lib/avr/include/avr/iom328p.h	589
+OCR1AL	/usr/lib/avr/include/avr/iom328p.h	571
+OCR1AL0	/usr/lib/avr/include/avr/iom328p.h	572
+OCR1AL1	/usr/lib/avr/include/avr/iom328p.h	573
+OCR1AL2	/usr/lib/avr/include/avr/iom328p.h	574
+OCR1AL3	/usr/lib/avr/include/avr/iom328p.h	575
+OCR1AL4	/usr/lib/avr/include/avr/iom328p.h	576
+OCR1AL5	/usr/lib/avr/include/avr/iom328p.h	577
+OCR1AL6	/usr/lib/avr/include/avr/iom328p.h	578
+OCR1AL7	/usr/lib/avr/include/avr/iom328p.h	579
+OCR1B	/usr/lib/avr/include/avr/iom328p.h	591
+OCR1BH	/usr/lib/avr/include/avr/iom328p.h	603
+OCR1BH0	/usr/lib/avr/include/avr/iom328p.h	604
+OCR1BH1	/usr/lib/avr/include/avr/iom328p.h	605
+OCR1BH2	/usr/lib/avr/include/avr/iom328p.h	606
+OCR1BH3	/usr/lib/avr/include/avr/iom328p.h	607
+OCR1BH4	/usr/lib/avr/include/avr/iom328p.h	608
+OCR1BH5	/usr/lib/avr/include/avr/iom328p.h	609
+OCR1BH6	/usr/lib/avr/include/avr/iom328p.h	610
+OCR1BH7	/usr/lib/avr/include/avr/iom328p.h	611
+OCR1BL	/usr/lib/avr/include/avr/iom328p.h	593
+OCR1BL0	/usr/lib/avr/include/avr/iom328p.h	594
+OCR1BL1	/usr/lib/avr/include/avr/iom328p.h	595
+OCR1BL2	/usr/lib/avr/include/avr/iom328p.h	596
+OCR1BL3	/usr/lib/avr/include/avr/iom328p.h	597
+OCR1BL4	/usr/lib/avr/include/avr/iom328p.h	598
+OCR1BL5	/usr/lib/avr/include/avr/iom328p.h	599
+OCR1BL6	/usr/lib/avr/include/avr/iom328p.h	600
+OCR1BL7	/usr/lib/avr/include/avr/iom328p.h	601
+OCR2A	/usr/lib/avr/include/avr/iom328p.h	639
+OCR2AUB	/usr/lib/avr/include/avr/iom328p.h	663
+OCR2B	/usr/lib/avr/include/avr/iom328p.h	649
+OCR2BUB	/usr/lib/avr/include/avr/iom328p.h	662
+OCR2_0	/usr/lib/avr/include/avr/iom328p.h	640
+OCR2_0	/usr/lib/avr/include/avr/iom328p.h	650
+OCR2_1	/usr/lib/avr/include/avr/iom328p.h	641
+OCR2_1	/usr/lib/avr/include/avr/iom328p.h	651
+OCR2_2	/usr/lib/avr/include/avr/iom328p.h	642
+OCR2_2	/usr/lib/avr/include/avr/iom328p.h	652
+OCR2_3	/usr/lib/avr/include/avr/iom328p.h	643
+OCR2_3	/usr/lib/avr/include/avr/iom328p.h	653
+OCR2_4	/usr/lib/avr/include/avr/iom328p.h	644
+OCR2_4	/usr/lib/avr/include/avr/iom328p.h	654
+OCR2_5	/usr/lib/avr/include/avr/iom328p.h	645
+OCR2_5	/usr/lib/avr/include/avr/iom328p.h	655
+OCR2_6	/usr/lib/avr/include/avr/iom328p.h	646
+OCR2_6	/usr/lib/avr/include/avr/iom328p.h	656
+OCR2_7	/usr/lib/avr/include/avr/iom328p.h	647
+OCR2_7	/usr/lib/avr/include/avr/iom328p.h	657
+OSCCAL	/usr/lib/avr/include/avr/iom328p.h	376
+PA0	/usr/lib/avr/include/avr/portpins.h	81
+PA1	/usr/lib/avr/include/avr/portpins.h	86
+PA2	/usr/lib/avr/include/avr/portpins.h	91
+PA3	/usr/lib/avr/include/avr/portpins.h	96
+PA4	/usr/lib/avr/include/avr/portpins.h	101
+PA5	/usr/lib/avr/include/avr/portpins.h	106
+PA6	/usr/lib/avr/include/avr/portpins.h	111
+PA7	/usr/lib/avr/include/avr/portpins.h	116
+PB0	/usr/lib/avr/include/avr/portpins.h	124
+PB1	/usr/lib/avr/include/avr/portpins.h	129
+PB2	/usr/lib/avr/include/avr/portpins.h	134
+PB3	/usr/lib/avr/include/avr/portpins.h	139
+PB4	/usr/lib/avr/include/avr/portpins.h	144
+PB5	/usr/lib/avr/include/avr/portpins.h	149
+PB6	/usr/lib/avr/include/avr/portpins.h	154
+PB7	/usr/lib/avr/include/avr/portpins.h	159
+PC0	/usr/lib/avr/include/avr/portpins.h	167
+PC1	/usr/lib/avr/include/avr/portpins.h	172
+PC2	/usr/lib/avr/include/avr/portpins.h	177
+PC3	/usr/lib/avr/include/avr/portpins.h	182
+PC4	/usr/lib/avr/include/avr/portpins.h	187
+PC5	/usr/lib/avr/include/avr/portpins.h	192
+PC6	/usr/lib/avr/include/avr/portpins.h	197
+PC7	/usr/lib/avr/include/avr/portpins.h	202
+PCICR	/usr/lib/avr/include/avr/iom328p.h	386
+PCIE0	/usr/lib/avr/include/avr/iom328p.h	387
+PCIE1	/usr/lib/avr/include/avr/iom328p.h	388
+PCIE2	/usr/lib/avr/include/avr/iom328p.h	389
+PCIF0	/usr/lib/avr/include/avr/iom328p.h	158
+PCIF1	/usr/lib/avr/include/avr/iom328p.h	159
+PCIF2	/usr/lib/avr/include/avr/iom328p.h	160
+PCIFR	/usr/lib/avr/include/avr/iom328p.h	157
+PCINT0	/usr/lib/avr/include/avr/iom328p.h	398
+PCINT0_vect	/usr/lib/avr/include/avr/iom328p.h	797
+PCINT0_vect_num	/usr/lib/avr/include/avr/iom328p.h	796
+PCINT1	/usr/lib/avr/include/avr/iom328p.h	399
+PCINT10	/usr/lib/avr/include/avr/iom328p.h	410
+PCINT11	/usr/lib/avr/include/avr/iom328p.h	411
+PCINT12	/usr/lib/avr/include/avr/iom328p.h	412
+PCINT13	/usr/lib/avr/include/avr/iom328p.h	413
+PCINT14	/usr/lib/avr/include/avr/iom328p.h	414
+PCINT16	/usr/lib/avr/include/avr/iom328p.h	417
+PCINT17	/usr/lib/avr/include/avr/iom328p.h	418
+PCINT18	/usr/lib/avr/include/avr/iom328p.h	419
+PCINT19	/usr/lib/avr/include/avr/iom328p.h	420
+PCINT1_vect	/usr/lib/avr/include/avr/iom328p.h	800
+PCINT1_vect_num	/usr/lib/avr/include/avr/iom328p.h	799
+PCINT2	/usr/lib/avr/include/avr/iom328p.h	400
+PCINT20	/usr/lib/avr/include/avr/iom328p.h	421
+PCINT21	/usr/lib/avr/include/avr/iom328p.h	422
+PCINT22	/usr/lib/avr/include/avr/iom328p.h	423
+PCINT23	/usr/lib/avr/include/avr/iom328p.h	424
+PCINT2_vect	/usr/lib/avr/include/avr/iom328p.h	803
+PCINT2_vect_num	/usr/lib/avr/include/avr/iom328p.h	802
+PCINT3	/usr/lib/avr/include/avr/iom328p.h	401
+PCINT4	/usr/lib/avr/include/avr/iom328p.h	402
+PCINT5	/usr/lib/avr/include/avr/iom328p.h	403
+PCINT6	/usr/lib/avr/include/avr/iom328p.h	404
+PCINT7	/usr/lib/avr/include/avr/iom328p.h	405
+PCINT8	/usr/lib/avr/include/avr/iom328p.h	408
+PCINT9	/usr/lib/avr/include/avr/iom328p.h	409
+PCMSK0	/usr/lib/avr/include/avr/iom328p.h	397
+PCMSK1	/usr/lib/avr/include/avr/iom328p.h	407
+PCMSK2	/usr/lib/avr/include/avr/iom328p.h	416
+PD0	/usr/lib/avr/include/avr/portpins.h	210
+PD1	/usr/lib/avr/include/avr/portpins.h	215
+PD2	/usr/lib/avr/include/avr/portpins.h	220
+PD3	/usr/lib/avr/include/avr/portpins.h	225
+PD4	/usr/lib/avr/include/avr/portpins.h	230
+PD5	/usr/lib/avr/include/avr/portpins.h	235
+PD6	/usr/lib/avr/include/avr/portpins.h	240
+PD7	/usr/lib/avr/include/avr/portpins.h	245
+PE0	/usr/lib/avr/include/avr/portpins.h	253
+PE1	/usr/lib/avr/include/avr/portpins.h	258
+PE2	/usr/lib/avr/include/avr/portpins.h	263
+PE3	/usr/lib/avr/include/avr/portpins.h	268
+PE4	/usr/lib/avr/include/avr/portpins.h	273
+PE5	/usr/lib/avr/include/avr/portpins.h	278
+PE6	/usr/lib/avr/include/avr/portpins.h	283
+PE7	/usr/lib/avr/include/avr/portpins.h	288
+PF0	/usr/lib/avr/include/avr/portpins.h	296
+PF1	/usr/lib/avr/include/avr/portpins.h	301
+PF2	/usr/lib/avr/include/avr/portpins.h	306
+PF3	/usr/lib/avr/include/avr/portpins.h	311
+PF4	/usr/lib/avr/include/avr/portpins.h	316
+PF5	/usr/lib/avr/include/avr/portpins.h	321
+PF6	/usr/lib/avr/include/avr/portpins.h	326
+PF7	/usr/lib/avr/include/avr/portpins.h	331
+PG0	/usr/lib/avr/include/avr/portpins.h	339
+PG1	/usr/lib/avr/include/avr/portpins.h	344
+PG2	/usr/lib/avr/include/avr/portpins.h	349
+PG3	/usr/lib/avr/include/avr/portpins.h	354
+PG4	/usr/lib/avr/include/avr/portpins.h	359
+PG5	/usr/lib/avr/include/avr/portpins.h	364
+PG6	/usr/lib/avr/include/avr/portpins.h	369
+PG7	/usr/lib/avr/include/avr/portpins.h	374
+PGERS	/usr/lib/avr/include/avr/iom328p.h	343
+PGM_P	/usr/lib/avr/include/avr/pgmspace.h	335
+PGM_P	/usr/lib/avr/include/avr/pgmspace.h	364
+PGM_P	/usr/lib/avr/include/avr/pgmspace.h	374
+PGM_VOID_P	/usr/lib/avr/include/avr/pgmspace.h	344
+PGM_VOID_P	/usr/lib/avr/include/avr/pgmspace.h	368
+PGM_VOID_P	/usr/lib/avr/include/avr/pgmspace.h	378
+PGWRT	/usr/lib/avr/include/avr/iom328p.h	344
+PH0	/usr/lib/avr/include/avr/portpins.h	382
+PH1	/usr/lib/avr/include/avr/portpins.h	387
+PH2	/usr/lib/avr/include/avr/portpins.h	392
+PH3	/usr/lib/avr/include/avr/portpins.h	397
+PH4	/usr/lib/avr/include/avr/portpins.h	402
+PH5	/usr/lib/avr/include/avr/portpins.h	407
+PH6	/usr/lib/avr/include/avr/portpins.h	412
+PH7	/usr/lib/avr/include/avr/portpins.h	417
+PIN0	/usr/lib/avr/include/avr/portpins.h	72
+PIN1	/usr/lib/avr/include/avr/portpins.h	71
+PIN2	/usr/lib/avr/include/avr/portpins.h	70
+PIN3	/usr/lib/avr/include/avr/portpins.h	69
+PIN4	/usr/lib/avr/include/avr/portpins.h	68
+PIN5	/usr/lib/avr/include/avr/portpins.h	67
+PIN6	/usr/lib/avr/include/avr/portpins.h	66
+PIN7	/usr/lib/avr/include/avr/portpins.h	65
+PINB	/usr/lib/avr/include/avr/iom328p.h	54
+PINB0	/usr/lib/avr/include/avr/iom328p.h	55
+PINB1	/usr/lib/avr/include/avr/iom328p.h	56
+PINB2	/usr/lib/avr/include/avr/iom328p.h	57
+PINB3	/usr/lib/avr/include/avr/iom328p.h	58
+PINB4	/usr/lib/avr/include/avr/iom328p.h	59
+PINB5	/usr/lib/avr/include/avr/iom328p.h	60
+PINB6	/usr/lib/avr/include/avr/iom328p.h	61
+PINB7	/usr/lib/avr/include/avr/iom328p.h	62
+PINC	/usr/lib/avr/include/avr/iom328p.h	84
+PINC0	/usr/lib/avr/include/avr/iom328p.h	85
+PINC1	/usr/lib/avr/include/avr/iom328p.h	86
+PINC2	/usr/lib/avr/include/avr/iom328p.h	87
+PINC3	/usr/lib/avr/include/avr/iom328p.h	88
+PINC4	/usr/lib/avr/include/avr/iom328p.h	89
+PINC5	/usr/lib/avr/include/avr/iom328p.h	90
+PINC6	/usr/lib/avr/include/avr/iom328p.h	91
+PIND	/usr/lib/avr/include/avr/iom328p.h	111
+PIND0	/usr/lib/avr/include/avr/iom328p.h	112
+PIND1	/usr/lib/avr/include/avr/iom328p.h	113
+PIND2	/usr/lib/avr/include/avr/iom328p.h	114
+PIND3	/usr/lib/avr/include/avr/iom328p.h	115
+PIND4	/usr/lib/avr/include/avr/iom328p.h	116
+PIND5	/usr/lib/avr/include/avr/iom328p.h	117
+PIND6	/usr/lib/avr/include/avr/iom328p.h	118
+PIND7	/usr/lib/avr/include/avr/iom328p.h	119
+PJ0	/usr/lib/avr/include/avr/portpins.h	425
+PJ1	/usr/lib/avr/include/avr/portpins.h	430
+PJ2	/usr/lib/avr/include/avr/portpins.h	435
+PJ3	/usr/lib/avr/include/avr/portpins.h	440
+PJ4	/usr/lib/avr/include/avr/portpins.h	445
+PJ5	/usr/lib/avr/include/avr/portpins.h	450
+PJ6	/usr/lib/avr/include/avr/portpins.h	455
+PJ7	/usr/lib/avr/include/avr/portpins.h	460
+PK0	/usr/lib/avr/include/avr/portpins.h	468
+PK1	/usr/lib/avr/include/avr/portpins.h	473
+PK2	/usr/lib/avr/include/avr/portpins.h	478
+PK3	/usr/lib/avr/include/avr/portpins.h	483
+PK4	/usr/lib/avr/include/avr/portpins.h	488
+PK5	/usr/lib/avr/include/avr/portpins.h	493
+PK6	/usr/lib/avr/include/avr/portpins.h	498
+PK7	/usr/lib/avr/include/avr/portpins.h	503
+PL0	/usr/lib/avr/include/avr/portpins.h	511
+PL1	/usr/lib/avr/include/avr/portpins.h	516
+PL2	/usr/lib/avr/include/avr/portpins.h	521
+PL3	/usr/lib/avr/include/avr/portpins.h	526
+PL4	/usr/lib/avr/include/avr/portpins.h	531
+PL5	/usr/lib/avr/include/avr/portpins.h	536
+PL6	/usr/lib/avr/include/avr/portpins.h	541
+PL7	/usr/lib/avr/include/avr/portpins.h	546
+PLL_LOCK	../myavrnrflib/nRF24L01.h	55
+PLOS_CNT	../myavrnrflib/nRF24L01.h	63
+PORF	/usr/lib/avr/include/avr/iom328p.h	329
+PORT0	/usr/lib/avr/include/avr/portpins.h	52
+PORT1	/usr/lib/avr/include/avr/portpins.h	51
+PORT2	/usr/lib/avr/include/avr/portpins.h	50
+PORT3	/usr/lib/avr/include/avr/portpins.h	49
+PORT4	/usr/lib/avr/include/avr/portpins.h	48
+PORT5	/usr/lib/avr/include/avr/portpins.h	47
+PORT6	/usr/lib/avr/include/avr/portpins.h	46
+PORT7	/usr/lib/avr/include/avr/portpins.h	45
+PORTA0	/usr/lib/avr/include/avr/portpins.h	79
+PORTA1	/usr/lib/avr/include/avr/portpins.h	84
+PORTA2	/usr/lib/avr/include/avr/portpins.h	89
+PORTA3	/usr/lib/avr/include/avr/portpins.h	94
+PORTA4	/usr/lib/avr/include/avr/portpins.h	99
+PORTA5	/usr/lib/avr/include/avr/portpins.h	104
+PORTA6	/usr/lib/avr/include/avr/portpins.h	109
+PORTA7	/usr/lib/avr/include/avr/portpins.h	114
+PORTB	/usr/lib/avr/include/avr/iom328p.h	74
+PORTB0	/usr/lib/avr/include/avr/iom328p.h	75
+PORTB0	/usr/lib/avr/include/avr/portpins.h	122
+PORTB1	/usr/lib/avr/include/avr/iom328p.h	76
+PORTB1	/usr/lib/avr/include/avr/portpins.h	127
+PORTB2	/usr/lib/avr/include/avr/iom328p.h	77
+PORTB2	/usr/lib/avr/include/avr/portpins.h	132
+PORTB3	/usr/lib/avr/include/avr/iom328p.h	78
+PORTB3	/usr/lib/avr/include/avr/portpins.h	137
+PORTB4	/usr/lib/avr/include/avr/iom328p.h	79
+PORTB4	/usr/lib/avr/include/avr/portpins.h	142
+PORTB5	/usr/lib/avr/include/avr/iom328p.h	80
+PORTB5	/usr/lib/avr/include/avr/portpins.h	147
+PORTB6	/usr/lib/avr/include/avr/iom328p.h	81
+PORTB6	/usr/lib/avr/include/avr/portpins.h	152
+PORTB7	/usr/lib/avr/include/avr/iom328p.h	82
+PORTB7	/usr/lib/avr/include/avr/portpins.h	157
+PORTC	/usr/lib/avr/include/avr/iom328p.h	102
+PORTC0	/usr/lib/avr/include/avr/iom328p.h	103
+PORTC0	/usr/lib/avr/include/avr/portpins.h	165
+PORTC1	/usr/lib/avr/include/avr/iom328p.h	104
+PORTC1	/usr/lib/avr/include/avr/portpins.h	170
+PORTC2	/usr/lib/avr/include/avr/iom328p.h	105
+PORTC2	/usr/lib/avr/include/avr/portpins.h	175
+PORTC3	/usr/lib/avr/include/avr/iom328p.h	106
+PORTC3	/usr/lib/avr/include/avr/portpins.h	180
+PORTC4	/usr/lib/avr/include/avr/iom328p.h	107
+PORTC4	/usr/lib/avr/include/avr/portpins.h	185
+PORTC5	/usr/lib/avr/include/avr/iom328p.h	108
+PORTC5	/usr/lib/avr/include/avr/portpins.h	190
+PORTC6	/usr/lib/avr/include/avr/iom328p.h	109
+PORTC6	/usr/lib/avr/include/avr/portpins.h	195
+PORTC7	/usr/lib/avr/include/avr/portpins.h	200
+PORTD	/usr/lib/avr/include/avr/iom328p.h	131
+PORTD0	/usr/lib/avr/include/avr/iom328p.h	132
+PORTD0	/usr/lib/avr/include/avr/portpins.h	208
+PORTD1	/usr/lib/avr/include/avr/iom328p.h	133
+PORTD1	/usr/lib/avr/include/avr/portpins.h	213
+PORTD2	/usr/lib/avr/include/avr/iom328p.h	134
+PORTD2	/usr/lib/avr/include/avr/portpins.h	218
+PORTD3	/usr/lib/avr/include/avr/iom328p.h	135
+PORTD3	/usr/lib/avr/include/avr/portpins.h	223
+PORTD4	/usr/lib/avr/include/avr/iom328p.h	136
+PORTD4	/usr/lib/avr/include/avr/portpins.h	228
+PORTD5	/usr/lib/avr/include/avr/iom328p.h	137
+PORTD5	/usr/lib/avr/include/avr/portpins.h	233
+PORTD6	/usr/lib/avr/include/avr/iom328p.h	138
+PORTD6	/usr/lib/avr/include/avr/portpins.h	238
+PORTD7	/usr/lib/avr/include/avr/iom328p.h	139
+PORTD7	/usr/lib/avr/include/avr/portpins.h	243
+PORTE0	/usr/lib/avr/include/avr/portpins.h	251
+PORTE1	/usr/lib/avr/include/avr/portpins.h	256
+PORTE2	/usr/lib/avr/include/avr/portpins.h	261
+PORTE3	/usr/lib/avr/include/avr/portpins.h	266
+PORTE4	/usr/lib/avr/include/avr/portpins.h	271
+PORTE5	/usr/lib/avr/include/avr/portpins.h	276
+PORTE6	/usr/lib/avr/include/avr/portpins.h	281
+PORTE7	/usr/lib/avr/include/avr/portpins.h	286
+PORTF0	/usr/lib/avr/include/avr/portpins.h	294
+PORTF1	/usr/lib/avr/include/avr/portpins.h	299
+PORTF2	/usr/lib/avr/include/avr/portpins.h	304
+PORTF3	/usr/lib/avr/include/avr/portpins.h	309
+PORTF4	/usr/lib/avr/include/avr/portpins.h	314
+PORTF5	/usr/lib/avr/include/avr/portpins.h	319
+PORTF6	/usr/lib/avr/include/avr/portpins.h	324
+PORTF7	/usr/lib/avr/include/avr/portpins.h	329
+PORTG0	/usr/lib/avr/include/avr/portpins.h	337
+PORTG1	/usr/lib/avr/include/avr/portpins.h	342
+PORTG2	/usr/lib/avr/include/avr/portpins.h	347
+PORTG3	/usr/lib/avr/include/avr/portpins.h	352
+PORTG4	/usr/lib/avr/include/avr/portpins.h	357
+PORTG5	/usr/lib/avr/include/avr/portpins.h	362
+PORTG6	/usr/lib/avr/include/avr/portpins.h	367
+PORTG7	/usr/lib/avr/include/avr/portpins.h	372
+PORTH0	/usr/lib/avr/include/avr/portpins.h	380
+PORTH1	/usr/lib/avr/include/avr/portpins.h	385
+PORTH2	/usr/lib/avr/include/avr/portpins.h	390
+PORTH3	/usr/lib/avr/include/avr/portpins.h	395
+PORTH4	/usr/lib/avr/include/avr/portpins.h	400
+PORTH5	/usr/lib/avr/include/avr/portpins.h	405
+PORTH6	/usr/lib/avr/include/avr/portpins.h	410
+PORTH7	/usr/lib/avr/include/avr/portpins.h	415
+PORTJ0	/usr/lib/avr/include/avr/portpins.h	423
+PORTJ1	/usr/lib/avr/include/avr/portpins.h	428
+PORTJ2	/usr/lib/avr/include/avr/portpins.h	433
+PORTJ3	/usr/lib/avr/include/avr/portpins.h	438
+PORTJ4	/usr/lib/avr/include/avr/portpins.h	443
+PORTJ5	/usr/lib/avr/include/avr/portpins.h	448
+PORTJ6	/usr/lib/avr/include/avr/portpins.h	453
+PORTJ7	/usr/lib/avr/include/avr/portpins.h	458
+PORTK0	/usr/lib/avr/include/avr/portpins.h	466
+PORTK1	/usr/lib/avr/include/avr/portpins.h	471
+PORTK2	/usr/lib/avr/include/avr/portpins.h	476
+PORTK3	/usr/lib/avr/include/avr/portpins.h	481
+PORTK4	/usr/lib/avr/include/avr/portpins.h	486
+PORTK5	/usr/lib/avr/include/avr/portpins.h	491
+PORTK6	/usr/lib/avr/include/avr/portpins.h	496
+PORTK7	/usr/lib/avr/include/avr/portpins.h	501
+PORTL0	/usr/lib/avr/include/avr/portpins.h	509
+PORTL1	/usr/lib/avr/include/avr/portpins.h	514
+PORTL2	/usr/lib/avr/include/avr/portpins.h	519
+PORTL3	/usr/lib/avr/include/avr/portpins.h	524
+PORTL4	/usr/lib/avr/include/avr/portpins.h	529
+PORTL5	/usr/lib/avr/include/avr/portpins.h	534
+PORTL6	/usr/lib/avr/include/avr/portpins.h	539
+PORTL7	/usr/lib/avr/include/avr/portpins.h	544
+PRADC	/usr/lib/avr/include/avr/iom328p.h	368
+PRIM_RX	../myavrnrflib/nRF24L01.h	37
+PRIX16	/usr/lib/avr/include/inttypes.h	253
+PRIX32	/usr/lib/avr/include/inttypes.h	294
+PRIX64	/usr/lib/avr/include/inttypes.h	317
+PRIX8	/usr/lib/avr/include/inttypes.h	212
+PRIXFAST16	/usr/lib/avr/include/inttypes.h	259
+PRIXFAST32	/usr/lib/avr/include/inttypes.h	300
+PRIXFAST64	/usr/lib/avr/include/inttypes.h	319
+PRIXFAST8	/usr/lib/avr/include/inttypes.h	218
+PRIXLEAST16	/usr/lib/avr/include/inttypes.h	256
+PRIXLEAST32	/usr/lib/avr/include/inttypes.h	297
+PRIXLEAST64	/usr/lib/avr/include/inttypes.h	318
+PRIXLEAST8	/usr/lib/avr/include/inttypes.h	215
+PRIXMAX	/usr/lib/avr/include/inttypes.h	324
+PRIXPTR	/usr/lib/avr/include/inttypes.h	339
+PRId16	/usr/lib/avr/include/inttypes.h	117
+PRId32	/usr/lib/avr/include/inttypes.h	138
+PRId64	/usr/lib/avr/include/inttypes.h	159
+PRId8	/usr/lib/avr/include/inttypes.h	96
+PRIdFAST16	/usr/lib/avr/include/inttypes.h	123
+PRIdFAST32	/usr/lib/avr/include/inttypes.h	144
+PRIdFAST64	/usr/lib/avr/include/inttypes.h	161
+PRIdFAST8	/usr/lib/avr/include/inttypes.h	102
+PRIdLEAST16	/usr/lib/avr/include/inttypes.h	120
+PRIdLEAST32	/usr/lib/avr/include/inttypes.h	141
+PRIdLEAST64	/usr/lib/avr/include/inttypes.h	160
+PRIdLEAST8	/usr/lib/avr/include/inttypes.h	99
+PRIdMAX	/usr/lib/avr/include/inttypes.h	168
+PRIdPTR	/usr/lib/avr/include/inttypes.h	175
+PRIi16	/usr/lib/avr/include/inttypes.h	127
+PRIi32	/usr/lib/avr/include/inttypes.h	148
+PRIi64	/usr/lib/avr/include/inttypes.h	163
+PRIi8	/usr/lib/avr/include/inttypes.h	106
+PRIiFAST16	/usr/lib/avr/include/inttypes.h	133
+PRIiFAST32	/usr/lib/avr/include/inttypes.h	154
+PRIiFAST64	/usr/lib/avr/include/inttypes.h	165
+PRIiFAST8	/usr/lib/avr/include/inttypes.h	112
+PRIiLEAST16	/usr/lib/avr/include/inttypes.h	130
+PRIiLEAST32	/usr/lib/avr/include/inttypes.h	151
+PRIiLEAST64	/usr/lib/avr/include/inttypes.h	164
+PRIiLEAST8	/usr/lib/avr/include/inttypes.h	109
+PRIiMAX	/usr/lib/avr/include/inttypes.h	169
+PRIiPTR	/usr/lib/avr/include/inttypes.h	178
+PRIo16	/usr/lib/avr/include/inttypes.h	223
+PRIo32	/usr/lib/avr/include/inttypes.h	264
+PRIo64	/usr/lib/avr/include/inttypes.h	305
+PRIo8	/usr/lib/avr/include/inttypes.h	182
+PRIoFAST16	/usr/lib/avr/include/inttypes.h	229
+PRIoFAST32	/usr/lib/avr/include/inttypes.h	270
+PRIoFAST64	/usr/lib/avr/include/inttypes.h	307
+PRIoFAST8	/usr/lib/avr/include/inttypes.h	188
+PRIoLEAST16	/usr/lib/avr/include/inttypes.h	226
+PRIoLEAST32	/usr/lib/avr/include/inttypes.h	267
+PRIoLEAST64	/usr/lib/avr/include/inttypes.h	306
+PRIoLEAST8	/usr/lib/avr/include/inttypes.h	185
+PRIoMAX	/usr/lib/avr/include/inttypes.h	321
+PRIoPTR	/usr/lib/avr/include/inttypes.h	330
+PRIu16	/usr/lib/avr/include/inttypes.h	233
+PRIu32	/usr/lib/avr/include/inttypes.h	274
+PRIu64	/usr/lib/avr/include/inttypes.h	309
+PRIu8	/usr/lib/avr/include/inttypes.h	192
+PRIuFAST16	/usr/lib/avr/include/inttypes.h	239
+PRIuFAST32	/usr/lib/avr/include/inttypes.h	280
+PRIuFAST64	/usr/lib/avr/include/inttypes.h	311
+PRIuFAST8	/usr/lib/avr/include/inttypes.h	198
+PRIuLEAST16	/usr/lib/avr/include/inttypes.h	236
+PRIuLEAST32	/usr/lib/avr/include/inttypes.h	277
+PRIuLEAST64	/usr/lib/avr/include/inttypes.h	310
+PRIuLEAST8	/usr/lib/avr/include/inttypes.h	195
+PRIuMAX	/usr/lib/avr/include/inttypes.h	322
+PRIuPTR	/usr/lib/avr/include/inttypes.h	333
+PRIx16	/usr/lib/avr/include/inttypes.h	243
+PRIx32	/usr/lib/avr/include/inttypes.h	284
+PRIx64	/usr/lib/avr/include/inttypes.h	313
+PRIx8	/usr/lib/avr/include/inttypes.h	202
+PRIxFAST16	/usr/lib/avr/include/inttypes.h	249
+PRIxFAST32	/usr/lib/avr/include/inttypes.h	290
+PRIxFAST64	/usr/lib/avr/include/inttypes.h	315
+PRIxFAST8	/usr/lib/avr/include/inttypes.h	208
+PRIxLEAST16	/usr/lib/avr/include/inttypes.h	246
+PRIxLEAST32	/usr/lib/avr/include/inttypes.h	287
+PRIxLEAST64	/usr/lib/avr/include/inttypes.h	314
+PRIxLEAST8	/usr/lib/avr/include/inttypes.h	205
+PRIxMAX	/usr/lib/avr/include/inttypes.h	323
+PRIxPTR	/usr/lib/avr/include/inttypes.h	336
+PROGMEM	/usr/lib/avr/include/avr/pgmspace.h	109
+PRR	/usr/lib/avr/include/avr/iom328p.h	367
+PRSPI	/usr/lib/avr/include/avr/iom328p.h	370
+PRTIM0	/usr/lib/avr/include/avr/iom328p.h	372
+PRTIM1	/usr/lib/avr/include/avr/iom328p.h	371
+PRTIM2	/usr/lib/avr/include/avr/iom328p.h	373
+PRTWI	/usr/lib/avr/include/avr/iom328p.h	374
+PRUSART0	/usr/lib/avr/include/avr/iom328p.h	369
+PSRASY	/usr/lib/avr/include/avr/iom328p.h	218
+PSRSYNC	/usr/lib/avr/include/avr/iom328p.h	217
+PSTR	/usr/lib/avr/include/avr/pgmspace.h	/^# define PSTR(s) ((const PROGMEM char *)(s))$/
+PSTR	/usr/lib/avr/include/avr/pgmspace.h	/^# define PSTR(s) (__extension__({static const char/
+PTRDIFF_MAX	/usr/lib/avr/include/stdint.h	555
+PTRDIFF_MIN	/usr/lib/avr/include/stdint.h	560
+PUD	/usr/lib/avr/include/avr/iom328p.h	337
+PWM_DIR	switcherator.h	93
+PWM_DIR_BYTES	switcherator.h	62
+PWM_VALUE	switcherator.h	89
+PWM_VALUE_BYTES	switcherator.h	58
+PWR_UP	../myavrnrflib/nRF24L01.h	36
+RADIO_ADDR_R0	switcherator.h	78
+RADIO_ADDR_R0_BYTES	switcherator.h	46
+RADIO_ADDR_R1	switcherator.h	79
+RADIO_ADDR_R1_BYTES	switcherator.h	47
+RADIO_ADDR_R2	switcherator.h	80
+RADIO_ADDR_R2_BYTES	switcherator.h	48
+RADIO_ADDR_R3	switcherator.h	81
+RADIO_ADDR_R3_BYTES	switcherator.h	49
+RADIO_ADDR_R4	switcherator.h	82
+RADIO_ADDR_R4_BYTES	switcherator.h	50
+RADIO_ADDR_R5	switcherator.h	83
+RADIO_ADDR_R5_BYTES	switcherator.h	51
+RADIO_ADDR_TX	switcherator.h	77
+RADIO_ADDR_TX_BYTES	switcherator.h	45
+RAMEND	/usr/lib/avr/include/avr/iom328p.h	872
+RAMSTART	/usr/lib/avr/include/avr/iom328p.h	871
+RANDOM_MAX	/usr/lib/avr/include/stdlib.h	490
+RAND_MAX	/usr/lib/avr/include/stdlib.h	345
+REFS0	/usr/lib/avr/include/avr/iom328p.h	489
+REFS1	/usr/lib/avr/include/avr/iom328p.h	490
+REGISTER_MASK	../myavrnrflib/nRF24L01.h	83
+REUSE_TX_PL	../myavrnrflib/nRF24L01.h	88
+RF_CH	../myavrnrflib/nRF24L01.h	8
+RF_DR_HIGH	../myavrnrflib/nRF24L01.h	56
+RF_DR_LOW	../myavrnrflib/nRF24L01.h	54
+RF_PWR	../myavrnrflib/nRF24L01.h	57
+RF_SETUP	../myavrnrflib/nRF24L01.h	9
+RPD	../myavrnrflib/nRF24L01.h	12
+RWWSB	/usr/lib/avr/include/avr/iom328p.h	347
+RWWSRE	/usr/lib/avr/include/avr/iom328p.h	346
+RXB80	/usr/lib/avr/include/avr/iom328p.h	737
+RXC0	/usr/lib/avr/include/avr/iom328p.h	733
+RXCIE0	/usr/lib/avr/include/avr/iom328p.h	743
+RXEN0	/usr/lib/avr/include/avr/iom328p.h	740
+RX_ADDR_P0	../myavrnrflib/nRF24L01.h	13
+RX_ADDR_P1	../myavrnrflib/nRF24L01.h	14
+RX_ADDR_P2	../myavrnrflib/nRF24L01.h	15
+RX_ADDR_P3	../myavrnrflib/nRF24L01.h	16
+RX_ADDR_P4	../myavrnrflib/nRF24L01.h	17
+RX_ADDR_P5	../myavrnrflib/nRF24L01.h	18
+RX_DR	../myavrnrflib/nRF24L01.h	58
+RX_EMPTY	../myavrnrflib/nRF24L01.h	69
+RX_FULL	../myavrnrflib/nRF24L01.h	68
+RX_PW_P0	../myavrnrflib/nRF24L01.h	20
+RX_PW_P1	../myavrnrflib/nRF24L01.h	21
+RX_PW_P2	../myavrnrflib/nRF24L01.h	22
+RX_PW_P3	../myavrnrflib/nRF24L01.h	23
+RX_PW_P4	../myavrnrflib/nRF24L01.h	24
+RX_PW_P5	../myavrnrflib/nRF24L01.h	25
+RX_P_NO	../myavrnrflib/nRF24L01.h	61
+R_REGISTER	../myavrnrflib/nRF24L01.h	81
+R_RX_PAYLOAD	../myavrnrflib/nRF24L01.h	84
+R_RX_PL_WID	../myavrnrflib/nRF24L01.h	89
+Red	switcherator.c	80
+SCNd16	/usr/lib/avr/include/inttypes.h	357
+SCNd32	/usr/lib/avr/include/inttypes.h	378
+SCNd64	/usr/lib/avr/include/inttypes.h	399
+SCNd8	/usr/lib/avr/include/inttypes.h	344
+SCNdFAST16	/usr/lib/avr/include/inttypes.h	363
+SCNdFAST32	/usr/lib/avr/include/inttypes.h	384
+SCNdFAST64	/usr/lib/avr/include/inttypes.h	401
+SCNdFAST8	/usr/lib/avr/include/inttypes.h	346
+SCNdLEAST16	/usr/lib/avr/include/inttypes.h	360
+SCNdLEAST32	/usr/lib/avr/include/inttypes.h	381
+SCNdLEAST64	/usr/lib/avr/include/inttypes.h	400
+SCNdLEAST8	/usr/lib/avr/include/inttypes.h	345
+SCNdMAX	/usr/lib/avr/include/inttypes.h	407
+SCNdPTR	/usr/lib/avr/include/inttypes.h	414
+SCNi16	/usr/lib/avr/include/inttypes.h	367
+SCNi32	/usr/lib/avr/include/inttypes.h	388
+SCNi64	/usr/lib/avr/include/inttypes.h	403
+SCNi8	/usr/lib/avr/include/inttypes.h	348
+SCNiFAST16	/usr/lib/avr/include/inttypes.h	373
+SCNiFAST32	/usr/lib/avr/include/inttypes.h	394
+SCNiFAST64	/usr/lib/avr/include/inttypes.h	405
+SCNiFAST8	/usr/lib/avr/include/inttypes.h	350
+SCNiLEAST16	/usr/lib/avr/include/inttypes.h	370
+SCNiLEAST32	/usr/lib/avr/include/inttypes.h	391
+SCNiLEAST64	/usr/lib/avr/include/inttypes.h	404
+SCNiLEAST8	/usr/lib/avr/include/inttypes.h	349
+SCNiMAX	/usr/lib/avr/include/inttypes.h	408
+SCNiPTR	/usr/lib/avr/include/inttypes.h	417
+SCNo16	/usr/lib/avr/include/inttypes.h	437
+SCNo32	/usr/lib/avr/include/inttypes.h	468
+SCNo64	/usr/lib/avr/include/inttypes.h	499
+SCNo8	/usr/lib/avr/include/inttypes.h	421
+SCNoFAST16	/usr/lib/avr/include/inttypes.h	443
+SCNoFAST32	/usr/lib/avr/include/inttypes.h	474
+SCNoFAST64	/usr/lib/avr/include/inttypes.h	501
+SCNoFAST8	/usr/lib/avr/include/inttypes.h	423
+SCNoLEAST16	/usr/lib/avr/include/inttypes.h	440
+SCNoLEAST32	/usr/lib/avr/include/inttypes.h	471
+SCNoLEAST64	/usr/lib/avr/include/inttypes.h	500
+SCNoLEAST8	/usr/lib/avr/include/inttypes.h	422
+SCNoMAX	/usr/lib/avr/include/inttypes.h	511
+SCNoPTR	/usr/lib/avr/include/inttypes.h	519
+SCNu16	/usr/lib/avr/include/inttypes.h	447
+SCNu32	/usr/lib/avr/include/inttypes.h	478
+SCNu64	/usr/lib/avr/include/inttypes.h	503
+SCNu8	/usr/lib/avr/include/inttypes.h	425
+SCNuFAST16	/usr/lib/avr/include/inttypes.h	453
+SCNuFAST32	/usr/lib/avr/include/inttypes.h	484
+SCNuFAST64	/usr/lib/avr/include/inttypes.h	505
+SCNuFAST8	/usr/lib/avr/include/inttypes.h	427
+SCNuLEAST16	/usr/lib/avr/include/inttypes.h	450
+SCNuLEAST32	/usr/lib/avr/include/inttypes.h	481
+SCNuLEAST64	/usr/lib/avr/include/inttypes.h	504
+SCNuLEAST8	/usr/lib/avr/include/inttypes.h	426
+SCNuMAX	/usr/lib/avr/include/inttypes.h	512
+SCNuPTR	/usr/lib/avr/include/inttypes.h	522
+SCNx16	/usr/lib/avr/include/inttypes.h	457
+SCNx32	/usr/lib/avr/include/inttypes.h	488
+SCNx64	/usr/lib/avr/include/inttypes.h	507
+SCNx8	/usr/lib/avr/include/inttypes.h	429
+SCNxFAST16	/usr/lib/avr/include/inttypes.h	463
+SCNxFAST32	/usr/lib/avr/include/inttypes.h	494
+SCNxFAST64	/usr/lib/avr/include/inttypes.h	509
+SCNxFAST8	/usr/lib/avr/include/inttypes.h	431
+SCNxLEAST16	/usr/lib/avr/include/inttypes.h	460
+SCNxLEAST32	/usr/lib/avr/include/inttypes.h	491
+SCNxLEAST64	/usr/lib/avr/include/inttypes.h	508
+SCNxLEAST8	/usr/lib/avr/include/inttypes.h	430
+SCNxMAX	/usr/lib/avr/include/inttypes.h	513
+SCNxPTR	/usr/lib/avr/include/inttypes.h	525
+SE	/usr/lib/avr/include/avr/iom328p.h	323
+SELFPRGEN	/usr/lib/avr/include/avr/iom328p.h	342
+SERIAL_NUM	switcherator.h	75
+SERIAL_NUM_BYTES	switcherator.h	53
+SETUP_AW	../myavrnrflib/nRF24L01.h	6
+SETUP_RETR	../myavrnrflib/nRF24L01.h	7
+SET_CONFIG	switcherator.h	35
+SET_DYNPD	switcherator.h	31
+SET_FEATURE	switcherator.h	33
+SET_RF_CH	switcherator.h	37
+SET_RF_SETUP	switcherator.h	27
+SET_RX_ADDR_P0	switcherator.h	28
+SET_SETUP_RETR	switcherator.h	39
+SET_TX_ADDR	switcherator.h	29
+SIGNAL	/usr/lib/avr/include/avr/interrupt.h	/^#  define SIGNAL(vector)$/
+SIGNAL	/usr/lib/avr/include/avr/interrupt.h	/^#  define SIGNAL(vector)					\\$/
+SIGNAL	/usr/lib/avr/include/avr/interrupt.h	/^#  define SIGNAL(vector)					\\$/
+SIGNATURE_0	/usr/lib/avr/include/avr/iom328p.h	921
+SIGNATURE_1	/usr/lib/avr/include/avr/iom328p.h	922
+SIGNATURE_2	/usr/lib/avr/include/avr/iom328p.h	923
+SIG_ATOMIC_MAX	/usr/lib/avr/include/stdint.h	569
+SIG_ATOMIC_MIN	/usr/lib/avr/include/stdint.h	574
+SIZE_MAX	/usr/lib/avr/include/stdint.h	580
+SM0	/usr/lib/avr/include/avr/iom328p.h	324
+SM1	/usr/lib/avr/include/avr/iom328p.h	325
+SM2	/usr/lib/avr/include/avr/iom328p.h	326
+SMCR	/usr/lib/avr/include/avr/iom328p.h	322
+SP	/usr/lib/avr/include/avr/common.h	77
+SP	/usr/lib/avr/include/avr/common.h	85
+SP	/usr/lib/avr/include/avr/common.h	89
+SPCR	/usr/lib/avr/include/avr/iom328p.h	287
+SPDR	/usr/lib/avr/include/avr/iom328p.h	302
+SPDR0	/usr/lib/avr/include/avr/iom328p.h	303
+SPDR1	/usr/lib/avr/include/avr/iom328p.h	304
+SPDR2	/usr/lib/avr/include/avr/iom328p.h	305
+SPDR3	/usr/lib/avr/include/avr/iom328p.h	306
+SPDR4	/usr/lib/avr/include/avr/iom328p.h	307
+SPDR5	/usr/lib/avr/include/avr/iom328p.h	308
+SPDR6	/usr/lib/avr/include/avr/iom328p.h	309
+SPDR7	/usr/lib/avr/include/avr/iom328p.h	310
+SPE	/usr/lib/avr/include/avr/iom328p.h	294
+SPH	/usr/lib/avr/include/avr/common.h	74
+SPH	/usr/lib/avr/include/avr/common.h	92
+SPI2X	/usr/lib/avr/include/avr/iom328p.h	298
+SPIE	/usr/lib/avr/include/avr/iom328p.h	295
+SPIF	/usr/lib/avr/include/avr/iom328p.h	300
+SPI_STC_vect	/usr/lib/avr/include/avr/iom328p.h	839
+SPI_STC_vect_num	/usr/lib/avr/include/avr/iom328p.h	838
+SPL	/usr/lib/avr/include/avr/common.h	71
+SPL	/usr/lib/avr/include/avr/common.h	81
+SPMCSR	/usr/lib/avr/include/avr/iom328p.h	341
+SPMIE	/usr/lib/avr/include/avr/iom328p.h	348
+SPM_PAGESIZE	/usr/lib/avr/include/avr/iom328p.h	870
+SPM_READY_vect	/usr/lib/avr/include/avr/iom328p.h	863
+SPM_READY_vect_num	/usr/lib/avr/include/avr/iom328p.h	862
+SPR0	/usr/lib/avr/include/avr/iom328p.h	288
+SPR1	/usr/lib/avr/include/avr/iom328p.h	289
+SPSR	/usr/lib/avr/include/avr/iom328p.h	297
+SREG	/usr/lib/avr/include/avr/common.h	101
+SREG	/usr/lib/avr/include/avr/common.h	103
+SREG_C	/usr/lib/avr/include/avr/common.h	110
+SREG_H	/usr/lib/avr/include/avr/common.h	125
+SREG_I	/usr/lib/avr/include/avr/common.h	131
+SREG_N	/usr/lib/avr/include/avr/common.h	116
+SREG_S	/usr/lib/avr/include/avr/common.h	122
+SREG_T	/usr/lib/avr/include/avr/common.h	128
+SREG_V	/usr/lib/avr/include/avr/common.h	119
+SREG_Z	/usr/lib/avr/include/avr/common.h	113
+STATUS	../myavrnrflib/nRF24L01.h	10
+SWITCH_STUFF	switcherator.h	86
+SWITCH_STUFF_BYTES	switcherator.h	55
+TCCR0A	/usr/lib/avr/include/avr/iom328p.h	221
+TCCR0B	/usr/lib/avr/include/avr/iom328p.h	229
+TCCR1A	/usr/lib/avr/include/avr/iom328p.h	504
+TCCR1B	/usr/lib/avr/include/avr/iom328p.h	512
+TCCR1C	/usr/lib/avr/include/avr/iom328p.h	521
+TCCR2A	/usr/lib/avr/include/avr/iom328p.h	613
+TCCR2B	/usr/lib/avr/include/avr/iom328p.h	621
+TCN2UB	/usr/lib/avr/include/avr/iom328p.h	664
+TCNT0	/usr/lib/avr/include/avr/iom328p.h	237
+TCNT0_0	/usr/lib/avr/include/avr/iom328p.h	238
+TCNT0_1	/usr/lib/avr/include/avr/iom328p.h	239
+TCNT0_2	/usr/lib/avr/include/avr/iom328p.h	240
+TCNT0_3	/usr/lib/avr/include/avr/iom328p.h	241
+TCNT0_4	/usr/lib/avr/include/avr/iom328p.h	242
+TCNT0_5	/usr/lib/avr/include/avr/iom328p.h	243
+TCNT0_6	/usr/lib/avr/include/avr/iom328p.h	244
+TCNT0_7	/usr/lib/avr/include/avr/iom328p.h	245
+TCNT1	/usr/lib/avr/include/avr/iom328p.h	525
+TCNT1H	/usr/lib/avr/include/avr/iom328p.h	537
+TCNT1H0	/usr/lib/avr/include/avr/iom328p.h	538
+TCNT1H1	/usr/lib/avr/include/avr/iom328p.h	539
+TCNT1H2	/usr/lib/avr/include/avr/iom328p.h	540
+TCNT1H3	/usr/lib/avr/include/avr/iom328p.h	541
+TCNT1H4	/usr/lib/avr/include/avr/iom328p.h	542
+TCNT1H5	/usr/lib/avr/include/avr/iom328p.h	543
+TCNT1H6	/usr/lib/avr/include/avr/iom328p.h	544
+TCNT1H7	/usr/lib/avr/include/avr/iom328p.h	545
+TCNT1L	/usr/lib/avr/include/avr/iom328p.h	527
+TCNT1L0	/usr/lib/avr/include/avr/iom328p.h	528
+TCNT1L1	/usr/lib/avr/include/avr/iom328p.h	529
+TCNT1L2	/usr/lib/avr/include/avr/iom328p.h	530
+TCNT1L3	/usr/lib/avr/include/avr/iom328p.h	531
+TCNT1L4	/usr/lib/avr/include/avr/iom328p.h	532
+TCNT1L5	/usr/lib/avr/include/avr/iom328p.h	533
+TCNT1L6	/usr/lib/avr/include/avr/iom328p.h	534
+TCNT1L7	/usr/lib/avr/include/avr/iom328p.h	535
+TCNT2	/usr/lib/avr/include/avr/iom328p.h	629
+TCNT2_0	/usr/lib/avr/include/avr/iom328p.h	630
+TCNT2_1	/usr/lib/avr/include/avr/iom328p.h	631
+TCNT2_2	/usr/lib/avr/include/avr/iom328p.h	632
+TCNT2_3	/usr/lib/avr/include/avr/iom328p.h	633
+TCNT2_4	/usr/lib/avr/include/avr/iom328p.h	634
+TCNT2_5	/usr/lib/avr/include/avr/iom328p.h	635
+TCNT2_6	/usr/lib/avr/include/avr/iom328p.h	636
+TCNT2_7	/usr/lib/avr/include/avr/iom328p.h	637
+TCR2AUB	/usr/lib/avr/include/avr/iom328p.h	661
+TCR2BUB	/usr/lib/avr/include/avr/iom328p.h	660
+TIFR0	/usr/lib/avr/include/avr/iom328p.h	141
+TIFR1	/usr/lib/avr/include/avr/iom328p.h	146
+TIFR2	/usr/lib/avr/include/avr/iom328p.h	152
+TIMER0_COMPA_vect	/usr/lib/avr/include/avr/iom328p.h	830
+TIMER0_COMPA_vect_num	/usr/lib/avr/include/avr/iom328p.h	829
+TIMER0_COMPB_vect	/usr/lib/avr/include/avr/iom328p.h	833
+TIMER0_COMPB_vect_num	/usr/lib/avr/include/avr/iom328p.h	832
+TIMER0_OVF_vect	/usr/lib/avr/include/avr/iom328p.h	836
+TIMER0_OVF_vect_num	/usr/lib/avr/include/avr/iom328p.h	835
+TIMER1_CAPT_vect	/usr/lib/avr/include/avr/iom328p.h	818
+TIMER1_CAPT_vect_num	/usr/lib/avr/include/avr/iom328p.h	817
+TIMER1_COMPA_vect	/usr/lib/avr/include/avr/iom328p.h	821
+TIMER1_COMPA_vect_num	/usr/lib/avr/include/avr/iom328p.h	820
+TIMER1_COMPB_vect	/usr/lib/avr/include/avr/iom328p.h	824
+TIMER1_COMPB_vect_num	/usr/lib/avr/include/avr/iom328p.h	823
+TIMER1_OVF_vect	/usr/lib/avr/include/avr/iom328p.h	827
+TIMER1_OVF_vect_num	/usr/lib/avr/include/avr/iom328p.h	826
+TIMER2_COMPA_vect	/usr/lib/avr/include/avr/iom328p.h	809
+TIMER2_COMPA_vect_num	/usr/lib/avr/include/avr/iom328p.h	808
+TIMER2_COMPB_vect	/usr/lib/avr/include/avr/iom328p.h	812
+TIMER2_COMPB_vect_num	/usr/lib/avr/include/avr/iom328p.h	811
+TIMER2_OVF_vect	/usr/lib/avr/include/avr/iom328p.h	815
+TIMER2_OVF_vect_num	/usr/lib/avr/include/avr/iom328p.h	814
+TIMER_CLOCK_SEL	switcherator.h	68
+TIMER_RESET	switcherator.h	69
+TIMER_TENTH	switcherator.h	71
+TIMER_TOTAL	switcherator.h	70
+TIMSK0	/usr/lib/avr/include/avr/iom328p.h	426
+TIMSK1	/usr/lib/avr/include/avr/iom328p.h	431
+TIMSK2	/usr/lib/avr/include/avr/iom328p.h	437
+TOIE0	/usr/lib/avr/include/avr/iom328p.h	427
+TOIE1	/usr/lib/avr/include/avr/iom328p.h	432
+TOIE2	/usr/lib/avr/include/avr/iom328p.h	438
+TOV0	/usr/lib/avr/include/avr/iom328p.h	142
+TOV1	/usr/lib/avr/include/avr/iom328p.h	147
+TOV2	/usr/lib/avr/include/avr/iom328p.h	153
+TSM	/usr/lib/avr/include/avr/iom328p.h	219
+TWA0	/usr/lib/avr/include/avr/iom328p.h	689
+TWA1	/usr/lib/avr/include/avr/iom328p.h	690
+TWA2	/usr/lib/avr/include/avr/iom328p.h	691
+TWA3	/usr/lib/avr/include/avr/iom328p.h	692
+TWA4	/usr/lib/avr/include/avr/iom328p.h	693
+TWA5	/usr/lib/avr/include/avr/iom328p.h	694
+TWA6	/usr/lib/avr/include/avr/iom328p.h	695
+TWAM0	/usr/lib/avr/include/avr/iom328p.h	717
+TWAM1	/usr/lib/avr/include/avr/iom328p.h	718
+TWAM2	/usr/lib/avr/include/avr/iom328p.h	719
+TWAM3	/usr/lib/avr/include/avr/iom328p.h	720
+TWAM4	/usr/lib/avr/include/avr/iom328p.h	721
+TWAM5	/usr/lib/avr/include/avr/iom328p.h	722
+TWAM6	/usr/lib/avr/include/avr/iom328p.h	723
+TWAMR	/usr/lib/avr/include/avr/iom328p.h	716
+TWAR	/usr/lib/avr/include/avr/iom328p.h	687
+TWBR	/usr/lib/avr/include/avr/iom328p.h	668
+TWBR0	/usr/lib/avr/include/avr/iom328p.h	669
+TWBR1	/usr/lib/avr/include/avr/iom328p.h	670
+TWBR2	/usr/lib/avr/include/avr/iom328p.h	671
+TWBR3	/usr/lib/avr/include/avr/iom328p.h	672
+TWBR4	/usr/lib/avr/include/avr/iom328p.h	673
+TWBR5	/usr/lib/avr/include/avr/iom328p.h	674
+TWBR6	/usr/lib/avr/include/avr/iom328p.h	675
+TWBR7	/usr/lib/avr/include/avr/iom328p.h	676
+TWCR	/usr/lib/avr/include/avr/iom328p.h	707
+TWD0	/usr/lib/avr/include/avr/iom328p.h	698
+TWD1	/usr/lib/avr/include/avr/iom328p.h	699
+TWD2	/usr/lib/avr/include/avr/iom328p.h	700
+TWD3	/usr/lib/avr/include/avr/iom328p.h	701
+TWD4	/usr/lib/avr/include/avr/iom328p.h	702
+TWD5	/usr/lib/avr/include/avr/iom328p.h	703
+TWD6	/usr/lib/avr/include/avr/iom328p.h	704
+TWD7	/usr/lib/avr/include/avr/iom328p.h	705
+TWDR	/usr/lib/avr/include/avr/iom328p.h	697
+TWEA	/usr/lib/avr/include/avr/iom328p.h	713
+TWEAK_TIMER	switcherator.h	92
+TWEAK_TIMER_BYTES	switcherator.h	61
+TWEN	/usr/lib/avr/include/avr/iom328p.h	709
+TWGCE	/usr/lib/avr/include/avr/iom328p.h	688
+TWIE	/usr/lib/avr/include/avr/iom328p.h	708
+TWINT	/usr/lib/avr/include/avr/iom328p.h	714
+TWI_vect	/usr/lib/avr/include/avr/iom328p.h	860
+TWI_vect_num	/usr/lib/avr/include/avr/iom328p.h	859
+TWPS0	/usr/lib/avr/include/avr/iom328p.h	679
+TWPS1	/usr/lib/avr/include/avr/iom328p.h	680
+TWS3	/usr/lib/avr/include/avr/iom328p.h	681
+TWS4	/usr/lib/avr/include/avr/iom328p.h	682
+TWS5	/usr/lib/avr/include/avr/iom328p.h	683
+TWS6	/usr/lib/avr/include/avr/iom328p.h	684
+TWS7	/usr/lib/avr/include/avr/iom328p.h	685
+TWSR	/usr/lib/avr/include/avr/iom328p.h	678
+TWSTA	/usr/lib/avr/include/avr/iom328p.h	712
+TWSTO	/usr/lib/avr/include/avr/iom328p.h	711
+TWWC	/usr/lib/avr/include/avr/iom328p.h	710
+TXB80	/usr/lib/avr/include/avr/iom328p.h	736
+TXC0	/usr/lib/avr/include/avr/iom328p.h	732
+TXCIE0	/usr/lib/avr/include/avr/iom328p.h	742
+TXEN0	/usr/lib/avr/include/avr/iom328p.h	739
+TX_ADDR	../myavrnrflib/nRF24L01.h	19
+TX_DS	../myavrnrflib/nRF24L01.h	59
+TX_EMPTY	../myavrnrflib/nRF24L01.h	67
+TX_FULL	../myavrnrflib/nRF24L01.h	62
+TX_REUSE	../myavrnrflib/nRF24L01.h	65
+U2X0	/usr/lib/avr/include/avr/iom328p.h	727
+UBRR0	/usr/lib/avr/include/avr/iom328p.h	757
+UBRR0H	/usr/lib/avr/include/avr/iom328p.h	769
+UBRR0L	/usr/lib/avr/include/avr/iom328p.h	759
+UBRR0_0	/usr/lib/avr/include/avr/iom328p.h	760
+UBRR0_1	/usr/lib/avr/include/avr/iom328p.h	761
+UBRR0_10	/usr/lib/avr/include/avr/iom328p.h	772
+UBRR0_11	/usr/lib/avr/include/avr/iom328p.h	773
+UBRR0_2	/usr/lib/avr/include/avr/iom328p.h	762
+UBRR0_3	/usr/lib/avr/include/avr/iom328p.h	763
+UBRR0_4	/usr/lib/avr/include/avr/iom328p.h	764
+UBRR0_5	/usr/lib/avr/include/avr/iom328p.h	765
+UBRR0_6	/usr/lib/avr/include/avr/iom328p.h	766
+UBRR0_7	/usr/lib/avr/include/avr/iom328p.h	767
+UBRR0_8	/usr/lib/avr/include/avr/iom328p.h	770
+UBRR0_9	/usr/lib/avr/include/avr/iom328p.h	771
+UCPHA0	/usr/lib/avr/include/avr/iom328p.h	748
+UCPOL0	/usr/lib/avr/include/avr/iom328p.h	746
+UCSR0A	/usr/lib/avr/include/avr/iom328p.h	725
+UCSR0B	/usr/lib/avr/include/avr/iom328p.h	735
+UCSR0C	/usr/lib/avr/include/avr/iom328p.h	745
+UCSZ00	/usr/lib/avr/include/avr/iom328p.h	747
+UCSZ01	/usr/lib/avr/include/avr/iom328p.h	749
+UCSZ02	/usr/lib/avr/include/avr/iom328p.h	738
+UDORD0	/usr/lib/avr/include/avr/iom328p.h	750
+UDR0	/usr/lib/avr/include/avr/iom328p.h	775
+UDR0_0	/usr/lib/avr/include/avr/iom328p.h	776
+UDR0_1	/usr/lib/avr/include/avr/iom328p.h	777
+UDR0_2	/usr/lib/avr/include/avr/iom328p.h	778
+UDR0_3	/usr/lib/avr/include/avr/iom328p.h	779
+UDR0_4	/usr/lib/avr/include/avr/iom328p.h	780
+UDR0_5	/usr/lib/avr/include/avr/iom328p.h	781
+UDR0_6	/usr/lib/avr/include/avr/iom328p.h	782
+UDR0_7	/usr/lib/avr/include/avr/iom328p.h	783
+UDRE0	/usr/lib/avr/include/avr/iom328p.h	731
+UDRIE0	/usr/lib/avr/include/avr/iom328p.h	741
+UINT16_C	/usr/lib/avr/include/stdint.h	/^#define UINT16_C(value) __CONCAT(value, UL)$/
+UINT16_C	/usr/lib/avr/include/stdint.h	/^#define UINT16_C(value) __CONCAT(value, U)$/
+UINT16_MAX	/usr/lib/avr/include/stdint.h	316
+UINT16_MAX	/usr/lib/avr/include/stdint.h	337
+UINT32_C	/usr/lib/avr/include/stdint.h	/^#define UINT32_C(value) ((uint32_t) __CONCAT(value/
+UINT32_C	/usr/lib/avr/include/stdint.h	/^#define UINT32_C(value) __CONCAT(value, UL)$/
+UINT32_MAX	/usr/lib/avr/include/stdint.h	320
+UINT32_MAX	/usr/lib/avr/include/stdint.h	352
+UINT64_C	/usr/lib/avr/include/stdint.h	/^#define UINT64_C(value) __CONCAT(value, ULL)$/
+UINT64_MAX	/usr/lib/avr/include/stdint.h	369
+UINT8_C	/usr/lib/avr/include/stdint.h	/^#define UINT8_C(value) ((uint8_t) __CONCAT(value, /
+UINT8_MAX	/usr/lib/avr/include/stdint.h	310
+UINTMAX_C	/usr/lib/avr/include/stdint.h	/^#define UINTMAX_C(value) __CONCAT(value, ULL)$/
+UINTMAX_MAX	/usr/lib/avr/include/stdint.h	542
+UINTPTR_MAX	/usr/lib/avr/include/stdint.h	521
+UINT_FAST16_MAX	/usr/lib/avr/include/stdint.h	470
+UINT_FAST32_MAX	/usr/lib/avr/include/stdint.h	485
+UINT_FAST64_MAX	/usr/lib/avr/include/stdint.h	500
+UINT_FAST8_MAX	/usr/lib/avr/include/stdint.h	455
+UINT_LEAST16_MAX	/usr/lib/avr/include/stdint.h	404
+UINT_LEAST32_MAX	/usr/lib/avr/include/stdint.h	419
+UINT_LEAST64_MAX	/usr/lib/avr/include/stdint.h	434
+UINT_LEAST8_MAX	/usr/lib/avr/include/stdint.h	389
+UMSEL00	/usr/lib/avr/include/avr/iom328p.h	754
+UMSEL01	/usr/lib/avr/include/avr/iom328p.h	755
+UPE0	/usr/lib/avr/include/avr/iom328p.h	728
+UPM00	/usr/lib/avr/include/avr/iom328p.h	752
+UPM01	/usr/lib/avr/include/avr/iom328p.h	753
+USART_RX_vect	/usr/lib/avr/include/avr/iom328p.h	842
+USART_RX_vect_num	/usr/lib/avr/include/avr/iom328p.h	841
+USART_TX_vect	/usr/lib/avr/include/avr/iom328p.h	848
+USART_TX_vect_num	/usr/lib/avr/include/avr/iom328p.h	847
+USART_UDRE_vect	/usr/lib/avr/include/avr/iom328p.h	845
+USART_UDRE_vect_num	/usr/lib/avr/include/avr/iom328p.h	844
+USBS0	/usr/lib/avr/include/avr/iom328p.h	751
+WCOL	/usr/lib/avr/include/avr/iom328p.h	299
+WDCE	/usr/lib/avr/include/avr/iom328p.h	355
+WDE	/usr/lib/avr/include/avr/iom328p.h	354
+WDIE	/usr/lib/avr/include/avr/iom328p.h	357
+WDIF	/usr/lib/avr/include/avr/iom328p.h	358
+WDP0	/usr/lib/avr/include/avr/iom328p.h	351
+WDP1	/usr/lib/avr/include/avr/iom328p.h	352
+WDP2	/usr/lib/avr/include/avr/iom328p.h	353
+WDP3	/usr/lib/avr/include/avr/iom328p.h	356
+WDRF	/usr/lib/avr/include/avr/iom328p.h	332
+WDTCSR	/usr/lib/avr/include/avr/iom328p.h	350
+WDT_vect	/usr/lib/avr/include/avr/iom328p.h	806
+WDT_vect_num	/usr/lib/avr/include/avr/iom328p.h	805
+WEEKLY_PROGRAM	switcherator.h	91
+WEEKLY_PROGRAM_BYTES	switcherator.h	60
+WGM00	/usr/lib/avr/include/avr/iom328p.h	222
+WGM01	/usr/lib/avr/include/avr/iom328p.h	223
+WGM02	/usr/lib/avr/include/avr/iom328p.h	233
+WGM10	/usr/lib/avr/include/avr/iom328p.h	505
+WGM11	/usr/lib/avr/include/avr/iom328p.h	506
+WGM12	/usr/lib/avr/include/avr/iom328p.h	516
+WGM13	/usr/lib/avr/include/avr/iom328p.h	517
+WGM20	/usr/lib/avr/include/avr/iom328p.h	614
+WGM21	/usr/lib/avr/include/avr/iom328p.h	615
+WGM22	/usr/lib/avr/include/avr/iom328p.h	625
+W_ACK_PAYLOAD	../myavrnrflib/nRF24L01.h	90
+W_REGISTER	../myavrnrflib/nRF24L01.h	82
+W_TX_PAYLOAD	../myavrnrflib/nRF24L01.h	85
+W_TX_PAYLOAD_NO_ACK	../myavrnrflib/nRF24L01.h	91
+XH	/usr/lib/avr/include/avr/common.h	204
+XL	/usr/lib/avr/include/avr/common.h	203
+XRAMEND	/usr/lib/avr/include/avr/iom328p.h	874
+XRAMSIZE	/usr/lib/avr/include/avr/iom328p.h	873
+YH	/usr/lib/avr/include/avr/common.h	206
+YL	/usr/lib/avr/include/avr/common.h	205
+ZH	/usr/lib/avr/include/avr/common.h	209
+ZL	/usr/lib/avr/include/avr/common.h	208
+_ANSI_STDDEF_H	/usr/lib/gcc/avr/4.7.2/include/stddef.h	43
+_AVR_COMMON_H	/usr/lib/avr/include/avr/common.h	35
+_AVR_EEPROM_H_	/usr/lib/avr/include/avr/eeprom.h	36
+_AVR_FUSE_H_	/usr/lib/avr/include/avr/fuse.h	36
+_AVR_INTERRUPT_H_	/usr/lib/avr/include/avr/interrupt.h	36
+_AVR_IOM328P_H_	/usr/lib/avr/include/avr/iom328p.h	50
+_AVR_IOXXX_H_	/usr/lib/avr/include/avr/iom328p.h	43
+_AVR_IO_H_	/usr/lib/avr/include/avr/io.h	97
+_AVR_LOCK_H_	/usr/lib/avr/include/avr/lock.h	36
+_AVR_PORTPINS_H_	/usr/lib/avr/include/avr/portpins.h	34
+_AVR_SFR_DEFS_H_	/usr/lib/avr/include/avr/sfr_defs.h	36
+_AVR_VERSION_H_	/usr/lib/avr/include/avr/version.h	54
+_BSD_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	83
+_BSD_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	144
+_BSD_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	368
+_BSD_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	381
+_BSD_RUNE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	302
+_BSD_RUNE_T_DEFINED_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	296
+_BSD_SIZE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	87
+_BSD_SIZE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	195
+_BSD_SIZE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	372
+_BSD_SIZE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	385
+_BSD_SIZE_T_DEFINED_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	198
+_BSD_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	91
+_BSD_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	271
+_BSD_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	291
+_BSD_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	376
+_BSD_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	389
+_BSD_WCHAR_T_DEFINED_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	295
+_BV	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _BV(bit) (1 << (bit))$/
+_EEGET	/usr/lib/avr/include/avr/eeprom.h	/^#define _EEGET(var, addr) (var) = eeprom_read_byte/
+_EEPROM_CONCAT1	/usr/lib/avr/include/avr/eeprom.h	/^#define _EEPROM_CONCAT1(s1, s2)     s1 ## s2$/
+_EEPROM_CONCAT2	/usr/lib/avr/include/avr/eeprom.h	/^#define _EEPROM_CONCAT2(s1, s2)     _EEPROM_CONCAT/
+_EEPROM_REG_LOCATIONS_	/usr/lib/avr/include/avr/iom328p.h	214
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	47
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	49
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	51
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	53
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	55
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	57
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	59
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	61
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	63
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	65
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	67
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	69
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	71
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	73
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	75
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	77
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	79
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	81
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	83
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	85
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	87
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	89
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	91
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	93
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	95
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	97
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	99
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	101
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	103
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	105
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	107
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	109
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	111
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	113
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	115
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	117
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	119
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	121
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	123
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	125
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	127
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	129
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	131
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	133
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	135
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	137
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	139
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	141
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	143
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	145
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	147
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	149
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	151
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	153
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	155
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	157
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	159
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	161
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	163
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	165
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	167
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	169
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	171
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	173
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	175
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	177
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	179
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	181
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	183
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	185
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	187
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	189
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	191
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	193
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	195
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	197
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	199
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	201
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	203
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	205
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	207
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	209
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	211
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	213
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	215
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	217
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	219
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	221
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	223
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	225
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	227
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	229
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	231
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	233
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	235
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	237
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	239
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	241
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	243
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	245
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	247
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	249
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	251
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	253
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	255
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	257
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	259
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	261
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	263
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	265
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	267
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	269
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	271
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	273
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	275
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	277
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	279
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	281
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	283
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	285
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	287
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	289
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	291
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	293
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	295
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	297
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	299
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	301
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	303
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	305
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	307
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	309
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	311
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	313
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	315
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	317
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	319
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	321
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	323
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	325
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	327
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	329
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	331
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	333
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	335
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	337
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	339
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	341
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	343
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	345
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	347
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	349
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	351
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	353
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	355
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	357
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	359
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	361
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	363
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	365
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	367
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	369
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	371
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	373
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	375
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	377
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	379
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	381
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	383
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	385
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	387
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	390
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	392
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	394
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	396
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	398
+_EEPROM_SUFFIX	/usr/lib/avr/include/avr/eeprom.h	400
+_EEPUT	/usr/lib/avr/include/avr/eeprom.h	/^#define _EEPUT(addr, val) eeprom_write_byte ((uint/
+_FFS	/usr/lib/avr/include/string.h	/^#define _FFS(x)$/
+_FFS	/usr/lib/avr/include/string.h	/^#define	_FFS(x) \\$/
+_GCC_MAX_ALIGN_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	419
+_GCC_PTRDIFF_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	146
+_GCC_SIZE_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	201
+_GCC_WCHAR_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	277
+_GCC_WRAP_STDINT_H	/usr/lib/gcc/avr/4.7.2/include/stdint.h	7
+_HAVE_AVR_STACK_POINTER_HI	/usr/lib/avr/include/avr/common.h	234
+_MMIO_BYTE	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _MMIO_BYTE(mem_addr) (*(volatile uint8_t */
+_MMIO_DWORD	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _MMIO_DWORD(mem_addr) (*(volatile uint32_t/
+_MMIO_WORD	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _MMIO_WORD(mem_addr) (*(volatile uint16_t /
+_NRF_H_	../myavrnrflib/nrf.h	2
+_PTRDIFF_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	71
+_PTRDIFF_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	139
+_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	82
+_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	98
+_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	143
+_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	367
+_PTRDIFF_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	380
+_RUNE_T_DECLARED	/usr/lib/gcc/avr/4.7.2/include/stddef.h	315
+_SFR_ADDR	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_ADDR(sfr) _SFR_MEM_ADDR(sfr)$/
+_SFR_ADDR	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_ADDR(sfr) (_SFR_IO_REG_P(sfr) ? (_SFR/
+_SFR_ADDR	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_ADDR(sfr) _SFR_MEM_ADDR(sfr)$/
+_SFR_ASM_COMPAT	/usr/lib/avr/include/avr/sfr_defs.h	119
+_SFR_ASM_COMPAT	/usr/lib/avr/include/avr/sfr_defs.h	121
+_SFR_BYTE	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_BYTE(sfr) _MMIO_BYTE(_SFR_ADDR(sfr))$/
+_SFR_DWORD	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_DWORD(sfr) _MMIO_DWORD(_SFR_ADDR(sfr)/
+_SFR_IO16	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_IO16(io_addr) ((io_addr) + __SFR_OFFS/
+_SFR_IO16	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_IO16(io_addr) _MMIO_WORD((io_addr) + /
+_SFR_IO8	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_IO8(io_addr) ((io_addr) + __SFR_OFFSE/
+_SFR_IO8	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_IO8(io_addr) _MMIO_BYTE((io_addr) + _/
+_SFR_IO_ADDR	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_IO_ADDR(sfr) ((sfr) - __SFR_OFFSET)$/
+_SFR_IO_ADDR	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_IO_ADDR(sfr) (_SFR_MEM_ADDR(sfr) - __/
+_SFR_IO_REG_P	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_IO_REG_P(sfr) ((sfr) < 0x40 + __SFR_O/
+_SFR_IO_REG_P	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_IO_REG_P(sfr) (_SFR_MEM_ADDR(sfr) < 0/
+_SFR_MEM16	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_MEM16(mem_addr) (mem_addr)$/
+_SFR_MEM16	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_MEM16(mem_addr) _MMIO_WORD(mem_addr)$/
+_SFR_MEM32	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_MEM32(mem_addr) (mem_addr)$/
+_SFR_MEM32	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_MEM32(mem_addr) _MMIO_DWORD(mem_addr)/
+_SFR_MEM8	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_MEM8(mem_addr) (mem_addr)$/
+_SFR_MEM8	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_MEM8(mem_addr) _MMIO_BYTE(mem_addr)$/
+_SFR_MEM_ADDR	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_MEM_ADDR(sfr) (sfr)$/
+_SFR_MEM_ADDR	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_MEM_ADDR(sfr) ((uint16_t) &(sfr))$/
+_SFR_WORD	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _SFR_WORD(sfr) _MMIO_WORD(_SFR_ADDR(sfr))$/
+_SIZET_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	202
+_SIZE_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	68
+_SIZE_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	189
+_SIZE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	86
+_SIZE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	194
+_SIZE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	371
+_SIZE_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	384
+_SIZE_T_DECLARED	/usr/lib/gcc/avr/4.7.2/include/stddef.h	199
+_SIZE_T_DEFINED	/usr/lib/gcc/avr/4.7.2/include/stddef.h	197
+_SIZE_T_DEFINED_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	196
+_SPI_H_	../myavrnrflib/spi.h	28
+_STDDEF_H	/usr/lib/gcc/avr/4.7.2/include/stddef.h	40
+_STDDEF_H_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	41
+_STDLIB_H_	/usr/lib/avr/include/stdlib.h	40
+_STRING_H_	/usr/lib/avr/include/string.h	41
+_SYS_SIZE_T_H	/usr/lib/gcc/avr/4.7.2/include/stddef.h	190
+_TYPE_ptrdiff_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	108
+_TYPE_ptrdiff_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	109
+_TYPE_size_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	112
+_TYPE_size_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	113
+_TYPE_wchar_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	116
+_TYPE_wchar_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	117
+_T_PTRDIFF	/usr/lib/gcc/avr/4.7.2/include/stddef.h	141
+_T_PTRDIFF_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	140
+_T_SIZE	/usr/lib/gcc/avr/4.7.2/include/stddef.h	192
+_T_SIZE_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	191
+_T_WCHAR	/usr/lib/gcc/avr/4.7.2/include/stddef.h	268
+_T_WCHAR_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	267
+_UTIL_DELAY_BASIC_H_	/usr/lib/avr/include/util/delay_basic.h	35
+_UTIL_DELAY_H_	/usr/lib/avr/include/util/delay.h	36
+_VECTOR	/usr/lib/avr/include/avr/sfr_defs.h	/^#define _VECTOR(N) __vector_ ## N$/
+_VECTORS_SIZE	/usr/lib/avr/include/avr/iom328p.h	865
+_WCHAR_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	77
+_WCHAR_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	266
+_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	90
+_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	270
+_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	375
+_WCHAR_T_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	388
+_WCHAR_T_DECLARED	/usr/lib/gcc/avr/4.7.2/include/stddef.h	278
+_WCHAR_T_DEFINED	/usr/lib/gcc/avr/4.7.2/include/stddef.h	273
+_WCHAR_T_DEFINED_	/usr/lib/gcc/avr/4.7.2/include/stddef.h	272
+_WCHAR_T_H	/usr/lib/gcc/avr/4.7.2/include/stddef.h	274
+_WINT_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	349
+__ATTR_CONST__	/usr/lib/avr/include/stdlib.h	85
+__ATTR_CONST__	/usr/lib/avr/include/string.h	52
+__ATTR_CONST__	/usr/lib/avr/include/avr/pgmspace.h	91
+__ATTR_CONST__	/usr/lib/avr/include/math.h	117
+__ATTR_MALLOC__	/usr/lib/avr/include/stdlib.h	89
+__ATTR_NORETURN__	/usr/lib/avr/include/stdlib.h	93
+__ATTR_PROGMEM__	/usr/lib/avr/include/avr/pgmspace.h	95
+__ATTR_PURE__	/usr/lib/avr/include/stdlib.h	97
+__ATTR_PURE__	/usr/lib/avr/include/string.h	48
+__ATTR_PURE__	/usr/lib/avr/include/avr/eeprom.h	475
+__ATTR_PURE__	/usr/lib/avr/include/avr/eeprom.h	477
+__ATTR_PURE__	/usr/lib/avr/include/avr/pgmspace.h	99
+__AVR_ATmega328__	switcherator.c	2
+__AVR_HAVE_LPMX__	/usr/lib/avr/include/avr/common.h	313
+__AVR_HAVE_MOVW__	/usr/lib/avr/include/avr/common.h	307
+__AVR_HAVE_MUL__	/usr/lib/avr/include/avr/common.h	319
+__AVR_LIBC_DATE_	/usr/lib/avr/include/avr/version.h	76
+__AVR_LIBC_DATE_STRING__	/usr/lib/avr/include/avr/version.h	72
+__AVR_LIBC_MAJOR__	/usr/lib/avr/include/avr/version.h	80
+__AVR_LIBC_MINOR__	/usr/lib/avr/include/avr/version.h	84
+__AVR_LIBC_REVISION__	/usr/lib/avr/include/avr/version.h	88
+__AVR_LIBC_VERSION_STRING__	/usr/lib/avr/include/avr/version.h	58
+__AVR_LIBC_VERSION__	/usr/lib/avr/include/avr/version.h	68
+__BOOT_LOCK_BITS_0_EXIST	/usr/lib/avr/include/avr/iom328p.h	916
+__BOOT_LOCK_BITS_1_EXIST	/usr/lib/avr/include/avr/iom328p.h	917
+__CONCAT	/usr/lib/avr/include/stdint.h	/^#define __CONCAT(left, right) __CONCATenate(left, /
+__CONCATenate	/usr/lib/avr/include/stdint.h	/^#define __CONCATenate(left, right) left ## right$/
+__EEGET	/usr/lib/avr/include/avr/eeprom.h	/^#define __EEGET(var, addr) (var) = eeprom_read_byt/
+__EEPUT	/usr/lib/avr/include/avr/eeprom.h	/^#define __EEPUT(addr, val) eeprom_write_byte ((uin/
+__ELPM	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM(addr)        __ELPM_xmega__(addr)$/
+__ELPM	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM(addr)        __ELPM_enhanced__(addr/
+__ELPM	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM(addr)        __ELPM_classic__(addr)/
+__ELPM_classic__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_classic__(addr)      \\$/
+__ELPM_dword	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_dword(addr)  __ELPM_dword_xmega__(a/
+__ELPM_dword	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_dword(addr)  __ELPM_dword_enhanced_/
+__ELPM_dword	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_dword(addr)  __ELPM_dword_classic__/
+__ELPM_dword_classic__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_dword_classic__(addr)      \\$/
+__ELPM_dword_enhanced__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_dword_enhanced__(addr)     \\$/
+__ELPM_dword_xmega__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_dword_xmega__(addr)        \\$/
+__ELPM_enhanced__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_enhanced__(addr)     \\$/
+__ELPM_float	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_float(addr)  __ELPM_float_xmega__(a/
+__ELPM_float	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_float(addr)  __ELPM_float_enhanced_/
+__ELPM_float	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_float(addr)  __ELPM_float_classic__/
+__ELPM_float_classic__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_float_classic__(addr)      \\$/
+__ELPM_float_enhanced__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_float_enhanced__(addr)     \\$/
+__ELPM_float_xmega__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_float_xmega__(addr)        \\$/
+__ELPM_word	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_word(addr)   __ELPM_word_xmega__(ad/
+__ELPM_word	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_word(addr)   __ELPM_word_enhanced__/
+__ELPM_word	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_word(addr)   __ELPM_word_classic__(/
+__ELPM_word_classic__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_word_classic__(addr)     \\$/
+__ELPM_word_enhanced__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_word_enhanced__(addr)    \\$/
+__ELPM_word_xmega__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_word_xmega__(addr)       \\$/
+__ELPM_xmega__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __ELPM_xmega__(addr)        \\$/
+__HAS_DELAY_CYCLES	/usr/lib/avr/include/util/delay.h	39
+__INTR_ATTRS	/usr/lib/avr/include/avr/interrupt.h	129
+__INTR_ATTRS	/usr/lib/avr/include/avr/interrupt.h	131
+__INTTYPES_H_	/usr/lib/avr/include/inttypes.h	35
+__INT_WCHAR_T_H	/usr/lib/gcc/avr/4.7.2/include/stddef.h	276
+__LOCK_BITS_EXIST	/usr/lib/avr/include/avr/iom328p.h	915
+__LPM	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM(addr)         __LPM_enhanced__(addr)/
+__LPM	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM(addr)         __LPM_classic__(addr)$/
+__LPM_classic__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_classic__(addr)   \\$/
+__LPM_dword	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_dword(addr)   __LPM_dword_enhanced__/
+__LPM_dword	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_dword(addr)   __LPM_dword_classic__(/
+__LPM_dword_classic__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_dword_classic__(addr)         \\$/
+__LPM_dword_enhanced__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_dword_enhanced__(addr)        \\$/
+__LPM_enhanced__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_enhanced__(addr)  \\$/
+__LPM_float	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_float(addr)   __LPM_float_enhanced__/
+__LPM_float	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_float(addr)   __LPM_float_classic__(/
+__LPM_float_classic__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_float_classic__(addr)         \\$/
+__LPM_float_enhanced__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_float_enhanced__(addr)        \\$/
+__LPM_word	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_word(addr)    __LPM_word_enhanced__(/
+__LPM_word	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_word(addr)    __LPM_word_classic__(a/
+__LPM_word_classic__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_word_classic__(addr)          \\$/
+__LPM_word_enhanced__	/usr/lib/avr/include/avr/pgmspace.h	/^#define __LPM_word_enhanced__(addr)         \\$/
+__MATH_H	/usr/lib/avr/include/math.h	49
+__PGMSPACE_H_	/usr/lib/avr/include/avr/pgmspace.h	83
+__PTRDIFF_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	142
+__PTRDIFF_TYPE__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	148
+__SFR_OFFSET	/usr/lib/avr/include/avr/sfr_defs.h	139
+__SFR_OFFSET	/usr/lib/avr/include/avr/sfr_defs.h	141
+__SFR_OFFSET	/usr/lib/avr/include/avr/sfr_defs.h	170
+__SFR_OFFSET	/usr/lib/avr/include/avr/sfr_defs.h	172
+__SIZE_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	193
+__SIZE_TYPE__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	210
+__SIZE_T__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	188
+__STDDEF_H__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	45
+__STDINT_H_	/usr/lib/avr/include/stdint.h	40
+__STRINGIFY	/usr/lib/avr/include/avr/interrupt.h	/^#define __STRINGIFY(x) #x$/
+__USING_MINT8	/usr/lib/avr/include/stdint.h	55
+__USING_MINT8	/usr/lib/avr/include/stdint.h	57
+__WCHAR_T	/usr/lib/gcc/avr/4.7.2/include/stddef.h	269
+__WCHAR_TYPE__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	322
+__WCHAR_T__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	265
+__WINT_TYPE__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	352
+___int_ptrdiff_t_h	/usr/lib/gcc/avr/4.7.2/include/stddef.h	145
+___int_size_t_h	/usr/lib/gcc/avr/4.7.2/include/stddef.h	200
+___int_wchar_t_h	/usr/lib/gcc/avr/4.7.2/include/stddef.h	275
+__compar_fn_t	/usr/lib/avr/include/stdlib.h	80
+__fuse_t	/usr/lib/avr/include/avr/fuse.h	234
+__fuse_t	/usr/lib/avr/include/avr/fuse.h	244
+__fuse_t	/usr/lib/avr/include/avr/fuse.h	252
+__fuse_t	/usr/lib/avr/include/avr/fuse.h	259
+__max_align_ld	/usr/lib/gcc/avr/4.7.2/include/stddef.h	425
+__max_align_ll	/usr/lib/gcc/avr/4.7.2/include/stddef.h	424
+__need_NULL	/usr/lib/avr/include/stdlib.h	44
+__need_NULL	/usr/lib/gcc/avr/4.7.2/include/stddef.h	409
+__need_NULL	/usr/lib/avr/include/string.h	43
+__need_ptrdiff_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	161
+__need_size_t	/usr/lib/avr/include/stdlib.h	45
+__need_size_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	235
+__need_size_t	/usr/lib/avr/include/string.h	44
+__need_size_t	/usr/lib/avr/include/avr/pgmspace.h	85
+__need_wchar_t	/usr/lib/avr/include/stdlib.h	46
+__need_wchar_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	344
+__need_wint_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	356
+__ptr_t	/usr/lib/avr/include/stdlib.h	50
+__size_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	207
+__size_t__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	187
+__wchar_t__	/usr/lib/gcc/avr/4.7.2/include/stddef.h	264
+_delay_loop_1	/usr/lib/avr/include/util/delay_basic.h	/^static inline void _delay_loop_1(uint8_t __count) /
+_delay_loop_1	/usr/lib/avr/include/util/delay_basic.h	/^_delay_loop_1(uint8_t __count)$/
+_delay_loop_2	/usr/lib/avr/include/util/delay_basic.h	/^static inline void _delay_loop_2(uint16_t __count)/
+_delay_loop_2	/usr/lib/avr/include/util/delay_basic.h	/^_delay_loop_2(uint16_t __count)$/
+_delay_ms	/usr/lib/avr/include/util/delay.h	/^static inline void _delay_ms(double __ms) __attrib/
+_delay_ms	/usr/lib/avr/include/util/delay.h	/^_delay_ms(double __ms)$/
+_delay_us	/usr/lib/avr/include/util/delay.h	/^static inline void _delay_us(double __us) __attrib/
+_delay_us	/usr/lib/avr/include/util/delay.h	/^_delay_us(double __us)$/
+abort	/usr/lib/avr/include/stdlib.h	/^extern void abort(void) __ATTR_NORETURN__;$/
+abs	/usr/lib/avr/include/stdlib.h	/^#define	abs(__i) __builtin_abs(__i)$/
+acosf	/usr/lib/avr/include/math.h	275
+advanceDay	switcherator.c	/^void advanceDay(void) {$/
+asinf	/usr/lib/avr/include/math.h	283
+atan2f	/usr/lib/avr/include/math.h	299
+atanf	/usr/lib/avr/include/math.h	290
+bit_is_clear	/usr/lib/avr/include/avr/sfr_defs.h	/^#define bit_is_clear(sfr, bit) (!(_SFR_BYTE(sfr) &/
+bit_is_set	/usr/lib/avr/include/avr/sfr_defs.h	/^#define bit_is_set(sfr, bit) (_SFR_BYTE(sfr) & _BV/
+blue	switcherator.c	85
+bright	switcherator.c	86
+brightnessSet	switcherator.c	/^void brightnessSet(char * commandReceived) {$/
+byte	/usr/lib/avr/include/avr/fuse.h	233
+byte	/usr/lib/avr/include/avr/fuse.h	258
+cbrtf	/usr/lib/avr/include/math.h	184
+ceilf	/usr/lib/avr/include/math.h	217
+checkCommand	switcherator.c	/^void checkCommand(char * commandReceived) {$/
+checkDaylightSavings	switcherator.c	/^void checkDaylightSavings(void) {$/
+clearEEPROM	switcherator.c	/^void clearEEPROM(int memLocation) {$/
+clearFail	switcherator.c	/^void clearFail(void) {$/
+clearImmediateChange	switcherator.c	/^void clearImmediateChange(void) {$/
+clearInput	switcherator.c	/^void clearInput(char * commandReceived) {$/
+clearProgram	switcherator.c	/^void clearProgram(char * commandReceived) {$/
+clearTheProgram	switcherator.c	/^void clearTheProgram(int programNumber) {$/
+clearTheSwitch	switcherator.c	/^void clearTheSwitch(int switchNumber) {$/
+clearToEEPROM	switcherator.c	/^void clearToEEPROM(void) {$/
+cli	/usr/lib/avr/include/avr/interrupt.h	/^#define cli()$/
+cli	/usr/lib/avr/include/avr/interrupt.h	/^# define cli()  __asm__ __volatile__ ("cli" ::: "m/
+clockInit	switcherator.c	/^void clockInit(void) {$/
+clockString	switcherator.c	/^void clockString(void) {$/
+clockTweak	switcherator.c	/^void clockTweak(char * commandReceived) {$/
+colorChangeCount	switcherator.c	78
+colorChangeSet	switcherator.c	/^void colorChangeSet(char * commandReceived) {$/
+colorChangeSpeed	switcherator.c	77
+colorChanges	switcherator.c	63
+copysign	/usr/lib/avr/include/math.h	/^__ATTR_CONST__ static inline double copysign (doub/
+copysignf	/usr/lib/avr/include/math.h	367
+cos	/usr/lib/avr/include/math.h	/^extern double cos(double __x) __ATTR_CONST__;$/
+cosf	/usr/lib/avr/include/math.h	128
+coshf	/usr/lib/avr/include/math.h	255
+currentColor	switcherator.c	79
+currentHue	switcherator.c	73
+cycleHue	switcherator.c	/^void cycleHue(char * commandReceived) {$/
+daylightSavings	switcherator.c	24
+div_t	/usr/lib/avr/include/stdlib.h	71
+dow	switcherator.c	19
+eeprom_busy_wait	/usr/lib/avr/include/avr/eeprom.h	/^#define eeprom_busy_wait() do {} while (!eeprom_is/
+eeprom_is_ready	/usr/lib/avr/include/avr/eeprom.h	/^# define eeprom_is_ready()$/
+eeprom_is_ready	/usr/lib/avr/include/avr/eeprom.h	/^# define eeprom_is_ready()	bit_is_clear (NVM_STATU/
+eeprom_is_ready	/usr/lib/avr/include/avr/eeprom.h	/^# define eeprom_is_ready()	bit_is_clear (DEECR, BS/
+eeprom_is_ready	/usr/lib/avr/include/avr/eeprom.h	/^# define eeprom_is_ready()	bit_is_clear (EECR, EEP/
+eeprom_is_ready	/usr/lib/avr/include/avr/eeprom.h	/^# define eeprom_is_ready()	bit_is_clear (EECR, EEW/
+eeprom_read_block	/usr/lib/avr/include/avr/eeprom.h	410
+eeprom_read_byte	/usr/lib/avr/include/avr/eeprom.h	406
+eeprom_read_byte	/usr/lib/avr/include/avr/eeprom.h	/^uint8_t eeprom_read_byte (const uint8_t *__p) __AT/
+eeprom_read_dword	/usr/lib/avr/include/avr/eeprom.h	408
+eeprom_read_float	/usr/lib/avr/include/avr/eeprom.h	409
+eeprom_read_word	/usr/lib/avr/include/avr/eeprom.h	407
+eeprom_update_block	/usr/lib/avr/include/avr/eeprom.h	422
+eeprom_update_byte	/usr/lib/avr/include/avr/eeprom.h	418
+eeprom_update_dword	/usr/lib/avr/include/avr/eeprom.h	420
+eeprom_update_float	/usr/lib/avr/include/avr/eeprom.h	421
+eeprom_update_word	/usr/lib/avr/include/avr/eeprom.h	419
+eeprom_write_block	/usr/lib/avr/include/avr/eeprom.h	416
+eeprom_write_byte	/usr/lib/avr/include/avr/eeprom.h	412
+eeprom_write_dword	/usr/lib/avr/include/avr/eeprom.h	414
+eeprom_write_float	/usr/lib/avr/include/avr/eeprom.h	415
+eeprom_write_word	/usr/lib/avr/include/avr/eeprom.h	413
+expf	/usr/lib/avr/include/math.h	249
+extended	/usr/lib/avr/include/avr/fuse.h	243
+fabsf	/usr/lib/avr/include/math.h	147
+fail	switcherator.c	/^void fail(int failCode) {$/
+failCondition	switcherator.c	31
+failTimer	switcherator.c	32
+fdimf	/usr/lib/avr/include/math.h	384
+ffs	/usr/lib/avr/include/string.h	/^extern int ffs (int __val) __ATTR_CONST__;$/
+findOpenSwitch	switcherator.c	/^int findOpenSwitch(int programNumber) {$/
+flashFail	switcherator.c	/^void flashFail(void) {$/
+floorf	/usr/lib/avr/include/math.h	210
+fmaf	/usr/lib/avr/include/math.h	393
+fmaxf	/usr/lib/avr/include/math.h	401
+fminf	/usr/lib/avr/include/math.h	409
+fmodf	/usr/lib/avr/include/math.h	154
+formatAddress	switcherator.c	/^uint64_t formatAddress(char * address) {$/
+frexpf	/usr/lib/avr/include/math.h	235
+generalInformation	switcherator.c	/^void generalInformation(void) {$/
+generalInit	switcherator.c	/^void generalInit(void) {$/
+generalStatus	switcherator.c	/^void generalStatus(char * commandReceived) {$/
+getDayofYear	switcherator.c	/^int getDayofYear(int year, int month, int day) {$/
+getInput	switcherator.c	/^void getInput(int inputNumber) {$/
+getPort	switcherator.c	/^void getPort(int switchNumber, char * port, char */
+getSwitchNumber	switcherator.c	/^int getSwitchNumber(char * commandReceived) {$/
+getWeekday	switcherator.c	/^int getWeekday(int year, int month, int day) {$/
+globalDay	switcherator.c	19
+globalHour	switcherator.c	19
+globalMinute	switcherator.c	19
+globalMonth	switcherator.c	19
+globalSecond	switcherator.c	19
+globalYear	switcherator.c	19
+green	switcherator.c	84
+high	/usr/lib/avr/include/avr/fuse.h	242
+high	/usr/lib/avr/include/avr/fuse.h	251
+hueCount	switcherator.c	75
+hueSpeed	switcherator.c	74
+hypotf	/usr/lib/avr/include/math.h	195
+immediateChange	switcherator.c	68
+inputCheck	switcherator.c	/^void inputCheck(void) {$/
+inputTenthCheck	switcherator.c	/^void inputTenthCheck(void) {$/
+inputs	switcherator.c	107
+inputsProgrammed	switcherator.c	/^void inputsProgrammed(void) {$/
+int16_t	/usr/lib/avr/include/stdint.h	84
+int16_t	/usr/lib/avr/include/stdint.h	123
+int32_t	/usr/lib/avr/include/stdint.h	94
+int32_t	/usr/lib/avr/include/stdint.h	125
+int64_t	/usr/lib/avr/include/stdint.h	106
+int64_t	/usr/lib/avr/include/stdint.h	128
+int8_t	/usr/lib/avr/include/stdint.h	74
+int8_t	/usr/lib/avr/include/stdint.h	121
+int_farptr_t	/usr/lib/avr/include/inttypes.h	77
+int_fast16_t	/usr/lib/avr/include/stdint.h	223
+int_fast32_t	/usr/lib/avr/include/stdint.h	233
+int_fast64_t	/usr/lib/avr/include/stdint.h	246
+int_fast8_t	/usr/lib/avr/include/stdint.h	213
+int_least16_t	/usr/lib/avr/include/stdint.h	169
+int_least32_t	/usr/lib/avr/include/stdint.h	179
+int_least64_t	/usr/lib/avr/include/stdint.h	192
+int_least8_t	/usr/lib/avr/include/stdint.h	159
+intmax_t	/usr/lib/avr/include/stdint.h	266
+intmax_t	/usr/lib/avr/include/stdint.h	273
+intptr_t	/usr/lib/avr/include/stdint.h	142
+isfinitef	/usr/lib/avr/include/math.h	352
+isinff	/usr/lib/avr/include/math.h	334
+isnanf	/usr/lib/avr/include/math.h	324
+labs	/usr/lib/avr/include/stdlib.h	/^#define labs(__i) __builtin_labs(__i)$/
+ldexpf	/usr/lib/avr/include/math.h	243
+ldiv_t	/usr/lib/avr/include/stdlib.h	77
+littleCount	switcherator.c	76
+log10f	/usr/lib/avr/include/math.h	311
+logf	/usr/lib/avr/include/math.h	305
+loop_until_bit_is_clear	/usr/lib/avr/include/avr/sfr_defs.h	/^#define loop_until_bit_is_clear(sfr, bit) do { } w/
+loop_until_bit_is_set	/usr/lib/avr/include/avr/sfr_defs.h	/^#define loop_until_bit_is_set(sfr, bit) do { } whi/
+low	/usr/lib/avr/include/avr/fuse.h	241
+low	/usr/lib/avr/include/avr/fuse.h	250
+lrintf	/usr/lib/avr/include/math.h	454
+lroundf	/usr/lib/avr/include/math.h	440
+max_align_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	426
+memchr_P	/usr/lib/avr/include/avr/pgmspace.h	/^extern const void * memchr_P(const void *, int __v/
+newMinute	switcherator.c	28
+newProgram	switcherator.c	/^void newProgram(char * commandReceived) {$/
+newSecond	switcherator.c	27
+offsetof	/usr/lib/gcc/avr/4.7.2/include/stddef.h	/^#define offsetof(TYPE, MEMBER) __builtin_offsetof /
+ok	switcherator.c	/^void ok(void) {$/
+oldBright	switcherator.c	87
+panicMyClockIsNotSet	switcherator.c	14
+pgm_get_far_address	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_get_far_address(var)                  /
+pgm_read_byte	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_byte(address_short)    pgm_read_b/
+pgm_read_byte_far	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_byte_far(address_long)  __ELPM((u/
+pgm_read_byte_near	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_byte_near(address_short) __LPM((u/
+pgm_read_dword	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_dword(address_short)   pgm_read_d/
+pgm_read_dword_far	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_dword_far(address_long) __ELPM_dw/
+pgm_read_dword_near	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_dword_near(address_short) \\$/
+pgm_read_float	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_float(address_short)   pgm_read_f/
+pgm_read_float_far	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_float_far(address_long) __ELPM_fl/
+pgm_read_float_near	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_float_near(address_short) \\$/
+pgm_read_word	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_word(address_short)    pgm_read_w/
+pgm_read_word_far	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_word_far(address_long)  __ELPM_wo/
+pgm_read_word_near	/usr/lib/avr/include/avr/pgmspace.h	/^#define pgm_read_word_near(address_short) __LPM_wo/
+powf	/usr/lib/avr/include/math.h	317
+prog_char	/usr/lib/avr/include/avr/pgmspace.h	158
+prog_char	/usr/lib/avr/include/avr/pgmspace.h	350
+prog_int16_t	/usr/lib/avr/include/avr/pgmspace.h	230
+prog_int16_t	/usr/lib/avr/include/avr/pgmspace.h	354
+prog_int32_t	/usr/lib/avr/include/avr/pgmspace.h	266
+prog_int32_t	/usr/lib/avr/include/avr/pgmspace.h	356
+prog_int64_t	/usr/lib/avr/include/avr/pgmspace.h	305
+prog_int64_t	/usr/lib/avr/include/avr/pgmspace.h	359
+prog_int8_t	/usr/lib/avr/include/avr/pgmspace.h	194
+prog_int8_t	/usr/lib/avr/include/avr/pgmspace.h	352
+prog_uchar	/usr/lib/avr/include/avr/pgmspace.h	176
+prog_uchar	/usr/lib/avr/include/avr/pgmspace.h	351
+prog_uint16_t	/usr/lib/avr/include/avr/pgmspace.h	248
+prog_uint16_t	/usr/lib/avr/include/avr/pgmspace.h	355
+prog_uint32_t	/usr/lib/avr/include/avr/pgmspace.h	284
+prog_uint32_t	/usr/lib/avr/include/avr/pgmspace.h	357
+prog_uint64_t	/usr/lib/avr/include/avr/pgmspace.h	326
+prog_uint64_t	/usr/lib/avr/include/avr/pgmspace.h	360
+prog_uint8_t	/usr/lib/avr/include/avr/pgmspace.h	212
+prog_uint8_t	/usr/lib/avr/include/avr/pgmspace.h	353
+prog_void	/usr/lib/avr/include/avr/pgmspace.h	140
+prog_void	/usr/lib/avr/include/avr/pgmspace.h	349
+programAddSwitch	switcherator.c	/^void programAddSwitch(char * commandReceived) {$/
+programDisplay	switcherator.c	/^void programDisplay(char * commandReceived) {$/
+programGetSwitches	switcherator.c	/^int programGetSwitches(int programNumber, char * s/
+programSetDays	switcherator.c	/^void programSetDays(char * commandReceived) {$/
+programSetTime	switcherator.c	/^void programSetTime(char * commandReceived) {$/
+programsProgrammed	switcherator.c	/^void programsProgrammed(void) {$/
+ptrdiff_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	150
+pwmClear	switcherator.c	/^void pwmClear(int switchNumber) {$/
+pwmIsSet	switcherator.c	64
+pwmOldValues	switcherator.c	69
+pwmSetup	switcherator.c	/^void pwmSetup(char * commandReceived) {$/
+pwmSummary	switcherator.c	/^void pwmSummary(void) {$/
+pwmSwitchNumber	switcherator.c	65
+pwmValueSet	switcherator.c	/^void pwmValueSet(char * commandReceived) {$/
+pwmValues	switcherator.c	62
+pwmdir	switcherator.c	89
+quot	/usr/lib/avr/include/stdlib.h	69
+quot	/usr/lib/avr/include/stdlib.h	75
+radioChangeAddress	switcherator.c	/^void radioChangeAddress(char * commandReceived) {$/
+radioDisplayAddress	switcherator.c	/^void radioDisplayAddress(char * commandReceived) {/
+radioInit	switcherator.c	/^void radioInit(void) {$/
+radioReceiveBuffer	switcherator.c	52
+radioTest	switcherator.c	/^int radioTest(void) {$/
+readEEPROM	switcherator.c	/^int readEEPROM(char * data, int memLocation, int m/
+receiveBuffer	switcherator.c	51
+red	switcherator.c	83
+rem	/usr/lib/avr/include/stdlib.h	70
+rem	/usr/lib/avr/include/stdlib.h	76
+reti	/usr/lib/avr/include/avr/interrupt.h	/^#  define reti()$/
+reti	/usr/lib/avr/include/avr/interrupt.h	/^#  define reti()  __asm__ __volatile__ ("reti" ::)/
+returnHex	switcherator.c	/^void returnHex(unsigned int number, char * thisStr/
+returnHexWithout	switcherator.c	/^void returnHexWithout(unsigned int number, char * /
+returnInt	switcherator.c	/^void returnInt(int number, char * thisString) {$/
+roundf	/usr/lib/avr/include/math.h	427
+runColorChanges	switcherator.c	60
+runColorFunction	switcherator.c	/^void runColorFunction(void) {$/
+runHue	switcherator.c	59
+runHueFunction	switcherator.c	/^void runHueFunction(void) {$/
+rune_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	294
+rune_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	314
+rx_addr_p0	switcherator.c	120
+rx_addr_p1	switcherator.c	120
+rx_addr_p2	switcherator.c	120
+rx_addr_p3	switcherator.c	120
+rx_addr_p4	switcherator.c	120
+rx_addr_p5	switcherator.c	120
+saveToEEPROM	switcherator.c	/^void saveToEEPROM(void) {$/
+sei	/usr/lib/avr/include/avr/interrupt.h	/^#define sei()$/
+sei	/usr/lib/avr/include/avr/interrupt.h	/^# define sei()  __asm__ __volatile__ ("sei" ::: "m/
+sendMessage	switcherator.c	/^void sendMessage(char * myResponse) {$/
+setAnalogInput	switcherator.c	/^void setAnalogInput(char * commandReceived) {$/
+setClock	switcherator.c	/^void setClock(char * commandReceived) {$/
+setDaylightSavings	switcherator.c	/^void setDaylightSavings(char * commandReceived) {$/
+setDigitalInput	switcherator.c	/^void setDigitalInput(char * commandReceived) {$/
+setHueSpeed	switcherator.c	/^void setHueSpeed(char * commandReceived) {$/
+setImmediateChange	switcherator.c	/^void setImmediateChange(char * commandReceived) {$/
+setNewSwitch	switcherator.c	/^void setNewSwitch(char * commandReceived) {$/
+setTimeLimits	switcherator.c	/^void setTimeLimits(char * commandReceived) {$/
+signbit	/usr/lib/avr/include/math.h	/^extern int signbit (double __x) __ATTR_CONST__;$/
+signbitf	/usr/lib/avr/include/math.h	377
+sinf	/usr/lib/avr/include/math.h	134
+sinhf	/usr/lib/avr/include/math.h	261
+size_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	213
+sqrtf	/usr/lib/avr/include/math.h	178
+squaref	/usr/lib/avr/include/math.h	203
+ssize_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	215
+startClock	switcherator.c	/^void startClock(void) {$/
+startProgram	switcherator.c	/^void startProgram(char * commandReceived) {$/
+startSwitch	switcherator.c	/^void startSwitch(char * commandReceived) {$/
+startTheProgram	switcherator.c	/^void startTheProgram(int programNumber, int durati/
+statusMsg	switcherator.c	56
+stopClock	switcherator.c	/^void stopClock(void) {$/
+strlen_P	/usr/lib/avr/include/avr/pgmspace.h	/^static inline size_t strlen_P(const char *s) {$/
+switchBright	switcherator.c	88
+switchBrightness	switcherator.c	/^void switchBrightness(char * commandReceived) {$/
+switchChanged	switcherator.c	29
+switchClear	switcherator.c	/^void switchClear(char * commandReceived) {$/
+switchDisplay	switcherator.c	/^void switchDisplay(char * commandReceived) {$/
+switchOnOff	switcherator.c	/^void switchOnOff(void) {$/
+switchStatus	switcherator.c	38
+switchStuff	switcherator.c	47
+switchesOn	switcherator.c	/^void switchesOn(void) {$/
+switchesProgrammed	switcherator.c	/^void switchesProgrammed(void) {$/
+tanf	/usr/lib/avr/include/math.h	140
+tanhf	/usr/lib/avr/include/math.h	267
+tempHugeString	switcherator.c	55
+tempIntString	switcherator.c	53
+tempLongString	switcherator.c	54
+tenthFlag	switcherator.c	30
+ticks	switcherator.c	18
+timeLimits	switcherator.c	111
+timerCheck	switcherator.c	/^void timerCheck(void) {$/
+truncf	/usr/lib/avr/include/math.h	416
+tweakTimer	switcherator.c	115
+tx_addr	switcherator.c	120
+uint16_t	/usr/lib/avr/include/stdint.h	89
+uint16_t	/usr/lib/avr/include/stdint.h	124
+uint32_t	/usr/lib/avr/include/stdint.h	99
+uint32_t	/usr/lib/avr/include/stdint.h	126
+uint64_t	/usr/lib/avr/include/stdint.h	113
+uint64_t	/usr/lib/avr/include/stdint.h	129
+uint8_t	/usr/lib/avr/include/stdint.h	79
+uint8_t	/usr/lib/avr/include/stdint.h	122
+uint_farptr_t	/usr/lib/avr/include/inttypes.h	81
+uint_fast16_t	/usr/lib/avr/include/stdint.h	228
+uint_fast32_t	/usr/lib/avr/include/stdint.h	238
+uint_fast64_t	/usr/lib/avr/include/stdint.h	253
+uint_fast8_t	/usr/lib/avr/include/stdint.h	218
+uint_least16_t	/usr/lib/avr/include/stdint.h	174
+uint_least32_t	/usr/lib/avr/include/stdint.h	184
+uint_least64_t	/usr/lib/avr/include/stdint.h	199
+uint_least8_t	/usr/lib/avr/include/stdint.h	164
+uintmax_t	/usr/lib/avr/include/stdint.h	268
+uintmax_t	/usr/lib/avr/include/stdint.h	278
+uintptr_t	/usr/lib/avr/include/stdint.h	147
+unformatAddress	switcherator.c	/^void unformatAddress(uint64_t oldAddress, char * f/
+wasDaylightSavings	switcherator.c	23
+wchar_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	325
+weeklyProgram	switcherator.c	98
+weeklySeconds	switcherator.c	21
+wint_t	/usr/lib/gcc/avr/4.7.2/include/stddef.h	354
+writeEEPROM	switcherator.c	/^void writeEEPROM(char * data, int memLocation, int/

@@ -2,4 +2,17 @@ myradiodb.php
 tags
 /nbproject/
 test.php
+*.o
+*.lst
+*.elf
+*.hex
+/.dep/
+*.map
+*.lss
+*.eep
+*.sym
+/nbproject/private/
+*/nbproject/
+*.d
+*.lst
 
