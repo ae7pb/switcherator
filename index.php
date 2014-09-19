@@ -44,6 +44,9 @@
 </style>
 
 <?PHP
+
+$colors = array( "purple", "blue", "red", "orange", "lime", "yellow", "orangered", "forestgreen", "fuchsia", "crimson");
+
 // decide how we are running and do an appropriate new line
 if (php_sapi_name() == "cli")
     $nl = "\n";
@@ -159,29 +162,89 @@ $db->exec("CREATE TABLE IF NOT EXISTS colorChanges (
     unique(radioID,colorChangeNumber)
     )");
 
-displayMenu();
+if(isset($_GET['radio'])) {
+    displayCurrentRadioMenu($_GET['radio']);
+} else if(isset($_GET['newRadio'])) {
+    displayNewRadioMenu();
+} else if(isset($_GET['newManualRadio'])) {
+    displayManualRadioAdd();
+} else {
+    displayRadioMenu();
+}
+
 //  TODO: colorful layout, switches side by side showing how many it has and if they are programmed or not.
 //newRadio("radio1","desc","porch");
 //    if (!processRadio(1))
 //        echo "fail";
 //    else
 //        echo "good";
-echo "<div>";
 
-function displayMenu() {
+/*
+ * Displays the main radio menu.
+ */
+function displayRadioMenu() {
     global $db;
-    echo "fart";
+    echo "<div>";    
     $sql = "select * from radios";
     $result = $db->query($sql);
     while($radioInfo = $result->fetchArray(SQLITE3_ASSOC)) {
-        print_R($radioInfo);
+        $colorID = $radioInfo['id'] - 1;
+        while($colorID >= 10)
+            $colorID -= 10;
         ?>
-        <div><a href="?radio=<?= $radioInfo['id'] ?>"><span class="link red"><?= $radioInfo['name'] ?>
+        <div><a href="?radio=<?= $radioInfo['id'] ?>"><span class="link <?=$colors['colorID']?>"><?= $radioInfo['name'] ?>
                     <br/><?= $radioInfo['description'] ?></span></a></div>
         <?PHP
     }
-    echo "gas";
+    ?>
+    <div><a href="?newRadio=true"><span class="link purple">Automatically add new radio.</span></a></div>
+    <div><a href="?newManualRadio=true"><span class="link purple">Manually add new radio.</span></a></div>
+    </div>
+    <?PHP
 }
+
+/*
+ * Displays the current radio menu when we have a radio set up.
+ */
+function displayCurrentRadioMenu($radioID) {
+    // get info about the radio
+    $sql = "select count(switchStuff) from switches where radioID = :radioID and switchStuff != 255";
+    $statement = $db->prepare($sql);
+    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
+        echo $db->lastErrorMsg();
+    $result = $statement->execute();
+    $switchCount = $result->fetchArray();
+    
+    $sql = "select count(programNumber) from programs where radioID = :radioID and days != 255";
+    $statement = $db->prepare($sql);
+    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
+        echo $db->lastErrorMsg();
+    $result = $statement->execute();
+    $programCount = $result->fetchArray();
+    
+    $sql = "select count(pinStuff) from inputs where radioID = :radioID and pinStuff != 255";
+    $statement = $db->prepare($sql);
+    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
+        echo $db->lastErrorMsg();
+    $result = $statement->execute();
+    $inputCount = $result->fetchArray();
+    
+    $sql = "select count(colorChangeNumber) from colorChanges where radioID = :radioID and (red != 0 or green != 1 or blue != 0)";
+    $statement = $db->prepare($sql);
+    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
+        echo $db->lastErrorMsg();
+    $result = $statement->execute();
+    $colorChangeCount = $result->fetchArray();
+    
+      $sql = "select count(limitNumber) from timeLimits where radioID = :radioID and (startTime != 0 or stopTime != 0 or days != 0)";
+    $statement = $db->prepare($sql);
+    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
+        echo $db->lastErrorMsg();
+    $result = $statement->execute();
+    $timeLimitCount = $result->fetchArray();
+    
+}
+
 
 /*
  * Run a radio command. Either returns the array output from the command
@@ -485,7 +548,7 @@ function processRadio($radioID) {
  * brightness - brightness value (1-16)
  */
 ?>
-
+<div>
     <div><a href="#"><span class="link blue"></span></a></div>
     <div><a href="#"><span class="link red"></span></a></div>
     <div><a href="#"><span class="link purple"></span></a></div>
