@@ -936,7 +936,7 @@ void cycleHue(char * commandReceived) {
         colorChangeSpeed = programNumber;
     else {
         statusMsg[0] = 0;
-        itoa(statusMsg,colorChangeSpeed,10);
+        itoa(colorChangeSpeed,statusMsg,10);
         sendMessage(statusMsg);
     }
     ok();
@@ -951,7 +951,7 @@ void setHueSpeed(char * commandReceived) {
         hueSpeed = programNumber;
     else {
         statusMsg[0] = 0;
-        itoa(statusMsg,colorChangeSpeed,10);
+        itoa(colorChangeSpeed,statusMsg,10);
         sendMessage(statusMsg);
     }
     ok();
@@ -2189,6 +2189,7 @@ void memoryDump(void) {
     strcat(statusMsg, "|");
     returnHexWithout(inputMessageTiming, tempLongString);
     strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "|");
 
     linecount++;
     resetStatus(linecount, "M");
