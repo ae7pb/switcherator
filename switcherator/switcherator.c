@@ -6,12 +6,7 @@
 #endif
 
 // TODO: deal with pulse width sonar thingie
-/*
- * TODO: Huespeed, brightness and colorchangespeed are not being saved
-static unsigned int colorChangeSpeed = 10; // how many 1/10 seconds in each color change
-static unsigned int bright = 16;
-static unsigned int hueSpeed = 16;
- */
+
 #include "switcherator.h"
 
 // globals and such
@@ -1172,7 +1167,7 @@ void brightnessSet(char * commandReceived) {
 
 // sometimes you might want the lights to act like they
 // are being controlled via DMX or something.  this is how
-// ic:xxx,xxx,xxx,dura
+// ic:ccc,ccc,ccc,dura
 // 0123456789012345678
 
 void setImmediateChange(char * commandReceived) {
