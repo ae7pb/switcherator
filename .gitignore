@@ -1,3 +1,7 @@
+myradiodb.php
+tags
+/nbproject/
+test.php
 *.o
 *.lst
 *.elf
