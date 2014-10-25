@@ -5,10 +5,13 @@
 #define F_CPU 16000000
 #endif
 
-// TODO: set up way to send feedback from switches
 // TODO: deal with pulse width sonar thingie
-// TODO: transmit switch results. store in global variable. Retry 20 times every 10 secs until an awk is received.
-
+/*
+ * TODO: Huespeed, brightness and colorchangespeed are not being saved
+static unsigned int colorChangeSpeed = 10; // how many 1/10 seconds in each color change
+static unsigned int bright = 16;
+static unsigned int hueSpeed = 16;
+ */
 #include "switcherator.h"
 
 // globals and such
@@ -46,6 +49,7 @@ static unsigned long switchStatus[NUM_SWITCHES];
 // pin is abs(value/2)-the base - PINB3 = (22-16)/2  PINB3 (22-16)%2 = 0 - low (23-16)%2 = 1 - high
 // 200 = PWM, 201 = PWM rotating hue. PWM always uses PORTD3,PORTD5,PORTD6 for RGB
 // 202 = Color changing PWM
+// 212 = brightness setting
 // future - 202 - PWM with other ports. Can't on 328p since radio overlaps pwm pins
 static char switchStuff[NUM_SWITCHES];
 // Switch PWM
@@ -55,7 +59,6 @@ static char switchStuff[NUM_SWITCHES];
 static char switchPWM[NUM_SWITCHES];
 
 // strings
-static char receiveBuffer[30];
 static char radioReceiveBuffer[30];
 static char tempIntString[] = "00";
 static char tempLongString[] = "0000";
@@ -135,7 +138,6 @@ static uint64_t rx_addr_p0, rx_addr_p1, rx_addr_p2, rx_addr_p3, rx_addr_p4, rx_a
 static uint64_t inputAddr;
 
 int main(void) {
-    receiveBuffer[0] = 0;
     radioReceiveBuffer[0] = 0;
     int x = 0;
     inputMessage[0] = 0;
@@ -256,7 +258,6 @@ int main(void) {
             // clear the buffer
             for (x = 0; x < 30; x++) {
                 radioReceiveBuffer[x] = 0;
-                receiveBuffer[x] = 0;
             }
         }
     }
@@ -1764,6 +1765,27 @@ void generalInit(void) {
         inputMessageTiming += tempStuff[1];
     }
 
+    // the hue speed
+    if (readEEPROM(tempStuff, HUESPEED, HUESPEED_BYTES) == 1) {
+        hueSpeed = tempStuff[0];
+        hueSpeed <<=8;
+        hueSpeed += tempStuff[1];
+    }
+
+    // color change speed
+    if (readEEPROM(tempStuff, COL_CHANGE, COL_CHANGE_BYTES) == 1) {
+        colorChangeSpeed = tempStuff[0];
+        colorChangeSpeed <<=8;
+        colorChangeSpeed += tempStuff[1];
+    }
+
+    // the global brightness level
+    if (readEEPROM(tempStuff, GLOBAL_BRIGHT, GLOBAL_BRIGHT_BYTES) == 1) {
+        bright = tempStuff[0];
+        bright <<=8;
+        bright += tempStuff[1];
+    }
+
     // process daylight savings
     if (readEEPROM(tempStuff, DAYLIGHT_SAVE, DAYLIGHT_SAVE_BYTES) == 1) {
         // Spring month
@@ -2116,6 +2138,18 @@ void saveToEEPROM(void) {
     tempStuff[1] = (inputMessageTiming & 0xff);
     writeEEPROM(tempStuff, INP_MESS_TIME, INP_MESS_TIME_BYTES);
 
+    tempStuff[0] = (hueSpeed >> 8);
+    tempStuff[1] = (hueSpeed & 0xff);
+    writeEEPROM(tempStuff, HUESPEED, HUESPEED_BYTES);
+
+    tempStuff[0] = (colorChangeSpeed >> 8);
+    tempStuff[1] = (colorChangeSpeed & 0xff);
+    writeEEPROM(tempStuff, COL_CHANGE, COL_CHANGE_BYTES);
+
+    tempStuff[0] = (bright >> 8);
+    tempStuff[1] = (bright & 0xff);
+    writeEEPROM(tempStuff, GLOBAL_BRIGHT, GLOBAL_BRIGHT_BYTES);
+
     ok();
 }
 
@@ -2151,6 +2185,19 @@ void memoryDump(void) {
     returnHexWithout(inputMessageTiming, tempLongString);
     strcat(statusMsg, tempLongString);
 
+    linecount++;
+    resetStatus(linecount, "M");
+    
+    returnHexWithout(hueSpeed, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "|");
+    returnHexWithout(colorChangeSpeed, tempLongString);
+    strcat(statusMsg, tempLongString);
+    strcat(statusMsg, "|");
+    returnHexWithout(bright, tempLongString);
+    strcat(statusMsg, tempLongString);
+
+            
     linecount++;
     resetStatus(linecount, "S");
 

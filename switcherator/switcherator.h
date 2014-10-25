@@ -65,6 +65,9 @@
 #define SWITCH_PWM_BYTES        3
 #define COLOR_CHANGABLE_BYTES   3
 #define INP_MESS_TIME_BYTES     4
+#define HUESPEED_BYTES          4
+#define COL_CHANGE_BYTES        4
+#define GLOBAL_BRIGHT_BYTES     4
 
 // Timer Variables
 // if F_CPU = 16Mhz then 1 second is 125 cycles counting to 125
@@ -99,6 +102,9 @@
 #define SWITCH_PWM      (BRIGHTNESS + BRIGHTNESS_BYTES)
 #define COLOR_CHANGABLE (SWITCH_PWM + (SWITCH_PWM_BYTES * NUM_SWITCHES))
 #define INP_MESS_TIME   (COLOR_CHANGABLE + (NUM_COLOR_CHANGES * COLOR_CHANGABLE_BYTES))
+#define HUESPEED        (INP_MESS_TIME + INP_MESS_TIME_BYTES)
+#define COL_CHANGE      (HUESPEED + HUESPEED_BYTES)
+#define GLOBAL_BRIGHT   (COL_CHANGE + COL_CHANGE_BYTES)
 
 // check to make sure we aren't using too much ram
 #if ((INP_MESS_TIME + INP_MESS_TIME_BYTES + BASE_PROG_RAM) > RAMEND)

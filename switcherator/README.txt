@@ -135,14 +135,14 @@ CC:##,vvv,vvv,vvv,p  - color change values - ## is the color change number - p=1
 BS:16 - changes brightness of a pwm switch
 SB S#16 - sets a second brightness for pwm that can be set off by an input
 SS:S#Durat. - start switch
-SP:P#Durat. - start progam
+SP:P#Durat. - start program
 SA - Save
 CL - clear saved
 CT:xxxx - sets amount to adjust the timer.  15625? is default
 RD:N - radio display address
 RC:N 0xnnnnnnnnnn Radio change address
 AI:##PpLLLHHH?##DuraPO - Analog input - ## input num, port/pin, LLL%,HHH%,? = (s)witch or (p)rogram, ## num, dur/poll time in seconds
-DI:##Ppx?##DuraPO - Digital input. ?=H/L for what activates switch
+DI:##Ppx?##DuraPO - Digital input. x=H/L for what activates switch
 CI xx - Clear Input
 GS - General Status
 GI General Information
