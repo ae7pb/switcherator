@@ -1165,7 +1165,9 @@ void brightnessSet(char * commandReceived) {
     } else {
         if (brightValue > 16)
             brightValue = 16;
-        bright = brightValue;
+        // only change current brightness if it isn't being overridden
+        if (oldBright == bright)
+            bright = brightValue;
         oldBright = brightValue;
         switchChanged = 1;
         ok();
