@@ -297,7 +297,7 @@ void checkCommand(char * commandReceived) {
         case 0x4348: //CH
             cycleHue(commandReceived);
             break;
-        case 0x4864: //HS
+        case 0x4853: //HS
             setHueSpeed(commandReceived);
             break;
         case 0x4E50: //NP
@@ -951,7 +951,7 @@ void setHueSpeed(char * commandReceived) {
         hueSpeed = programNumber;
     else {
         statusMsg[0] = 0;
-        itoa(statusMsg,colorChangeSpeed,10);
+        itoa(statusMsg,hueSpeed,10);
         sendMessage(statusMsg);
     }
     ok();
@@ -1165,10 +1165,7 @@ void brightnessSet(char * commandReceived) {
     } else {
         if (brightValue > 16)
             brightValue = 16;
-        if (oldBright == bright) {
-            // currently not being overridden
-            bright = brightValue;
-        }
+        bright = brightValue;
         oldBright = brightValue;
         switchChanged = 1;
         ok();
@@ -2703,6 +2700,7 @@ void switchOnOff(void) {
                         runColorChanges = 1;
                     } else if (switchStuff[x] == 212) {
                         // change the brightness
+                        oldBright = bright;
                         bright = switchBright[x];
                     } else {
                         // get the hue cycle going
