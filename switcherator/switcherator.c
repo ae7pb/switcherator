@@ -934,6 +934,11 @@ void cycleHue(char * commandReceived) {
     programNumber = getInt(commandReceived, 5, 4);
     if (programNumber > 0)
         colorChangeSpeed = programNumber;
+    else {
+        statusMsg[0] = 0;
+        itoa(statusMsg,colorChangeSpeed,10);
+        sendMessage(statusMsg);
+    }
     ok();
 }
 
@@ -944,6 +949,11 @@ void setHueSpeed(char * commandReceived) {
     int programNumber = getSwitchNumber(commandReceived);
     if (programNumber > 0)
         hueSpeed = programNumber;
+    else {
+        statusMsg[0] = 0;
+        itoa(statusMsg,colorChangeSpeed,10);
+        sendMessage(statusMsg);
+    }
     ok();
 }
 
