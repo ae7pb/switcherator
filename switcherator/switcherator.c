@@ -2180,7 +2180,7 @@ void memoryDump(void) {
     returnHexWithout(daylightSavings[1][0], tempLongString);
     strcat(statusMsg, tempLongString);
     strcat(statusMsg, "|");
-    returnHexWithout(daylightSavings[0][1], tempLongString);
+    returnHexWithout(daylightSavings[1][1], tempLongString);
     strcat(statusMsg, tempLongString);
     strcat(statusMsg, "|");
     returnHexWithout(pwmdir, tempLongString);
@@ -2490,7 +2490,7 @@ void setDaylightSavings(char * commandReceived) {
     ok();
 }
 
-// Decide if this 3:00am is daylight savings and adjust accordingly
+// Decide if this 2:00am is daylight savings and adjust accordingly
 
 void checkDaylightSavings(void) {
     // have we adjusted for daylight savings?
@@ -4026,8 +4026,8 @@ ISR(TIMER1_COMPA_vect) {
             if (globalMinute == 60) {
                 globalHour++;
                 globalMinute = 0;
-                // daylight savings is always at 3am
-                if (globalHour == 3)
+                // daylight savings is always at 2am
+                if (globalHour == 2)
                     checkDaylightSavings();
                 if (globalHour == 24) {
                     globalHour = 0;
