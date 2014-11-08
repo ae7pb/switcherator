@@ -74,6 +74,9 @@ static unsigned long immediateChange = 0;
 static char pwmOldValues[] = {0, 0, 0};
 static char pwmChangeValues[] = {0, 0, 0};
 
+// if an input is a pwm we may need to make sure the right input is on
+static int switchPWMOverride = 99;
+
 // rotating hue
 static unsigned int currentHue = 0;
 static unsigned int hueSpeed = 16;
@@ -2654,6 +2657,13 @@ void switchOnOff(void) {
                 activePWM = 1;
         }
     }
+    // check if we have a switch overriding a PWM
+    if(switchPWMOverride < 99) {
+        if(switchStatus[switchPWMOverride] == 0) {
+            // time is up for the input switch
+            switchPWMOverride = 99;
+        }
+    }
     
     for (x = 0; x < NUM_SWITCHES; x++) {
         // see if a switch is set up
@@ -2681,7 +2691,10 @@ void switchOnOff(void) {
                         bright = oldBright;
                     }
                     // now don't override if we are changing it ourselves
-                } else if (switchStatus[x] > 0 && immediateChange == 0) {
+                } else if (switchStatus[x] > 0 && immediateChange == 0
+                        // also need to check if an input is overriding the normal pwm
+                        && (switchPWMOverride == 99 || switchPWMOverride == x)
+                        ) {
                     // turn it on
                     // decide if it is a changing hue or static values
                     if (switchStuff[x] == 200) {
@@ -3814,6 +3827,9 @@ void getInput(int inputNumber) {
                     switchChanged = 1;
                 if ((switchStatus[switchNumber]) < (weeklySeconds + duration))
                     switchStatus[switchNumber] = (weeklySeconds + duration);
+                // if switch is a PWM then we want it to be a priority and override other pwm color
+                if (switchStuff[switchNumber] >= 200)
+                    switchPWMOverride = switchNumber;
             } else { // its a program;
                 test = 0;
                 // check and make sure we are within the time limits (eg dusk to dawn)
