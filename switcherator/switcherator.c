@@ -17,6 +17,7 @@ static char panicMyClockIsNotSet = 1;
 
 // clock related
 static unsigned int ticks = 0; // ticks for the clock
+static unsigned int tenthTicks = 0;
 static unsigned int globalYear, globalMonth, globalDay, globalHour, globalMinute, globalSecond, dow;
 // dow - Sunday = 0
 static unsigned long weeklySeconds = 0;
@@ -4027,8 +4028,8 @@ void clearFail(void) {
 }
 
 ISR(TIMER1_COMPA_vect) {
-    int tenthTicks;
     ticks++;
+    tenthTicks++;
     // if its been a second
     if (ticks >= tweakTimer) {
         ticks = 0;
@@ -4052,9 +4053,8 @@ ISR(TIMER1_COMPA_vect) {
             }
         }
     }
-    tenthTicks = ticks % TIMER_TENTH;
-    if (tenthTicks == 0) {
+    if (tenthTicks >= TIMER_TENTH) {
         tenthFlag = 1;
-        // set flags for whatever functions we want to do every 10th of a second here
+        tenthTicks = 0;
     }
 }
