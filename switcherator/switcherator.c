@@ -251,7 +251,7 @@ int main(void) {
         payloadLength = dynReceive(radioReceiveBuffer);
         if (payloadLength > 1) {
             // wait so the receiver won't miss our response
-            _delay_ms(90);
+//            _delay_ms(90);
             checkCommand(radioReceiveBuffer);
 
             // clear the buffer
