@@ -35,7 +35,7 @@
 // config - just the default
 #define SET_CONFIG      (1 << EN_CRC)
 // actual frequency
-#define SET_RF_CH       42 // the answer
+#define SET_RF_CH       110 // outside of wifi 
 // 15 retries before giving up
 #define SET_SETUP_RETR  0x0f
 
