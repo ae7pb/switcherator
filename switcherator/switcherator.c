@@ -1591,48 +1591,52 @@ void programDisplay(char * commandReceived) {
     itoa(duration, tempLongString, 10);
     strcat(statusMsg, tempLongString);
     strcat(statusMsg, " D:");
+    char dayString[8];
+    processDays(weekdays,dayString);
+    strcat(statusMsg,dayString);
+    sendMessage(statusMsg);
+}
+void processDays(int weekdays, char * dayString) {
+    dayString[0] = 0;
     if (weekdays == 255) {
-        strcat(statusMsg, "-------");
-        sendMessage(statusMsg);
+        strcat(dayString, "-------");
         return;
     }
     if (weekdays & 0x40) {
-        strcat(statusMsg, "S");
+        strcat(dayString, "S");
     } else {
-        strcat(statusMsg, "-");
+        strcat(dayString, "-");
     }
     if (weekdays & 0x20) {
-        strcat(statusMsg, "M");
+        strcat(dayString, "M");
     } else {
-        strcat(statusMsg, "-");
+        strcat(dayString, "-");
     }
     if (weekdays & 0x10) {
-        strcat(statusMsg, "T");
+        strcat(dayString, "T");
     } else {
-        strcat(statusMsg, "-");
+        strcat(dayString, "-");
     }
     if (weekdays & 0x08) {
-        strcat(statusMsg, "W");
+        strcat(dayString, "W");
     } else {
-        strcat(statusMsg, "-");
+        strcat(dayString, "-");
     }
     if (weekdays & 0x04) {
-        strcat(statusMsg, "T");
+        strcat(dayString, "T");
     } else {
-        strcat(statusMsg, "-");
+        strcat(dayString, "-");
     }
     if (weekdays & 0x02) {
-        strcat(statusMsg, "F");
+        strcat(dayString, "F");
     } else {
-        strcat(statusMsg, "-");
+        strcat(dayString, "-");
     }
     if (weekdays & 0x01) {
-        strcat(statusMsg, "S");
+        strcat(dayString, "S");
     } else {
-        strcat(statusMsg, "-");
+        strcat(dayString, "-");
     }
-
-    sendMessage(statusMsg);
 }
 
 // get the switches for a program
@@ -2822,13 +2826,18 @@ void setTimeLimits(char * commandReceived) {
         returnInt(startMinute, tempLongString);
         strcat(statusMsg, tempLongString);
         strcat(statusMsg, "Stop:");
-        stopHour = (startTime / 60 / 60);
+        stopHour = (stopTime / 60 / 60);
         returnInt(stopHour, tempLongString);
         strcat(statusMsg, tempLongString);
-        stopMinute = ((startTime - (stopHour * 60 * 60)) / 60);
+        stopMinute = ((stopTime - (stopHour * 60 * 60)) / 60);
         strcat(statusMsg, ":");
         returnInt(stopMinute, tempLongString);
         strcat(statusMsg, tempLongString);
+        strcat(statusMsg,"Days");
+        char dayString[8];
+        int weekdays = timeLimits[programNumber][2];
+        processDays(weekdays, dayString);
+        strcat(statusMsg,dayString);
         sendMessage(statusMsg);
         return;
     }
