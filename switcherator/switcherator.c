@@ -7,6 +7,11 @@
 
 // TODO: deal with pulse width sonar thingie
 
+// If you want the hex smaller
+// Basically if you aren't going to use the human readble functions (switch display, etc) then this will save you code space
+#define SMALLER = 1
+
+
 #include "switcherator.h"
 
 // globals and such
@@ -175,7 +180,7 @@ int main(void) {
     int y;
     // initialize programs
     for (x = 0; x < MAX_PROGRAM; x++) {
-        for(y = 0; y<10;y++) {
+        for (y = 0; y < 10; y++) {
             weeklyProgram[x][y] = 255;
         }
     }
@@ -251,7 +256,7 @@ int main(void) {
         payloadLength = dynReceive(radioReceiveBuffer);
         if (payloadLength > 1) {
             // wait so the receiver won't miss our response
-//            _delay_ms(90);
+            //            _delay_ms(90);
             checkCommand(radioReceiveBuffer);
 
             // clear the buffer
@@ -391,7 +396,6 @@ void checkCommand(char * commandReceived) {
         default:
         case 0x4455: //DU
             memoryDump();
-            break;
             break;
     }
 }
@@ -634,6 +638,7 @@ void clearTheSwitch(int switchNumber) {
 // show a summary of the switches
 
 void switchDisplay(char * commandReceived) {
+#ifndef SMALLER
     char port[] = {0};
     char pin[] = {0};
     char direction[] = {0};
@@ -669,7 +674,7 @@ void switchDisplay(char * commandReceived) {
         }
     }
     sendMessage(statusMsg);
-
+#endif
 }
 
 // takes in a switch number and time and turns on the switch
@@ -940,7 +945,7 @@ void cycleHue(char * commandReceived) {
         colorChangeSpeed = programNumber;
     else {
         statusMsg[0] = 0;
-        itoa(colorChangeSpeed,statusMsg,10);
+        itoa(colorChangeSpeed, statusMsg, 10);
         sendMessage(statusMsg);
     }
     ok();
@@ -955,7 +960,7 @@ void setHueSpeed(char * commandReceived) {
         hueSpeed = programNumber;
     else {
         statusMsg[0] = 0;
-        itoa(hueSpeed,statusMsg,10);
+        itoa(hueSpeed, statusMsg, 10);
         sendMessage(statusMsg);
     }
     ok();
@@ -989,6 +994,7 @@ void colorChangeSet(char * commandReceived) {
 // show the pwm values & color change values
 
 void pwmSummary(void) {
+#ifndef SMALLER
     statusMsg[0] = 0;
     int x;
     strcat(statusMsg, "Dir ");
@@ -1045,6 +1051,7 @@ void pwmSummary(void) {
             statusMsg[0] = 0;
         }
     }
+#endif
 }
 // HardwarePWM
 //static char runHue = 0;
@@ -1321,8 +1328,8 @@ void clearProgram(char * commandReceived) {
 
 void clearTheProgram(int programNumber) {
     int x = 0;
-    if(weeklyProgram[programNumber][9] != 255) {
-        clearTheProgram((int)weeklyProgram[programNumber][9]);
+    if (weeklyProgram[programNumber][9] != 255) {
+        clearTheProgram((int) weeklyProgram[programNumber][9]);
     }
     // some of these "0" is a valid option so make it 255
     for (x = 0; x < 10; x++) {
@@ -1377,8 +1384,8 @@ void programAddSwitch(char * commandReceived) {
     int blankSwitch = 0;
     int overflowProgram = 255;
     while (noSwitchYet == 1) {
-    // see if our program has a valid switch
-    blankSwitch = findOpenSwitch(programNumber);
+        // see if our program has a valid switch
+        blankSwitch = findOpenSwitch(programNumber);
         if (blankSwitch == 0) {
             // our program is full.  Find or make another one
             // first check if we already are overflowing.
@@ -1416,7 +1423,7 @@ void programAddSwitch(char * commandReceived) {
         }
     }
     char test = weeklyProgram[programNumber][1];
-    if(test == 255){
+    if (test == 255) {
         weeklyProgram[programNumber][1] = 0xfe;
     }
     weeklyProgram[programNumber][blankSwitch] = switchNumber;
@@ -1531,6 +1538,7 @@ void programSetTime(char * commandReceived) {
 }
 
 void programDisplay(char * commandReceived) {
+#ifndef SMALLER
     int x = 0;
     int programNumber = 0;
     programNumber = getInt(commandReceived, 3, 2);
@@ -1592,10 +1600,12 @@ void programDisplay(char * commandReceived) {
     strcat(statusMsg, tempLongString);
     strcat(statusMsg, " D:");
     char dayString[8];
-    processDays(weekdays,dayString);
-    strcat(statusMsg,dayString);
+    processDays(weekdays, dayString);
+    strcat(statusMsg, dayString);
     sendMessage(statusMsg);
+#endif
 }
+
 void processDays(int weekdays, char * dayString) {
     dayString[0] = 0;
     if (weekdays == 255) {
@@ -1780,21 +1790,21 @@ void generalInit(void) {
     // the hue speed
     if (readEEPROM(tempStuff, HUESPEED, HUESPEED_BYTES) == 1) {
         hueSpeed = tempStuff[0];
-        hueSpeed <<=8;
+        hueSpeed <<= 8;
         hueSpeed += tempStuff[1];
     }
 
     // color change speed
     if (readEEPROM(tempStuff, COL_CHANGE, COL_CHANGE_BYTES) == 1) {
         colorChangeSpeed = tempStuff[0];
-        colorChangeSpeed <<=8;
+        colorChangeSpeed <<= 8;
         colorChangeSpeed += tempStuff[1];
     }
 
     // the global brightness level
     if (readEEPROM(tempStuff, GLOBAL_BRIGHT, GLOBAL_BRIGHT_BYTES) == 1) {
         bright = tempStuff[0];
-        bright <<=8;
+        bright <<= 8;
         bright += tempStuff[1];
     }
 
@@ -2200,7 +2210,7 @@ void memoryDump(void) {
 
     linecount++;
     resetStatus(linecount, "M");
-    
+
     returnHexWithout(hueSpeed, tempLongString);
     strcat(statusMsg, tempLongString);
     strcat(statusMsg, "|");
@@ -2210,7 +2220,7 @@ void memoryDump(void) {
     returnHexWithout(bright, tempLongString);
     strcat(statusMsg, tempLongString);
 
-            
+
     linecount++;
     resetStatus(linecount, "S");
 
@@ -2294,12 +2304,12 @@ void memoryDump(void) {
             strcat(statusMsg, "Y");
         else
             strcat(statusMsg, "N");
-            if (strlen(statusMsg) >= 24) {
-                sendMessage(statusMsg);
-                linecount++;
-                statusMsg[1] = 0;
-                interjectLineNumber(linecount);
-            }
+        if (strlen(statusMsg) >= 24) {
+            sendMessage(statusMsg);
+            linecount++;
+            statusMsg[1] = 0;
+            interjectLineNumber(linecount);
+        }
     }
 
     linecount++;
@@ -2655,21 +2665,21 @@ void switchOnOff(void) {
     char direction[1];
     volatile unsigned char *thisPort = 0;
     // need a second quick loop to see if an active pwm is going on so we don't turn it off
-    for (x=0;x<NUM_SWITCHES;x++) {
+    for (x = 0; x < NUM_SWITCHES; x++) {
         if (switchStuff[x] >= 200 && switchStuff[x] <= 220) {
-            if(switchStatus[x] > 0)
+            if (switchStatus[x] > 0)
                 // we have a pwm switch turned on with more time left.
                 activePWM = 1;
         }
     }
     // check if we have a switch overriding a PWM
-    if(switchPWMOverride < 99) {
-        if(switchStatus[switchPWMOverride] == 0) {
+    if (switchPWMOverride < 99) {
+        if (switchStatus[switchPWMOverride] == 0) {
             // time is up for the input switch
             switchPWMOverride = 99;
         }
     }
-    
+
     for (x = 0; x < NUM_SWITCHES; x++) {
         // see if a switch is set up
         if (switchStuff[x] != 255) {
@@ -2814,6 +2824,7 @@ void setTimeLimits(char * commandReceived) {
         return;
     }
     if (commandReceived[5] == '?') {
+#ifndef SMALLER
         // show the limit.
         startTime = timeLimits[programNumber][0];
         stopTime = timeLimits[programNumber][1];
@@ -2833,12 +2844,13 @@ void setTimeLimits(char * commandReceived) {
         strcat(statusMsg, ":");
         returnInt(stopMinute, tempLongString);
         strcat(statusMsg, tempLongString);
-        strcat(statusMsg,"Days");
+        strcat(statusMsg, "Days");
         char dayString[8];
         int weekdays = timeLimits[programNumber][2];
         processDays(weekdays, dayString);
-        strcat(statusMsg,dayString);
+        strcat(statusMsg, dayString);
         sendMessage(statusMsg);
+#endif
         return;
     }
     for (x = 0; x < 7; x++) {
@@ -3121,7 +3133,6 @@ void returnHexWithout(unsigned int number, char * tempMe) {
     strcat(tempMe, tempHugeString);
 }
 
-// Clock interrupt - fires when the compare is off
 
 /****************************************************************
  *
@@ -3198,6 +3209,7 @@ uint64_t formatAddress(char * address) {
 //0123
 
 void radioDisplayAddress(char * commandReceived) {
+#ifndef SMALLER
     int x = 0;
     char tempRadioString[6];
     statusMsg[0] = 0;
@@ -3231,6 +3243,7 @@ void radioDisplayAddress(char * commandReceived) {
         strcat(statusMsg, tempLongString);
     }
     sendMessage(statusMsg);
+#endif
 }
 
 // change the radio address
@@ -3338,20 +3351,20 @@ void sendMessage(char * myResponse) {
 void sendInputMessage(void) {
     stopRx();
     _delay_us(10);
-    if(inputAddr > 0) {
-        writeAddr(TX_ADDR,inputAddr);
-        writeAddr(RX_ADDR_P0,inputAddr);
+    if (inputAddr > 0) {
+        writeAddr(TX_ADDR, inputAddr);
+        writeAddr(RX_ADDR_P0, inputAddr);
     }
     int transmitLength = strlen(inputMessage);
     if (!transmit(inputMessage, transmitLength)) {
-        writeAddr(TX_ADDR,tx_addr);
-        writeAddr(RX_ADDR_P0,rx_addr_p0);
+        writeAddr(TX_ADDR, tx_addr);
+        writeAddr(RX_ADDR_P0, rx_addr_p0);
         return;
     } else {
         inputMessageAttempts = 0;
         inputMessage[0] = 0;
-        writeAddr(TX_ADDR,tx_addr);
-        writeAddr(RX_ADDR_P0,rx_addr_p0);
+        writeAddr(TX_ADDR, tx_addr);
+        writeAddr(RX_ADDR_P0, rx_addr_p0);
     }
 }
 
@@ -3992,41 +4005,29 @@ void flashFail(void) {
     failTimer++;
     INDICATOR_DDR |= INDICATOR_PIN;
     // different timings for different fails
-    if (failCondition == 1) {
-        if (failTimer == 2) {
-            INDICATOR_PORT |= INDICATOR_PIN;
-        } else if (failTimer == 4) {
-            INDICATOR_PORT &= ~(INDICATOR_PIN);
-        } else if (failTimer == 24)
-            failTimer = 0;
-    } else if (failCondition == 2) {
-        if (failTimer == 2) {
-            INDICATOR_PORT |= INDICATOR_PIN;
-        } else if (failTimer == 4) {
-            INDICATOR_PORT &= ~(INDICATOR_PIN);
-        } else if (failTimer == 8) {
+    if (failTimer == 2) {
+        INDICATOR_PORT |= INDICATOR_PIN;
+    } else if (failTimer == 4) {
+        INDICATOR_PORT &= ~(INDICATOR_PIN);
+    }
+    if (failCondition >= 2) {
+        if (failTimer == 8) {
             INDICATOR_PORT |= INDICATOR_PIN;
         } else if (failTimer == 10) {
             INDICATOR_PORT &= ~(INDICATOR_PIN);
-        } else if (failTimer == 30)
-            failTimer = 0;
-    } else if (failCondition == 3) {
-        if (failTimer == 2) {
-            INDICATOR_PORT |= INDICATOR_PIN;
-        } else if (failTimer == 4) {
-            INDICATOR_PORT &= ~(INDICATOR_PIN);
-        } else if (failTimer == 8) {
-            INDICATOR_PORT |= INDICATOR_PIN;
-        } else if (failTimer == 10) {
-            INDICATOR_PORT &= ~(INDICATOR_PIN);
-        } else if (failTimer == 14) {
+        }
+    }
+    if (failCondition >= 3) {
+        if (failTimer == 14) {
             INDICATOR_PORT |= INDICATOR_PIN;
         } else if (failTimer == 16) {
             INDICATOR_PORT &= ~(INDICATOR_PIN);
-        } else if (failTimer == 36)
-            failTimer = 0;
+        }
     }
+    if (failTimer == 24)
+        failTimer = 0;
 }
+
 
 // turns off the indicator pin
 
