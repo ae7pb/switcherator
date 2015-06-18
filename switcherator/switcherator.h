@@ -61,13 +61,11 @@
 #define WEEKLY_PROGRAM_BYTES    (10 + 2)
 #define TWEAK_TIMER_BYTES       4
 #define PWM_DIR_BYTES           3
-#define BRIGHTNESS_BYTES        (NUM_SWITCHES + 2)
 #define SWITCH_PWM_BYTES        3
 #define COLOR_CHANGABLE_BYTES   3
 #define INP_MESS_TIME_BYTES     4
 #define HUESPEED_BYTES          4
 #define COL_CHANGE_BYTES        4
-#define GLOBAL_BRIGHT_BYTES     4
 
 // Timer Variables
 // if F_CPU = 16Mhz then 1 second is 125 cycles counting to 125
@@ -98,13 +96,11 @@
 #define WEEKLY_PROGRAM  (COLOR_CHANGE + (COLOR_CHANGE_BYTES * NUM_COLOR_CHANGES) )    // The program
 #define TWEAK_TIMER     (WEEKLY_PROGRAM + (WEEKLY_PROGRAM_BYTES * MAX_PROGRAM) )
 #define PWM_DIR         (TWEAK_TIMER + TWEAK_TIMER_BYTES)
-#define BRIGHTNESS      (PWM_DIR + PWM_DIR_BYTES)
-#define SWITCH_PWM      (BRIGHTNESS + BRIGHTNESS_BYTES)
+#define SWITCH_PWM      (PWM_DIR + PWM_DIR_BYTES)
 #define COLOR_CHANGABLE (SWITCH_PWM + (SWITCH_PWM_BYTES * NUM_SWITCHES))
 #define INP_MESS_TIME   (COLOR_CHANGABLE + (NUM_COLOR_CHANGES * COLOR_CHANGABLE_BYTES))
 #define HUESPEED        (INP_MESS_TIME + INP_MESS_TIME_BYTES)
 #define COL_CHANGE      (HUESPEED + HUESPEED_BYTES)
-#define GLOBAL_BRIGHT   (COL_CHANGE + COL_CHANGE_BYTES)
 
 // check to make sure we aren't using too much ram
 #if ((INP_MESS_TIME + INP_MESS_TIME_BYTES + BASE_PROG_RAM) > RAMEND)
@@ -135,7 +131,6 @@ void clearTheSwitch(int switchNumber);
 void switchDisplay(char * commandReceived);
 void startSwitch(char * commandReceived);
 void getPort(int switchNumber, char * port, char * pin, char * direction);
-void switchBrightness(char * commandReceived);
 
 // pwm related
 void pwmSetup(char * commandReceived);
@@ -147,7 +142,6 @@ void colorChangeSet(char * commandReceived);
 void pwmSummary(void);
 void runColorFunction(void);
 void runHueFunction(void);
-void brightnessSet(char * commandReceived);
 void setImmediateChange(char * commandReceived);
 void clearImmediateChange(void);
 

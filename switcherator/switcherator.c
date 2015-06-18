@@ -50,7 +50,6 @@ static unsigned long switchStatus[NUM_SWITCHES];
 // pin is abs(value/2)-the base - PINB3 = (22-16)/2  PINB3 (22-16)%2 = 0 - low (23-16)%2 = 1 - high
 // 200 = PWM, 201 = PWM rotating hue. PWM always uses PORTD3,PORTD5,PORTD6 for RGB
 // 202 = Color changing PWM
-// 212 = brightness setting
 // future - 202 - PWM with other ports. Can't on 328p since radio overlaps pwm pins
 static char switchStuff[NUM_SWITCHES];
 // Switch PWM
@@ -97,9 +96,6 @@ static unsigned char currentColor = 0;
 static unsigned int red = 0;
 static unsigned int green = 0;
 static unsigned int blue = 0;
-static unsigned int bright = 16;
-static unsigned char oldBright = 16;
-static char switchBright[NUM_SWITCHES];
 static unsigned char pwmdir = 0;
 
 
@@ -169,7 +165,6 @@ int main(void) {
     for (x = 0; x < NUM_SWITCHES; x++) {
         switchStatus[x] = 0;
         switchStuff[x] = 255;
-        switchBright[x] = 16;
     }
     for (x = 0; x < NUM_INPUTS; x++) {
         inputs[x][0] = 255;
@@ -365,12 +360,6 @@ void checkCommand(char * commandReceived) {
             break;
         case 0x4343: //CC
             colorChangeSet(commandReceived);
-            break;
-        case 0x5342: //sb
-            switchBrightness(commandReceived);
-            break;
-        case 0x4253: //bs
-            brightnessSet(commandReceived);
             break;
         case 0x4749: //GI
             generalInformation();
@@ -710,16 +699,11 @@ void startSwitch(char * commandReceived) {
             red = colorChanges[temp][0];
             green = colorChanges[temp][1];
             blue = colorChanges[temp][2];
-            red = red * bright / 16;
-            green = green * bright / 16;
-            blue = blue * bright / 16;
             Red = red;
             Green = green;
             Blue = blue;
         } else if (switchStuff[switchNumber] == 202) {
             runColorChanges = 1;
-        } else if (switchStuff[switchNumber] == 212) {
-            bright = switchBright[switchNumber];
         } else {
             runHue = 1;
         }
@@ -820,35 +804,6 @@ void getPort(int switchNumber, char * port, char * pin, char * direction) {
     direction[0] = switchInfo % 2;
 }
 
-// assign a secondary brightness to a switch
-// sb s#16
-
-void switchBrightness(char * commandReceived) {
-    int switchNumber = getSwitchNumber(commandReceived);
-    char tempBright = 0;
-    if (switchNumber >= NUM_SWITCHES) {
-        fail(1);
-        return;
-    }
-    int brightValue;
-    brightValue = getInt(commandReceived, 5, 2);
-    if (brightValue == 0) {
-        tempBright = switchBright[switchNumber];
-        itoa(tempBright, tempIntString, 10);
-        statusMsg[0] = 0;
-        strcat(statusMsg, "Set @");
-        strcat(statusMsg, tempIntString);
-        sendMessage(statusMsg);
-    } else {
-        if (brightValue > 16)
-            brightValue = 16;
-        clearTheSwitch(switchNumber);
-        // value to indicate this is brightness
-        switchStuff[switchNumber] = 212;
-        switchBright[switchNumber] = brightValue;
-        ok();
-    }
-}
 
 /****************************************************************
  *
@@ -915,21 +870,17 @@ void pwmSetup(char * commandReceived) {
 // Turn off the PWM - called by clearing the switch
 
 void pwmClear(int switchNumber) {
-    if (switchStuff[switchNumber] == 212) {
-        bright = oldBright;
-    } else {
-        TCCR0A = 0;
-        TCCR0B = 0;
-        TCCR2A = 0;
-        TCCR2B = 0;
-        Red = 0;
-        Green = 0;
-        Blue = 0;
-        DDRD &= ~((1 << PIND3)&(1 << PIND5)&(1 << PIND6));
-        runHue = 0;
-        runColorChanges = 0;
-        pwmIsSet = 0;
-    }
+    TCCR0A = 0;
+    TCCR0B = 0;
+    TCCR2A = 0;
+    TCCR2B = 0;
+    Red = 0;
+    Green = 0;
+    Blue = 0;
+    DDRD &= ~((1 << PIND3)&(1 << PIND5)&(1 << PIND6));
+    runHue = 0;
+    runColorChanges = 0;
+    pwmIsSet = 0;
 
 }
 
@@ -1087,9 +1038,6 @@ void runColorFunction(void) {
     red = colorChanges[currentColor][0];
     green = colorChanges[currentColor][1];
     blue = colorChanges[currentColor][2];
-    red = red * bright / 16;
-    green = green * bright / 16;
-    blue = blue * bright / 16;
     Red = red;
     Green = green;
     Blue = blue;
@@ -1149,41 +1097,12 @@ void runHueFunction(void) {
         blue = 0;
         currentHue = 0;
     }
-    red = red * bright / 16;
-    green = green * bright / 16;
-    blue = blue * bright / 16;
     Red = red;
     Green = green;
     Blue = blue;
     currentHue++;
 }
 
-// sets the pwm brightness value
-// bs 16
-
-void brightnessSet(char * commandReceived) {
-    int brightValue = getSwitchNumber(commandReceived);
-    if (brightValue == 0) {
-        // display the brightness
-        itoa(oldBright, tempIntString, 10);
-        statusMsg[0] = 0;
-        strcat(statusMsg, "Set @");
-        strcat(statusMsg, tempIntString);
-        strcat(statusMsg, "B@");
-        itoa(bright, tempIntString, 10);
-        strcat(statusMsg, tempIntString);
-        sendMessage(statusMsg);
-    } else {
-        if (brightValue > 16)
-            brightValue = 16;
-        // only change current brightness if it isn't being overridden
-        if (oldBright == bright)
-            bright = brightValue;
-        oldBright = brightValue;
-        switchChanged = 1;
-        ok();
-    }
-}
 
 // sometimes you might want the lights to act like they
 // are being controlled via DMX or something.  this is how
@@ -1801,12 +1720,6 @@ void generalInit(void) {
         colorChangeSpeed += tempStuff[1];
     }
 
-    // the global brightness level
-    if (readEEPROM(tempStuff, GLOBAL_BRIGHT, GLOBAL_BRIGHT_BYTES) == 1) {
-        bright = tempStuff[0];
-        bright <<= 8;
-        bright += tempStuff[1];
-    }
 
     // process daylight savings
     if (readEEPROM(tempStuff, DAYLIGHT_SAVE, DAYLIGHT_SAVE_BYTES) == 1) {
@@ -1823,7 +1736,6 @@ void generalInit(void) {
 
     // switches
     if (readEEPROM(switchStuff, SWITCH_STUFF, SWITCH_STUFF_BYTES) == 1) {
-        readEEPROM(switchBright, BRIGHTNESS, BRIGHTNESS_BYTES);
         volatile unsigned char *realPort = 0;
         volatile unsigned char *realDDR = 0;
         char realPin = 0;
@@ -2082,7 +1994,6 @@ void saveToEEPROM(void) {
     }
     if (setupaSwitch == 1) {
         writeEEPROM(switchStuff, SWITCH_STUFF, SWITCH_STUFF_BYTES);
-        writeEEPROM(switchBright, BRIGHTNESS, BRIGHTNESS_BYTES);
     }
     tempStuff[0] = pwmdir;
     if (setupPWM == 1)
@@ -2168,10 +2079,6 @@ void saveToEEPROM(void) {
     tempStuff[1] = (colorChangeSpeed & 0xff);
     writeEEPROM(tempStuff, COL_CHANGE, COL_CHANGE_BYTES);
 
-    tempStuff[0] = (bright >> 8);
-    tempStuff[1] = (bright & 0xff);
-    writeEEPROM(tempStuff, GLOBAL_BRIGHT, GLOBAL_BRIGHT_BYTES);
-
     ok();
 }
 
@@ -2184,7 +2091,7 @@ void memoryDump(void) {
     int imAnInt = 0;
 
     // First line is miscellaneous stuff
-    // Tweaktimer, daylightsavings (4 bytes), brightness, pwm direction
+    // Tweaktimer, daylightsavings (4 bytes), pwm direction
     strcat(statusMsg, "M00-");
     returnHexWithout(tweakTimer, tempLongString);
     strcat(statusMsg, tempLongString);
@@ -2216,9 +2123,6 @@ void memoryDump(void) {
     strcat(statusMsg, "|");
     returnHexWithout(colorChangeSpeed, tempLongString);
     strcat(statusMsg, tempLongString);
-    strcat(statusMsg, "|");
-    returnHexWithout(bright, tempLongString);
-    strcat(statusMsg, tempLongString);
 
 
     linecount++;
@@ -2228,7 +2132,8 @@ void memoryDump(void) {
         imAnInt = switchStuff[x];
         returnHexWithout(imAnInt, tempLongString);
         strcat(statusMsg, tempLongString);
-        returnHexWithout(switchBright[x], tempLongString);
+        // killing brightness. Don't want to change this until I fix the web db
+        returnHexWithout(0, tempLongString);
         strcat(statusMsg, tempLongString);
         returnHexWithout(switchPWM[x], tempLongString);
         strcat(statusMsg, tempLongString);
@@ -2355,7 +2260,6 @@ void clearToEEPROM(void) {
     clearEEPROM(INPUT_ADDR);
     clearEEPROM(SWITCH_STUFF);
     clearEEPROM(PWM_DIR);
-    clearEEPROM(BRIGHTNESS);
     for (x = 0; x < NUM_INPUTS; x++)
         clearEEPROM((INPUT + (x * INPUT_BYTES)));
     for (x = 0; x < NUM_LIMITS; x++)
@@ -2702,8 +2606,6 @@ void switchOnOff(void) {
                         Green = 0;
                         Blue = 0;
                         runColorChanges = 0;
-                    } else if (switchStuff[x] == 212) {
-                        bright = oldBright;
                     }
                     // now don't override if we are changing it ourselves
                 } else if (switchStatus[x] > 0 && immediateChange == 0
@@ -2718,21 +2620,11 @@ void switchOnOff(void) {
                         red = colorChanges[temp][0];
                         green = colorChanges[temp][1];
                         blue = colorChanges[temp][2];
-                        red = red * bright;
-                        red = red / 16;
-                        green = green * bright;
-                        green = green / 16;
-                        blue = blue * bright;
-                        blue = blue / 16;
                         Red = red;
                         Green = green;
                         Blue = blue;
                     } else if (switchStuff[x] == 202) {
                         runColorChanges = 1;
-                    } else if (switchStuff[x] == 212) {
-                        // change the brightness
-                        oldBright = bright;
-                        bright = switchBright[x];
                     } else {
                         // get the hue cycle going
                         runHue = 1;
