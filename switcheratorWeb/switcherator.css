@@ -2,12 +2,42 @@
 
 
 .navigation{
-    width:  100%;
+    width:      100%;
 }
 .subNav{
-    float:  left;
+    float:      left;
 }
 
 .radios {
-    float:  left;
+    min-width:  100px;
+    min-height: 100px;
+    font-size:  2em;
+    float:      left;
+    padding:    10px;
+    outline:    1px solid;
+    margin:     15px;
+    background-color: lightblue;
 }
+
+.goBack {
+    width:      100px;
+    min-height: 100px;
+    font-size:  1.5em;
+    float:      left;
+    padding:    10px;
+    outline:    1px solid;
+    margin:     15px;
+    background-color:   lightyellow;
+    display:    none;
+}
+
+.loading {
+    width:      30px;
+    min-height: 100px;
+    background: url("img/loading3.gif") no-repeat center center;
+    padding:    5px;
+    margin:     15px;
+    float:      left;
+    display:    none;
+}
+
