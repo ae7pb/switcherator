@@ -3901,6 +3901,7 @@ void getInput(int inputNumber) {
  */
 void possibleInputMessage(int inputNumber) {
     // send a switch message
+    // inputMessageGathered is the last time we send the message + the input timing
     if (inputMessageTiming > 0 && weeklySeconds > inputMessageGathered[inputNumber]) {
         char tempRadioString[6];
         unformatAddress(rx_addr_p0, tempRadioString);

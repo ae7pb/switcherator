@@ -41,3 +41,46 @@
     display:    none;
 }
 
+.radioDetails {
+    display:    none;
+}
+
+.detailContainer {
+    font-size:  1.2em;
+    float:      left;
+}
+
+.radioSettingsChild {
+    width:  100px;
+    min-height: 100px;
+    background-color: thistle;
+    padding:    10px;
+    outline:    1px solid;
+    margin:     15px;
+    float:      left;
+}
+
+.radioSettingsSubChild {
+    display:    none;
+    float:      left;
+}
+
+.radioSwitchesChild {
+    background-color: beige;
+}
+
+.radioProgramsChild {
+    background-color: lightgreen;
+}
+
+.radioColorsChild {
+    background-color: lightcyan;
+}
+
+.radioInputsChild {
+    background-color: lightpink;
+}
+
+.radioTimeLimitsChild {
+    background-color: chocolate;
+}

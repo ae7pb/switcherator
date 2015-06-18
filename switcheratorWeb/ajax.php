@@ -99,6 +99,9 @@ function radioDetails($radioID) {
         "colors"=>$colors,
         "timeLimits"=>$timeLimits,
     );
+    if(isset($_GET['debug'])) {
+        echo "<pre>"; print_r($outArray); echo "</pre>";
+    }
     return json_encode($outArray);      
 }
 

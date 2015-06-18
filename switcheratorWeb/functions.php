@@ -24,7 +24,6 @@ function redoDatabase() {
     inputMessageTiming int,
     hueSpeed int,
     colorChangeSpeed int,
-    brightness int,
     txAddress text,
     rxAddress0 text,
     rxAddress1 text,
@@ -45,7 +44,6 @@ function redoDatabase() {
     radioID int,
     switchNumber int,
     switchStuff int,
-    switchBright int,
     switchPWM int,
     details text,
     unique(radioID, switchNumber)
