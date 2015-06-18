@@ -80,7 +80,7 @@ function radioDetails($radioID) {
     $result = $statement->execute();
     $colors = array();
     while($row = $result->fetchArray())
-            $colors[] = $row;
+            $colors[$row['colorChangeNumber']] = $row;
 
     $sql = "select * from timeLimits where radioID = :radioID and (startTime != 0 or stopTime != 0 or days != 0)";
     $statement = $db->prepare($sql);

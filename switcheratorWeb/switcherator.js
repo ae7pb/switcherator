@@ -14,7 +14,7 @@ var radioPrograms;
 var radioInputs;
 var radioColors;
 var radioTimeLimits;
-
+var ports = ["PORTA", "PORTB", "PORTC", "PORTD", "PORTE", "PORTF", "PORTG"];
 
 /*
  * Get all the radios in the database first thing.
@@ -35,8 +35,7 @@ $(document).ready(function () {
  * Shows the navigation bar
  */
 function navigationBar(radioText) {
-    var container = $("#navBar");
-    container.html("<div class=subNav><b>Hello&nbsp;</b></div><div class=subNav>there</div>");
+    $("#navBar").html("<div class=subNav><b>Hello&nbsp;</b></div><div class=subNav>there</div>");
 
 }
 
@@ -46,9 +45,8 @@ function navigationBar(radioText) {
 function radioDivs(response) {
     response.forEach(function (radio) {
         var output = radio.name;
-        var container = $("#radioList");
         var radioNum = radio.id;
-        container.append(
+        $("#radioList").append(
                 "<div id=radio-" + radioNum + " class=radios onclick='radioDetail(" + radioNum + ")'>" + output + "</div>"
                 );
     })
@@ -107,23 +105,26 @@ function showRadioDetails(response) {
     radioColors = response.colors;
     radioTimeLimits = response.timeLimits;
 
+    /*
+     * Radio settings boxes
+     */
 
     var colorChangeSpeed = parseInt(radioSettings.colorChangeSpeed, 16);
     $("#radioSettings").after(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeName() >Color change speed (0-9999 default 10 = 1 second): <br/><b>" + colorChangeSpeed + "</b></div>");
-    
+            "onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/><b>" + colorChangeSpeed + "</b></div>");
+
     var hueSpeed = parseInt(radioSettings.hueSpeed, 16);
     $("#radioSettings").after(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeName() >Smooth hue color change speed (0-99 default 16): <br/><b>" + hueSpeed + "</b></div>");
+            "onclick=radioChangeHueSpeed() >Smooth hue color change speed (0-99 default 16): <br/><b>" + hueSpeed + "</b></div>");
 
     // Input message timing - When an input is triggered and we send a message the input message timing is
     // how long we wait before we send the next message
     var inputTiming = parseInt(radioSettings.inputMessageTiming, 16);
     $("#radioSettings").after(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeName() >Timing between input messages - 0 = no messages: <br/><b>" + inputTiming + "</b></div>");
+            "onclick=radioChangeInputTiming() >Timing between input messages (0 = no messages): <br/><b>" + inputTiming + "</b></div>");
 
     var clockTweak = parseInt(radioSettings.clockTweak, 16);
     clockTweak = clockTweak.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -141,9 +142,90 @@ function showRadioDetails(response) {
             );
 
 
+
+    $("#radioSwitches").append(
+            "<div id=radioSwitches-0 class='radioSwitchesChild detailField' onclick=viewRadioSwitches() >" +
+            "<span id=radioSwitchesMsg >Click to view Switches</span></div>"
+            );
+    $("#radioSwitches").append(
+            "<div id=radioSwitches-n class='radioSwitchesChild radioSwitchesSubChild detailField' onclick=addEditSwitch('new') >" +
+            "Click to add new switch</div>"
+            );
+
+    /*
+     * Radio switches boxes
+     */
+    var port, getPin, pin, hiLo, switchMessage, switchStuff, colorNum, red, green, blue, switchColor, textColor;
+
+    radioSwitches.forEach(function (thisSwitch) {
+        switchStuff = parseInt(thisSwitch.switchStuff, 10);
+        // switch stuff is a complicated but compact port / pin switch thingie. Need to decode it
+        if (switchStuff >= 200) {
+            switch (switchStuff) {
+                // 200 = single color pwm
+                case 200:
+                    textColor = "black";
+                    colorNum = parseInt(thisSwitch.switchPWM, 10);
+                    red = parseInt(radioColors[colorNum]["red"]);
+                    green = parseInt(radioColors[colorNum]["green"]);
+                    blue = parseInt(radioColors[colorNum]["blue"]);
+                    if (red < 75 || green < 75 || blue < 75)
+                        textColor = "white";
+                    switchColor = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
+                            ("0" + blue.toString(16)).substr(-2);
+                    switchMessage = "Single color PWM - color # " + thisSwitch.switchPWM + ". " +
+                            "<span style='background-color: #" + switchColor + "; color: " + textColor + ";' >0x" +
+                            switchColor + "</span>";
+                    break;
+                case 201:
+                    switchMessage("Activate smooth hue color change");
+                    break;
+                case 202:
+                    switchMessage("Activate color change rotation");
+                    break;
+            }
+        } else {
+            port = ports[(Math.floor(thisSwitch.switchStuff / 16))];
+            getPin = thisSwitch.switchStuff % 16;
+            pin = Math.floor(getPin / 2);
+            if (getPin % 2 == 0) {
+                hiLo = "low";
+            } else {
+                hiLo = "high";
+            }
+            switchMessage = "Switch " + port + pin + " Pin is " + hiLo + " when activated";
+        }
+        $("#radioSwitches").append(
+                "<div id=radioSwitches-" + thisSwitch.id + " class='radioSwitchesChild radioSwitchesSubChild detailField' " +
+                "onClick=addEditSwitch(" + thisSwitch.id + ")>" + switchMessage + "</div>"
+                );
+
+    });
+    /*
+     * Radio programs boxes
+     */
+    radioPrograms.forEach(function(thisProgram) {
+        // programNumber, days (0b01111111 = sun-sat), time (seconds from midnight), duration(seconds), 
+        // switches(ff=blank), rollover(next program that houses more switches)
+        // TODO: you are here
+    });
+
+
+    /*
+     * Radio inputs boxes
+     */
+
+    /*
+     * Radio colors boxes
+     */
+    
+    /*
+     * Radio time limits boxes
+     */
+
     $("#radioSettings").data("hide", "hidden");
+    $("#radioSwitches").data("hide", "hidden");
     $(".radioDetails").show();
-    //TODO: you are here
 }
 
 /**********************************************************
@@ -160,11 +242,11 @@ function viewRadioSettings() {
     if ($("#radioSettings").data("hide") == "shown") {
         $(".radioSettingsSubChild").hide();
         $("#radioSettings").data("hide", "hidden");
-        $("#radioSettingsMsg").text("Click to view Settings");
+        $("#radioSettingsMsg").text("Click to view settings");
     } else {
         $(".radioSettingsSubChild").show();
         $("#radioSettings").data("hide", "shown");
-        $("#radioSettingsMsg").text("Click to hide Settings");
+        $("#radioSettingsMsg").text("Click to hide settings");
     }
 }
 
@@ -173,3 +255,43 @@ function radioChangeName() {
 
 }
 
+function radioChangeTweak() {
+
+}
+
+function radioChangeInputTiming() {
+
+}
+
+function radioChangeHueSpeed() {
+
+}
+
+function radioChangeColorSpeed() {
+
+}
+
+/**********************************************************
+ * 
+ * Radio Switches Area
+ * 
+ **********************************************************/
+
+/*
+ * Shows the sub navigation for the radio switches
+ */
+function viewRadioSwitches() {
+    if ($("#radioSwitches").data("hide") == "shown") {
+        $(".radioSwitchesSubChild").hide();
+        $("#radioSwitches").data("hide", "hidden");
+        $("#radioSwitchesMsg").text("Click to view switches");
+    } else {
+        $(".radioSwitchesSubChild").show();
+        $("#radioSwitches").data("hide", "shown");
+        $("#radioSwitchesMsg").text("Click to hide switches");
+    }
+}
+
+function addEditSwitch(switchNum) {
+
+}

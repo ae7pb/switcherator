@@ -9,7 +9,7 @@
 
 // If you want the hex smaller
 // Basically if you aren't going to use the human readble functions (switch display, etc) then this will save you code space
-#define SMALLER = 1
+//#define SMALLER = 1
 
 
 #include "switcherator.h"

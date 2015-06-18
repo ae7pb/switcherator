@@ -50,20 +50,25 @@
     float:      left;
 }
 
-.radioSettingsChild {
+.detailField {
     width:  100px;
     min-height: 100px;
-    background-color: thistle;
     padding:    10px;
     outline:    1px solid;
     margin:     15px;
     float:      left;
 }
 
-.radioSettingsSubChild {
+.radioSettingsChild {
+    background-color: thistle;
+}
+
+.radioSettingsSubChild, 
+.radioSwitchesSubChild {
     display:    none;
     float:      left;
 }
+
 
 .radioSwitchesChild {
     background-color: beige;
