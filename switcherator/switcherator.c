@@ -2132,9 +2132,6 @@ void memoryDump(void) {
         imAnInt = switchStuff[x];
         returnHexWithout(imAnInt, tempLongString);
         strcat(statusMsg, tempLongString);
-        // killing brightness. Don't want to change this until I fix the web db
-        returnHexWithout(0, tempLongString);
-        strcat(statusMsg, tempLongString);
         returnHexWithout(switchPWM[x], tempLongString);
         strcat(statusMsg, tempLongString);
         if (strlen(statusMsg) >= 28 && (x + 1) < NUM_SWITCHES) {
