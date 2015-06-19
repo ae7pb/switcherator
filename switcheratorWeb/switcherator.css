@@ -65,7 +65,8 @@
 
 .radioSettingsSubChild, 
 .radioSwitchesSubChild,
-.radioProgramsSubChild{
+.radioProgramsSubChild,
+.radioInputsSubChild{
     display:    none;
     float:      left;
     font-size:  .9em;

@@ -157,7 +157,6 @@ function showRadioDetails(response) {
      * Radio switches boxes
      */
     var port, getPin, pin, hiLo, switchMessage, switchStuff, colorNum, red, green, blue, switchColor, textColor;
-
     radioSwitches.forEach(function (thisSwitch) {
         switchStuff = parseInt(thisSwitch.switchStuff, 10);
         // switch stuff is a complicated but compact port / pin switch thingie. Need to decode it
@@ -198,7 +197,7 @@ function showRadioDetails(response) {
         }
         $("#radioSwitches").append(
                 "<div id=radioSwitches-" + thisSwitch.id + " class='radioSwitchesChild radioSwitchesSubChild detailField' " +
-                "onClick=addEditSwitch(" + thisSwitch.id + ")>Switch #" + thisSwitch.id + " " + switchMessage + "</div>"
+                "onClick=addEditSwitch(" + thisSwitch.id + ")>Switch #" + thisSwitch.switchNumber + " " + switchMessage + "</div>"
                 );
 
     });
@@ -219,7 +218,7 @@ function showRadioDetails(response) {
     radioPrograms.forEach(function (thisProgram) {
         // programNumber, days (0b01111111 = sun-sat), time (seconds from midnight), duration(seconds), 
         // switches(ff=blank), rollover(next program that houses more switches)
-        dayInt = parseInt(thisProgram.days,10);
+        dayInt = parseInt(thisProgram.days, 10);
         if (dayInt & 0x40)
             programDays = "S";
         else
@@ -262,10 +261,10 @@ function showRadioDetails(response) {
             }
         }
         $("#radioPrograms").append(
-                "<div id=radioPrograms-"+thisProgram.programNumber+" class='radioProgramsChild "+
-                "radioProgramsSubChild detailField' onclick=addEditProgram('"+thisProgram.programNumber+
+                "<div id=radioPrograms-" + thisProgram.id + " class='radioProgramsChild " +
+                "radioProgramsSubChild detailField' onclick=addEditProgram('" + thisProgram.id +
                 "') >" + "Program #" + thisProgram.programNumber + " Start:" + programStart +
-                " Dur.:"+programDuration+" "+programDays+" Sw:"+programSwitches+"</div>"
+                " Dur.:" + programDuration + " " + programDays + " Sw:" + programSwitches + "</div>"
                 );
 
     });
@@ -274,6 +273,42 @@ function showRadioDetails(response) {
      * Radio inputs boxes
      */
 
+    $("#radioInputs").append(
+            "<div id=radioInputs-v class='radioInputsChild detailField' onclick=viewRadioInputs() >" +
+            "<span id=radioInputsMsg >Click to view inputs</span></div>"
+            );
+    $("#radioInputs").append(
+            "<div id=radioInputs-n class='radioInputsChild radioInputsSubChild detailField' onclick=addEditProgram('new') >" +
+            "Click to add new input</div>"
+            );
+
+    // input information (from switcherator.c)
+    // Pp - value of 255 (default) means nothing programmed
+    // value of 0-15 = PORTA, 16-31 = PORTB, 32-47 = PORTC, 
+    // 48-63 = PORTD, 64-79 = PORTE, 80-95 = PORTF, 96-112 = PORTG
+    // pin is abs(value/2)-the base - PINB3 = (22-16)/2  PINB3 (22-16)%2 = 0 - low (23-16)%2 = 1 - high
+    // pLHsDDPw Pp int pin/port like sw, L%,H% (0,255 - digital), s - 0-127=switch, 128-255 = prog
+    // dur in seconds, poll time in secs or  0 for continuous. w = which rgb (mask);)
+
+    var inputPinStuff, inputLow, inputHigh, inputSwitchOrProgram, inputDuration, inputPollTime, inputWhichRGB, port, pin, getPin, portPin;
+    radioInputs.forEach(function (thisInput) {
+        inputPinStuff = parseInt(thisInput.pinStuff, 10);
+        // low threshhold that must be met to start switch (analog)
+        inputLow = parseInt(thisInput.lowPercent, 10);
+        // high threshhold - max analog can be or 255 for digital switch
+        inputHigh = parseInt(thisInput.highPercent, 10);
+        // 0-127 = switch, 128-255 = program
+        inputSwitchOrProgram = parseInt(thisInput.whichSwitchOrProgram, 10);
+        inputDuration = parseInt(thisInput.inputDuration, 10);
+        // 0 = every 1/10 second or >0 is num seconds
+        inputPollTime = parseInt(thisInput.pollTime);
+        inputWhichRGB = parseInt(thisInput.whichRGB);
+        port = Math.floor(inputPinStuff / 16);
+        getPin = inputPinStuff % 16;
+        pin = Math.floor(getPin / 2);
+        portPin = ports[port]+pin.toString(10);
+        // TODO: you are here 
+    });
     /*
      * Radio colors boxes
      */
@@ -285,6 +320,7 @@ function showRadioDetails(response) {
     $("#radioSettings").data("hide", "hidden");
     $("#radioSwitches").data("hide", "hidden");
     $("#radioPrograms").data("hide", "hidden");
+    $("#radioInputs").data("hide", "hidden");
     $(".radioDetails").show();
 }
 
@@ -364,7 +400,7 @@ function addEditSwitch(switchNum) {
 
 
 /*
- * Shows the sub navigation for the radio switches
+ * Shows the sub navigation for the radio programs
  */
 function viewRadioPrograms() {
     if ($("#radioPrograms").data("hide") == "shown") {
@@ -379,5 +415,32 @@ function viewRadioPrograms() {
 }
 
 function addEditProgram(programNum) {
+
+}
+
+
+/**********************************************************
+ * 
+ * Radio Inputs Area
+ * 
+ **********************************************************/
+
+
+/*
+ * Shows the sub navigation for the radio inputs
+ */
+function viewRadioInputs() {
+    if ($("#radioInputs").data("hide") == "shown") {
+        $(".radioInputsSubChild").hide();
+        $("#radioInputs").data("hide", "hidden");
+        $("#radioInputsMsg").text("Click to view inputs");
+    } else {
+        $(".radioInputsSubChild").show();
+        $("#radioInputs").data("hide", "shown");
+        $("#radioInputsMsg").text("Click to hide inputs");
+    }
+}
+
+function addEditProgram(inputNum) {
 
 }
