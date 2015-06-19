@@ -5,6 +5,10 @@
  * Creative Commons Attribution
  */
 
+// TODO: Show menu for new radio
+
+
+
 /*
  * Global variables.  Yeah yeah I know whatever.
  */
@@ -35,7 +39,7 @@ $(document).ready(function () {
  * Shows the navigation bar
  */
 function navigationBar(radioText) {
-    $("#navBar").html("<div class=subNav><b>Hello&nbsp;</b></div><div class=subNav>there (nav bar)</div>");
+
 
 }
 
@@ -480,6 +484,10 @@ function radioChangeColorSpeed() {
 
 }
 
+function addNewRadio() {
+    
+}
+
 /**********************************************************
  * 
  * Radio Switches Area
@@ -609,3 +617,5 @@ function viewRadioTimeLimits() {
 function addEditTimeLimits(limitID) {
 
 }
+
+
