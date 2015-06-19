@@ -853,6 +853,9 @@ void pwmSetup(char * commandReceived) {
     TCCR0B = (1 << CS01) | (1 << CS00);
 
     TCCR2B = (1 << CS22); // F_CPU/64
+    // default pwm dir to out
+    setPWMDir("xxxH");
+    
     pwmIsSet = 1;
     pwmSwitchNumber = switchNumber;
     // pwm to output
