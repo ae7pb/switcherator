@@ -35,7 +35,7 @@ $(document).ready(function () {
  * Shows the navigation bar
  */
 function navigationBar(radioText) {
-    $("#navBar").html("<div class=subNav><b>Hello&nbsp;</b></div><div class=subNav>there</div>");
+    $("#navBar").html("<div class=subNav><b>Hello&nbsp;</b></div><div class=subNav>there (nav bar)</div>");
 
 }
 
@@ -109,46 +109,46 @@ function showRadioDetails(response) {
      * Radio settings boxes
      */
 
-    $("#radioSettings").append(
+    $("#radioSwitches").before(
             "<div id=radioSettings-0 class='radioSettingsChild detailField' onclick=viewRadioSettings() >" +
             "<span id=radioSettingsMsg >Click to view Settings</span></div>"
             );
 
-    $("#radioSettings").append(
+    $("#radioSwitches").before(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
             "onclick=radioChangeName() >Name: <br/><b>" + response.radio.name + "</b></div>");
 
     var clockTweak = parseInt(radioSettings.clockTweak, 16);
     clockTweak = clockTweak.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    $("#radioSettings").append(
+    $("#radioSwitches").before(
             "<div id=radioSettings-2 class='radioSettingsChild radioSettingsSubChild detailField' " +
             "onclick=radioChangeTweak() >Clock adjustment (15,625 default):<br/><b> " + clockTweak + "</b></div>");
 
     var colorChangeSpeed = parseInt(radioSettings.colorChangeSpeed, 16);
-    $("#radioSettings").append(
+    $("#radioSwitches").before(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
             "onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/><b>" + colorChangeSpeed + "</b></div>");
 
     var hueSpeed = parseInt(radioSettings.hueSpeed, 16);
-    $("#radioSettings").append(
+    $("#radioSwitches").before(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
             "onclick=radioChangeHueSpeed() >Smooth hue color change speed (0-99 default 16): <br/><b>" + hueSpeed + "</b></div>");
 
     // Input message timing - When an input is triggered and we send a message the input message timing is
     // how long we wait before we send the next message
     var inputTiming = parseInt(radioSettings.inputMessageTiming, 16);
-    $("#radioSettings").append(
+    $("#radioSwitches").before(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
             "onclick=radioChangeInputTiming() >Timing between input messages (0 = no messages): <br/><b>" + inputTiming + "</b></div>");
 
 
 
 
-    $("#radioSwitches").append(
+    $("#radioPrograms").before(
             "<div id=radioSwitches-0 class='radioSwitchesChild detailField' onclick=viewRadioSwitches() >" +
             "<span id=radioSwitchesMsg >Click to view Switches</span></div>"
             );
-    $("#radioSwitches").append(
+    $("#radioPrograms").before(
             "<div id=radioSwitches-n class='radioSwitchesChild radioSwitchesSubChild detailField' onclick=addEditSwitch('new') >" +
             "Click to add new switch</div>"
             );
@@ -195,7 +195,7 @@ function showRadioDetails(response) {
             }
             switchMessage = "Switch " + port + pin + " Pin is " + hiLo + " when activated";
         }
-        $("#radioSwitches").append(
+        $("#radioPrograms").before(
                 "<div id=radioSwitches-" + thisSwitch.id + " class='radioSwitchesChild radioSwitchesSubChild detailField' " +
                 "onClick=addEditSwitch(" + thisSwitch.id + ")>Switch #" + thisSwitch.switchNumber + " " + switchMessage + "</div>"
                 );
@@ -205,11 +205,11 @@ function showRadioDetails(response) {
      * Radio programs boxes
      */
 
-    $("#radioPrograms").append(
+    $("#radioInputs").before(
             "<div id=radioPrograms-v class='radioProgramsChild detailField' onclick=viewRadioPrograms() >" +
             "<span id=radioProgramsMsg >Click to view programs</span></div>"
             );
-    $("#radioPrograms").append(
+    $("#radioInputs").before(
             "<div id=radioPrograms-n class='radioProgramsChild radioProgramsSubChild detailField' onclick=addEditProgram('new') >" +
             "Click to add new program</div>"
             );
@@ -260,7 +260,7 @@ function showRadioDetails(response) {
                 programSwitches += parseInt(switchArray[x], 16).toString(10);
             }
         }
-        $("#radioPrograms").append(
+        $("#radioInputs").before(
                 "<div id=radioPrograms-" + thisProgram.id + " class='radioProgramsChild " +
                 "radioProgramsSubChild detailField' onclick=addEditProgram('" + thisProgram.id +
                 "') >" + "Program #" + thisProgram.programNumber + " Start:" + programStart +
@@ -273,12 +273,12 @@ function showRadioDetails(response) {
      * Radio inputs boxes
      */
 
-    $("#radioInputs").append(
+    $("#radioColors").before(
             "<div id=radioInputs-v class='radioInputsChild detailField' onclick=viewRadioInputs() >" +
             "<span id=radioInputsMsg >Click to view inputs</span></div>"
             );
-    $("#radioInputs").append(
-            "<div id=radioInputs-n class='radioInputsChild radioInputsSubChild detailField' onclick=addEditProgram('new') >" +
+    $("#radioColors").before(
+            "<div id=radioInputs-n class='radioInputsChild radioInputsSubChild detailField' onclick=addEditInput('new') >" +
             "Click to add new input</div>"
             );
 
@@ -290,7 +290,8 @@ function showRadioDetails(response) {
     // pLHsDDPw Pp int pin/port like sw, L%,H% (0,255 - digital), s - 0-127=switch, 128-255 = prog
     // dur in seconds, poll time in secs or  0 for continuous. w = which rgb (mask);)
 
-    var inputPinStuff, inputLow, inputHigh, inputSwitchOrProgram, inputDuration, inputPollTime, inputWhichRGB, port, pin, getPin, portPin;
+    var inputPinStuff, inputLow, inputHigh, inputType, inputValues, inputSwitchOrProgram, inputPollTime, inputWhichRGB,
+            port, pin, getPin, portPin, switchOrProgText, switchNum;
     radioInputs.forEach(function (thisInput) {
         inputPinStuff = parseInt(thisInput.pinStuff, 10);
         // low threshhold that must be met to start switch (analog)
@@ -298,29 +299,141 @@ function showRadioDetails(response) {
         // high threshhold - max analog can be or 255 for digital switch
         inputHigh = parseInt(thisInput.highPercent, 10);
         // 0-127 = switch, 128-255 = program
+        if (inputHigh == 255 || inputLow == 255) {
+            inputType = "Digital";
+            if (inputHigh == 255)
+                inputValues = "High activates";
+            else
+                inputValues = "Low activates";
+        } else {
+            inputType = "Analog";
+            inputValues = (Math.floor(inputHigh * 100 / 254)).toString(10) + "% - " +
+                    (Math.floor(inputLow * 100 / 254)).toString(10) + "%";
+        }
         inputSwitchOrProgram = parseInt(thisInput.whichSwitchOrProgram, 10);
-        inputDuration = parseInt(thisInput.inputDuration, 10);
+        if (inputSwitchOrProgram > 127) {
+            switchNum = inputSwitchOrProgram - 128;
+            switchOrProgText = "Pr#" + switchNum.toString(10);
+        } else {
+            switchOrProgText = "Sw#" + inputSwitchOrProgram.toString(10);
+        }
         // 0 = every 1/10 second or >0 is num seconds
         inputPollTime = parseInt(thisInput.pollTime);
         inputWhichRGB = parseInt(thisInput.whichRGB);
         port = Math.floor(inputPinStuff / 16);
         getPin = inputPinStuff % 16;
         pin = Math.floor(getPin / 2);
-        portPin = ports[port]+pin.toString(10);
-        // TODO: you are here 
+        portPin = ports[port] + pin.toString(10);
+        $("#radioColors").before(
+                "<div id=radioInputs-" + thisInput.id + " class='radioInputsChild radioInputsSubChild detailField'" +
+                " onclick=addEditInput('" + thisInput.id + "') >" + inputType + " #" + thisInput.inputNumber + " " + portPin + " " + inputValues +
+                " " + switchOrProgText + " Dur:" + thisInput.duration + " Poll time:" + thisInput.pollTime
+                + "</div>");
     });
+
     /*
      * Radio colors boxes
      */
+    $("#radioTimeLimits").before(
+            "<div id=radioColors-v class='radioColorsChild detailField' onclick=viewRadioColors() >" +
+            "<span id=radioColorsMsg >Click to view colors</span></div>"
+            );
+    $("#radioTimeLimits").before(
+            "<div id=radioColors-n class='radioColorsChild radioColorsSubChild detailField' onclick=addEditColors('new') >" +
+            "Click to add new color</div>"
+            );
+
+    var colorText, colorMessage, changeMessage;
+    radioColors.forEach(function (thisColor) {
+        red = parseInt(thisColor.red);
+        green = parseInt(thisColor.green);
+        blue = parseInt(thisColor.blue);
+        textColor = "black";
+        if (red < 75 || green < 75 || blue < 75)
+            textColor = "white";
+        colorText = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
+                ("0" + blue.toString(16)).substr(-2);
+        colorMessage =
+                "<span style='background-color: #" + colorText + "; color: " + textColor + ";' >0x" +
+                colorText + "</span>";
+        if (thisColor.ifChangeable == "1")
+            changeMessage = "<br/>Part of rotating change";
+        else
+            changeMessage = "<br/>Not part of rotating change";
+
+        $("#radioTimeLimits").before(
+                "<div id=radioColors-" + thisColor.id + " class='radioColorsChild radioColorsSubChild detailField'" +
+                " onclick=addEditColors('" + thisColor.id + "') >Color #" + thisColor.colorChangeNumber + " " + colorMessage +
+                " " + changeMessage + "</div>"
+                );
+    });
+
 
     /*
      * Radio time limits boxes
      */
+    $("#uhEnding").before(
+            "<div id=radioTimeLimits-v class='radioTimeLimitsChild detailField' onclick=viewRadioTimeLimits() >" +
+            "<span id=radioTimeLimitsMsg >Click to view time limits</span></div>"
+            );
+    $("#uhEnding").before(
+            "<div id=radioTimeLimits-n class='radioTimeLimitsChild radioTimeLimitsSubChild detailField' onclick=addEditTimeLimits('new') >" +
+            "Click to add new time limit</div>"
+            );
+    var limitStart, limitStop, startMessage, stopMessage, limitDays;
+    radioTimeLimits.forEach(function(thisLimit) {
+        limitStart = parseInt(thisLimit.startTime);
+        limitStop = parseInt(thisLimit.stopTime);
+        hour = Math.floor(limitStart / 60);
+        minute = limitStart % 60;
+        startMessage = " Start: ".hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
+        hour = Math.floor(limitStop / 60);
+        minute = limitStop % 60;
+        stopMessage = " Stop: ".hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
+        dayInt = parseInt(thisLimit.days, 10);
+        if (dayInt & 0x40)
+            limitDays = "S";
+        else
+            limitDays = "-";
+        if (dayInt & 0x20)
+            limitDays += "M";
+        else
+            limitDays += "-";
+        if (dayInt & 0x10)
+            limitDays += "T";
+        else
+            limitDays += "-";
+        if (dayInt & 0x08)
+            limitDays += "W";
+        else
+            limitDays += "-";
+        if (dayInt & 0x04)
+            limitDays += "T";
+        else
+            limitDays += "-";
+        if (dayInt & 0x02)
+            limitDays += "F";
+        else
+            limitDays += "-";
+        if (dayInt & 0x01)
+            limitDays += "S";
+        else
+            limitDays += "-";
+        $("#uhEnding").before(
+            "<div id=radioTimeLimits-"+thisLimit.id+" class='radioTimeLimitsChild radioTimeLimitsSubChild detailField' "+
+            "onclick=addEditTimeLimits('"+thisLimit.id+"') >Time Limit #" + thisLimit.limitNumber + startMessage +
+            stopMessage + " Days:" + limitDays + "</div>"
+                );
+    })
+
+
+
 
     $("#radioSettings").data("hide", "hidden");
     $("#radioSwitches").data("hide", "hidden");
     $("#radioPrograms").data("hide", "hidden");
     $("#radioInputs").data("hide", "hidden");
+    $("#radioColors").data("hide", "hidden");
     $(".radioDetails").show();
 }
 
@@ -388,7 +501,7 @@ function viewRadioSwitches() {
     }
 }
 
-function addEditSwitch(switchNum) {
+function addEditSwitch(switchID) {
 
 }
 
@@ -414,7 +527,7 @@ function viewRadioPrograms() {
     }
 }
 
-function addEditProgram(programNum) {
+function addEditProgram(programID) {
 
 }
 
@@ -441,6 +554,58 @@ function viewRadioInputs() {
     }
 }
 
-function addEditProgram(inputNum) {
+function addEditInput(inputID) {
+
+}
+
+/**********************************************************
+ * 
+ * Radio Colors Area
+ * 
+ **********************************************************/
+
+
+/*
+ * Shows the sub navigation for the radio inputs
+ */
+function viewRadioColors() {
+    if ($("#radioColors").data("hide") == "shown") {
+        $(".radioColorsSubChild").hide();
+        $("#radioColors").data("hide", "hidden");
+        $("#radioColorsMsg").text("Click to view colors");
+    } else {
+        $(".radioColorsSubChild").show();
+        $("#radioColors").data("hide", "shown");
+        $("#radioColorsMsg").text("Click to hide colors");
+    }
+}
+
+function addEditColors(colorID) {
+
+}
+
+/**********************************************************
+ * 
+ * Radio TimeLimits Area
+ * 
+ **********************************************************/
+
+
+/*
+ * Shows the sub navigation for the radio inputs
+ */
+function viewRadioTimeLimits() {
+    if ($("#radioTimeLimits").data("hide") == "shown") {
+        $(".radioTimeLimitsSubChild").hide();
+        $("#radioTimeLimits").data("hide", "hidden");
+        $("#radioTimeLimitsMsg").text("Click to view time limits");
+    } else {
+        $(".radioTimeLimitsSubChild").show();
+        $("#radioTimeLimits").data("hide", "shown");
+        $("#radioTimeLimitsMsg").text("Click to hide time limits");
+    }
+}
+
+function addEditTimeLimits(limitID) {
 
 }
