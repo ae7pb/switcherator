@@ -120,7 +120,7 @@ function showRadioDetails(response) {
 
     $("#radioSwitches").before(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeName() >Name: <br/><b>" + response.radio.name + "</b></div>");
+            "onclick=radioChangeName() >Name: <br/><b>" + radioSettings.name + "</b></div>");
 
     var clockTweak = parseInt(radioSettings.clockTweak, 16);
     clockTweak = clockTweak.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -385,7 +385,7 @@ function showRadioDetails(response) {
             "Click to add new time limit</div>"
             );
     var limitStart, limitStop, startMessage, stopMessage, limitDays;
-    radioTimeLimits.forEach(function(thisLimit) {
+    radioTimeLimits.forEach(function (thisLimit) {
         limitStart = parseInt(thisLimit.startTime);
         limitStop = parseInt(thisLimit.stopTime);
         hour = Math.floor(limitStart / 60);
@@ -424,9 +424,9 @@ function showRadioDetails(response) {
         else
             limitDays += "-";
         $("#uhEnding").before(
-            "<div id=radioTimeLimits-"+thisLimit.id+" class='radioTimeLimitsChild radioTimeLimitsSubChild detailField' "+
-            "onclick=addEditTimeLimits('"+thisLimit.id+"') >Time Limit #" + thisLimit.limitNumber + startMessage +
-            stopMessage + " Days:" + limitDays + "</div>"
+                "<div id=radioTimeLimits-" + thisLimit.id + " class='radioTimeLimitsChild radioTimeLimitsSubChild detailField' " +
+                "onclick=addEditTimeLimits('" + thisLimit.id + "') >Time Limit #" + thisLimit.limitNumber + startMessage +
+                stopMessage + " Days:" + limitDays + "</div>"
                 );
     })
 
@@ -463,12 +463,51 @@ function viewRadioSettings() {
     }
 }
 
-
+// Change the name of the radio, edit the description and location.
 function radioChangeName() {
+    resetEdit();
+    $("#individualDetailEdit").append(
+            "<div class=detailEdit ><table class=detailTable><tr class=detailTable><td class=left >Radio Name:</td>\
+            <td class=right><input id=newRadioName value='" + radioSettings.name + "'></td></tr><tr class=detailTable><td class=left>Description</td><td class=right>\n\
+            <textarea cols=21 rows=6 id=newRadioDescription>" + radioSettings.description.trim() + "</textarea></td></tr><tr class=detailTable><td class=left>\n\
+            Location</td><td class=right><input id=newRadioLocation value='" + radioSettings.location + "'></td></tr><tr class=detailTable><td class=left>\n\
+            &nbsp;</td><td class=right><input type=button value=Submit onClick=radioChangeNameSubmit() /></td></tr></table></div>"
+            );
+}
+function radioChangeNameSubmit() {
+    $.post("ajax.php?function=radioChangeName",
+            {name: $("#newRadioName").val(),
+                description: $("newRadioDescription").val(),
+                location: $("#newRadioLocation").val()
+            }
+    , function (data) {
+        if (data == "ok") {
+            radioSettings.name = $("#newRadioName").val();
+            radioSettings.description = $("#newRadioDescription").val();
+            radioSettings.location = $("#newRadioLocation").val();
+            $("#messageBar").html("Name changed.");
+            // TODO: make message bar disappear in a few seconds or when something gets clicked
+        } else {
+            $("#errorBar").html("Name change error.");
+        }
+    },
+            "text"
+            ).error(function () {
+        $("#errorBar").html("Server time out.;")
+    })
 
 }
 
 function radioChangeTweak() {
+
+    /*    $.post("ajax.php?function=radioCommand",
+     {radioID: "5",
+     command: "du"
+     },
+     function (response) {
+     console.log(response);
+     },
+     "text");*/
 
 }
 
@@ -485,7 +524,7 @@ function radioChangeColorSpeed() {
 }
 
 function addNewRadio() {
-    
+
 }
 
 /**********************************************************
@@ -618,4 +657,14 @@ function addEditTimeLimits(limitID) {
 
 }
 
+/**********************************************************
+ * 
+ * General List
+ * 
+ **********************************************************/
 
+function resetEdit() {
+    $("#individualDetailEdit").children('div').each(function () {
+        $(this).remove();
+    });
+}

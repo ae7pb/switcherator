@@ -107,3 +107,28 @@
 .radioTimeLimitsChild {
     background-color: chocolate;
 }
+.editSection {
+    width:      100%;
+    float:      left;
+    text-align: center;
+
+}
+.detailEdit{
+    position:       absolute;
+    width:          50%;
+    left:           25%;
+    min-height:     25px;
+    text-align:     center;
+    font-size:      .9em;
+    padding:        10px;
+    margin:         15px;
+    text-align:     center;
+    vertical-align: middle;
+    background-color:   #EEEEEE;
+    border-radius:  25px;
+    box-shadow:     0 0 4px 1px black;
+}
+table.detailTable  {
+    margin:         0 auto;
+}
+

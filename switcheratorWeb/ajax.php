@@ -9,6 +9,12 @@ switch ($_GET['function']) {
     case "radioDetails":
         echo radioDetails($_GET['radioID']);
         break;
+    case "radioCommand":
+        echo sendRadioCommand();
+        break;
+    case "radioChangeName":
+        echo radioChangeName();
+        break;
 }
 
 /*
@@ -67,6 +73,23 @@ function radioDetails($radioID) {
         echo "</pre>";
     }
     return json_encode($outArray);
+}
+
+// gets and does a command to the radio
+function sendRadioCommand() {
+    $command = $_POST['command'];
+    $radioID = intval($_POST['radioID']);
+    if(preg_match('/^[a-zA-Z0-9]+$/',$command) !== 1)
+            return json_encode(array("fail"=>"Invalid command."));
+    include_once("functions.php");
+    $response = radioCommand($radioID, $command);
+    if($response == false)
+        return json_encode(array("fail"=>"Invalid command!"));
+    return json_encode($response);
+}
+
+function radioChangeName() {
+    echo "ok";
 }
 
 ?>
