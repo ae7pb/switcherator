@@ -53,7 +53,7 @@ function radioDetails($radioID) {
     $result = $statement->execute();
     $switches = array();
     while($row = $result->fetchArray())
-            $switches[] = $row;
+            $switches[$row['switchNumber']] = $row;
 
     $sql = "select * from programs where radioID = :radioID and time != 65535";
     $statement = $db->prepare($sql);
@@ -62,7 +62,7 @@ function radioDetails($radioID) {
     $result = $statement->execute();
     $programs = array();
     while($row = $result->fetchArray())
-            $programs[] = $row;
+            $programs[$row['programNumber']] = $row;
 
     $sql = "select * from inputs where radioID = :radioID and pinStuff != 255";
     $statement = $db->prepare($sql);
