@@ -51,7 +51,7 @@
 }
 
 .detailField {
-    width:  100px;
+    width:      100px;
     min-height: 100px;
     padding:    10px;
     outline:    1px solid;
@@ -64,9 +64,11 @@
 }
 
 .radioSettingsSubChild, 
-.radioSwitchesSubChild {
+.radioSwitchesSubChild,
+.radioProgramsSubChild{
     display:    none;
     float:      left;
+    font-size:  .9em;
 }
 
 

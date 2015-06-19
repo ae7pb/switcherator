@@ -109,37 +109,38 @@ function showRadioDetails(response) {
      * Radio settings boxes
      */
 
+    $("#radioSettings").append(
+            "<div id=radioSettings-0 class='radioSettingsChild detailField' onclick=viewRadioSettings() >" +
+            "<span id=radioSettingsMsg >Click to view Settings</span></div>"
+            );
+
+    $("#radioSettings").append(
+            "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
+            "onclick=radioChangeName() >Name: <br/><b>" + response.radio.name + "</b></div>");
+
+    var clockTweak = parseInt(radioSettings.clockTweak, 16);
+    clockTweak = clockTweak.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    $("#radioSettings").append(
+            "<div id=radioSettings-2 class='radioSettingsChild radioSettingsSubChild detailField' " +
+            "onclick=radioChangeTweak() >Clock adjustment (15,625 default):<br/><b> " + clockTweak + "</b></div>");
+
     var colorChangeSpeed = parseInt(radioSettings.colorChangeSpeed, 16);
-    $("#radioSettings").after(
+    $("#radioSettings").append(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
             "onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/><b>" + colorChangeSpeed + "</b></div>");
 
     var hueSpeed = parseInt(radioSettings.hueSpeed, 16);
-    $("#radioSettings").after(
+    $("#radioSettings").append(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
             "onclick=radioChangeHueSpeed() >Smooth hue color change speed (0-99 default 16): <br/><b>" + hueSpeed + "</b></div>");
 
     // Input message timing - When an input is triggered and we send a message the input message timing is
     // how long we wait before we send the next message
     var inputTiming = parseInt(radioSettings.inputMessageTiming, 16);
-    $("#radioSettings").after(
+    $("#radioSettings").append(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
             "onclick=radioChangeInputTiming() >Timing between input messages (0 = no messages): <br/><b>" + inputTiming + "</b></div>");
 
-    var clockTweak = parseInt(radioSettings.clockTweak, 16);
-    clockTweak = clockTweak.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    $("#radioSettings").after(
-            "<div id=radioSettings-2 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeTweak() >Clock adjustment (15,625 default):<br/><b> " + clockTweak + "</b></div>");
-
-    $("#radioSettings").after(
-            "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeName() >Name: <br/><b>" + response.radio.name + "</b></div>");
-
-    $("#radioSettings").after(
-            "<div id=radioSettings-0 class='radioSettingsChild detailField' onclick=viewRadioSettings() >" +
-            "<span id=radioSettingsMsg >Click to view Settings</span></div>"
-            );
 
 
 
@@ -197,19 +198,77 @@ function showRadioDetails(response) {
         }
         $("#radioSwitches").append(
                 "<div id=radioSwitches-" + thisSwitch.id + " class='radioSwitchesChild radioSwitchesSubChild detailField' " +
-                "onClick=addEditSwitch(" + thisSwitch.id + ")>" + switchMessage + "</div>"
+                "onClick=addEditSwitch(" + thisSwitch.id + ")>Switch #" + thisSwitch.id + " " + switchMessage + "</div>"
                 );
 
     });
     /*
      * Radio programs boxes
      */
-    radioPrograms.forEach(function(thisProgram) {
+
+    $("#radioPrograms").append(
+            "<div id=radioPrograms-v class='radioProgramsChild detailField' onclick=viewRadioPrograms() >" +
+            "<span id=radioProgramsMsg >Click to view programs</span></div>"
+            );
+    $("#radioPrograms").append(
+            "<div id=radioPrograms-n class='radioProgramsChild radioProgramsSubChild detailField' onclick=addEditProgram('new') >" +
+            "Click to add new program</div>"
+            );
+
+    var programDays, dayInt, programStart, hour, minute, programDuration, switchArray, programSwitches;
+    radioPrograms.forEach(function (thisProgram) {
         // programNumber, days (0b01111111 = sun-sat), time (seconds from midnight), duration(seconds), 
         // switches(ff=blank), rollover(next program that houses more switches)
-        // TODO: you are here
-    });
+        dayInt = parseInt(thisProgram.days,10);
+        if (dayInt & 0x40)
+            programDays = "S";
+        else
+            programDays = "-";
+        if (dayInt & 0x20)
+            programDays += "M";
+        else
+            programDays += "-";
+        if (dayInt & 0x10)
+            programDays += "T";
+        else
+            programDays += "-";
+        if (dayInt & 0x08)
+            programDays += "W";
+        else
+            programDays += "-";
+        if (dayInt & 0x04)
+            programDays += "T";
+        else
+            programDays += "-";
+        if (dayInt & 0x02)
+            programDays += "F";
+        else
+            programDays += "-";
+        if (dayInt & 0x01)
+            programDays += "S";
+        else
+            programDays += "-";
+        hour = Math.floor((parseInt(thisProgram.time)) / 60);
+        minute = (parseInt(thisProgram.time)) % 60;
+        programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
+        programDuration = (Math.floor((parseInt(thisProgram.duration)) / 60)).toString(10);
+        switchArray = thisProgram.switches.split(",");
+        programSwitches = "";
+        for (var x = 0; x < switchArray.length; x++) {
+            if (switchArray[x] !== "ff") {
+                if (x > 0)
+                    programSwitches += ",";
+                programSwitches += parseInt(switchArray[x], 16).toString(10);
+            }
+        }
+        $("#radioPrograms").append(
+                "<div id=radioPrograms-"+thisProgram.programNumber+" class='radioProgramsChild "+
+                "radioProgramsSubChild detailField' onclick=addEditProgram('"+thisProgram.programNumber+
+                "') >" + "Program #" + thisProgram.programNumber + " Start:" + programStart +
+                " Dur.:"+programDuration+" "+programDays+" Sw:"+programSwitches+"</div>"
+                );
 
+    });
 
     /*
      * Radio inputs boxes
@@ -218,13 +277,14 @@ function showRadioDetails(response) {
     /*
      * Radio colors boxes
      */
-    
+
     /*
      * Radio time limits boxes
      */
 
     $("#radioSettings").data("hide", "hidden");
     $("#radioSwitches").data("hide", "hidden");
+    $("#radioPrograms").data("hide", "hidden");
     $(".radioDetails").show();
 }
 
@@ -293,5 +353,31 @@ function viewRadioSwitches() {
 }
 
 function addEditSwitch(switchNum) {
+
+}
+
+/**********************************************************
+ * 
+ * Radio Programs Area
+ * 
+ **********************************************************/
+
+
+/*
+ * Shows the sub navigation for the radio switches
+ */
+function viewRadioPrograms() {
+    if ($("#radioPrograms").data("hide") == "shown") {
+        $(".radioProgramsSubChild").hide();
+        $("#radioPrograms").data("hide", "hidden");
+        $("#radioProgramsMsg").text("Click to view programs");
+    } else {
+        $(".radioProgramsSubChild").show();
+        $("#radioPrograms").data("hide", "shown");
+        $("#radioProgramsMsg").text("Click to hide programs");
+    }
+}
+
+function addEditProgram(programNum) {
 
 }
