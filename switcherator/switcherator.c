@@ -382,6 +382,9 @@ void checkCommand(char * commandReceived) {
         case 0x4954: //IT
             setInputMessageTiming(commandReceived);
             break;
+        case 0x5744: //WD
+            setPWMDir(commandReceived);
+            break;
         default:
         case 0x4455: //DU
             memoryDump();
@@ -813,7 +816,7 @@ void getPort(int switchNumber, char * port, char * pin, char * direction) {
 
 // PWM setup.  This is initially  geared for the 328p but the framework
 // exists for other chips
-// PS:P#S#DH
+// PS:P#S#H
 // 012345678
 
 void pwmSetup(char * commandReceived) {
@@ -833,9 +836,9 @@ void pwmSetup(char * commandReceived) {
     switchNumber = getInt(commandReceived, 5, 2);
     clearTheSwitch(switchNumber);
     // set up a hue pwm
-    if (commandReceived[8] == 'H' || commandReceived[8] == 'h' || commandReceived[8] == '1') {
+    if (commandReceived[7] == 'H' || commandReceived[7] == 'h' || commandReceived[7] == '1') {
         switchStuff[switchNumber] = 201;
-    } else if (commandReceived[8] == 'C' || commandReceived[8] == 'c') {
+    } else if (commandReceived[7] == 'C' || commandReceived[7] == 'c') {
         switchStuff[switchNumber] = 202;
     } else {
         switchStuff[switchNumber] = 200;
@@ -846,17 +849,6 @@ void pwmSetup(char * commandReceived) {
     //Red = 0;
     //Green = 0;
     //Blue = 0;
-    // Set output phase correct whatevers
-    // set it to inverted if the direction is 0
-    if (commandReceived[7] == '0') {
-        pwmdir = 0;
-        TCCR0A = (1 << COM0A0) | (1 << COM0A1) | (1 << COM0B0) | (1 << COM0B1) | (1 << WGM00);
-        TCCR2A = (1 << COM2B0) | (1 << COM2B1) | (1 << WGM20);
-    } else {
-        pwmdir = 1;
-        TCCR0A = (1 << COM0A1) | (1 << COM0B1) | (1 << WGM00);
-        TCCR2A = (1 << COM2B1) | (1 << WGM20);
-    }
     // F_CPU/64 timers
     TCCR0B = (1 << CS01) | (1 << CS00);
 
@@ -883,6 +875,35 @@ void pwmClear(int switchNumber) {
     pwmIsSet = 0;
 
 }
+
+// Sets up the direction of the pwm
+// WD:d = d=1 high
+// 0123
+void setPWMDir(char * commandReceived) {
+    // Set output phase correct whatevers
+    // set it to inverted if the direction is 0
+    if (commandReceived[3] == '0' || commandReceived[3] == 'l' ||
+            commandReceived[3] == 'L') {
+        pwmdir = 0;
+        TCCR0A = (1 << COM0A0) | (1 << COM0A1) | (1 << COM0B0) | (1 << COM0B1) | (1 << WGM00);
+        TCCR2A = (1 << COM2B0) | (1 << COM2B1) | (1 << WGM20);
+    } else if (commandReceived[3] == 'x') {
+        statusMsg[0] = 0;
+        if(pwmdir == 1)
+            strcat(statusMsg,"Hi");
+        else
+            strcat(statusMsg,"Low");
+        sendMessage(statusMsg);
+    } else {
+        pwmdir = 1;
+        TCCR0A = (1 << COM0A1) | (1 << COM0B1) | (1 << WGM00);
+        TCCR2A = (1 << COM2B1) | (1 << WGM20);
+    }
+    ok();
+}
+
+
+
 
 // This just sets up the times for the PWM hues
 // CH:P#TTTTT 

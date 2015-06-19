@@ -134,6 +134,7 @@ void getPort(int switchNumber, char * port, char * pin, char * direction);
 
 // pwm related
 void pwmSetup(char * commandReceived);
+void setPWMDir(char * commandReceived);
 void pwmClear(int switchNumber);
 void cycleHue(char * commandReceived);
 void setHueSpeed(char * commandReceived);
