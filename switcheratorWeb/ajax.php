@@ -21,7 +21,6 @@ function getRadios() {
     $result = $db->query($sql);
     while ($row = $result->fetchArray(SQLITE3_ASSOC))
         $radioInfo[] = $row;
-    // one too many entries
     return json_encode($radioInfo);
 }
 
@@ -41,62 +40,27 @@ function radioDetails($radioID) {
     $row = $result->fetchArray();
     if ($row == false)
         return (json_encode(array("fail" => "Invalid radio id")));
-    $radioDetail = $row;
+    $outArray['radio'] = $row;
 
-    // no go through and get all of the details
-    $sql = "select * from switches where radioID = :radioID and switchStuff != 255";
-    $statement = $db->prepare($sql);
-    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
-        echo $db->lastErrorMsg();
-    $result = $statement->execute();
-    $switches = array();
-    while ($row = $result->fetchArray())
-        $switches[] = $row;
-
-    $sql = "select * from programs where radioID = :radioID and time != 65535";
-    $statement = $db->prepare($sql);
-    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
-        echo $db->lastErrorMsg();
-    $result = $statement->execute();
-    $programs = array();
-    while ($row = $result->fetchArray())
-        $programs[] = $row;
-
-    $sql = "select * from inputs where radioID = :radioID and pinStuff != 255";
-    $statement = $db->prepare($sql);
-    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
-        echo $db->lastErrorMsg();
-    $result = $statement->execute();
-    $inputs = array();
-    while ($row = $result->fetchArray())
-        $inputs[] = $row;
-
-    $sql = "select * from colorChanges where radioID = :radioID and (red != 0 or green != 1 or blue != 0)";
-    $statement = $db->prepare($sql);
-    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
-        echo $db->lastErrorMsg();
-    $result = $statement->execute();
-    $colors = array();
-    while ($row = $result->fetchArray())
-        $colors[$row['colorChangeNumber']] = $row;
-
-    $sql = "select * from timeLimits where radioID = :radioID and (startTime != 0 or stopTime != 0 or days != 0)";
-    $statement = $db->prepare($sql);
-    if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
-        echo $db->lastErrorMsg();
-    $result = $statement->execute();
-    $timeLimits = array();
-    while ($row = $result->fetchArray())
-        $timeLimits[] = $row;
-
-    $outArray = array(
-        "radio" => $radioDetail,
-        "switches" => $switches,
-        "program" => $programs,
-        "inputs" => $inputs,
-        "colors" => $colors,
-        "timeLimits" => $timeLimits,
+    $sqlArray = array(
+        array("switches", "select * from switches where radioID = :radioID and switchStuff != 255"),
+        array("programs", "select * from programs where radioID = :radioID and time != 65535"),
+        array("inputs", "select * from inputs where radioID = :radioID and pinStuff != 255"),
+        array("colors", "select * from colorChanges where radioID = :radioID and (red != 0 or green != 1 or blue != 0)"),
+        array("timeLimits", "select * from timeLimits where radioID = :radioID and (startTime != 0 or stopTime != 0 or days != 0)")
     );
+    foreach ($sqlArray as $sqlItem) {
+        $sql = $sqlItem[1];
+        $statement = $db->prepare($sql);
+        if (!$statement->bindValue(":radioID", $radioID, SQLITE3_INTEGER))
+            echo $db->lastErrorMsg();
+        $result = $statement->execute();
+        $data = array();
+        while ($row = $result->fetchArray())
+            $data[] = $row;
+        $outArray[$sqlItem[0]] = $data;
+    }
+
     if (isset($_GET['debug'])) {
         echo "<pre>";
         print_r($outArray);

@@ -100,7 +100,7 @@ function showRadioDetails(response) {
     // fill in the global variables
     radioSettings = response.radio;
     radioSwitches = response.switches;
-    radioPrograms = response.program;
+    radioPrograms = response.programs;
     radioInputs = response.inputs;
     radioColors = response.colors;
     radioTimeLimits = response.timeLimits;
