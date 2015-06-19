@@ -301,4 +301,133 @@ function processRadio($radioID) {
     return true;
 }
 
+// Get the basic information of a new radio and assign it its very own address
+function newRadio($name = "", $description = "", $location = "") {
+    global $db;
+    //First see if there is a radio there using default address
+    $returnArray = array();
+    exec("nrfcl -t f0f0f0f001 -r f0f0f0f001 gi", $returnArray);
+    if (!isset($returnArray[0]) or strpos($returnArray[0], "ok") === false) {
+        echo "No radio communication";
+        return false;
+    }
+
+    $sql = "SELECT max(rxAddress0) from radios";
+    $result = $db->query($sql);
+    if ($result == false)
+        $freq = "f0f0f0f002";
+    else {
+        $row = $result->fetchArray(SQLITE3_NUM);
+        if ($row[0] == NULL)
+            $freq = "f0f0f0f002";
+        else {
+            $lastFreq = $row[0];
+            $freqNum = "0x" . substr($lastFreq, 6);
+            $thisFreq = intval($freqNum, 16) + 1;
+            $newFreq = dechex($thisFreq);
+            while (strlen($newFreq) < 4)
+                $newFreq = "0" . $newFreq;
+            $freq = substr($lastFreq, 0, 6) . $newFreq;
+        }
+    }
+
+    // Now actually send the changes to the radio
+    // set the receive frequency to the new frequency
+    $command = "nrfcl -t f0f0f0f001 -r f0f0f0f001 RC:0:0x$freq";
+    $returnArray = 0;
+    exec($command, $returnArray);
+    if (count($returnArray) < 2) {
+        print_r($returnArray);
+        return false;
+    }
+    // set the transmit frequency to the new frequency
+    $command = "nrfcl -t $freq -r $freq RC:T:0x$freq";
+    $returnArray = 0;
+    exec($command, $returnArray);
+    if (count($returnArray) < 2) {
+        print_r($returnArray);
+        return false;
+    }
+
+    // do the update
+    return existingNewRadio($name, $description, $location, $freq);
+}
+
+// Get a new radio from an existing address
+function existingNewRadio($name = "", $description = "", $location = "", $freq) {
+    global $db;
+    //First see if there is a radio there using default address
+    $returnArray = array();
+    exec("nrfcl -t $freq -r $freq gi", $returnArray);
+    if (!isset($returnArray[0]) or strpos($returnArray[0], "ok") === false) {
+        echo "No radio communication!";
+        return false;
+    }
+    $returnString = "";
+    foreach ($returnArray as $line) {
+        if (strpos($line, "Transmitting") === false)
+            $returnString .= $line;
+    }
+    //Make sure we got the whole message
+    if (strpos($returnString, "Pr") === false or
+            strpos($returnString, "Sw") === false or
+            strpos($returnString, "In") === false or
+            strpos($returnString, "Li") === false or
+            strpos($returnString, "CC") === false) {
+        echo "Didn't receive summary.";
+        return false;
+    }
+    // k cool. We have all the info
+    $radioParams = explode(",", $returnString);
+    for ($x = 0; $x < count($radioParams); $x+=2) {
+        $number = explode("/", $radioParams[$x + 1]);
+        $programmed = $number[0];
+        $total = $number[1];
+        switch ($radioParams[$x]) {
+            case "Pr":
+                $programs = $total;
+                break;
+            case "Sw":
+                $switches = $total;
+                break;
+            case "In":
+                $inputs = $total;
+                break;
+            case "Li":
+                $limits = $total;
+                break;
+            case "CC":
+                $colorChanges = $total;
+                break;
+        }
+    }
+
+
+    $sql = "INSERT INTO radios (name, description, location, switchCount, 
+        programCount, inputCount, timeLimitCount, colorChangeCount, txAddress, 
+        rxAddress0) values (:name, :description, :location, $switches, 
+        $programs, $inputs, $limits, $colorChanges, '$freq', '$freq')";
+    $statement = $db->prepare($sql);
+    if (!$statement->bindValue(":name", $name, SQLITE3_TEXT))
+        echo $db->lastErrorMsg();
+    $statement->bindValue(":description", $description, SQLITE3_TEXT);
+    $statement->bindValue(":location", $location, SQLITE3_TEXT);
+    $result = $statement->execute();
+    if (!$result)
+        echo $db->lastErrorMsg();
+    echo "Success<br/>";
+    $radioID = $db->lastInsertRowID();
+    // save setup
+    $command = "nrfcl -t $freq -r $freq SA";
+    exec($command, $returnArray);
+    // set clock
+    $command = "nrfcl -t $freq -r $freq";
+    exec($command, $returnArray);
+    // get info from the radio
+    processRadio($radioID);
+
+    return true;
+}
+
+
 ?>
