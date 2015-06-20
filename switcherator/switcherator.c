@@ -35,7 +35,7 @@ static char newSecond = 0;
 static char newMinute = 0;
 static char switchChanged = 0;
 static char tenthFlag = 0; // 10th of a second(ish) has passed
-static char failCondition = 3;
+static char failCondition = 1;
 static char failTimer = 0;
 #define INDICATOR_PORT PORTD
 #define INDICATOR_PIN (1 << PIND2)
@@ -138,6 +138,10 @@ static uint64_t rx_addr_p0, rx_addr_p1, rx_addr_p2, rx_addr_p3, rx_addr_p4, rx_a
 static uint64_t inputAddr;
 
 int main(void) {
+    // we're using the watchdog to reset so lets avoid a loop
+    MCUSR = 0;
+    wdt_disable();
+
     radioReceiveBuffer[0] = 0;
     int x = 0;
     inputMessage[0] = 0;
@@ -184,7 +188,6 @@ int main(void) {
 
     clockInit();
     radioInit();
-    startRx();
     // make sure general init is after radioinit
     generalInit();
     startClock();
@@ -212,6 +215,8 @@ int main(void) {
                     sendInputMessage();
                 }
             }
+        if(failCondition & 2 || failCondition & 4)
+            radioInit();
         }
         // runs only if a switch changed
         if (switchChanged == 1) {
@@ -384,6 +389,9 @@ void checkCommand(char * commandReceived) {
             break;
         case 0x5744: //WD
             setPWMDir(commandReceived);
+            break;
+        case 0x5245: //RE
+            resetMe();
             break;
         default:
         case 0x4455: //DU
@@ -2352,8 +2360,8 @@ void setClock(char * commandReceived) {
     stopClock();
     startClock();
     panicMyClockIsNotSet = 0;
-    if (failCondition == 3) {
-        clearFail();
+    if (failCondition & 1) {
+        clearFail(1);
     }
 }
 
@@ -3079,7 +3087,7 @@ void radioInit(void) {
     radioTest();
 
     startRadio();
-
+    startRx();
 }
 
 // radio test - just make sure it is still working
@@ -3089,11 +3097,13 @@ int radioTest(void) {
     test_addr = readAddr(RX_ADDR_P0);
     if (test_addr != rx_addr_p0) {
         // nope.  broken
-        failCondition = 1;
+        failCondition |= 2;
         return -1;
     }
-    if (failCondition == 1 || failCondition == 2)
-        clearFail();
+    if (failCondition & 2)
+        clearFail(2);
+    if (failCondition & 4)
+        clearFail(4);
     return 1;
 }
 
@@ -3251,10 +3261,12 @@ void sendMessage(char * myResponse) {
     _delay_us(10);
     int transmitLength = strlen(myResponse);
     if (!transmit(myResponse, transmitLength)) {
-        failCondition = 2;
+        failCondition |= 4;
     } else {
-        failCondition = 0;
-        clearFail();
+        if(failCondition & 2)
+            clearFail(2);
+        if(failCondition & 4)
+            clearFail(4);
     }
     startRx();
 }
@@ -3924,14 +3936,14 @@ void flashFail(void) {
     } else if (failTimer == 4) {
         INDICATOR_PORT &= ~(INDICATOR_PIN);
     }
-    if (failCondition >= 2) {
+    if (failCondition & 2) {
         if (failTimer == 8) {
             INDICATOR_PORT |= INDICATOR_PIN;
         } else if (failTimer == 10) {
             INDICATOR_PORT &= ~(INDICATOR_PIN);
         }
     }
-    if (failCondition >= 3) {
+    if (failCondition & 4) {
         if (failTimer == 14) {
             INDICATOR_PORT |= INDICATOR_PIN;
         } else if (failTimer == 16) {
@@ -3945,10 +3957,19 @@ void flashFail(void) {
 
 // turns off the indicator pin
 
-void clearFail(void) {
+void clearFail(int fail) {
+    failCondition &= ~(fail);
     failTimer = 0;
     INDICATOR_PORT |= (INDICATOR_PIN);
     INDICATOR_DDR |= (INDICATOR_PIN);
+}
+
+// do a full chip reset (useful when we reprogram EEPROM)
+
+void resetMe(void) {
+    cli();
+    wdt_enable(WDTO_1S);
+    while(1);
 }
 
 ISR(TIMER1_COMPA_vect) {

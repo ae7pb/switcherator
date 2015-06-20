@@ -2,6 +2,7 @@
 #include <string.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <avr/wdt.h>
 
 #include <avr/eeprom.h>
 #include <avr/pgmspace.h>
@@ -219,5 +220,5 @@ void setInputMessageTiming(char * commandReceived);
 void clearInput(char * commandReceived);
 
 void flashFail(void);
-void clearFail(void);
-
+void clearFail(int fail);
+void resetMe(void);
