@@ -468,9 +468,12 @@ function radioChangeName() {
     resetEdit();
     $("#individualDetailEdit").append(
             "<div class=detailEdit ><table class=detailTable><tr class=detailTable><td class=left >Radio Name:</td>\
-            <td class=right><input id=newRadioName value='" + radioSettings.name + "'></td></tr><tr class=detailTable><td class=left>Description</td><td class=right>\n\
-            <textarea cols=21 rows=6 id=newRadioDescription>" + radioSettings.description.trim() + "</textarea></td></tr><tr class=detailTable><td class=left>\n\
-            Location</td><td class=right><input id=newRadioLocation value='" + radioSettings.location + "'></td></tr><tr class=detailTable><td class=left>\n\
+            <td class=right><input id=newRadioName value='" + radioSettings.name + "'></td></tr><tr class=detailTable>\n\
+            <td class=left>Description</td><td class=right>\n\
+            <textarea cols=21 rows=6 id=newRadioDescription>" + radioSettings.description.trim() + "</textarea>\n\
+            </td></tr><tr class=detailTable><td class=left>\n\
+            Location</td><td class=right><input id=newRadioLocation value='" + radioSettings.location + "'></td></tr>\n\
+            <tr class=detailTable><td class=left>\n\
             &nbsp;</td><td class=right><input type=button value=Submit onClick=radioChangeNameSubmit() /></td></tr></table></div>"
             );
 }
