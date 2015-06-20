@@ -19,6 +19,7 @@ var radioInputs;
 var radioColors;
 var radioTimeLimits;
 var ports = ["PORTA", "PORTB", "PORTC", "PORTD", "PORTE", "PORTF", "PORTG"];
+var resetOnClick = 0;
 
 /*
  * Get all the radios in the database first thing.
@@ -32,6 +33,17 @@ $(document).ready(function () {
             "json");
     navigationBar(null);
 
+});
+
+$(document).on('click', function () {
+    if (resetOnClick == 1)
+        resetOnClick = 2;
+    else if (resetOnClick == 2) {
+        resetOnClick = 0;
+        $("#messageBar").hide();
+        $("#errorBar").hide();
+        $("#detailEditDiv").remove();
+    }
 });
 
 /*
@@ -465,52 +477,82 @@ function viewRadioSettings() {
 
 // Change the name of the radio, edit the description and location.
 function radioChangeName() {
-    resetEdit();
-    $("#individualDetailEdit").append(
-            "<div class=detailEdit ><table class=detailTable><tr class=detailTable><td class=left >Radio Name:</td>\
-            <td class=right><input id=newRadioName value='" + radioSettings.name + "'></td></tr><tr class=detailTable>\n\
-            <td class=left>Description</td><td class=right>\n\
-            <textarea cols=21 rows=6 id=newRadioDescription>" + radioSettings.description.trim() + "</textarea>\n\
-            </td></tr><tr class=detailTable><td class=left>\n\
-            Location</td><td class=right><input id=newRadioLocation value='" + radioSettings.location + "'></td></tr>\n\
-            <tr class=detailTable><td class=left>\n\
-            &nbsp;</td><td class=right><input type=button value=Submit onClick=radioChangeNameSubmit() /></td></tr></table></div>"
-            );
+    // stupid bug I'm not sure how to deal with
+    if (radioSettings.description == 'null')
+        radioSettings.description = " ";
+    twoByFour("Radio Name:", "<form id=newRadioNameForm >" +
+            "<input id=newRadioName value='" + radioSettings.name + "'>", "Description",
+            "<textarea cols=21 rows=6 id=newRadioDescription >" + radioSettings.description + "</textarea>",
+            "Location", "<input id=newRadioLocation value='" + radioSettings.location + "'>",
+            "&nbsp;", "<button id=newRadioNameSubmit >Submit</button></form>");
 }
+
+$("#newRadioNameForm").submit(function(event){
+    alert("submitted");
+    event.preventDefault();
+});
+
 function radioChangeNameSubmit() {
     $.post("ajax.php?function=radioChangeName",
-            {name: $("#newRadioName").val(),
-                description: $("newRadioDescription").val(),
+            {
+                radioID: radioSettings.id,
+                name: $("#newRadioName").val(),
+                description: $("#newRadioDescription").val(),
                 location: $("#newRadioLocation").val()
             }
     , function (data) {
+        console.log(data);
         if (data == "ok") {
             radioSettings.name = $("#newRadioName").val();
             radioSettings.description = $("#newRadioDescription").val();
             radioSettings.location = $("#newRadioLocation").val();
-            $("#messageBar").html("Name changed.");
-            // TODO: make message bar disappear in a few seconds or when something gets clicked
+            showMessage("Name changed.");
         } else {
-            $("#errorBar").html("Name change error.");
+            showError("Name change error.");
         }
     },
             "text"
             ).error(function () {
-        $("#errorBar").html("Server time out.;")
-    })
-
+        showError("Name change error.");
+    });
+    resetOnClick = 1;
+    // forgot you have to return false to cancel page reload
+    return false;
 }
+;
 
 function radioChangeTweak() {
+    resetEdit();
+    oneByTwoByTwo(
+            "Enter an amount +/-999 to adjust how many ticks in a second.  Default is 15,525.",
+            "Amount:", "<input id=clockTweak value=0 />", "&nbsp;",
+            "<input type=button value=Submit onClick=radioChangeTweakSubmit() />");
+}
 
-    /*    $.post("ajax.php?function=radioCommand",
-     {radioID: "5",
-     command: "du"
-     },
-     function (response) {
-     console.log(response);
-     },
-     "text");*/
+function radioChangeTweakSubmit() {
+    $.post("ajax.php?function=radioChangeTweak",
+            {
+                radioID: radioSettings.id,
+                amount: $("#clockTweak").val(),
+                description: $("newRadioDescription").val(),
+                location: $("#newRadioLocation").val()
+            }
+    , function (data) {
+        console.log(data);
+        if (data == "ok") {
+            radioSettings.name = $("#newRadioName").val();
+            radioSettings.description = $("#newRadioDescription").val();
+            radioSettings.location = $("#newRadioLocation").val();
+            showMessage("Name changed.");
+        } else {
+            showError("Name change error.");
+        }
+    },
+            "text"
+            ).error(function () {
+        showError("Name change error!");
+    })
+
 
 }
 
@@ -670,4 +712,39 @@ function resetEdit() {
     $("#individualDetailEdit").children('div').each(function () {
         $(this).remove();
     });
+}
+
+function showMessage(message) {
+    $("#messageBar").html(message);
+    $("#messageBar").show();
+}
+
+function showError(message) {
+    $("#errorBar").html(message)
+    $("#errorBar").show();
+}
+
+/**********************************************************
+ * 
+ * Edit Templates
+ * 
+ **********************************************************/
+
+// don't wanna type the same thing a million times
+function twoByFour(topLeft, topRight, secondLeft, secondRight, thirdLeft, thirdRight, bottomLeft, bottomRight) {
+    resetEdit();
+    $("#individualDetailEdit").append(
+            "<div id=detailEditDiv class=detailEdit ><table class=detailTable><tr class=detailTable><td class=left >" + topLeft + "</td>\
+            <td class=right>" + topRight + "</td></tr><tr class=detailTable><td class=left>" + secondLeft + "</td><td class=right>" + secondRight +
+            "</td></tr><tr class=detailTable><td class=left>" + thirdLeft + "</td><td class=right>" + thirdRight + "</td></tr>" +
+            "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table></div>"
+            );
+}
+
+function oneByTwoByTwo(top, secondLeft, secondRight, bottomLeft, bottomRight) {
+    $("#individualDetailEdit").append(
+            "<div id=detailEditDiv class=detailEdit ><table class=detailTable><tr class=detailTable><td class=left colspan=2 >" + top + "</td>\
+            </tr><tr class=detailTable><td class=left>" + secondLeft + "</td><td class=right>" + secondRight + "</td></tr>" +
+            "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table></div>"
+            );
 }

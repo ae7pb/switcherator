@@ -79,17 +79,31 @@ function radioDetails($radioID) {
 function sendRadioCommand() {
     $command = $_POST['command'];
     $radioID = intval($_POST['radioID']);
-    if(preg_match('/^[a-zA-Z0-9]+$/',$command) !== 1)
-            return json_encode(array("fail"=>"Invalid command."));
+    if (preg_match('/^[a-zA-Z0-9]+$/', $command) !== 1)
+        return json_encode(array("fail" => "Invalid command."));
     include_once("functions.php");
     $response = radioCommand($radioID, $command);
-    if($response == false)
-        return json_encode(array("fail"=>"Invalid command!"));
+    if ($response == false)
+        return json_encode(array("fail" => "Invalid command!"));
     return json_encode($response);
 }
 
 function radioChangeName() {
-    echo "ok";
+    global $db;
+    $sql = "update radios set name = :name, description = :description, location = :location where id = :radioID";
+    $statement = $db->prepare($sql);
+    if (!$statement->bindValue(":name", $_POST['name'], SQLITE3_TEXT))
+        die($db->lastErrorMessage());
+    if (!$statement->bindValue(":description", $_POST['description'], SQLITE3_TEXT))
+        die($db->lastErrorMessage());
+    if (!$statement->bindValue(":location", $_POST['location'], SQLITE3_TEXT))
+        die($db->lastErrorMessage());
+    if (!$statement->bindValue(":radioID", $_POST['radioID'], SQLITE3_INTEGER))
+        die($db->lastErrorMessage());
+    $result = $statement->execute();
+    if($result == false)
+        die($db->lastErrorMessage());
+    return "ok";
 }
 
 ?>
