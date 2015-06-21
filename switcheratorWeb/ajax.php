@@ -1,7 +1,7 @@
 <?php
 
 global $db;
-$db = new SQLite3('myradiodb.php');
+$db = new SQLite3('../myradiodb.php');
 switch ($_GET['function']) {
     case "getRadios":
         echo getRadios();

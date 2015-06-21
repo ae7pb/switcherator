@@ -12,7 +12,7 @@
         <?php
         include("functions.php");
         global $db;
-        $db = new SQLite3('myradiodb.php');
+        $db = new SQLite3('../myradiodb.php');
         redoDatabase();
 
 

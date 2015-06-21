@@ -138,7 +138,8 @@ function showRadioDetails(response) {
     clockTweak = clockTweak.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     $("#radioSwitches").before(
             "<div id=radioSettings-2 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeTweak() >Clock adjustment (15,625 default):<br/><b> " + clockTweak + "</b></div>");
+            "onclick=radioChangeTweak() >Clock adjustment (15,625 default):<br/><b><span id=clockTweakDisplay > "
+            + clockTweak + "</span></b></div>");
 
     var colorChangeSpeed = parseInt(radioSettings.colorChangeSpeed, 16);
     $("#radioSwitches").before(
@@ -501,7 +502,6 @@ function radioChangeNameSubmit(event) {
                 location: $("#newRadioLocation").val()
             }
     , function (data) {
-        console.log(data);
         if (data == "ok") {
             radioSettings.name = $("#newRadioName").val();
             radioSettings.description = $("#newRadioDescription").val();
@@ -518,19 +518,19 @@ function radioChangeNameSubmit(event) {
         showError("Name change error.");
     });
     resetOnClick = 1;
-    // forgot you have to return false to cancel page reload
-    //return false;
 };
 
 function radioChangeTweak() {
     resetEdit();
     oneByTwoByTwo(
             "Enter an amount +/-999 to adjust how many ticks in a second.  Default is 15,525.",
-            "Amount:", "<input id=clockTweak value=0 />", "&nbsp;",
-            "<input type=button value=Submit onClick=radioChangeTweakSubmit() />");
+            "Amount:", "<input id=clockTweak value=0 onKeyPress(radioChangeTweakSubmit(event);) />", "&nbsp;",
+            "<input type=button value=Submit onClick=radioChangeTweakSubmit(event) />");
 }
 
-function radioChangeTweakSubmit() {
+function radioChangeTweakSubmit(event) {
+    if(event.keyCode != 13 && event.keyCode != 0 )
+        return;
     $.post("ajax.php?function=radioChangeTweak",
             {
                 radioID: radioSettings.id,
@@ -540,20 +540,19 @@ function radioChangeTweakSubmit() {
             }
     , function (data) {
         console.log(data);
-        if (data == "ok") {
-            radioSettings.name = $("#newRadioName").val();
-            radioSettings.description = $("#newRadioDescription").val();
-            radioSettings.location = $("#newRadioLocation").val();
-            showMessage("Name changed.");
+        if (data.status == "ok") {
+            $("#clockTweakDisplay").val(data.tweak);
+            radioSettings.clockTweak = data.tweak.toString(16);
+            showMessage("Tweak changed.");
         } else {
-            showError("Name change error.");
+            showError("Tweak error.");
         }
     },
-            "text"
+            "json"
             ).error(function () {
-        showError("Name change error!");
+        showError("Tweak error!");
     })
-
+    resetOnClick = 1;
 
 }
 
