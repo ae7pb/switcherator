@@ -206,6 +206,7 @@ void returnHexWithout(unsigned int number, char * tempMe);
 uint64_t formatAddress(char * address);
 void unformatAddress(uint64_t oldAddress, char * formattedAddress);
 void radioInit(void);
+void radioInit2(void);
 int radioTest(void);
 void radioDisplayAddress(char * commandReceived);
 void radioChangeAddress(char * commandReceived);

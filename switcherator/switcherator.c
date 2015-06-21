@@ -216,7 +216,7 @@ int main(void) {
                 }
             }
         if(failCondition & 2 || failCondition & 4)
-            radioInit();
+            radioInit2();
         }
         // runs only if a switch changed
         if (switchChanged == 1) {
@@ -3162,7 +3162,11 @@ void radioInit(void) {
     rx_addr_p3 = readAddr(RX_ADDR_P3);
     rx_addr_p4 = readAddr(RX_ADDR_P4);
     rx_addr_p5 = readAddr(RX_ADDR_P5);
+    radioInit2();
+}
 
+// splitting things up so we can re-run this later but not lose the address
+void radioInit2(void) {
     writeReg(RF_SETUP, SET_RF_SETUP);
     writeAddr(RX_ADDR_P0, rx_addr_p0);
     writeAddr(TX_ADDR, tx_addr);
