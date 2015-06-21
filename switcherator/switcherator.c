@@ -35,7 +35,7 @@ static char newSecond = 0;
 static char newMinute = 0;
 static char switchChanged = 0;
 static char tenthFlag = 0; // 10th of a second(ish) has passed
-static char failCondition = 1;
+static char failCondition = 0;
 static char failTimer = 0;
 #define INDICATOR_PORT PORTD
 #define INDICATOR_PIN (1 << PIND2)
@@ -141,7 +141,7 @@ int main(void) {
     // we're using the watchdog to reset so lets avoid a loop
     MCUSR = 0;
     wdt_disable();
-
+    failCondition = 1;
     radioReceiveBuffer[0] = 0;
     int x = 0;
     inputMessage[0] = 0;
@@ -215,8 +215,8 @@ int main(void) {
                     sendInputMessage();
                 }
             }
-        if(failCondition & 2 || failCondition & 4)
-            radioInit2();
+            if ((failCondition & 2) == 2 || (failCondition & 4) == 4)
+                radioInit2();
         }
         // runs only if a switch changed
         if (switchChanged == 1) {
@@ -442,7 +442,7 @@ int getHexInt(char * commandReceived, int first, int chars) {
     strncat(tempHugeString, &commandReceived[first], chars);
     long temp;
     int output;
-    temp = strtol(tempHugeString,0,16);
+    temp = strtol(tempHugeString, 0, 16);
     output = temp;
     return output;
 }
@@ -880,7 +880,7 @@ void pwmSetup(char * commandReceived) {
     TCCR2B = (1 << CS22); // F_CPU/64
     // default pwm dir to out
     setPWMDir("xxxH");
-    
+
     pwmIsSet = 1;
     pwmSwitchNumber = switchNumber;
     // pwm to output
@@ -907,6 +907,7 @@ void pwmClear(int switchNumber) {
 // Sets up the direction of the pwm
 // WD:d = d=1 high
 // 0123
+
 void setPWMDir(char * commandReceived) {
     // Set output phase correct whatevers
     // set it to inverted if the direction is 0
@@ -917,10 +918,10 @@ void setPWMDir(char * commandReceived) {
         TCCR2A = (1 << COM2B0) | (1 << COM2B1) | (1 << WGM20);
     } else if (commandReceived[3] == 'x') {
         statusMsg[0] = 0;
-        if(pwmdir == 1)
-            strcat(statusMsg,"Hi");
+        if (pwmdir == 1)
+            strcat(statusMsg, "Hi");
         else
-            strcat(statusMsg,"Low");
+            strcat(statusMsg, "Low");
         sendMessage(statusMsg);
     } else {
         pwmdir = 1;
@@ -2143,34 +2144,33 @@ void memoryWrite(char * commandReceived) {
     int bytes, checksum, checkDigit, checksumFromCommand, x;
     char data[9];
     checksumFromCommand = 0;
-    address = getHexInt(commandReceived,3,4);
+    address = getHexInt(commandReceived, 3, 4);
     // bytes is really characters sent.  Oh Well.
-    bytes = getHexInt(commandReceived,7,2);
-    if(bytes > 16) {
+    bytes = getHexInt(commandReceived, 7, 2);
+    if (bytes > 16) {
         fail(0x17);
         return;
     }
-    if((bytes % 2) != 0) {
+    if ((bytes % 2) != 0) {
         fail(0x16);
         return;
     }
-    checksum = getHexInt(commandReceived,9,1);
+    checksum = getHexInt(commandReceived, 9, 1);
     // populate data and calculate checksom
-    for(x = 0; x < bytes; x+=2) {
-        checkDigit = getHexInt(commandReceived,(x+10),2);
+    for (x = 0; x < bytes; x += 2) {
+        checkDigit = getHexInt(commandReceived, (x + 10), 2);
         checksumFromCommand += checkDigit;
-        data[(x/2)] = checkDigit;
+        data[(x / 2)] = checkDigit;
     }
     checksumFromCommand = checksumFromCommand & 0x0F;
-    if(checksum == checksumFromCommand) {
-        eeprom_update_block((const void*) data, (void*) address, (bytes/2));
+    if (checksum == checksumFromCommand) {
+        eeprom_update_block((const void*) data, (void*) address, (bytes / 2));
         ok();
     } else {
         fail(0x15);
     }
 
 }
-
 
 /*
  * Create ability to read memory items through the radio
@@ -2182,26 +2182,23 @@ void memoryRead(char * commandReceived) {
     unsigned int address;
     int bytes, x;
     char data[9];
-    address = getHexInt(commandReceived,3,4);
+    address = getHexInt(commandReceived, 3, 4);
     // bytes is really characters sent.  Oh Well.
-    bytes = getHexInt(commandReceived,7,2);
-    if(bytes > 8) {
+    bytes = getHexInt(commandReceived, 7, 2);
+    if (bytes > 8) {
         fail(0x17);
         return;
     }
     eeprom_read_block(data, (void*) address, bytes);
     statusMsg[0] = 0;
-    for(x = 0;x<bytes;x++) {
-        returnHexWithout(data[(x*2)], tempLongString);
-        strcat(statusMsg,tempLongString);
-        returnHexWithout(data[((x*2)+1)], tempLongString);
-        strcat(statusMsg,tempLongString);
+    for (x = 0; x < bytes; x++) {
+        returnHexWithout(data[(x * 2)], tempLongString);
+        strcat(statusMsg, tempLongString);
+        returnHexWithout(data[((x * 2) + 1)], tempLongString);
+        strcat(statusMsg, tempLongString);
     }
     sendMessage(statusMsg);
 }
-
-
-
 
 /* dump the contents of the memory across the radio
  */
@@ -2449,9 +2446,8 @@ void setClock(char * commandReceived) {
     stopClock();
     startClock();
     panicMyClockIsNotSet = 0;
-    if (failCondition & 1) {
+    if((failCondition & 1) == 1)
         clearFail(1);
-    }
 }
 
 
@@ -3166,6 +3162,7 @@ void radioInit(void) {
 }
 
 // splitting things up so we can re-run this later but not lose the address
+
 void radioInit2(void) {
     writeReg(RF_SETUP, SET_RF_SETUP);
     writeAddr(RX_ADDR_P0, rx_addr_p0);
@@ -3193,9 +3190,9 @@ int radioTest(void) {
         failCondition |= 2;
         return -1;
     }
-    if (failCondition & 2)
+    if ((failCondition & 2) == 2)
         clearFail(2);
-    if (failCondition & 4)
+    if ((failCondition & 4) == 4)
         clearFail(4);
     return 1;
 }
@@ -3356,9 +3353,9 @@ void sendMessage(char * myResponse) {
     if (!transmit(myResponse, transmitLength)) {
         failCondition |= 4;
     } else {
-        if(failCondition & 2)
+        if ((failCondition & 2) == 2)
             clearFail(2);
-        if(failCondition & 4)
+        if ((failCondition & 4) == 4)
             clearFail(4);
     }
     startRx();
@@ -4029,14 +4026,14 @@ void flashFail(void) {
     } else if (failTimer == 4) {
         INDICATOR_PORT &= ~(INDICATOR_PIN);
     }
-    if (failCondition & 2) {
+    if ((failCondition & 2) == 2) {
         if (failTimer == 8) {
             INDICATOR_PORT |= INDICATOR_PIN;
         } else if (failTimer == 10) {
             INDICATOR_PORT &= ~(INDICATOR_PIN);
         }
     }
-    if (failCondition & 4) {
+    if ((failCondition & 4) == 4) {
         if (failTimer == 14) {
             INDICATOR_PORT |= INDICATOR_PIN;
         } else if (failTimer == 16) {
@@ -4050,8 +4047,9 @@ void flashFail(void) {
 
 // turns off the indicator pin
 
-void clearFail(int fail) {
-    failCondition &= ~(fail);
+void clearFail(char fail) {
+    statusMsg[0] = 0;
+    failCondition = (failCondition & ~(fail));
     failTimer = 0;
     INDICATOR_PORT |= (INDICATOR_PIN);
     INDICATOR_DDR |= (INDICATOR_PIN);
@@ -4062,7 +4060,7 @@ void clearFail(int fail) {
 void resetMe(void) {
     cli();
     wdt_enable(WDTO_1S);
-    while(1);
+    while (1);
 }
 
 ISR(TIMER1_COMPA_vect) {

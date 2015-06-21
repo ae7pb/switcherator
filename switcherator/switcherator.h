@@ -224,5 +224,5 @@ void setInputMessageTiming(char * commandReceived);
 void clearInput(char * commandReceived);
 
 void flashFail(void);
-void clearFail(int fail);
+void clearFail(char fail);
 void resetMe(void);
