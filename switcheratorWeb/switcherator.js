@@ -143,7 +143,8 @@ function showRadioDetails(response) {
     var colorChangeSpeed = parseInt(radioSettings.colorChangeSpeed, 16);
     $("#radioSwitches").before(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/><b>" + colorChangeSpeed + "</b></div>");
+            "onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/><b>" + 
+            colorChangeSpeed + "</b></div>");
 
     var hueSpeed = parseInt(radioSettings.hueSpeed, 16);
     $("#radioSwitches").before(
@@ -226,7 +227,7 @@ function showRadioDetails(response) {
             "<span id=radioProgramsMsg >Click to view programs</span></div>"
             );
     $("#radioInputs").before(
-            "<div id=radioPrograms-n class='radioProgramsChild radioProgramsSubChild detailField' onclick=addEditProgram('new') >" +
+            "<div id=radioPrograms-n class='radioProgramsChild radioProgramsSubChild detailField' onclick=addEditProgram('new') >"+
             "Click to add new program</div>"
             );
 
@@ -342,7 +343,8 @@ function showRadioDetails(response) {
         portPin = ports[port] + pin.toString(10);
         $("#radioColors").before(
                 "<div id=radioInputs-" + thisInput.id + " class='radioInputsChild radioInputsSubChild detailField'" +
-                " onclick=addEditInput('" + thisInput.id + "') >" + inputType + " #" + thisInput.inputNumber + " " + portPin + " " + inputValues +
+                " onclick=addEditInput('" + thisInput.id + "') >" + inputType + " #" + thisInput.inputNumber + " " +
+                portPin + " " + inputValues +
                 " " + switchOrProgText + " Dur:" + thisInput.duration + " Poll time:" + thisInput.pollTime
                 + "</div>");
     });
@@ -393,8 +395,8 @@ function showRadioDetails(response) {
             "<span id=radioTimeLimitsMsg >Click to view time limits</span></div>"
             );
     $("#uhEnding").before(
-            "<div id=radioTimeLimits-n class='radioTimeLimitsChild radioTimeLimitsSubChild detailField' onclick=addEditTimeLimits('new') >" +
-            "Click to add new time limit</div>"
+            "<div id=radioTimeLimits-n class='radioTimeLimitsChild radioTimeLimitsSubChild detailField'"+
+            " onclick=addEditTimeLimits('new') >" + "Click to add new time limit</div>"
             );
     var limitStart, limitStop, startMessage, stopMessage, limitDays;
     radioTimeLimits.forEach(function (thisLimit) {

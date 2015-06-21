@@ -393,6 +393,12 @@ void checkCommand(char * commandReceived) {
         case 0x5245: //RE
             resetMe();
             break;
+        case 0x4D57: //MW
+            memoryWrite(commandReceived);
+            break;
+        case 0x4D52: //MR
+            memoryRead(commandReceived);
+            break;
         default:
         case 0x4455: //DU
             memoryDump();
@@ -430,6 +436,17 @@ long getLong(char * commandReceived, int first, int chars) {
     output = atol(tempHugeString);
     return output;
 }
+
+int getHexInt(char * commandReceived, int first, int chars) {
+    tempHugeString[0] = 0;
+    strncat(tempHugeString, &commandReceived[first], chars);
+    long temp;
+    int output;
+    temp = strtol(tempHugeString,0,16);
+    output = temp;
+    return output;
+}
+
 
 // Helper function to get the switch number from char 3 and 4 of an array
 
@@ -2113,6 +2130,78 @@ void saveToEEPROM(void) {
 
     ok();
 }
+
+/*
+ * Create ability to dump memory items through the radio
+ * Note: this is a rather trusting function so use at your own risk
+ * MW:AAAABBCdata--------------
+ * 0123456789012345678901234567
+ * AAAA = memory address BB = # bytes C = checksum (add up all digits of data then 0xff)
+ */
+void memoryWrite(char * commandReceived) {
+    unsigned int address;
+    int bytes, checksum, checkDigit, checksumFromCommand, x;
+    char data[9];
+    checksumFromCommand = 0;
+    address = getHexInt(commandReceived,3,4);
+    // bytes is really characters sent.  Oh Well.
+    bytes = getHexInt(commandReceived,7,2);
+    if(bytes > 16) {
+        fail(0x17);
+        return;
+    }
+    if((bytes % 2) != 0) {
+        fail(0x16);
+        return;
+    }
+    checksum = getHexInt(commandReceived,9,1);
+    // populate data and calculate checksom
+    for(x = 0; x < bytes; x+=2) {
+        checkDigit = getHexInt(commandReceived,(x+10),2);
+        checksumFromCommand += checkDigit;
+        data[(x/2)] = checkDigit;
+    }
+    checksumFromCommand = checksumFromCommand & 0x0F;
+    if(checksum == checksumFromCommand) {
+        eeprom_update_block((const void*) data, (void*) address, (bytes/2));
+        ok();
+    } else {
+        fail(0x15);
+    }
+
+}
+
+
+/*
+ * Create ability to read memory items through the radio
+ * MR:AAAAB
+ * 0123456789012345678901234567
+ * AAAA = memory address BB = # bytes 
+ */
+void memoryRead(char * commandReceived) {
+    unsigned int address;
+    int bytes, x;
+    char data[9];
+    address = getHexInt(commandReceived,3,4);
+    // bytes is really characters sent.  Oh Well.
+    bytes = getHexInt(commandReceived,7,2);
+    if(bytes > 8) {
+        fail(0x17);
+        return;
+    }
+    eeprom_read_block(data, (void*) address, bytes);
+    statusMsg[0] = 0;
+    for(x = 0;x<bytes;x++) {
+        returnHexWithout(data[(x*2)], tempLongString);
+        strcat(statusMsg,tempLongString);
+        returnHexWithout(data[((x*2)+1)], tempLongString);
+        strcat(statusMsg,tempLongString);
+    }
+    sendMessage(statusMsg);
+}
+
+
+
 
 /* dump the contents of the memory across the radio
  */

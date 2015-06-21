@@ -122,6 +122,7 @@ void fail(int failCode);
 void ok(void);
 int getInt(char * commandReceived, int first, int chars);
 long getLong(char * commandReceived, int first, int chars);
+int getInt(char * commandReceived, int first, int chars);
 
 
 int getSwitchNumber(char * commandReceived);
@@ -169,6 +170,8 @@ void writeEEPROM(char * data, int memLocation, int memBytes);
 void clearEEPROM(int memLocation);
 void saveToEEPROM(void);// **
 void clearToEEPROM(void);// **
+void memoryWrite(char * commandReceived);
+void memoryRead(char * commandReceived);
 void memoryDump(void); // dump out the memory
 void interjectLineNumber(int lineNumber);
 void resetStatus(int linecount, char * letter);

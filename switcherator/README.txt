@@ -40,6 +40,9 @@ GI General Information
 PP SW IP SO - display which programs / switches / inputs are programmed and on
 IC:xxx,xxx,xxx,dura - Instant change - switch on PWM instantly duration in seconds
 IT:xxxx - start receiving input messages and setting the timing between positive inputs and next message
+RE Resets the chip (useful with the memory edit)
+MW:AAAABBCdata-------------- memory write: AAAA = memory address BB = # bytes C = checksum (add up all digits of data then 0xff)
+MR:AAAABB - memory Read
 
 Fail Codes:
 01 - Invalid Switch Number
@@ -62,4 +65,4 @@ Fail Codes:
 12 - Pin already set as output
 13 - No colors Indicated
 14 - PWM not set up
-
+15 - Invalid Memory Checksum
