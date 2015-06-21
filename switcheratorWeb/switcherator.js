@@ -132,7 +132,7 @@ function showRadioDetails(response) {
 
     $("#radioSwitches").before(
             "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeName() >Name: <br/><b>" + radioSettings.name + "</b></div>");
+            "onclick=radioChangeName() >Name: <br/><b><span id=radioNameSpan >" + radioSettings.name + "</span></b></div>");
 
     var clockTweak = parseInt(radioSettings.clockTweak, 16);
     clockTweak = clockTweak.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -482,19 +482,17 @@ function radioChangeName() {
     // stupid bug I'm not sure how to deal with
     if (radioSettings.description == 'null')
         radioSettings.description = " ";
-    twoByFour("Radio Name:", "<form id=newRadioNameForm >" +
-            "<input id=newRadioName value='" + radioSettings.name + "'>", "Description",
+    twoByFour("", "Radio Name:", 
+            "<input id=newRadioName value='" + radioSettings.name + "' onKeyPress=radioChangeNameSubmit(event) />", "Description",
             "<textarea cols=21 rows=6 id=newRadioDescription >" + radioSettings.description + "</textarea>",
-            "Location", "<input id=newRadioLocation value='" + radioSettings.location + "'>",
-            "&nbsp;", "<button id=newRadioNameSubmit >Submit</button></form>");
+            "Location", "<input id=newRadioLocation value='" + radioSettings.location + "' onKeyPress=radioChangeNameSubmit(event) />",
+            "&nbsp;", "<button onClick=radioChangeNameSubmit(event)>Submit</button>", "");
 }
 
-$("#newRadioNameForm").submit(function(event){
-    alert("submitted");
-    event.preventDefault();
-});
-
-function radioChangeNameSubmit() {
+// for the life of me I couldn't get this to work so we'll go this route (key code)
+function radioChangeNameSubmit(event) {
+    if(event.keyCode != 13 && event.keyCode != 0 )
+        return;
     $.post("ajax.php?function=radioChangeName",
             {
                 radioID: radioSettings.id,
@@ -508,6 +506,8 @@ function radioChangeNameSubmit() {
             radioSettings.name = $("#newRadioName").val();
             radioSettings.description = $("#newRadioDescription").val();
             radioSettings.location = $("#newRadioLocation").val();
+            $("#radio-"+radioSettings.id).html(radioSettings.name);
+            $("#radioNameSpan").html(radioSettings.name);
             showMessage("Name changed.");
         } else {
             showError("Name change error.");
@@ -519,9 +519,8 @@ function radioChangeNameSubmit() {
     });
     resetOnClick = 1;
     // forgot you have to return false to cancel page reload
-    return false;
-}
-;
+    //return false;
+};
 
 function radioChangeTweak() {
     resetEdit();
@@ -733,13 +732,13 @@ function showError(message) {
  **********************************************************/
 
 // don't wanna type the same thing a million times
-function twoByFour(topLeft, topRight, secondLeft, secondRight, thirdLeft, thirdRight, bottomLeft, bottomRight) {
+function twoByFour(preTable, topLeft, topRight, secondLeft, secondRight, thirdLeft, thirdRight, bottomLeft, bottomRight, postTable) {
     resetEdit();
     $("#individualDetailEdit").append(
-            "<div id=detailEditDiv class=detailEdit ><table class=detailTable><tr class=detailTable><td class=left >" + topLeft + "</td>\
+            "<div id=detailEditDiv class=detailEdit >"+preTable+"<table class=detailTable><tr class=detailTable><td class=left >" + topLeft + "</td>\
             <td class=right>" + topRight + "</td></tr><tr class=detailTable><td class=left>" + secondLeft + "</td><td class=right>" + secondRight +
             "</td></tr><tr class=detailTable><td class=left>" + thirdLeft + "</td><td class=right>" + thirdRight + "</td></tr>" +
-            "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table></div>"
+            "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table>"+postTable+"</div>"
             );
 }
 
