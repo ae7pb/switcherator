@@ -1,21 +1,17 @@
 <?php
 
+// if we are supressing radio output
+global $debug;
+$debug = true;
+//$debug = false;
+
 global $db;
 $db = new SQLite3('../myradiodb.php');
-switch ($_GET['function']) {
-    case "getRadios":
-        echo getRadios();
-        break;
-    case "radioDetails":
-        echo radioDetails($_GET['radioID']);
-        break;
-    case "radioCommand":
-        echo sendRadioCommand();
-        break;
-    case "radioChangeName":
-        echo radioChangeName();
-        break;
-}
+if (function_exists($_GET['function']))
+    echo $_GET['function']();
+else
+    echo "Error";
+
 
 /*
  * Return the list of radios
@@ -34,8 +30,8 @@ function getRadios() {
  * Return the summary of a single radio
  */
 
-function radioDetails($radioID) {
-    $radioID = intval($radioID);
+function radioDetails() {
+    $radioID = intval($_GET['radioID']);
     global $db;
     // check if the radio is valid
     $sql = "select * from radios where id = :radioID";
@@ -79,13 +75,23 @@ function radioDetails($radioID) {
 function sendRadioCommand() {
     $command = $_POST['command'];
     $radioID = intval($_POST['radioID']);
-    if (preg_match('/^[a-zA-Z0-9]+$/', $command) !== 1)
+    if (preg_match('/^[a-zA-Z0-9:-]+$/', $command) != 1)
         return json_encode(array("fail" => "Invalid command."));
     include_once("functions.php");
     $response = radioCommand($radioID, $command);
     if ($response == false)
         return json_encode(array("fail" => "Invalid command!"));
-    return json_encode($response);
+    return "ok";
+}
+
+// redoes the database based on the radio
+function processRadioCommand() {
+    $radioID = intval($_POST['radioID']);
+    include_once("functions.php");
+    if (processRadio($radioID))
+        return "ok";
+    else
+        return "error";
 }
 
 function radioChangeName() {
@@ -101,7 +107,7 @@ function radioChangeName() {
     if (!$statement->bindValue(":radioID", $_POST['radioID'], SQLITE3_INTEGER))
         die($db->lastErrorMessage());
     $result = $statement->execute();
-    if($result == false)
+    if ($result == false)
         die($db->lastErrorMessage());
     return "ok";
 }

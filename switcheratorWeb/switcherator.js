@@ -43,16 +43,20 @@ $(document).on('click', function () {
         $("#messageBar").hide();
         $("#errorBar").hide();
         $("#detailEditDiv").remove();
+        $("#debugSection").hide();
     }
 });
 
 // templates files
 $.get("templatesBox.html", function (templates) {
     $("body").append(templates);
-})
+});
 $.get("templatesForms.html", function (templates) {
     $("body").append(templates);
-})
+});
+$.get("nonTemplateI18n.html", function (templates) {
+    $("body").append(templates);
+});
 
 
 /*
@@ -422,27 +426,37 @@ function viewRadioSettings() {
         showHeaderSections();
         $(".radioSettingsSubChild").hide();
         $("#radioSettings").data("hide", "hidden");
-        $("#radioSettingsMsg").text("Click to view settings");
+        $("#radioSettingsMsg").text(wordsToTranslate.clickViewSettings);
     } else {
         hideHeaderSections();
         $("#radioSettings-0").show();
         $(".radioSettingsSubChild").show();
         $("#radioSettings").data("hide", "shown");
-        $("#radioSettingsMsg").text("Click to hide settings");
+        $("#radioSettingsMsg").text(wordsToTranslate.clickHideSettings);
     }
 }
 
 // Change the name of the radio, edit the description and location.
 function radioChangeName() {
-    // stupid bug I'm not sure how to deal with
-    if (radioSettings.description == 'null')
-        radioSettings.description = " ";
-    twoByFour("", "Radio Name:",
-            "<input id=newRadioName value='" + radioSettings.name + "' onKeyPress=radioChangeNameSubmit(event) />", "Description",
-            "<textarea cols=21 rows=6 id=newRadioDescription >" + radioSettings.description + "</textarea>",
-            "Location", "<input id=newRadioLocation value='" + radioSettings.location + "' onKeyPress=radioChangeNameSubmit(event) />",
-            "&nbsp;", "<button onClick=radioChangeNameSubmit(event)>Submit</button>", "");
-}
+    resetEdit();
+    var changeNameArray = {
+        topLeft: wordsToTranslate.radioName,
+        topRight: "<input id=newRadioName value='"+radioSettings.name+"' onKeyPress=radioChangeNameSubmit(event) />",
+        secondLeft: wordsToTranslate.Description,
+        secondRight: "<textarea cols=21 rows=6 id=newRadioDescription >"+radioSettings.description+"</textarea>",
+        thirdLeft: wordsToTranslate.Location,
+        thirdRight: "<input id=newRadioLocation value='"+radioSettings.location+"' onKeyPress=radioChangeNameSubmit(event) />",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<button onClick=radioChangeNameSubmit(event)>Submit</button>,"
+    };
+    htmlOutput = templateRender("#twoByFour", changeNameArray);
+    $("#individualDetailEdit").append(htmlOutput);
+    }
+
+
+
+
+
 
 // for the life of me I couldn't get this to work so we'll go this route (key code)
 function radioChangeNameSubmit(event) {
@@ -462,50 +476,66 @@ function radioChangeNameSubmit(event) {
             radioSettings.location = $("#newRadioLocation").val();
             $("#radio-" + radioSettings.id).html(radioSettings.name);
             $("#radioNameSpan").html(radioSettings.name);
-            showMessage("Name changed.");
+            showMessage(wordsToTranslate.nameChangeError);
         } else {
-            showError("Name change error.");
+            showError(wordsToTranslate.nameChangeError);
         }
     },
             "text"
             ).error(function () {
-        showError("Name change error.");
+        showError(wordsToTranslate.nameChangeError);
     });
     resetOnClick = 1;
 }
-;
 
 function radioChangeTweak() {
     resetEdit();
-    oneByTwoByTwo(
-            "Enter an amount +/-999 to adjust how many ticks in a second.  Default is 15,525.",
-            "Amount:", "<input id=clockTweak value=0 onKeyPress(radioChangeTweakSubmit(event);) />", "&nbsp;",
-            "<input type=button value=Submit onClick=radioChangeTweakSubmit(event) />");
+    var changeTweakArray = {
+        topMessage: wordsToTranslate.clockTweakMessage,
+        topLeft: wordsToTranslate.tweakAdjust,
+        topRight: "<input id=clockTweak value=0 onKeyPress(radioChangeTweakSubmit(event);) />",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<input type=button value=Submit onClick=radioChangeTweakSubmit(event) />"
+    }
+    htmlOutput = templateRender("#oneByTwoByTwo", changeTweakArray);
+    $("#individualDetailEdit").append(htmlOutput);
 }
 
+// from readme
+// CT:xxxx - sets amount to adjust the timer.  15625? is default
 function radioChangeTweakSubmit(event) {
     if (event.keyCode != 13 && event.keyCode != 0)
         return;
-    $.post("ajax.php?function=radioChangeTweak",
+    var tweak = $("#clockTweak").val();
+    // convert it to int and back to sanitize
+    tweak = parseInt(tweak);
+    tweak = tweak.toString(10);
+    if(tweak == "NaN") {
+        showError(wordsToTranslate.tweakChangeError);
+        resetOnClick = 1;
+        return;
+    }
+    var radioCommand = "CT:"+tweak;
+    $.post("ajax.php?function=sendRadioCommand",
             {
                 radioID: radioSettings.id,
-                amount: $("#clockTweak").val(),
-                description: $("newRadioDescription").val(),
-                location: $("#newRadioLocation").val()
+                command: radioCommand,
             }
     , function (data) {
-        console.log(data);
-        if (data.status == "ok") {
-            $("#clockTweakDisplay").val(data.tweak);
-            radioSettings.clockTweak = data.tweak.toString(16);
-            showMessage("Tweak changed.");
+        if (data == "ok") {
+            var newTweak = parseInt(radioSettings.clockTweak,16)+parseInt(tweak,10);
+            $("#clockTweakDisplay").text(newTweak);
+            radioSettings.clockTweak = newTweak.toString(16);
+            showMessage(wordsToTranslate.tweakChanged);
         } else {
-            showError("Tweak error.");
+            showError(wordsToTranslate.tweakChangeError);
+            $("#debugSection").html(data);
+            $("#debugSection").show();
         }
     },
-            "json"
+            "text"
             ).error(function () {
-        showError("Tweak error!");
+        showError(wordsToTranslate.tweakChangeError);
     })
     resetOnClick = 1;
 

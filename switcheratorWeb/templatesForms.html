@@ -2,12 +2,7 @@
 
 
 
-
-function twoByFour(preTable, topLeft, topRight, secondLeft, secondRight, thirdLeft, thirdRight, bottomLeft, bottomRight, postTable) {
-resetEdit();
-$("#individualDetailEdit").append(
-
-
+<script id="twoByFour" type="text/x-jsrender" >
 <div id=detailEditDiv class=detailEdit >
     {{:preTable}}
     <table class=detailTable>
@@ -26,23 +21,24 @@ $("#individualDetailEdit").append(
         </tr>
     </table>{{:postTable}}
 </div>
+</script>
+<script id="oneByTwoByTwo" type="text/x-jsrender" >
+<div id="detailEditDiv" class="detailEdit" >
+    {{:preTable}}
+    <table class="detailTable">
+        <tr class="detailTable">
+            <td class="center" colspan=2 >{{:topMessage}}</td>
+        </tr>
+        <tr class="detailTable">
+            <td class="left">{{:topLeft}}</td>
+            <td class="right">{{:topRight}}</td>
+        </tr>
+        <tr class="detailTable">
+            <td class="left">{{:bottomLeft}}</td>
+            <td class="right">{{:bottomRight}}</td>
+        </tr>
+    </table>
+    {{:postTable}}
+</div>
+</script>
 
-
-<input id=newRadioName value='{{:radioSettings.name}}' onKeyPress=radioChangeNameSubmit(event) />
-Description
-<textarea cols=21 rows=6 id=newRadioDescription >{{:radioSettings.description}}</textarea>
-Location
-<input id=newRadioLocation value='{{:radioSettings.location}}' onKeyPress=radioChangeNameSubmit(event) />
-&nbsp;
-<button onClick=radioChangeNameSubmit(event)>Submit</button>
-
-
-
-
-function oneByTwoByTwo(top, secondLeft, secondRight, bottomLeft, bottomRight) {
-$("#individualDetailEdit").append(
-"<div id=detailEditDiv class=detailEdit ><table class=detailTable><tr class=detailTable><td class=left colspan=2 >" + top + "</td>\
-        </tr><tr class=detailTable><td class=left>" + secondLeft + "</td><td class=right>" + secondRight + "</td></tr>" +
-        "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table></div>"
-);
-}
