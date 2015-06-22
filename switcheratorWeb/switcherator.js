@@ -47,7 +47,7 @@ $(document).on('click', function () {
 });
 
 // templates file
-$.get("templates.html",function(templates) {
+$.get("templates.html", function (templates) {
     $("body").append(templates);
 })
 
@@ -69,9 +69,9 @@ function radioDivs(response) {
         var output = radio.name;
         var radioNum = radio.id;
         var radioListings = [
-            { radioNum: radioNum, output: output }
+            {radioNum: radioNum, output: output}
         ];
-        var htmlOutput = templateRender("#radioListTemplate",radioListings);
+        var htmlOutput = templateRender("#radioListTemplate", radioListings);
         $("#radioList").append(htmlOutput);
     })
 }
@@ -132,8 +132,8 @@ function showRadioDetails(response) {
     /*
      * Radio settings boxes
      */
-    
-    htmlOutput = templateRender("#radioViewSettingsTemplate",radioSettings);
+
+    htmlOutput = templateRender("#radioViewSettingsTemplate", radioSettings);
     $("#radioSwitches").before(htmlOutput);
 
     var clockTweak = parseInt(radioSettings.clockTweak, 16);
@@ -144,14 +144,14 @@ function showRadioDetails(response) {
     // how long we wait before we send the next message
     var inputTiming = parseInt(radioSettings.inputMessageTiming, 16);
     var data = [
-        { clockTweak: clockTweak,
+        {clockTweak: clockTweak,
             colorChangeSpeed: colorChangeSpeed,
             hueSpeed: hueSpeed,
             inputTiming: inputTiming
-                }
+        }
     ]
 
-    htmlOutput = templateRender("#radioOtherSettingsTemplate",data);
+    htmlOutput = templateRender("#radioOtherSettingsTemplate", data);
     $("#radioSwitches").before(htmlOutput);
 
 
@@ -159,51 +159,48 @@ function showRadioDetails(response) {
     /*
      * Radio switches boxes
      */
-    var port, getPin, pin, hiLo, switchMessage, switchStuff, colorNum, red, green, blue, switchColor, textColor;
+    var port, getPin, pin, hiLo, switchMessage, switchStuff, colorNum, red, green, blue, switchColor, textColor, switchString;
+    var switchArray = [];
     radioSwitches.forEach(function (thisSwitch) {
         switchStuff = parseInt(thisSwitch.switchStuff, 10);
+        switchString = thisSwitch.switchStuff;
         // switch stuff is a complicated but compact port / pin switch thingie. Need to decode it
         if (switchStuff >= 200) {
-            switch (switchStuff) {
+            if (switchStuff == 200) {
                 // 200 = single color pwm
-                case 200:
-                    textColor = "black";
-                    colorNum = parseInt(thisSwitch.switchPWM, 10);
-                    red = parseInt(radioColors[colorNum]["red"]);
-                    green = parseInt(radioColors[colorNum]["green"]);
-                    blue = parseInt(radioColors[colorNum]["blue"]);
-                    if (red < 75 || green < 75 || blue < 75)
-                        textColor = "white";
-                    switchColor = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
-                            ("0" + blue.toString(16)).substr(-2);
-                    switchMessage = "Single color PWM - color # " + thisSwitch.switchPWM + ". " +
-                            "<span style='background-color: #" + switchColor + "; color: " + textColor + ";' >0x" +
-                            switchColor + "</span>";
-                    break;
-                case 201:
-                    switchMessage("Activate smooth hue color change");
-                    break;
-                case 202:
-                    switchMessage("Activate color change rotation");
-                    break;
+                textColor = "black";
+                colorNum = parseInt(thisSwitch.switchPWM, 10);
+                red = parseInt(radioColors[colorNum]["red"]);
+                green = parseInt(radioColors[colorNum]["green"]);
+                blue = parseInt(radioColors[colorNum]["blue"]);
+                if (red < 75 || green < 75 || blue < 75)
+                    textColor = "white";
+                switchColor = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
+                        ("0" + blue.toString(16)).substr(-2);
+                switchArray.push({colorNum: colorNum, switchID: thisSwitch.id, switchNumber: thisSwitch.switchNumber,
+                    switchPWM: thisSwitch.switchPWM, switchColor: switchColor, textColor: textColor, switchType: switchString});
+            } else {
+                switchArray.push({switchType: switchString, switchID: thisSwitch.id, switchNumber: thisSwitch.switchNumber});                
             }
         } else {
             port = ports[(Math.floor(thisSwitch.switchStuff / 16))];
             getPin = thisSwitch.switchStuff % 16;
             pin = Math.floor(getPin / 2);
             if (getPin % 2 == 0) {
-                hiLo = "low";
+                hiLo = 0;
             } else {
-                hiLo = "high";
+                hiLo = 1;
             }
-            switchMessage = "Switch " + port + pin + " Pin is " + hiLo + " when activated";
+            switchArray.push({switchType: switchString, switchID: thisSwitch.id, switchNumber: thisSwitch.switchNumber,
+                    hiLo: hiLo, port: port, pin: pin});
         }
-        $("#radioPrograms").before(
-                "<div id=radioSwitches-" + thisSwitch.id + " class='radioSwitchesChild radioSwitchesSubChild detailField' " +
-                "onClick=addEditSwitch(" + thisSwitch.id + ")>Switch #" + thisSwitch.switchNumber + " " + switchMessage + "</div>"
-                );
 
+               
     });
+    htmlOutput = templateRender("#radioViewSwitchesTemplate", "");
+    $("#radioPrograms").before(htmlOutput);    
+    htmlOutput = templateRender("#radioViewSwitchTemplate", switchArray);
+    $("#radioPrograms").before(htmlOutput);    
     /*
      * Radio programs boxes
      */
@@ -213,7 +210,7 @@ function showRadioDetails(response) {
             "<span id=radioProgramsMsg >Click to view programs</span></div>"
             );
     $("#radioInputs").before(
-            "<div id=radioPrograms-n class='radioProgramsChild radioProgramsSubChild detailField' onclick=addEditProgram('new') >"+
+            "<div id=radioPrograms-n class='radioProgramsChild radioProgramsSubChild detailField' onclick=addEditProgram('new') >" +
             "Click to add new program</div>"
             );
 
@@ -381,7 +378,7 @@ function showRadioDetails(response) {
             "<span id=radioTimeLimitsMsg >Click to view time limits</span></div>"
             );
     $("#uhEnding").before(
-            "<div id=radioTimeLimits-n class='radioTimeLimitsChild radioTimeLimitsSubChild detailField'"+
+            "<div id=radioTimeLimits-n class='radioTimeLimitsChild radioTimeLimitsSubChild detailField'" +
             " onclick=addEditTimeLimits('new') >" + "Click to add new time limit</div>"
             );
     var limitStart, limitStop, startMessage, stopMessage, limitDays;
@@ -468,7 +465,7 @@ function radioChangeName() {
     // stupid bug I'm not sure how to deal with
     if (radioSettings.description == 'null')
         radioSettings.description = " ";
-    twoByFour("", "Radio Name:", 
+    twoByFour("", "Radio Name:",
             "<input id=newRadioName value='" + radioSettings.name + "' onKeyPress=radioChangeNameSubmit(event) />", "Description",
             "<textarea cols=21 rows=6 id=newRadioDescription >" + radioSettings.description + "</textarea>",
             "Location", "<input id=newRadioLocation value='" + radioSettings.location + "' onKeyPress=radioChangeNameSubmit(event) />",
@@ -477,7 +474,7 @@ function radioChangeName() {
 
 // for the life of me I couldn't get this to work so we'll go this route (key code)
 function radioChangeNameSubmit(event) {
-    if(event.keyCode != 13 && event.keyCode != 0 )
+    if (event.keyCode != 13 && event.keyCode != 0)
         return;
     $.post("ajax.php?function=radioChangeName",
             {
@@ -491,7 +488,7 @@ function radioChangeNameSubmit(event) {
             radioSettings.name = $("#newRadioName").val();
             radioSettings.description = $("#newRadioDescription").val();
             radioSettings.location = $("#newRadioLocation").val();
-            $("#radio-"+radioSettings.id).html(radioSettings.name);
+            $("#radio-" + radioSettings.id).html(radioSettings.name);
             $("#radioNameSpan").html(radioSettings.name);
             showMessage("Name changed.");
         } else {
@@ -503,7 +500,8 @@ function radioChangeNameSubmit(event) {
         showError("Name change error.");
     });
     resetOnClick = 1;
-};
+}
+;
 
 function radioChangeTweak() {
     resetEdit();
@@ -514,7 +512,7 @@ function radioChangeTweak() {
 }
 
 function radioChangeTweakSubmit(event) {
-    if(event.keyCode != 13 && event.keyCode != 0 )
+    if (event.keyCode != 13 && event.keyCode != 0)
         return;
     $.post("ajax.php?function=radioChangeTweak",
             {
@@ -716,10 +714,10 @@ function showError(message) {
  **********************************************************/
 
 // don't wanna type the same thing a million times
-function templateRender(templateID,Data) {
-        var template = $.templates(templateID)
-        var htmlOutput = template.render(Data);
-        return htmlOutput;
+function templateRender(templateID, Data) {
+    var template = $.templates(templateID)
+    var htmlOutput = template.render(Data);
+    return htmlOutput;
 }
 
 
@@ -727,10 +725,10 @@ function templateRender(templateID,Data) {
 function twoByFour(preTable, topLeft, topRight, secondLeft, secondRight, thirdLeft, thirdRight, bottomLeft, bottomRight, postTable) {
     resetEdit();
     $("#individualDetailEdit").append(
-            "<div id=detailEditDiv class=detailEdit >"+preTable+"<table class=detailTable><tr class=detailTable><td class=left >" + topLeft + "</td>\
+            "<div id=detailEditDiv class=detailEdit >" + preTable + "<table class=detailTable><tr class=detailTable><td class=left >" + topLeft + "</td>\
             <td class=right>" + topRight + "</td></tr><tr class=detailTable><td class=left>" + secondLeft + "</td><td class=right>" + secondRight +
             "</td></tr><tr class=detailTable><td class=left>" + thirdLeft + "</td><td class=right>" + thirdRight + "</td></tr>" +
-            "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table>"+postTable+"</div>"
+            "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table>" + postTable + "</div>"
             );
 }
 
