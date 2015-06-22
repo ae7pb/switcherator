@@ -46,6 +46,12 @@ $(document).on('click', function () {
     }
 });
 
+// templates file
+$.get("templates.html",function(templates) {
+    $("body").append(templates);
+})
+
+
 /*
  * 
  * Shows the navigation bar
@@ -62,9 +68,11 @@ function radioDivs(response) {
     response.forEach(function (radio) {
         var output = radio.name;
         var radioNum = radio.id;
-        $("#radioList").append(
-                "<div id=radio-" + radioNum + " class=radios onclick='radioDetail(" + radioNum + ")'>" + output + "</div>"
-                );
+        var radioListings = [
+            { radioNum: radioNum, output: output }
+        ];
+        var htmlOutput = templateRender("#radioListTemplate",radioListings);
+        $("#radioList").append(htmlOutput);
     })
 }
 /*
@@ -120,56 +128,33 @@ function showRadioDetails(response) {
     radioInputs = response.inputs;
     radioColors = response.colors;
     radioTimeLimits = response.timeLimits;
-
+    var htmlOutput = "";
     /*
      * Radio settings boxes
      */
-
-    $("#radioSwitches").before(
-            "<div id=radioSettings-0 class='radioSettingsChild detailField' onclick=viewRadioSettings() >" +
-            "<span id=radioSettingsMsg >Click to view Settings</span></div>"
-            );
-
-    $("#radioSwitches").before(
-            "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeName() >Name: <br/><b><span id=radioNameSpan >" + radioSettings.name + "</span></b></div>");
+    
+    htmlOutput = templateRender("#radioViewSettingsTemplate",radioSettings);
+    $("#radioSwitches").before(htmlOutput);
 
     var clockTweak = parseInt(radioSettings.clockTweak, 16);
     clockTweak = clockTweak.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    $("#radioSwitches").before(
-            "<div id=radioSettings-2 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeTweak() >Clock adjustment (15,625 default):<br/><b><span id=clockTweakDisplay > "
-            + clockTweak + "</span></b></div>");
-
     var colorChangeSpeed = parseInt(radioSettings.colorChangeSpeed, 16);
-    $("#radioSwitches").before(
-            "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/><b>" + 
-            colorChangeSpeed + "</b></div>");
-
     var hueSpeed = parseInt(radioSettings.hueSpeed, 16);
-    $("#radioSwitches").before(
-            "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeHueSpeed() >Smooth hue color change speed (0-99 default 16): <br/><b>" + hueSpeed + "</b></div>");
-
     // Input message timing - When an input is triggered and we send a message the input message timing is
     // how long we wait before we send the next message
     var inputTiming = parseInt(radioSettings.inputMessageTiming, 16);
-    $("#radioSwitches").before(
-            "<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' " +
-            "onclick=radioChangeInputTiming() >Timing between input messages (0 = no messages): <br/><b>" + inputTiming + "</b></div>");
+    var data = [
+        { clockTweak: clockTweak,
+            colorChangeSpeed: colorChangeSpeed,
+            hueSpeed: hueSpeed,
+            inputTiming: inputTiming
+                }
+    ]
+
+    htmlOutput = templateRender("#radioOtherSettingsTemplate",data);
+    $("#radioSwitches").before(htmlOutput);
 
 
-
-
-    $("#radioPrograms").before(
-            "<div id=radioSwitches-0 class='radioSwitchesChild detailField' onclick=viewRadioSwitches() >" +
-            "<span id=radioSwitchesMsg >Click to view Switches</span></div>"
-            );
-    $("#radioPrograms").before(
-            "<div id=radioSwitches-n class='radioSwitchesChild radioSwitchesSubChild detailField' onclick=addEditSwitch('new') >" +
-            "Click to add new switch</div>"
-            );
 
     /*
      * Radio switches boxes
@@ -731,6 +716,14 @@ function showError(message) {
  **********************************************************/
 
 // don't wanna type the same thing a million times
+function templateRender(templateID,Data) {
+        var template = $.templates(templateID)
+        var htmlOutput = template.render(Data);
+        return htmlOutput;
+}
+
+
+
 function twoByFour(preTable, topLeft, topRight, secondLeft, secondRight, thirdLeft, thirdRight, bottomLeft, bottomRight, postTable) {
     resetEdit();
     $("#individualDetailEdit").append(
