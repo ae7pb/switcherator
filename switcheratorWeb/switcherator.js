@@ -205,48 +205,23 @@ function showRadioDetails(response) {
      * Radio programs boxes
      */
 
-    $("#radioInputs").before(
-            "<div id=radioPrograms-v class='radioProgramsChild detailField' onclick=viewRadioPrograms() >" +
-            "<span id=radioProgramsMsg >Click to view programs</span></div>"
-            );
-    $("#radioInputs").before(
-            "<div id=radioPrograms-n class='radioProgramsChild radioProgramsSubChild detailField' onclick=addEditProgram('new') >" +
-            "Click to add new program</div>"
-            );
+    htmlOutput = templateRender("#radioViewProgramsTemplate", "");
+    $("#radioInputs").before(htmlOutput);    
 
     var programDays, dayInt, programStart, hour, minute, programDuration, switchArray, programSwitches;
+    var Sun, Mon, Tue, Wed, Thu, Fri, Sat;
+    var programArray = [];
     radioPrograms.forEach(function (thisProgram) {
         // programNumber, days (0b01111111 = sun-sat), time (seconds from midnight), duration(seconds), 
         // switches(ff=blank), rollover(next program that houses more switches)
         dayInt = parseInt(thisProgram.days, 10);
-        if (dayInt & 0x40)
-            programDays = "S";
-        else
-            programDays = "-";
-        if (dayInt & 0x20)
-            programDays += "M";
-        else
-            programDays += "-";
-        if (dayInt & 0x10)
-            programDays += "T";
-        else
-            programDays += "-";
-        if (dayInt & 0x08)
-            programDays += "W";
-        else
-            programDays += "-";
-        if (dayInt & 0x04)
-            programDays += "T";
-        else
-            programDays += "-";
-        if (dayInt & 0x02)
-            programDays += "F";
-        else
-            programDays += "-";
-        if (dayInt & 0x01)
-            programDays += "S";
-        else
-            programDays += "-";
+        if(dayInt & 0x40)Sun = 1;else Sun = 0;
+        if(dayInt & 0x20)Mon = 1;else Mon = 0;
+        if(dayInt & 0x10)Tue = 1;else Tue = 0;
+        if(dayInt & 0x08)Wed = 1;else Wed = 0;
+        if(dayInt & 0x04)Thu = 1;else Thu = 0;
+        if(dayInt & 0x02)Fri = 1;else Fri = 0;
+        if(dayInt & 0x01)Sat = 1;else Sat = 0;
         hour = Math.floor((parseInt(thisProgram.time)) / 60);
         minute = (parseInt(thisProgram.time)) % 60;
         programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
@@ -260,27 +235,25 @@ function showRadioDetails(response) {
                 programSwitches += parseInt(switchArray[x], 16).toString(10);
             }
         }
-        $("#radioInputs").before(
-                "<div id=radioPrograms-" + thisProgram.id + " class='radioProgramsChild " +
-                "radioProgramsSubChild detailField' onclick=addEditProgram('" + thisProgram.id +
-                "') >" + "Program #" + thisProgram.programNumber + " Start:" + programStart +
-                " Dur.:" + programDuration + " " + programDays + " Sw:" + programSwitches + "</div>"
-                );
+        programArray.push({
+                id: thisProgram.id,
+                programNumber: thisProgram.programNumber,
+                programStart: thisProgram.programStart,
+                programDuration: thisProgram.programDuration,
+                dayInt: dayInt,
+                programSwitches: programSwitches
+            });
 
     });
+    htmlOutput = templateRender("#radioViewProgramTemplate", programArray);
+    $("#radioInputs").before(htmlOutput);    
 
     /*
      * Radio inputs boxes
      */
 
-    $("#radioColors").before(
-            "<div id=radioInputs-v class='radioInputsChild detailField' onclick=viewRadioInputs() >" +
-            "<span id=radioInputsMsg >Click to view inputs</span></div>"
-            );
-    $("#radioColors").before(
-            "<div id=radioInputs-n class='radioInputsChild radioInputsSubChild detailField' onclick=addEditInput('new') >" +
-            "Click to add new input</div>"
-            );
+    htmlOutput = templateRender("#radioViewInputsTemplate", "");
+    $("#radioColors").before(htmlOutput);
 
     // input information (from switcherator.c)
     // Pp - value of 255 (default) means nothing programmed
@@ -292,6 +265,7 @@ function showRadioDetails(response) {
 
     var inputPinStuff, inputLow, inputHigh, inputType, inputValues, inputSwitchOrProgram, inputPollTime, inputWhichRGB,
             port, pin, getPin, portPin, switchOrProgText, switchNum;
+    var inputArray = [];
     radioInputs.forEach(function (thisInput) {
         inputPinStuff = parseInt(thisInput.pinStuff, 10);
         // low threshhold that must be met to start switch (analog)
@@ -300,41 +274,51 @@ function showRadioDetails(response) {
         inputHigh = parseInt(thisInput.highPercent, 10);
         // 0-127 = switch, 128-255 = program
         if (inputHigh == 255 || inputLow == 255) {
-            inputType = "Digital";
+            inputType = 1;
             if (inputHigh == 255)
-                inputValues = "High activates";
+                inputValues = 1;
             else
-                inputValues = "Low activates";
+                inputValues = 0;
         } else {
-            inputType = "Analog";
+            inputType = 0;
             inputValues = (Math.floor(inputHigh * 100 / 254)).toString(10) + "% - " +
                     (Math.floor(inputLow * 100 / 254)).toString(10) + "%";
         }
         inputSwitchOrProgram = parseInt(thisInput.whichSwitchOrProgram, 10);
         if (inputSwitchOrProgram > 127) {
             switchNum = inputSwitchOrProgram - 128;
-            switchOrProgText = "Pr#" + switchNum.toString(10);
+            switchOrProg = 1;
         } else {
-            switchOrProgText = "Sw#" + inputSwitchOrProgram.toString(10);
+            switchNum = inputSwitchOrProgram;
+            switchOrProg = 0;
         }
         // 0 = every 1/10 second or >0 is num seconds
         inputPollTime = parseInt(thisInput.pollTime);
+        //todo deal with whichRGB. Basically it can be an adjustment knob for each color
         inputWhichRGB = parseInt(thisInput.whichRGB);
         port = Math.floor(inputPinStuff / 16);
         getPin = inputPinStuff % 16;
         pin = Math.floor(getPin / 2);
         portPin = ports[port] + pin.toString(10);
-        $("#radioColors").before(
-                "<div id=radioInputs-" + thisInput.id + " class='radioInputsChild radioInputsSubChild detailField'" +
-                " onclick=addEditInput('" + thisInput.id + "') >" + inputType + " #" + thisInput.inputNumber + " " +
-                portPin + " " + inputValues +
-                " " + switchOrProgText + " Dur:" + thisInput.duration + " Poll time:" + thisInput.pollTime
-                + "</div>");
+        inputArray.push({
+            id: thisInput.id,
+            inputType: inputType,
+            inputNumber: thisInput.inputNumber,
+            portPin: portPin,
+            inputValues: inputValues,
+            switchOrProgram: switchOrProg,
+            switchNum: switchNum,
+            duration: thisInput.duration,
+            pollTime: thisInput.pollTime,
+        });
     });
 
+    htmlOutput = templateRender("#radioViewInputTemplate", inputArray);
+    $("#radioColors").before(htmlOutput);
     /*
      * Radio colors boxes
      */
+    //TODO: you are here
     $("#radioTimeLimits").before(
             "<div id=radioColors-v class='radioColorsChild detailField' onclick=viewRadioColors() >" +
             "<span id=radioColorsMsg >Click to view colors</span></div>"
