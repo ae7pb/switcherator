@@ -214,7 +214,7 @@ function showRadioDetails(response) {
     radioPrograms.forEach(function (thisProgram) {
         // programNumber, days (0b01111111 = sun-sat), time (seconds from midnight), duration(seconds), 
         // switches(ff=blank), rollover(next program that houses more switches)
-        dayInt = parseInt(thisProgram.days, 10);
+        dayInt = parseInt(thisProgram.days,10);
         if(dayInt & 0x40)Sun = 1;else Sun = 0;
         if(dayInt & 0x20)Mon = 1;else Mon = 0;
         if(dayInt & 0x10)Tue = 1;else Tue = 0;
@@ -232,15 +232,21 @@ function showRadioDetails(response) {
             if (switchArray[x] !== "ff") {
                 if (x > 0)
                     programSwitches += ",";
-                programSwitches += parseInt(switchArray[x], 16).toString(10);
+                programSwitches += (parseInt(switchArray[x], 16)).toString(10);
             }
         }
         programArray.push({
                 id: thisProgram.id,
                 programNumber: thisProgram.programNumber,
-                programStart: thisProgram.programStart,
-                programDuration: thisProgram.programDuration,
-                dayInt: dayInt,
+                programStart: programStart,
+                programDuration: programDuration,
+                Sun: Sun,
+                Mon: Mon,
+                Tue: Tue,
+                Wed: Wed,
+                Thu: Thu,
+                Fri: Fri,
+                Sat: Sat,
                 programSwitches: programSwitches
             });
 
@@ -281,7 +287,7 @@ function showRadioDetails(response) {
                 inputValues = 0;
         } else {
             inputType = 0;
-            inputValues = (Math.floor(inputHigh * 100 / 254)).toString(10) + "% - " +
+            inputValues = (Math.floor(inputHigh * 100 / 254)).toString(10) + "%-" +
                     (Math.floor(inputLow * 100 / 254)).toString(10) + "%";
         }
         inputSwitchOrProgram = parseInt(thisInput.whichSwitchOrProgram, 10);
@@ -318,17 +324,12 @@ function showRadioDetails(response) {
     /*
      * Radio colors boxes
      */
-    //TODO: you are here
-    $("#radioTimeLimits").before(
-            "<div id=radioColors-v class='radioColorsChild detailField' onclick=viewRadioColors() >" +
-            "<span id=radioColorsMsg >Click to view colors</span></div>"
-            );
-    $("#radioTimeLimits").before(
-            "<div id=radioColors-n class='radioColorsChild radioColorsSubChild detailField' onclick=addEditColors('new') >" +
-            "Click to add new color</div>"
-            );
 
-    var colorText, colorMessage, changeMessage;
+    htmlOutput = templateRender("#radioViewColorsTemplate", "");
+    $("#radioColors").before(htmlOutput);
+
+    var colorText, colorMessage, textColor;
+    var colorArray = [];
     radioColors.forEach(function (thisColor) {
         red = parseInt(thisColor.red);
         green = parseInt(thisColor.green);
@@ -338,78 +339,59 @@ function showRadioDetails(response) {
             textColor = "white";
         colorText = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
                 ("0" + blue.toString(16)).substr(-2);
-        colorMessage =
-                "<span style='background-color: #" + colorText + "; color: " + textColor + ";' >0x" +
-                colorText + "</span>";
-        if (thisColor.ifChangeable == "1")
-            changeMessage = "<br/>Part of rotating change";
-        else
-            changeMessage = "<br/>Not part of rotating change";
-
-        $("#radioTimeLimits").before(
-                "<div id=radioColors-" + thisColor.id + " class='radioColorsChild radioColorsSubChild detailField'" +
-                " onclick=addEditColors('" + thisColor.id + "') >Color #" + thisColor.colorChangeNumber + " " + colorMessage +
-                " " + changeMessage + "</div>"
-                );
+        colorArray.push({
+            id: thisColor.id,
+            colorChangeNumber: thisColor.colorChangeNumber,
+            color: colorText,
+            textColor: textColor,
+            changeAble: thisColor.ifChangeable,
+        })
     });
+    htmlOutput = templateRender("#radioViewColorTemplate", colorArray);
+    $("#radioColors").before(htmlOutput);
 
 
     /*
      * Radio time limits boxes
      */
-    $("#uhEnding").before(
-            "<div id=radioTimeLimits-v class='radioTimeLimitsChild detailField' onclick=viewRadioTimeLimits() >" +
-            "<span id=radioTimeLimitsMsg >Click to view time limits</span></div>"
-            );
-    $("#uhEnding").before(
-            "<div id=radioTimeLimits-n class='radioTimeLimitsChild radioTimeLimitsSubChild detailField'" +
-            " onclick=addEditTimeLimits('new') >" + "Click to add new time limit</div>"
-            );
+    htmlOutput = templateRender("#radioViewTimeLimitsTemplate", "");
+    $("#radioColors").before(htmlOutput);
+    
     var limitStart, limitStop, startMessage, stopMessage, limitDays;
+    var timeLimitArray = [];
     radioTimeLimits.forEach(function (thisLimit) {
         limitStart = parseInt(thisLimit.startTime);
         limitStop = parseInt(thisLimit.stopTime);
         hour = Math.floor(limitStart / 60);
         minute = limitStart % 60;
-        startMessage = " Start: ".hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
+        startMessage = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
         hour = Math.floor(limitStop / 60);
         minute = limitStop % 60;
-        stopMessage = " Stop: ".hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
+        stopMessage = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
         dayInt = parseInt(thisLimit.days, 10);
-        if (dayInt & 0x40)
-            limitDays = "S";
-        else
-            limitDays = "-";
-        if (dayInt & 0x20)
-            limitDays += "M";
-        else
-            limitDays += "-";
-        if (dayInt & 0x10)
-            limitDays += "T";
-        else
-            limitDays += "-";
-        if (dayInt & 0x08)
-            limitDays += "W";
-        else
-            limitDays += "-";
-        if (dayInt & 0x04)
-            limitDays += "T";
-        else
-            limitDays += "-";
-        if (dayInt & 0x02)
-            limitDays += "F";
-        else
-            limitDays += "-";
-        if (dayInt & 0x01)
-            limitDays += "S";
-        else
-            limitDays += "-";
-        $("#uhEnding").before(
-                "<div id=radioTimeLimits-" + thisLimit.id + " class='radioTimeLimitsChild radioTimeLimitsSubChild detailField' " +
-                "onclick=addEditTimeLimits('" + thisLimit.id + "') >Time Limit #" + thisLimit.limitNumber + startMessage +
-                stopMessage + " Days:" + limitDays + "</div>"
-                );
+        if(dayInt & 0x40)Sun = 1;else Sun = 0;
+        if(dayInt & 0x20)Mon = 1;else Mon = 0;
+        if(dayInt & 0x10)Tue = 1;else Tue = 0;
+        if(dayInt & 0x08)Wed = 1;else Wed = 0;
+        if(dayInt & 0x04)Thu = 1;else Thu = 0;
+        if(dayInt & 0x02)Fri = 1;else Fri = 0;
+        if(dayInt & 0x01)Sat = 1;else Sat = 0;
+        timeLimitArray.push({
+            id: thisLimit.id,
+            limitNumber: thisLimit.limitNumber,
+            startMessage: startMessage,
+            stopMessage: stopMessage,
+            Sun: Sun,
+            Mon: Mon,
+            Tue: Tue,
+            Wed: Wed,
+            Thu: Thu,
+            Fri: Fri,
+            Sat: Sat,
+        })
     })
+    htmlOutput = templateRender("#radioViewTimeLimitTemplate", timeLimitArray);
+    $("#radioColors").before(htmlOutput);
 
 
 
