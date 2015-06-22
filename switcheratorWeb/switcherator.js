@@ -46,8 +46,11 @@ $(document).on('click', function () {
     }
 });
 
-// templates file
-$.get("templates.html", function (templates) {
+// templates files
+$.get("templatesBox.html", function (templates) {
+    $("body").append(templates);
+})
+$.get("templatesForms.html", function (templates) {
     $("body").append(templates);
 })
 
@@ -416,10 +419,13 @@ function showRadioDetails(response) {
  */
 function viewRadioSettings() {
     if ($("#radioSettings").data("hide") == "shown") {
+        showHeaderSections();
         $(".radioSettingsSubChild").hide();
         $("#radioSettings").data("hide", "hidden");
         $("#radioSettingsMsg").text("Click to view settings");
     } else {
+        hideHeaderSections();
+        $("#radioSettings-0").show();
         $(".radioSettingsSubChild").show();
         $("#radioSettings").data("hide", "shown");
         $("#radioSettingsMsg").text("Click to hide settings");
@@ -532,10 +538,13 @@ function addNewRadio() {
  */
 function viewRadioSwitches() {
     if ($("#radioSwitches").data("hide") == "shown") {
+        showHeaderSections();
         $(".radioSwitchesSubChild").hide();
         $("#radioSwitches").data("hide", "hidden");
         $("#radioSwitchesMsg").text("Click to view switches");
     } else {
+        hideHeaderSections();
+        $("#radioSwitches-v").show();
         $(".radioSwitchesSubChild").show();
         $("#radioSwitches").data("hide", "shown");
         $("#radioSwitchesMsg").text("Click to hide switches");
@@ -558,10 +567,13 @@ function addEditSwitch(switchID) {
  */
 function viewRadioPrograms() {
     if ($("#radioPrograms").data("hide") == "shown") {
+        showHeaderSections();
         $(".radioProgramsSubChild").hide();
         $("#radioPrograms").data("hide", "hidden");
         $("#radioProgramsMsg").text("Click to view programs");
     } else {
+        hideHeaderSections();
+        $("#radioPrograms-v").show();
         $(".radioProgramsSubChild").show();
         $("#radioPrograms").data("hide", "shown");
         $("#radioProgramsMsg").text("Click to hide programs");
@@ -585,10 +597,13 @@ function addEditProgram(programID) {
  */
 function viewRadioInputs() {
     if ($("#radioInputs").data("hide") == "shown") {
+        showHeaderSections();
         $(".radioInputsSubChild").hide();
         $("#radioInputs").data("hide", "hidden");
         $("#radioInputsMsg").text("Click to view inputs");
     } else {
+        hideHeaderSections();
+        $("#radioInputs-v").show();
         $(".radioInputsSubChild").show();
         $("#radioInputs").data("hide", "shown");
         $("#radioInputsMsg").text("Click to hide inputs");
@@ -611,10 +626,13 @@ function addEditInput(inputID) {
  */
 function viewRadioColors() {
     if ($("#radioColors").data("hide") == "shown") {
+        showHeaderSections();
         $(".radioColorsSubChild").hide();
         $("#radioColors").data("hide", "hidden");
         $("#radioColorsMsg").text("Click to view colors");
     } else {
+        hideHeaderSections();
+        $("#radioColors-v").show();
         $(".radioColorsSubChild").show();
         $("#radioColors").data("hide", "shown");
         $("#radioColorsMsg").text("Click to hide colors");
@@ -637,10 +655,13 @@ function addEditColors(colorID) {
  */
 function viewRadioTimeLimits() {
     if ($("#radioTimeLimits").data("hide") == "shown") {
+        showHeaderSections();
         $(".radioTimeLimitsSubChild").hide();
         $("#radioTimeLimits").data("hide", "hidden");
         $("#radioTimeLimitsMsg").text("Click to view time limits");
     } else {
+        hideHeaderSections();
+        $("#radioTimeLimits-v").show();
         $(".radioTimeLimitsSubChild").show();
         $("#radioTimeLimits").data("hide", "shown");
         $("#radioTimeLimitsMsg").text("Click to hide time limits");
@@ -673,6 +694,14 @@ function showError(message) {
     $("#errorBar").show();
 }
 
+function hideHeaderSections() {
+    $(".headerSection").hide();
+}
+
+function showHeaderSections() {
+    $(".headerSection").show();
+}
+
 /**********************************************************
  * 
  * Edit Templates
@@ -688,20 +717,3 @@ function templateRender(templateID, Data) {
 
 
 
-function twoByFour(preTable, topLeft, topRight, secondLeft, secondRight, thirdLeft, thirdRight, bottomLeft, bottomRight, postTable) {
-    resetEdit();
-    $("#individualDetailEdit").append(
-            "<div id=detailEditDiv class=detailEdit >" + preTable + "<table class=detailTable><tr class=detailTable><td class=left >" + topLeft + "</td>\
-            <td class=right>" + topRight + "</td></tr><tr class=detailTable><td class=left>" + secondLeft + "</td><td class=right>" + secondRight +
-            "</td></tr><tr class=detailTable><td class=left>" + thirdLeft + "</td><td class=right>" + thirdRight + "</td></tr>" +
-            "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table>" + postTable + "</div>"
-            );
-}
-
-function oneByTwoByTwo(top, secondLeft, secondRight, bottomLeft, bottomRight) {
-    $("#individualDetailEdit").append(
-            "<div id=detailEditDiv class=detailEdit ><table class=detailTable><tr class=detailTable><td class=left colspan=2 >" + top + "</td>\
-            </tr><tr class=detailTable><td class=left>" + secondLeft + "</td><td class=right>" + secondRight + "</td></tr>" +
-            "<tr class=detailTable><td class=left>" + bottomLeft + "</td><td class=right>" + bottomRight + "</td></tr></table></div>"
-            );
-}

@@ -1,0 +1,131 @@
+<script id="radioListTemplate" type="text/x-jsrender" >
+<div id=radio-{{:radioNum}} class=radios onclick='radioDetail({{:radioNum}})'>{{:output}}</div>
+</script>
+
+<script id="radioViewSettingsTemplate" type="text/x-jsrender" >
+    <div id=radioSettings-0 class='radioSettingsChild detailField headerSection' onclick=viewRadioSettings() >
+    <span id=radioSettingsMsg >Click to view Settings</span></div>
+    <div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField' onclick=radioChangeName() >
+            Name:<br/><b><span id=radioNameSpan >{{:name}}</span></b></div>
+</script>
+
+<script id="radioOtherSettingsTemplate" type="text/x-jsrender" >
+<div id=radioSettings-2 class='radioSettingsChild radioSettingsSubChild detailField'  
+     onclick=radioChangeTweak() >Clock adjustment (15,625 default):<br/><b><span id=clockTweakDisplay > 
+            {{:clockTweak}}  </span></b></div>
+
+<div id=radioSettings-3 class='radioSettingsChild radioSettingsSubChild detailField'  
+     onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/><b>  
+        {{:colorChangeSpeed}}  </b></div>
+
+<div id=radioSettings-4 class='radioSettingsChild radioSettingsSubChild detailField'  
+     onclick=radioChangeHueSpeed() >Smooth hue color change speed (0-99 default 16): 
+    <br/><b>  {{:hueSpeed}}  </b></div>
+
+<div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField'  
+     onclick=radioChangeInputTiming() >Timing between input messages (0 = no messages):
+    <br/><b>  {{:inputTiming}}  </b></div>
+</script>
+
+<script id="radioViewSwitchesTemplate" type="text/x-jsrender" >
+<div id=radioSwitches-v class='radioSwitchesChild detailField headerSection' onclick=viewRadioSwitches() > 
+    <span id=radioSwitchesMsg >Click to view Switches</span></div>
+
+<div id=radioSwitches-n class='radioSwitchesChild radioSwitchesSubChild detailField' onclick=addEditSwitch('new') > 
+    Click to add new switch</div>
+</script>
+
+<script id="radioViewSwitchTemplate" type="text/x-jsrender" >
+<div id=radioSwitches-{{:switchID}} class='radioSwitchesChild radioSwitchesSubChild detailField'
+     onClick=addEditSwitch({{:switchID}})>
+        Switch #{{:switchNumber}}|{{:switchString}}-{{:switchID}}
+        {{if switchType == 200 }}
+            Single color PWM - color #{{:switchPWM}}.
+            <span style='background-color: #{{:switchColor}}; color: {{:textColor}}' >0x{{:switchColor}}</span>
+    
+            {{else switchType == 201}}
+            Activate smooth hue color change
+        {{else switchType == 202}}
+            Activate color change rotation
+        {{else }}
+            Switch {{:port}}{{:pin}} Pin is 
+            {{if hiLo == 0}}low
+            {{else}}high
+            {{/if}} when activated
+            
+        {{/if}}
+
+        </div>
+</script>
+
+<script id='radioViewProgramsTemplate' type="text/x-jsrender" >
+            <div id=radioPrograms-v class='radioProgramsChild detailField headerSection' onclick=viewRadioPrograms() > 
+            <span id=radioProgramsMsg >Click to view programs</span></div>
+            <div id=radioPrograms-n class='radioProgramsChild radioProgramsSubChild detailField' onclick=addEditProgram('new') > 
+            Click to add new program</div>
+</script>
+<script id="radioViewProgramTemplate" type="text/x-jsrender" >
+<div id=radioPrograms-{{:id}}   class='radioProgramsChild radioProgramsSubChild detailField' 
+     onclick=addEditProgram({{:id}}) >
+Program #{{:programNumber}}   Start:{{:programStart}} Dur.:{{:programDuration}} 
+      {{if Sun == 1}}S{{else}}-{{/if}}{{if Mon == 1}}M{{else}}-{{/if}}{{if Tue == 1}}T{{else}}-{{/if}}{{if Wed == 1}}W{{else}}-{{/if}}<!--
+      -->{{if Thu == 1}}T{{else}}-{{/if}}{{if Fri == 1}}F{{else}}-{{/if}}{{if Sat == 1}}S{{else}}-{{/if}}
+   Sw:{{:programSwitches}}  </div>
+</script>
+<script id="radioViewInputsTemplate" type="text/x-jsrender" >
+
+<div id=radioInputs-v class='radioInputsChild detailField headerSection' onclick=viewRadioInputs() > 
+<span id=radioInputsMsg >Click to view inputs</span></div>
+<div id=radioInputs-n class='radioInputsChild radioInputsSubChild detailField' onclick=addEditInput('new') > 
+Click to add new input</div>
+</script>
+<script id="radioViewInputTemplate" type="text/x-jsrender" >
+<div id=radioInputs-{{:id}}   class='radioInputsChild radioInputsSubChild detailField' 
+    onclick=addEditInput({{:id}}}) >
+    {{if inputType == 1}}
+    Digital #{{:inputNumber}} 
+    {{:portPin}} 
+    {{if inputValues == 1}}High Activates{{else}}Low Activates{{/if}}
+    {{else}}
+    Analog #{{:inputNumber}}
+    {{:portPin}}
+    {{:inputValues}}
+    {{/if}}
+    {{if switchOrProgram == 1}}Pr#{{else}}Sw#{{/if}}{{:switchNum}}
+    Dur:{{:duration}} Poll time:{{:pollTime}}
+ </div>
+</script>
+<script id="radioViewColorsTemplate" type="text/x-jsrender" >
+<div id=radioColors-v class='radioColorsChild detailField headerSection' onclick=viewRadioColors() > 
+    <span id=radioColorsMsg >Click to view colors</span></div>
+<div id=radioColors-n class='radioColorsChild radioColorsSubChild detailField' onclick=addEditColors('new') > 
+    Click to add new color</div>
+</script>
+<script id="radioViewColorTemplate" type="text/x-jsrender" >
+<div id=radioColors-{{:id}}   class='radioColorsChild radioColorsSubChild detailField' 
+     onclick=addEditColors({{:id}}) >Color #{{:colorChangeNumber}}
+                <span style='background-color: #{{:color}}  ; color:{{:textColor}};' >
+                    0x{{:color}}</span>
+                {{if changeable == 1}}
+                <br/>Part of rotating change
+                {{else}}
+                <br/>Not part of rotating change
+                {{/if}}
+            </div>
+</script>
+<script id="radioViewTimeLimitsTemplate" type="text/x-jsrender" >
+<div id=radioTimeLimits-v class='radioTimeLimitsChild detailField headerSection' onclick=viewRadioTimeLimits() > 
+    <span id=radioTimeLimitsMsg >Click to view time limits</span></div>
+<div id=radioTimeLimits-n class='radioTimeLimitsChild radioTimeLimitsSubChild detailField' 
+     onclick=addEditTimeLimits('new') >  Click to add new time limit</div>
+</script>
+<script id="radioViewTimeLimitTemplate" type="text/x-jsrender" >
+<div id=radioTimeLimits-{{:id}}  class='radioTimeLimitsChild radioTimeLimitsSubChild detailField'  
+     onclick=addEditTimeLimits({{:id}}) >Time Limit #{{:limitNumber}}
+    Start:{{:startMessage}} 
+    Stop:{{:stopMessage}}
+     Days:
+      {{if Sun == 1}}S{{else}}-{{/if}}{{if Mon == 1}}M{{else}}-{{/if}}{{if Tue == 1}}T{{else}}-{{/if}}{{if Wed == 1}}W{{else}}-{{/if}}<!--
+      -->{{if Thu == 1}}T{{else}}-{{/if}}{{if Fri == 1}}F{{else}}-{{/if}}{{if Sat == 1}}S{{else}}-{{/if}}
+</div>
+</script>

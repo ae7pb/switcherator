@@ -52,8 +52,7 @@
 #define RADIO_ADDR_R4_BYTES      3
 #define RADIO_ADDR_R5_BYTES      3
 #define INPUT_ADDR_BYTES         7
-#define DAYLIGHT_SAVE_BYTES     10
-#define SERIAL_NUM_BYTES         8
+#define DAYLIGHT_SAVE_BYTES      8
 // these depend on options above
 #define SWITCH_STUFF_BYTES      (NUM_SWITCHES + 2)
 #define INPUT_BYTES             ( 8 + 2 )
@@ -63,7 +62,6 @@
 #define TWEAK_TIMER_BYTES       4
 #define PWM_DIR_BYTES           3
 #define SWITCH_PWM_BYTES        3
-#define COLOR_CHANGABLE_BYTES   3
 #define INP_MESS_TIME_BYTES     4
 #define HUESPEED_BYTES          4
 #define COL_CHANGE_BYTES        4
@@ -78,30 +76,28 @@
 
 // EEPROM locations
 // 168 has 512 bytes, 328 has 1k bytes
-#define SERIAL_NUM      0     // Marker + 4 bytes for serial number
-#define DAYLIGHT_SAVE   6     // Marker + 6 bytes for daylight save on & off 
-#define RADIO_ADDR_TX   14    // marker + 5 byte address
-#define RADIO_ADDR_R0   21    // marker + 5 byte address
-#define RADIO_ADDR_R1   28    // marker + 5 byte address
-#define RADIO_ADDR_R2   35    // marker + 1 byte address
-#define RADIO_ADDR_R3   38    // marker + 1 byte address
-#define RADIO_ADDR_R4   41    // marker + 1 byte address
-#define RADIO_ADDR_R5   44    // marker + 1 byte address
-#define INPUT_ADDR      48    // marker + 5 byte address
-                              // skip 1 cause I hate odd numbers
+#define DAYLIGHT_SAVE   0                                       //  0 Marker + 6 bytes for daylight save on & off 
+#define RADIO_ADDR_TX   (DAYLIGHT_SAVE + DAYLIGHT_SAVE_BYTES)   //  8 marker + 5 byte address
+#define RADIO_ADDR_R0   (RADIO_ADDR_TX + RADIO_ADDR_TX_BYTES)   // 15 marker + 5 byte address
+#define RADIO_ADDR_R1   (RADIO_ADDR_R0 + RADIO_ADDR_R0_BYTES)   // 22 marker + 5 byte address
+#define RADIO_ADDR_R2   (RADIO_ADDR_R1 + RADIO_ADDR_R1_BYTES)   // 29 marker + 1 byte address
+#define RADIO_ADDR_R3   (RADIO_ADDR_R2 + RADIO_ADDR_R2_BYTES)   // 32 marker + 1 byte address
+#define RADIO_ADDR_R4   (RADIO_ADDR_R3 + RADIO_ADDR_R3_BYTES)   // 35 marker + 1 byte address
+#define RADIO_ADDR_R5   (RADIO_ADDR_R4 + RADIO_ADDR_R4_BYTES)   // 38 marker + 1 byte address
+#define INPUT_ADDR      (RADIO_ADDR_R5 + RADIO_ADDR_R5_BYTES)   // 41 marker + 5 byte address
+
 // these depend on items above
-#define SWITCH_STUFF    56    // 2 byte marker, NUM_SWITCHES byte values
-#define INPUT           (SWITCH_STUFF + SWITCH_STUFF_BYTES)
-#define LIMIT           (INPUT + (INPUT_BYTES * NUM_INPUTS) )
-#define COLOR_CHANGE    (LIMIT + (LIMIT_BYTES * NUM_LIMITS) )
-#define WEEKLY_PROGRAM  (COLOR_CHANGE + (COLOR_CHANGE_BYTES * NUM_COLOR_CHANGES) )    // The program
-#define TWEAK_TIMER     (WEEKLY_PROGRAM + (WEEKLY_PROGRAM_BYTES * MAX_PROGRAM) )
-#define PWM_DIR         (TWEAK_TIMER + TWEAK_TIMER_BYTES)
-#define SWITCH_PWM      (PWM_DIR + PWM_DIR_BYTES)
-#define COLOR_CHANGABLE (SWITCH_PWM + (SWITCH_PWM_BYTES * NUM_SWITCHES))
-#define INP_MESS_TIME   (COLOR_CHANGABLE + (NUM_COLOR_CHANGES * COLOR_CHANGABLE_BYTES))
-#define HUESPEED        (INP_MESS_TIME + INP_MESS_TIME_BYTES)
-#define COL_CHANGE      (HUESPEED + HUESPEED_BYTES)
+#define SWITCH_STUFF    (INPUT_ADDR + INPUT_ADDR_BYTES)         // 48 marker, NUM_SWITCHES byte values
+#define INPUT           (SWITCH_STUFF + SWITCH_STUFF_BYTES)     // 74
+#define LIMIT           (INPUT + (INPUT_BYTES * NUM_INPUTS) )   // 154
+#define COLOR_CHANGE    (LIMIT + (LIMIT_BYTES * NUM_LIMITS) )   // 194
+#define WEEKLY_PROGRAM  (COLOR_CHANGE + (COLOR_CHANGE_BYTES * NUM_COLOR_CHANGES) )    // 294   The program
+#define TWEAK_TIMER     (WEEKLY_PROGRAM + (WEEKLY_PROGRAM_BYTES * MAX_PROGRAM) )      // 582
+#define PWM_DIR         (TWEAK_TIMER + TWEAK_TIMER_BYTES)                             // 586
+#define SWITCH_PWM      (PWM_DIR + PWM_DIR_BYTES)                                     // 589
+#define INP_MESS_TIME   (SWITCH_PWM + (SWITCH_PWM_BYTES * NUM_SWITCHES))              // 661
+#define HUESPEED        (INP_MESS_TIME + INP_MESS_TIME_BYTES)                         // 665
+#define COL_CHANGE      (HUESPEED + HUESPEED_BYTES)                                   // 669
 
 // check to make sure we aren't using too much ram
 #if ((INP_MESS_TIME + INP_MESS_TIME_BYTES + BASE_PROG_RAM) > RAMEND)
