@@ -160,12 +160,12 @@ function processRadio($radioID) {
         if (!$db->exec($sql))
             echo $db->lastErrorMsg();
     }
-    $timeLimitsDetails = str_split($timeLimits, 3);
+    $timeLimitsDetails = str_split($timeLimits, 14);
     for ($x = 0; $x < count($timeLimitsDetails); $x++) {
         $thisTimeLimit = str_split($timeLimitsDetails[$x]);
-        $thisStartTime = hexdec($thisTimeLimit[0]);
-        $thisStopTime = hexdec($thisTimeLimit[1]);
-        $thisDays = hexdec($thisTimeLimit[2]);
+        $thisStartTime = hexdec(substr($timeLimitDetails[$x]),0,6);
+        $thisStopTime = hexdec(substr($timeLimitDetails[$x]),6,6);
+        $thisDays = hexdec(substr($timeLimitDetails[$x]),12,2);
         $sql = "insert or ignore into timeLimits (radioID, limitNumber, startTime, stopTime, " .
                 "days) values ($radioID, $x, $thisStartTime, $thisStopTime, $thisDays)";
         if (!$db->exec($sql))

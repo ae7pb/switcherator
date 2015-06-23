@@ -198,6 +198,7 @@ void switchesOn(void);
 void returnInt(int number, char * thisString);
 void returnHex(unsigned int number, char * thisString);
 void returnHexWithout(unsigned int number, char * tempMe);
+void returnLongHexWithout(unsigned long number, char * tempMe);
 // radio
 uint64_t formatAddress(char * address);
 void unformatAddress(uint64_t oldAddress, char * formattedAddress);
@@ -215,6 +216,7 @@ void setDigitalInput(char * commandReceived);
 void inputCheck(void);
 void inputTenthCheck(void);
 void getInput(int inputNumber);
+int testTimeLimit(void);
 void possibleInputMessage(int inputNumber);
 void setInputMessageTiming(char * commandReceived);
 void clearInput(char * commandReceived);

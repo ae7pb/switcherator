@@ -1937,14 +1937,6 @@ void generalInit(void) {
         }
     }
 
-    // if the color change is the a color change or just a color
-    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
-        memoryMarker = (COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES));
-        if (readEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES) == 1) {
-            colorIsChangable[x] = tempStuff[0];
-        }
-    }
-
 
 }
 
@@ -2108,13 +2100,6 @@ void saveToEEPROM(void) {
         writeEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES);
     }
 
-    // if the color change is the a color change or just a color
-    for (x = 0; x < NUM_COLOR_CHANGES; x++) {
-        memoryMarker = (COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES));
-        tempStuff[0] = colorIsChangable[x];
-        writeEEPROM(tempStuff, memoryMarker, SWITCH_PWM_BYTES);
-
-    }
 
     // if we are receiving input messages and what time
     tempStuff[0] = (inputMessageTiming >> 8);
@@ -2299,10 +2284,16 @@ void memoryDump(void) {
     linecount++;
     resetStatus(linecount, "T");
     // time limits
+    char tempReallyLongString[] = "0000000";
     for (x = 0; x < NUM_LIMITS; x++) {
         for (y = 0; y < 3; y++) {
-            returnHexWithout(timeLimits[x][y], tempLongString);
-            strcat(statusMsg, tempLongString);
+            if (y < 2) {
+                returnLongHexWithout(timeLimits[x][y], tempReallyLongString);
+                strcat(statusMsg, tempReallyLongString);
+            } else {
+                returnHexWithout(timeLimits[x][y], tempLongString);
+                strcat(statusMsg, tempLongString);
+            }
             if (strlen(statusMsg) >= 30) {
                 sendMessage(statusMsg);
                 linecount++;
@@ -2381,7 +2372,6 @@ void clearToEEPROM(void) {
         clearEEPROM((LIMIT + (x * LIMIT_BYTES)));
     for (x = 0; x < NUM_COLOR_CHANGES; x++) {
         clearEEPROM((COLOR_CHANGE + (x * COLOR_CHANGE_BYTES)));
-        clearEEPROM((COLOR_CHANGABLE + (x * COLOR_CHANGABLE_BYTES)));
     }
     for (x = 0; x < MAX_PROGRAM; x++)
         clearEEPROM((WEEKLY_PROGRAM + (x * WEEKLY_PROGRAM_BYTES)));
@@ -2446,7 +2436,7 @@ void setClock(char * commandReceived) {
     stopClock();
     startClock();
     panicMyClockIsNotSet = 0;
-    if((failCondition & 1) == 1)
+    if ((failCondition & 1) == 1)
         clearFail(1);
 }
 
@@ -2834,27 +2824,27 @@ void setTimeLimits(char * commandReceived) {
         // show the limit.
         startTime = timeLimits[programNumber][0];
         stopTime = timeLimits[programNumber][1];
-        strcat(statusMsg, "Start:");
         startHour = (startTime / 60 / 60);
         returnInt(startHour, tempLongString);
         strcat(statusMsg, tempLongString);
-        startMinute = ((startTime - (startHour * 60 * 60)) / 60);
+        startMinute = (startTime - (startHour * 60 * 60));
+        startMinute = startMinute / 60;
         strcat(statusMsg, ":");
         returnInt(startMinute, tempLongString);
         strcat(statusMsg, tempLongString);
-        strcat(statusMsg, "Stop:");
+        strcat(statusMsg, " - ");
         stopHour = (stopTime / 60 / 60);
         returnInt(stopHour, tempLongString);
         strcat(statusMsg, tempLongString);
-        stopMinute = ((stopTime - (stopHour * 60 * 60)) / 60);
+        stopMinute = (stopTime - (stopHour * 60 * 60));
+        stopMinute = stopMinute / 60;
         strcat(statusMsg, ":");
         returnInt(stopMinute, tempLongString);
         strcat(statusMsg, tempLongString);
         strcat(statusMsg, "Days");
-        char dayString[8];
         int weekdays = timeLimits[programNumber][2];
-        processDays(weekdays, dayString);
-        strcat(statusMsg, dayString);
+        processDays(weekdays, tempReallyLongString);
+        strcat(statusMsg, tempReallyLongString);
         sendMessage(statusMsg);
 #endif
         return;
@@ -3136,6 +3126,17 @@ void returnHexWithout(unsigned int number, char * tempMe) {
     itoa(number, tempHugeString, 16);
     if (strlen(tempHugeString) == 1 || strlen(tempHugeString) == 3)
         strcat(tempMe, "0");
+    strcat(tempMe, tempHugeString);
+}
+
+void returnLongHexWithout(unsigned long number, char * tempMe) {
+    tempMe[0] = 0;
+    ltoa(number, tempHugeString, 16);
+    int count = strlen(tempHugeString);
+    while (count < 6) {
+        strcat(tempMe, "0");
+        count++;
+    }
     strcat(tempMe, tempHugeString);
 }
 
@@ -3677,22 +3678,22 @@ void inputTenthCheck(void) {
 // actually check the input and do something based on that
 
 void getInput(int inputNumber) {
-    int x = 0;
+    int timeLimitTest = 0;
     unsigned int outputNum, duration, low, high, switchNumber;
     volatile unsigned char *thisPin = 0;
     long temp = 0;
-    char test = 0;
     char pwmValue = 0;
     char whichRGB = 0;
+    int programNumber = 0;
+    timeLimitTest = testTimeLimit();
     // set up how many seconds are at the beginning of today
-    long daySeconds = (dow * 86400);
-    long startTime, stopTime;
-    startTime = stopTime = 0;
     outputNum = duration = low = high = switchNumber = 0;
     outputNum = inputs[inputNumber][0];
     low = inputs[inputNumber][1];
     high = inputs[inputNumber][2];
     switchNumber = inputs[inputNumber][3];
+    if(switchNumber > 128)
+        programNumber = switchNumber - 128;
     temp = inputs[inputNumber][4];
     duration = (temp << 8);
     temp = inputs[inputNumber][5];
@@ -3746,44 +3747,10 @@ void getInput(int inputNumber) {
                     switchChanged = 1;
                 if (switchStatus[switchNumber] < (weeklySeconds + duration))
                     switchStatus[switchNumber] = (weeklySeconds + duration);
-            } else { // its a program;
-                test = 0;
-                // check and make sure we are within the time limits (eg dusk to dawn)
-                // first if no time limits set up then ignore it
-                for (x = 0; x < NUM_LIMITS; x++) {
-                    if (timeLimits[x][2] > 0)
-                        test = 1;
-                }
-                // no limits set up
-                if (test == 0)
-                    startTheProgram((switchNumber - 128), duration, 0);
-                for (x = 0; x < NUM_LIMITS; x++) {
-                    startTime = timeLimits[x][0];
-                    stopTime = timeLimits[x][1];
-                    // deal with nights that cross midnight
-                    if (stopTime < startTime) {
-                        temp = dow;
-                        // weekly seconds resets at the end of the week. so do lots of 9
-                        if (weeklySeconds <= (stopTime + daySeconds)) {
-                            // k this is dow + 1
-                            if (temp == 0)
-                                temp = 6;
-                            else
-                                temp--;
-                            if (timeLimits[x][2] & (1 << temp))
-                                startTheProgram((switchNumber - 128), duration, 0);
-                        } else if (weeklySeconds >= (startTime + daySeconds)) {
-                            if (timeLimits[x][2] & (1 << dow))
-                                startTheProgram((switchNumber - 128), duration, 0);
-                        }
-                    } else {
-                        if (weeklySeconds >= (startTime + daySeconds) &&
-                                weeklySeconds <= (stopTime + daySeconds)) {
-                            if (timeLimits[x][2] & (1 << dow))
-                                startTheProgram((switchNumber - 128), duration, 0);
-                        }
-                    }
-                } // end of the for
+            } else { // its a program - so test the time limit
+                if (timeLimitTest == 0)
+                    return;
+                startTheProgram(programNumber, duration, 0);
             }
         }
 
@@ -3869,46 +3836,56 @@ void getInput(int inputNumber) {
                 if (switchStuff[switchNumber] >= 200)
                     switchPWMOverride = switchNumber;
             } else { // its a program;
-                test = 0;
-                // check and make sure we are within the time limits (eg dusk to dawn)
-                // first if no time limits set up then ignore it
-                for (x = 0; x < NUM_LIMITS; x++) {
-                    if (timeLimits[x][2] > 0)
-                        test = 1;
-                }
-                // no limits set up
-                if (test == 0)
-                    startTheProgram((switchNumber - 128), duration, 0);
-                for (x = 0; x < NUM_LIMITS; x++) {
-                    startTime = timeLimits[x][0];
-                    stopTime = timeLimits[x][1];
-                    // deal with nights that cross midnight
-                    if (stopTime < startTime) {
-                        temp = dow;
-                        // weekly seconds resets at the end of the week. so do lots of 9
-                        if (weeklySeconds <= (stopTime + daySeconds)) {
-                            // k this is dow + 1
-                            if (temp == 0)
-                                temp = 6;
-                            else
-                                temp--;
-                            if (timeLimits[x][2] & (1 << temp))
-                                startTheProgram((switchNumber - 128), duration, 0);
-                        } else if (weeklySeconds >= (startTime + daySeconds)) {
-                            if (timeLimits[x][2] & (1 << dow))
-                                startTheProgram((switchNumber - 128), duration, 0);
-                        }
-                    } else {
-                        if (weeklySeconds >= (startTime + daySeconds) &&
-                                weeklySeconds <= (stopTime + daySeconds)) {
-                            if (timeLimits[x][2] & (1 << dow))
-                                startTheProgram((switchNumber - 128), duration, 0);
-                        }
-                    }
-                } // end of the for
+                if (timeLimitTest == 0)
+                    return;
+                startTheProgram(programNumber, duration, 0);
             }
         }
     }
+}
+
+int testTimeLimit(void) {
+    int x = 0;
+    long temp = 0;
+    char test = 0;
+    // set up how many seconds are at the beginning of today
+    long daySeconds = (dow * 86400);
+    long startTime, stopTime;
+    for (x = 0; x < NUM_LIMITS; x++) {
+        if (timeLimits[x][2] > 0)
+            test = 1;
+    }
+    // no limits set up
+    if (test == 0)
+        return 1;
+    for (x = 0; x < NUM_LIMITS; x++) {
+        startTime = timeLimits[x][0];
+        stopTime = timeLimits[x][1];
+        // deal with nights that cross midnight
+        if (stopTime < startTime) {
+            temp = dow;
+            // weekly seconds resets at the end of the week. so do lots of 9
+            if (weeklySeconds <= (stopTime + daySeconds)) {
+                // k this is dow + 1
+                if (temp == 0)
+                    temp = 6;
+                else
+                    temp--;
+                if ((timeLimits[x][2] & (1 << temp)) > 0)
+                    return 1;
+            } else if (weeklySeconds >= (startTime + daySeconds)) {
+                if ((timeLimits[x][2] & (1 << dow)) > 0)
+                    return 1;
+            }
+        } else {
+            if (weeklySeconds >= (startTime + daySeconds) &&
+                    weeklySeconds <= (stopTime + daySeconds)) {
+                if (((timeLimits[x][2] & (1 << dow)) > 0))
+                    return 1;
+            }
+        }
+    } // end of the for
+    return 0;
 }
 
 /*

@@ -7,7 +7,7 @@ The program listens to all the radio traffic and responds either to a message st
 Here are the commands:  They are all two digits and can be upper or lower case.
 TI:MMDDYYYYHHMMSS - Time
 DS:MMDD MMDD - Daylight Savings
-TL:##HHMMHHMMdddddd - Time Limits - Replace first H with x to clear or ? to inquire
+TL:##HHMMHHMMdddddd - Time Limits - Replace first H with x to clear or ? to inquire ** Only works on programs
 NS:S#PpD - New Switch
 SC:S# - Switch Clear
 SD:xx - Switch Display
