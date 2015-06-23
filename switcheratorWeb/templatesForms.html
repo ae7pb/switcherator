@@ -3,6 +3,7 @@
 
 
 <script id="twoByFour" type="text/x-jsrender" >
+
 <div id=detailEditDiv class=detailEdit >
     {{:preTable}}
     <table class=detailTable>
@@ -17,7 +18,7 @@
             <td class=right>{{:thirdRight}}</td>
         </tr><tr class=detailTable>
             <td class=left>{{:bottomLeft}}</td>
-            <td class=right>{{:bottomRight}}</td>
+            <td class=right>{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif/></span></td>
         </tr>
     </table>{{:postTable}}
 </div>
@@ -35,7 +36,7 @@
         </tr>
         <tr class="detailTable">
             <td class="left">{{:bottomLeft}}</td>
-            <td class="right">{{:bottomRight}}</td>
+            <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif/></span></td>
         </tr>
     </table>
     {{:postTable}}

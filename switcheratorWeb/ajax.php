@@ -31,6 +31,7 @@ function getRadios() {
  */
 
 function radioDetails() {
+    sleep(1);
     $radioID = intval($_GET['radioID']);
     global $db;
     // check if the radio is valid
@@ -73,6 +74,7 @@ function radioDetails() {
 
 // gets and does a command to the radio
 function sendRadioCommand() {
+    sleep(1);
     $command = $_POST['command'];
     $radioID = intval($_POST['radioID']);
     if (preg_match('/^[a-zA-Z0-9:-]+$/', $command) != 1)

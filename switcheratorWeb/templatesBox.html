@@ -1,5 +1,5 @@
 <script id="radioListTemplate" type="text/x-jsrender" >
-<div id=radio-{{:radioNum}} class=radios onclick='radioDetail({{:radioNum}})'>{{:output}}</div>
+<div id=radio-{{:radioNum}} class=radios onclick='getRadioDetails({{:radioNum}})'>{{:output}}</div>
 </script>
 
 <script id="radioViewSettingsTemplate" type="text/x-jsrender" >
@@ -15,16 +15,16 @@
             {{:clockTweak}}  </span></b></div>
 
 <div id=radioSettings-3 class='radioSettingsChild radioSettingsSubChild detailField'  
-     onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/><b>  
-        {{:colorChangeSpeed}}  </b></div>
+     onclick=radioChangeColorSpeed() >Color change speed (0-9999 default 10 = 1 second): <br/>
+      <b><span id=colorChangeSpeedDisplay>{{:colorChangeSpeed}}</span></b></div>
 
 <div id=radioSettings-4 class='radioSettingsChild radioSettingsSubChild detailField'  
      onclick=radioChangeHueSpeed() >Smooth hue color change speed (0-99 default 16): 
-    <br/><b>  {{:hueSpeed}}  </b></div>
+    <br/><b><span id=hueSpeedDisplay>{{:hueSpeed}}</span></b></div>
 
 <div id=radioSettings-1 class='radioSettingsChild radioSettingsSubChild detailField'  
      onclick=radioChangeInputTiming() >Timing between input messages (0 = no messages):
-    <br/><b>  {{:inputTiming}}  </b></div>
+    <br/><b><span id=inputTimingDisplay >{{:inputTiming}}</span></b></div>
 </script>
 
 <script id="radioViewSwitchesTemplate" type="text/x-jsrender" >
@@ -38,9 +38,10 @@
 <script id="radioViewSwitchTemplate" type="text/x-jsrender" >
 <div id=radioSwitches-{{:switchID}} class='radioSwitchesChild radioSwitchesSubChild detailField'
      onClick=addEditSwitch({{:switchID}})>
-        Switch #{{:switchNumber}}|{{:switchString}}-{{:switchID}}
+        Switch #{{:switchNumber}}<br/>
         {{if switchType == 200 }}
-            Single color PWM - color #{{:switchPWM}}.
+            Single color PWM<br/>
+            color #{{:switchPWM}}
             <span style='background-color: #{{:switchColor}}; color: {{:textColor}}' >0x{{:switchColor}}</span>
     
             {{else switchType == 201}}

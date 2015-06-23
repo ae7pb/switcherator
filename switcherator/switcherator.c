@@ -304,7 +304,7 @@ void checkCommand(char * commandReceived) {
             pwmSetup(commandReceived);
             break;
         case 0x4348: //CH
-            cycleHue(commandReceived);
+            setColorChangeSpeed(commandReceived);
             break;
         case 0x4853: //HS
             setHueSpeed(commandReceived);
@@ -935,13 +935,13 @@ void setPWMDir(char * commandReceived) {
 
 
 // This just sets up the times for the PWM hues
-// CH:P#TTTTT 
+// CH:TTTTT 
 // 0123456789
 
-void cycleHue(char * commandReceived) {
+void setColorChangeSpeed(char * commandReceived) {
     // right now we just have 1 pwm but I could add more
     int programNumber = 0;
-    programNumber = getInt(commandReceived, 5, 4);
+    programNumber = getInt(commandReceived, 3, 4);
     if (programNumber > 0)
         colorChangeSpeed = programNumber;
     else {

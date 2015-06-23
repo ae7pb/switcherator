@@ -19,7 +19,7 @@ PT:P#HHMMDur. - program time - changes program time
 PI:P# - program info
 PS:P#S#H - PWM setup - p# is color change num, sw #then H=Hue, C=color change, 0=static color
 WD:d - PWM Direction d=1 high, x shows it
-CH:P#vvvv - Color Change speed - default 10=1 second in 1/10ths
+CH:vvvv - Color Change speed - default 10=1 second in 1/10ths
 HS:xx - Hue Speed - smooth number.  16 default
 PW = PWM summary - 
 CC:##,vvv,vvv,vvv,p  - color change values - ## is the color change number - p=1 = pwm only
