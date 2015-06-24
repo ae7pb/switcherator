@@ -76,6 +76,7 @@ function navigationBar(radioText) {
 function radioDivs(response) {
     if (response == null)
         return;
+    $("#radioList").html("");
     response.forEach(function (radio) {
         var output = radio.name;
         var radioNum = radio.id;
@@ -535,6 +536,7 @@ function radioChangeName() {
     };
     htmlOutput = templateRender("#twoByFour", changeNameArray);
     $("#individualDetailEdit").append(htmlOutput);
+    $("#newRadioName").focus();
 }
 
 
@@ -580,6 +582,7 @@ function radioChangeTweak() {
     }
     htmlOutput = templateRender("#oneByTwoByTwo", changeTweakArray);
     $("#individualDetailEdit").append(htmlOutput);
+    $("#clockTweak").focus();
 }
 
 // from readme
@@ -620,6 +623,7 @@ function radioChangeColorSpeed() {
     }
     htmlOutput = templateRender("#oneByTwoByTwo", renderObject);
     $("#individualDetailEdit").append(htmlOutput);
+    $("#ccSpeed").focus();
 }
 
 function radioColorChangeSpeedSubmit(event) {
@@ -634,9 +638,8 @@ function radioColorChangeSpeedSubmit(event) {
         resetOnClick = 1;
         return;
     }
-    ccSpeed = ccSpeed.toString();
+    ccSpeed = ccSpeed.toString(16);
     var radioCommand = "CH:" + ccSpeed;
-    console.log(radioCommand);
     radioID = radioSettings.id;
     radioCommandResult = '';
     postRadioCommand(radioCommand, radioID);
@@ -654,6 +657,7 @@ function radioChangeHueSpeed() {
     }
     htmlOutput = templateRender("#oneByTwoByTwo", renderObject);
     $("#individualDetailEdit").append(htmlOutput);
+    $("#hueSpeed").focus();
 }
 
 function radioColorHueSpeedSubmit(event) {
@@ -661,14 +665,14 @@ function radioColorHueSpeedSubmit(event) {
         return;
     var hueSpeed = $("#hueSpeed").val();
     hueSpeed = parseInt(hueSpeed);
-    if (hueSpeed < 1 || hueSpeed > 99) {
+    if (hueSpeed < 1 || hueSpeed > 0xff) {
         showError(wordsToTranslate.changeError);
         $("#debugSection").html(wordsToTranslate.invalidAmount);
         $("#debugSection").show();
         resetOnClick = 1;
         return;
     }
-    hueSpeed = hueSpeed.toString();
+    hueSpeed = hueSpeed.toString(16);
     var radioCommand = "HS:" + hueSpeed;
     radioID = radioSettings.id;
     radioCommandResult = '';
@@ -681,12 +685,14 @@ function radioChangeInputTiming() {
     var renderObject = {
         topMessage: wordsToTranslate.inputTimingMessage,
         topLeft: wordsToTranslate.itMessage,
-        topRight: "<input id=inputTimingSpeed value=" + parseInt(radioSettings.inputMessageTiming, 16) + " onKeyDown=radioChangeInputTimingSubmit(event); />",
+        topRight: "<input id=inputTimingSpeed value=" + parseInt(radioSettings.inputMessageTiming, 16) + 
+            " onKeyDown=radioChangeInputTimingSubmit(event); />",
         bottomLeft: "&nbsp;",
         bottomRight: "<input type=button value=Submit onClick=radioChangeInputTimingSubmit(event) />"
     }
     htmlOutput = templateRender("#oneByTwoByTwo", renderObject);
     $("#individualDetailEdit").append(htmlOutput);
+    $("#inputTimingSpeed").focus();
 }
 
 function radioChangeInputTimingSubmit(event) {
@@ -694,14 +700,14 @@ function radioChangeInputTimingSubmit(event) {
         return;
     var inputTimingSpeed = $("#inputTimingSpeed").val();
     inputTimingSpeed = parseInt(inputTimingSpeed);
-    if (inputTimingSpeed < 1 || inputTimingSpeed > 9999) {
+    if (inputTimingSpeed < 1 || inputTimingSpeed > 0xffff) {
         showError(wordsToTranslate.changeError);
         $("#debugSection").html(wordsToTranslate.invalidAmount);
         $("#debugSection").show();
         resetOnClick = 1;
         return;
     }
-    inputTimingSpeed = inputTimingSpeed.toString();
+    inputTimingSpeed = inputTimingSpeed.toString(16);
     var radioCommand = "IT:" + inputTimingSpeed;
     radioID = radioSettings.id;
     radioCommandResult = '';
@@ -710,9 +716,10 @@ function radioChangeInputTimingSubmit(event) {
 
 
 function autoAddNewRadio() {
+    resetEdit();
     var newRadioObject = {
         topLeft: wordsToTranslate.radioName,
-        topRight: "<input id=newRadioName value='' onKeyDown=autoAddNewRadioSubmit(event) />",
+        topRight: "<input id=newRadioName value='' onKeyDown=autoAddNewRadioSubmit(event) >",
         secondLeft: wordsToTranslate.Description,
         secondRight: "<textarea cols=21 rows=6 id=newRadioDescription ></textarea>",
         thirdLeft: wordsToTranslate.Location,
@@ -722,6 +729,7 @@ function autoAddNewRadio() {
     };
     htmlOutput = templateRender("#twoByFour", newRadioObject);
     $("#individualDetailEdit").append(htmlOutput);
+    $("#newRadioName").focus();
 }
 
 function autoAddNewRadioSubmit(event) {
@@ -741,6 +749,7 @@ function autoAddNewRadioSubmit(event) {
             $("#submitWait").hide();
             reloadRadios();
             showMessage(wordsToTranslate.changeSuccess);
+             $("individualDetailEdit").empty();
         } else {
             $("#submitWait").hide();
             showError(wordsToTranslate.changeError);
@@ -799,6 +808,74 @@ function reloadRadios() {
 }
 
 function manuallyAddNewRadio() {
+    resetEdit();
+    var newRadioObject = {
+        topLeft: wordsToTranslate.radioName,
+        topRight: "<input id=newRadioName value='' onKeyDown=manuallyAddNewRadioSubmit(event) />",
+        secondLeft: wordsToTranslate.Description,
+        secondRight: "<textarea cols=21 rows=6 id=newRadioDescription ></textarea>",
+        thirdLeft: wordsToTranslate.Location,
+        thirdRight: "<input id=newRadioLocation value='' onKeyDown=manuallyAddNewRadioSubmit(event) />",
+        fourthLeft: wordsToTranslate.radioChannel,
+        fourthRight: "<input id=newRadioChannel onKeyDown=manuallyAddNewRadioSubmit(event) />",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<button onClick=manuallyAddNewRadioSubmit(event)>Submit</button>"
+    };
+    htmlOutput = templateRender("#twoByFive", newRadioObject);
+    $("#individualDetailEdit").append(htmlOutput);
+    $("#newRadioName").focus();
+}
+
+
+function manuallyAddNewRadioSubmit(event) {
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
+        return;
+    if ($("#newRadioName").val == "")
+        return;
+    if ($("#newRadioChannel").val == "" ) {
+        showError(wordsToTranslate.invalidChannel);
+        resetOnClick = 1;
+        return;
+    }
+    var text = $("#newRadioChannel").val();
+    var reg = /^[a-zA-Z0-9:-]+$/;
+    var match = text.match(reg);
+    if(match == null) {
+        showError(wordsToTranslate.invalidChannel);
+        resetOnClick = 1;
+        return;
+    }
+ 
+    $("#submitWait").show();
+    $.post("ajax.php?function=processExistingRadio",
+            {
+                name: $("#newRadioName").val(),
+                description: $("#newRadioDescription").val(),
+                location: $("#newRadioLocation").val(),
+                channel: $("#newRadioChannel").val(),
+            }
+    , function (data) {
+        if (data == "ok") {
+            $("#submitWait").hide();
+            reloadRadios();
+            showMessage(wordsToTranslate.changeSuccess);
+            $("individualDetailEdit").empty();
+        } else {
+            $("#submitWait").hide();
+            showError(wordsToTranslate.changeError);
+            if (debugMePlease == 1) {
+                $("#debugSection").html(data);
+                $("#debugSection").show();
+            }
+        }
+    },
+            "text"
+            ).error(function () {
+        $("#submitWait").hide();
+        showError(wordsToTranslate.nameChangeError);
+    });
+    resetOnClick = 1;
+
 
 }
 

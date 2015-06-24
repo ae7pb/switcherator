@@ -22,7 +22,7 @@ WD:d - PWM Direction d=1 high, x shows it
 CH:vvvv - Color Change speed - default 10=1 second in 1/10ths
 HS:xx - Hue Speed - smooth number.  16 default
 PW = PWM summary - 
-CC:##,vvv,vvv,vvv,p  - color change values - ## is the color change number - p=1 = pwm only
+CC:##rrggbbp  - color change values (hex) - ## is the color change number - p=1 = pwm only
 SS:S#Durat. - start switch
 SP:P#Durat. - start program
 SA - Save

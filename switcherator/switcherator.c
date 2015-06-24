@@ -145,6 +145,9 @@ int main(void) {
     radioReceiveBuffer[0] = 0;
     int x = 0;
     inputMessage[0] = 0;
+    hueSpeed = 16;
+    colorChangeSpeed = 10;
+    tweakTimer = TIMER_TOTAL;
 
     INDICATOR_DDR |= INDICATOR_PIN;
     for (x = 0; x < 4; x++) {
@@ -941,7 +944,7 @@ void setPWMDir(char * commandReceived) {
 void setColorChangeSpeed(char * commandReceived) {
     // right now we just have 1 pwm but I could add more
     int programNumber = 0;
-    programNumber = getInt(commandReceived, 3, 4);
+    programNumber = getHexInt(commandReceived, 3, 4);
     if (programNumber > 0)
         colorChangeSpeed = programNumber;
     else {
@@ -956,7 +959,7 @@ void setColorChangeSpeed(char * commandReceived) {
 // HS:xx
 
 void setHueSpeed(char * commandReceived) {
-    int programNumber = getSwitchNumber(commandReceived);
+    int programNumber = getHexInt(commandReceived,3,2);
     if (programNumber > 0)
         hueSpeed = programNumber;
     else {
@@ -973,6 +976,7 @@ void setHueSpeed(char * commandReceived) {
 
 // add a color to the color change
 // CC:##,vvv,vvv,vvv,p - p = pwm only
+// CC:##rrggbbp
 // 0123456789012345678
 
 void colorChangeSet(char * commandReceived) {
@@ -981,10 +985,10 @@ void colorChangeSet(char * commandReceived) {
         fail(7);
         return;
     }
-    colorChanges[programNumber][0] = getInt(commandReceived, 6, 3);
-    colorChanges[programNumber][1] = getInt(commandReceived, 10, 3);
-    colorChanges[programNumber][2] = getInt(commandReceived, 14, 3);
-    if (commandReceived[18] == '1') {
+    colorChanges[programNumber][0] = getHexInt(commandReceived, 5, 2);
+    colorChanges[programNumber][1] = getHexInt(commandReceived, 7, 2);
+    colorChanges[programNumber][2] = getHexInt(commandReceived, 9, 2);
+    if (commandReceived[11] == '1') {
         colorIsChangable[programNumber] = 0;
     } else {
         colorIsChangable[programNumber] = 1;
@@ -2880,6 +2884,7 @@ void setTimeLimits(char * commandReceived) {
 
 // take in 3 digits to tweak the clock time
 // CT xxxx
+// 0123456
 
 void clockTweak(char * commandReceived) {
     int tempnum = getInt(commandReceived, 3, 4);
@@ -3918,7 +3923,7 @@ void possibleInputMessage(int inputNumber) {
  * 0123456
  */
 void setInputMessageTiming(char * commandReceived) {
-    inputMessageTiming = getInt(commandReceived, 3, 4);
+    inputMessageTiming = getHexInt(commandReceived, 3, 4);
     ok();
 }
 

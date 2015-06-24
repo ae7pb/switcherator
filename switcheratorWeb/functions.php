@@ -275,7 +275,8 @@ function existingNewRadio($name = "", $description = "", $location = "", $freq) 
     $returnArray = array();
     exec("nrfcl -t $freq -r $freq gi", $returnArray);
     if (!isset($returnArray[0]) or strpos($returnArray[0], "ok") === false) {
-        echo "No radio communication!";
+        echo "No radio communication!<br/>";
+        print_r($returnArray);
         return false;
     }
     $returnString = "";

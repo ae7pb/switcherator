@@ -129,6 +129,26 @@ function processNewRadio() {
     return newRadio($name, $description, $location);
 }
 
+// Process radio that already has its own channel
+function processExistingRadio() {
+    $name = $_POST['name'];
+    if(isset($_POST['description'])) {
+        $description = $_POST['description'];
+    } else {
+        $description = "";
+    }
+    if(isset($_POST['location'])) {
+        $location = $_POST['location'];
+    } else {
+        $location = "";
+    }
+    $channel = $_POST['channel'];
+    if (preg_match('/^[a-zA-Z0-9:-]+$/', $channel) != 1)
+        return "Invalid channel.";
+    include_once('functions.php');
+    return existingNewRadio($name, $description, $location, $channel);
+}
+
 function updateRadio() {
     include_once('functions.php');
     return processRadio($_POST['radioID']);
