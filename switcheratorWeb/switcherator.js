@@ -583,7 +583,7 @@ function radioChangeTweakSubmit(event) {
     tweak = parseInt(tweak);
     tweak = tweak.toString(10);
     if (tweak == "NaN" || tweak > 9999 || tweak < -999) {
-        showError(wordsToTranslate.tweakChangeError);
+        showError(wordsToTranslate.changeError);
         if (debugMePlease == 1) {
             $("#debugSection").html(wordsToTranslate.invalidAmount);
             $("#debugSection").show();
@@ -619,7 +619,7 @@ function radioColorChangeSpeedSubmit(event) {
     var ccSpeed = $("#ccSpeed").val();
     ccSpeed = parseInt(ccSpeed);
     if (ccSpeed < 1 || ccSpeed > 9999) {
-        showError(wordsToTranslate.ccsChangeError);
+        showError(wordsToTranslate.changeError);
         $("#debugSection").html(wordsToTranslate.invalidAmount);
         $("#debugSection").show();
         resetOnClick = 1;
@@ -634,13 +634,70 @@ function radioColorChangeSpeedSubmit(event) {
 
 
 function radioChangeHueSpeed() {
+    resetEdit();
+    var renderObject = {
+        topMessage: wordsToTranslate.hueSpeedMessage,
+        topLeft: wordsToTranslate.hsInput,
+        topRight: "<input id=hueSpeed value=" + parseInt(radioSettings.hueSpeed, 16) + " onKeyPress=radioColorHueSpeedSubmit(event); />",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<input type=button value=Submit onClick=radioColorHueSpeedSubmit(event) />"
+    }
+    htmlOutput = templateRender("#oneByTwoByTwo", renderObject);
+    $("#individualDetailEdit").append(htmlOutput);
+}
 
+function radioColorHueSpeedSubmit(event) {
+    if (event.keyCode != 13 && event.keyCode != 0)
+        return;
+    var hueSpeed = $("#hueSpeed").val();
+    hueSpeed = parseInt(hueSpeed);
+    if (hueSpeed < 1 || hueSpeed > 99) {
+        showError(wordsToTranslate.changeError);
+        $("#debugSection").html(wordsToTranslate.invalidAmount);
+        $("#debugSection").show();
+        resetOnClick = 1;
+        return;
+    }
+    hueSpeed = hueSpeed.toString();
+    var radioCommand = "HS:" + hueSpeed;
+    radioID = radioSettings.id;
+    radioCommandResult = '';
+    postRadioCommand(radioCommand, radioID);
 }
 
 
 function radioChangeInputTiming() {
-
+    resetEdit();
+    var renderObject = {
+        topMessage: wordsToTranslate.inputTimingMessage,
+        topLeft: wordsToTranslate.itMessage,
+        topRight: "<input id=inputTimingSpeed value=" + parseInt(radioSettings.inputMessageTiming, 16) + " onKeyPress=radioChangeInputTimingSubmit(event); />",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<input type=button value=Submit onClick=radioChangeInputTimingSubmit(event) />"
+    }
+    htmlOutput = templateRender("#oneByTwoByTwo", renderObject);
+    $("#individualDetailEdit").append(htmlOutput);
 }
+
+function radioChangeInputTimingSubmit(event) {
+    if (event.keyCode != 13 && event.keyCode != 0)
+        return;
+    var inputTimingSpeed = $("#inputTimingSpeed").val();
+    inputTimingSpeed = parseInt(inputTimingSpeed);
+    if (inputTimingSpeed < 1 || inputTimingSpeed > 9999) {
+        showError(wordsToTranslate.changeError);
+        $("#debugSection").html(wordsToTranslate.invalidAmount);
+        $("#debugSection").show();
+        resetOnClick = 1;
+        return;
+    }
+    inputTimingSpeed = inputTimingSpeed.toString();
+    var radioCommand = "IT:" + inputTimingSpeed;
+    radioID = radioSettings.id;
+    radioCommandResult = '';
+    postRadioCommand(radioCommand, radioID);
+}
+
 
 function addNewRadio() {
 
