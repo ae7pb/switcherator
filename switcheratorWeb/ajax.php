@@ -2,8 +2,8 @@
 
 // if we are supressing radio output
 global $debug;
-$debug = true;
-//$debug = false;
+//$debug = true;
+$debug = false;
 
 global $db;
 $db = new SQLite3('../myradiodb.php');
@@ -31,7 +31,6 @@ function getRadios() {
  */
 
 function radioDetails() {
-    sleep(1);
     $radioID = intval($_GET['radioID']);
     global $db;
     // check if the radio is valid
@@ -74,15 +73,14 @@ function radioDetails() {
 
 // gets and does a command to the radio
 function sendRadioCommand() {
-    sleep(1);
     $command = $_POST['command'];
     $radioID = intval($_POST['radioID']);
     if (preg_match('/^[a-zA-Z0-9:-]+$/', $command) != 1)
-        return json_encode(array("fail" => "Invalid command."));
+        return "Invalid command.";
     include_once("functions.php");
-    $response = radioCommand($radioID, $command);
+    $response = radioCommand($radioID, $command,"ok");
     if ($response == false)
-        return json_encode(array("fail" => "Invalid command!"));
+        return "Invalid command!";
     return "ok";
 }
 
@@ -112,6 +110,28 @@ function radioChangeName() {
     if ($result == false)
         die($db->lastErrorMessage());
     return "ok";
+}
+
+// Process new radio
+function processNewRadio() {
+    $name = $_POST['name'];
+    if(isset($_POST['description'])) {
+        $description = $_POST['description'];
+    } else {
+        $description = "";
+    }
+    if(isset($_POST['location'])) {
+        $location = $_POST['location'];
+    } else {
+        $location = "";
+    }
+    include_once('functions.php');
+    return newRadio($name, $description, $location);
+}
+
+function updateRadio() {
+    include_once('functions.php');
+    return processRadio($_POST['radioID']);
 }
 
 ?>

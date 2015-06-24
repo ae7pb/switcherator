@@ -2,6 +2,11 @@
 <div id=radio-{{:radioNum}} class=radios onclick='getRadioDetails({{:radioNum}})'>{{:output}}</div>
 </script>
 
+<script id="radioUpdateTemplate" type="text/x-jsrender" >
+    <div id=refreshMe class='radioSettingsChild detailField headerSection' onclick=getRadioUpdate() >
+    Click to refresh radio data</div>
+</script>
+
 <script id="radioViewSettingsTemplate" type="text/x-jsrender" >
     <div id=radioSettings-0 class='radioSettingsChild detailField headerSection' onclick=viewRadioSettings() >
     <span id=radioSettingsMsg >Click to view Settings</span></div>

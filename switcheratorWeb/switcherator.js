@@ -74,6 +74,8 @@ function navigationBar(radioText) {
  * Populate the existing radioDiv element with a new box for each radio
  */
 function radioDivs(response) {
+    if (response == null)
+        return;
     response.forEach(function (radio) {
         var output = radio.name;
         var radioNum = radio.id;
@@ -87,7 +89,7 @@ function radioDivs(response) {
 /*
  * Get the details of a certain radio
  */
-function getRadioDetails(radioNum,updateMe) {
+function getRadioDetails(radioNum, updateMe) {
     if ($("#backToRadioList").is(":visible") && updateMe !== 1)
         return;
     $("#radioList").children('div').each(function () {
@@ -144,7 +146,7 @@ function showRadioDetails(response) {
     var showMe = "";
     // we will be re-running this later so figure out what is already open and arrange
     // for it to open back up
-    if($("#radioSettings").data("hide") == "shown") {
+    if ($("#radioSettings").data("hide") == "shown") {
         showMe = viewRadioSettings;
     } else if ($("#radioSwitches").data("hide") == "shown") {
         showMe = viewRadioSwitches;
@@ -157,8 +159,14 @@ function showRadioDetails(response) {
     } else if ($("#radioTimeLimits").data("hide") == "shown") {
         showMe = viewRadioTimeLimits;
     }
-    
-    
+
+
+    data = [
+        {radioID: radioSettings.radioID, }
+    ];
+    htmlOutput = templateRender("#radioUpdateTemplate", data);
+    $("#radioRefresh").append(htmlOutput);
+
     /*
      * Radio settings boxes
      */
@@ -480,7 +488,7 @@ function showRadioDetails(response) {
     $("#radioColors").data("hide", "hidden");
     $("#radioTimeLimits").data("hide", "hidden");
     $(".radioDetails").show();
-    if(typeof(showMe) === "function") {
+    if (typeof (showMe) === "function") {
         showMe();
     }
 }
@@ -548,7 +556,7 @@ function radioChangeNameSubmit(event) {
             radioSettings.location = $("#newRadioLocation").val();
             $("#radio-" + radioSettings.id).html(radioSettings.name);
             $("#radioNameSpan").html(radioSettings.name);
-            showMessage(wordsToTranslate.nameChangeError);
+            showMessage(wordsToTranslate.nameChanged);
         } else {
             showError(wordsToTranslate.nameChangeError);
         }
@@ -699,7 +707,100 @@ function radioChangeInputTimingSubmit(event) {
 }
 
 
-function addNewRadio() {
+function autoAddNewRadio() {
+    var newRadioObject = {
+        topLeft: wordsToTranslate.radioName,
+        topRight: "<input id=newRadioName value='' onKeyPress=autoAddNewRadioSubmit(event) />",
+        secondLeft: wordsToTranslate.Description,
+        secondRight: "<textarea cols=21 rows=6 id=newRadioDescription ></textarea>",
+        thirdLeft: wordsToTranslate.Location,
+        thirdRight: "<input id=newRadioLocation value='' onKeyPress=autoAddNewRadioSubmit(event) />",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<button onClick=autoAddNewRadioSubmit(event)>Submit</button>"
+    };
+    htmlOutput = templateRender("#twoByFour", newRadioObject);
+    $("#individualDetailEdit").append(htmlOutput);
+}
+
+function autoAddNewRadioSubmit(event) {
+    console.log(event);
+    if (event.keyCode != 13 && event.keyCode != 0)
+        return;
+    if ($("#newRadioName").val == "")
+        return;
+    $("#submitWait").show();
+    console.log('hi');
+    $.post("ajax.php?function=processNewRadio",
+            {
+                name: $("#newRadioName").val(),
+                description: $("#newRadioDescription").val(),
+                location: $("#newRadioLocation").val()
+            }
+    , function (data) {
+        if (data == "ok") {
+            $("#submitWait").hide();
+            reloadRadios();
+            showMessage(wordsToTranslate.changeSuccess);
+        } else {
+            $("#submitWait").hide();
+            showError(wordsToTranslate.changeError);
+            if (debugMePlease == 1) {
+                $("#debugSection").html(data);
+                $("#debugSection").show();
+            }
+        }
+    },
+            "text"
+            ).error(function () {
+        $("#submitWait").hide();
+        showError(wordsToTranslate.nameChangeError);
+    });
+    resetOnClick = 1;
+
+}
+
+function getRadioUpdate() {
+    console.log(event);
+    if (event.keyCode != 13 && event.keyCode != 0)
+        return;
+    $("#pleaseWaitRadio").show();
+    $.post("ajax.php?function=updateRadio",
+            {
+                radioID: radioSettings.id,
+            }
+    , function (data) {
+        if (data == "ok") {
+            $("#pleaseWaitRadio").hide();
+            showMessage(wordsToTranslate.changeSuccess);
+        } else {
+            $("#pleaseWaitRadio").hide();
+            showError(wordsToTranslate.changeError);
+            if (debugMePlease == 1) {
+                $("#debugSection").html(data);
+                $("#debugSection").show();
+            }
+        }
+    },
+            "text"
+            ).error(function () {
+        $("#pleaseWaitRadio").hide();
+        showError(wordsToTranslate.changeError);
+    });
+    resetOnClick = 1;
+
+}
+
+
+function reloadRadios() {
+    $.get("ajax.php",
+            {function: "getRadios"},
+    function (response) {
+        radioDivs(response)
+    },
+            "json");
+}
+
+function manuallyAddNewRadio() {
 
 }
 
@@ -892,11 +993,11 @@ function postRadioCommand(radioCommand, radioID) {
                 command: radioCommand,
             }
     , function (data) {
-        $("#submitWait").hide();        
+        $("#submitWait").hide();
         if (data == "ok") {
             showMessage(wordsToTranslate.changeSuccess);
             resetOnClick = 1;
-            getRadioDetails(radioID,1);
+            getRadioDetails(radioID, 1);
         } else {
             showError(wordsToTranslate.changeError);
             resetOnClick = 1;

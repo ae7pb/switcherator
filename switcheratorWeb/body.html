@@ -1,13 +1,15 @@
 <div id="messageBar" class="messageBar" ></div>
 <div id="errorBar" class="errorBar" ></div>
 <div id="navBar" class="navigation">
-    <div id="newRadio" class="subNav" onClick="addNewRadio()" >Add New Radio</div>
+    <div id="newRadio" class="subNav" onClick="autoAddNewRadio()" >Automatically add new radio</div>
+    <div id="newRadio" class="subNav" onClick="manuallyAddNewRadio()" >Manually add new radio</div>    
 </div>
-<br/>
+<br/><br/><br/>
 <div id="backToRadioList" class="goBack" onclick="goBackToRadioList();">Click to return to radio list.</div>
 <div id="radioList" class="normal"></div>
 <div id="pleaseWaitRadio" class="loading"></div>
 <div id="radioDetails" class="radioDetails">
+    <div id="radioRefresh" class="detailContainer radioDetails"></div>
     <div id="radioSettings" class="detailContainer radioDetails"></div>
     <div id="radioSwitches" class="detailContainer radioDetails"></div>
     <div id="radioPrograms" class="detailContainer radioDetails"></div>
@@ -18,8 +20,8 @@
 </div>
 <br/>
 <div class="bottomContainer" >
-<div id="individualDetailEdit" class="editSection" ></div>
+    <div id="individualDetailEdit" class="editSection" ></div>
 
-<div id="debugSection" class="debugSection" ></div>
+    <div id="debugSection" class="debugSection" ></div>
 
 </div>

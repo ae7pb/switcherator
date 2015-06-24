@@ -1,15 +1,13 @@
 <?php
 
-
 /*
  * Run a radio command. Either returns the array output from the command
  * or if you specify a desiredLine it just sends that line.
  */
 
-
 function radioCommand($radioID, $command, $desiredLine = "", $shortResponse = 0) {
     global $debug;
-    if($debug == true)
+    if ($debug == true)
         return true;
     global $db;
     $statement = $db->prepare("SELECT * FROM radios WHERE id = :id");
@@ -59,7 +57,7 @@ function processRadio($radioID) {
             $lineArray = explode("-", $line);
             $thisNumber = hexdec(substr($lineArray[0], -2));
             $radioOutput[$thisNumber] = $line;
-            if (strpos($lineArray[0], "END") === 0 and $thisNumber == count($radioOutput)) {
+            if (strpos($lineArray[0], "END") === 0 and ( $thisNumber + 1) == count($radioOutput)) {
                 $reachedTheEnd = 1;
                 $tries = 5;
             }
@@ -93,13 +91,15 @@ function processRadio($radioID) {
     }
     // TODO: use bind to make these sql entries safe
     $stuff = explode("|", $misc);
-    $sql = "update radios set clockTweak = \"{$stuff[0]}\", daylightSavingsStartMonth = \"{$stuff[1]}\", "
-            . "daylightSavingsStartDay = \"{$stuff[2]}\", daylightSavingsStopMonth = \"{$stuff[3]}\", "
-            . "daylightSavingsStopDay = \"{$stuff[4]}\", pwmDirection = \"{$stuff[5]}\", "
-            . "inputMessageTiming = \"{$stuff[6]}\", hueSpeed = \"{$stuff[7]}\", "
-            . "colorChangeSpeed = \"{$stuff[8]}\", brightness = \"{$stuff[9]}\" where id = $radioID";
-    if (!$db->exec($sql))
+    $sql = "update radios set clockTweak = '{$stuff[0]}', daylightSavingsStartMonth = '{$stuff[1]}', "
+            . "daylightSavingsStartDay = '{$stuff[2]}', daylightSavingsStopMonth = '{$stuff[3]}', "
+            . "daylightSavingsStopDay = '{$stuff[4]}', pwmDirection = '{$stuff[5]}', "
+            . "inputMessageTiming = '{$stuff[6]}', hueSpeed = '{$stuff[7]}', "
+            . "colorChangeSpeed = '{$stuff[8]}' where id = $radioID";
+    if (!$db->exec($sql)) {
         echo $db->lastErrorMsg();
+        echo " updating radios<br>";
+    }
     $switchDetails = str_split($switches, 4);
     for ($x = 0; $x < count($switchDetails); $x++) {
         $thisSwitch = str_split($switchDetails[$x], 2);
@@ -107,12 +107,16 @@ function processRadio($radioID) {
         $thisSwitchPWM = hexdec($thisSwitch[1]);
         $sql = "insert or ignore into switches (radioID, switchNumber, switchStuff, switchPWM) values " .
                 "($radioID, $x, $thisSwitchStuff, $thisSwitchPWM)";
-        if (!$db->exec($sql))
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
-        $sql = "update switches set switchStuff = $thisSwitchStuff, switchBright = $thisSwitchBright, " .
+            echo " at switches 1<br/>$sql<br/>";
+        }
+        $sql = "update switches set switchStuff = $thisSwitchStuff, " .
                 "switchPWM = $thisSwitchPWM where radioID = $radioID and switchNumber = $x";
-        if (!$db->exec($sql))
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
+            echo " at switches 2<br/>$sql<br/>";
+        }
     }
     $programDetails = str_split($programs, 20);
     for ($x = 0; $x < count($programDetails); $x++) {
@@ -130,13 +134,17 @@ function processRadio($radioID) {
         }
         $thisRollover = hexdec($thisProgram[9]);
         $sql = "insert or ignore into programs (radioID, programNumber, days, time, duration, switches, rollover) values " .
-                "($radioID, $x, $thisDays, $thisStart, $thisDuration, \"$thisSwitches\", $thisRollover)";
-        if (!$db->exec($sql))
+                "('$radioID', '$x', '$thisDays', '$thisStart', '$thisDuration', '$thisSwitches', '$thisRollover')";
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
-        $sql = "update programs set days = $thisDays, time = $thisStart, duration = $thisDuration, switches = " .
-                "\"$thisSwitches\", rollover = $thisRollover where radioID = $radioID and programNumber = $x";
-        if (!$db->exec($sql))
+            echo " at programs 1<br/>$sql<br/>";
+        }
+        $sql = "update programs set days = '$thisDays', time = '$thisStart', duration = '$thisDuration', switches = " .
+                "'$thisSwitches', rollover = '$thisRollover' where radioID = '$radioID' and programNumber = '$x'";
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
+            echo " at programs 2<br/>$sql<br/>";
+        }
     }
     $inputDetails = str_split($inputs, 16);
     for ($x = 0; $x < count($inputDetails); $x++) {
@@ -150,30 +158,37 @@ function processRadio($radioID) {
         $thisWhichRGB = hexdec($thisInput[7]);
         $sql = "insert or ignore into inputs (radioID, inputNumber, pinStuff, lowPercent, highPercent, " .
                 "whichSwitchOrProgram, duration, pollTime, whichRGB) values " .
-                "($radioID, $x, $thisPinStuff, $thisLowPercent, $thisHighPercent, " .
-                "$thisWhichSwitchOrProgram, $thisDuration, $thisPollTime, $thisWhichRGB)";
-        if (!$db->exec($sql))
+                "('$radioID', '$x', '$thisPinStuff', '$thisLowPercent', '$thisHighPercent', " .
+                "'$thisWhichSwitchOrProgram', '$thisDuration', '$thisPollTime', '$thisWhichRGB')";
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
-        $sql = "update inputs set pinStuff = $thisPinStuff, lowPercent = $thisLowPercent, highPercent = " .
-                "$thisHighPercent, whichSwitchOrProgram = $thisWhichSwitchOrProgram, duration = $thisDuration, " .
-                "pollTime = $thisPollTime, whichRGB = $thisWhichRGB where radioID = $radioID and inputNumber = $x";
-        if (!$db->exec($sql))
+            echo " at inputs 1<br/>$sql<br/>";
+        }
+        $sql = "update inputs set pinStuff = '$thisPinStuff', lowPercent = '$thisLowPercent', highPercent = " .
+                "'$thisHighPercent', whichSwitchOrProgram = $thisWhichSwitchOrProgram, duration = $thisDuration, " .
+                "pollTime = '$thisPollTime', whichRGB = '$thisWhichRGB' where radioID = '$radioID' and inputNumber = '$x'";
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
+            echo " at inputs 2<br/>$sql<br/>";
+        }
     }
     $timeLimitsDetails = str_split($timeLimits, 14);
     for ($x = 0; $x < count($timeLimitsDetails); $x++) {
-        $thisTimeLimit = str_split($timeLimitsDetails[$x]);
-        $thisStartTime = hexdec(substr($timeLimitDetails[$x]),0,6);
-        $thisStopTime = hexdec(substr($timeLimitDetails[$x]),6,6);
-        $thisDays = hexdec(substr($timeLimitDetails[$x]),12,2);
+        $thisStartTime = hexdec(substr($timeLimitsDetails[$x], 0, 6));
+        $thisStopTime = hexdec(substr($timeLimitsDetails[$x], 6, 6));
+        $thisDays = hexdec(substr($timeLimitsDetails[$x], 12, 2));
         $sql = "insert or ignore into timeLimits (radioID, limitNumber, startTime, stopTime, " .
-                "days) values ($radioID, $x, $thisStartTime, $thisStopTime, $thisDays)";
-        if (!$db->exec($sql))
+                "days) values ('$radioID', '$x', '$thisStartTime', '$thisStopTime', '$thisDays')";
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
-        $sql = "update timeLimits set startTime = $thisStartTime, stopTime = $thisStopTime, " .
-                "days = $thisDays where radioID = $radioID and limitNumber = $x";
-        if (!$db->exec($sql))
+            echo " at timeLimits 1<br/>$sql<br/>";
+        }
+        $sql = "update timeLimits set startTime = '$thisStartTime', stopTime = '$thisStopTime', " .
+                "days = '$thisDays' where radioID = '$radioID' and limitNumber = '$x'";
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
+            echo " at timeLimits 2<br/>$sql<br/>";
+        }
     }
     $colorChangeDetails = str_split($colorChanges, 7);
     for ($x = 0; $x < count($colorChangeDetails); $x++) {
@@ -187,14 +202,18 @@ function processRadio($radioID) {
             $thisChangeable = 0;
         $sql = "insert or ignore into colorChanges (radioID, colorChangeNumber, red, green, blue, "
                 . "ifChangeable) values ($radioID, $x, $thisRed, $thisGreen, $thisBlue, $thisChangeable)";
-        if (!$db->exec($sql))
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
+            echo " at colorchanges 1<br/>$sql<br/>";
+        }
         $sql = "update colorchanges set red = $thisRed, green = $thisGreen, blue = $thisBlue, "
                 . "ifChangeable = $thisChangeable where radioID = $radioID and colorChangeNumber = $x";
-        if (!$db->exec($sql))
+        if (!$db->exec($sql)) {
             echo $db->lastErrorMsg();
+            echo " at colorchanges 2<br/>$sql<br/>";
+        }
     }
-    return true;
+    return "ok";
 }
 
 // Get the basic information of a new radio and assign it its very own address
@@ -311,7 +330,6 @@ function existingNewRadio($name = "", $description = "", $location = "", $freq) 
     $result = $statement->execute();
     if (!$result)
         echo $db->lastErrorMsg();
-    echo "Success<br/>";
     $radioID = $db->lastInsertRowID();
     // save setup
     $command = "nrfcl -t $freq -r $freq SA";
@@ -322,7 +340,7 @@ function existingNewRadio($name = "", $description = "", $location = "", $freq) 
     // get info from the radio
     processRadio($radioID);
 
-    return true;
+    return "ok";
 }
 
 // Will create the database if it isn't already there
