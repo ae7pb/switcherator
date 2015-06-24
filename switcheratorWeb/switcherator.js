@@ -685,8 +685,8 @@ function radioChangeInputTiming() {
     var renderObject = {
         topMessage: wordsToTranslate.inputTimingMessage,
         topLeft: wordsToTranslate.itMessage,
-        topRight: "<input id=inputTimingSpeed value=" + parseInt(radioSettings.inputMessageTiming, 16) + 
-            " onKeyDown=radioChangeInputTimingSubmit(event); />",
+        topRight: "<input id=inputTimingSpeed value=" + parseInt(radioSettings.inputMessageTiming, 16) +
+                " onKeyDown=radioChangeInputTimingSubmit(event); />",
         bottomLeft: "&nbsp;",
         bottomRight: "<input type=button value=Submit onClick=radioChangeInputTimingSubmit(event) />"
     }
@@ -749,7 +749,7 @@ function autoAddNewRadioSubmit(event) {
             $("#submitWait").hide();
             reloadRadios();
             showMessage(wordsToTranslate.changeSuccess);
-             $("individualDetailEdit").empty();
+            $("individualDetailEdit").empty();
         } else {
             $("#submitWait").hide();
             showError(wordsToTranslate.changeError);
@@ -778,7 +778,7 @@ function getRadioUpdate() {
         if (data == "ok") {
             $("#pleaseWaitRadio").hide();
             showMessage(wordsToTranslate.changeSuccess);
-            getRadioDetails(radioID,1);
+            getRadioDetails(radioID, 1);
         } else {
             $("#pleaseWaitRadio").hide();
             showError(wordsToTranslate.changeError);
@@ -832,7 +832,7 @@ function manuallyAddNewRadioSubmit(event) {
         return;
     if ($("#newRadioName").val == "")
         return;
-    if ($("#newRadioChannel").val == "" ) {
+    if ($("#newRadioChannel").val == "") {
         showError(wordsToTranslate.invalidChannel);
         resetOnClick = 1;
         return;
@@ -840,12 +840,12 @@ function manuallyAddNewRadioSubmit(event) {
     var text = $("#newRadioChannel").val();
     var reg = /^[a-zA-Z0-9:-]+$/;
     var match = text.match(reg);
-    if(match == null) {
+    if (match == null) {
         showError(wordsToTranslate.invalidChannel);
         resetOnClick = 1;
         return;
     }
- 
+
     $("#submitWait").show();
     $.post("ajax.php?function=processExistingRadio",
             {
@@ -905,8 +905,80 @@ function viewRadioSwitches() {
 }
 
 function addEditSwitch(switchID) {
-
+    resetEdit();
+    // TODO: figure out switch fields here
+    var addEditSwitchObject = {
+        topMessage: wordsToTranslate.switchMessage,
+        topLeft: wordsToTranslate.switchType,
+        switchTypes: [
+            {typeIndex: 0, type: wordsToTranslate.switchSwitch, selected: '', },
+            {typeIndex: 1, type: wordsToTranslate.switchSingleColor, selected: '', },
+            {typeIndex: 2, type: wordsToTranslate.switchSmoothHue, selected: '', },
+            {typeIndex: 3, type: wordsToTranslate.colorRotation, selected: '', },
+        ],
+        secondLeft: wordsToTranslate.portPin,
+        ports: [
+            {portIndex: 0, port: "PORTA", selected: ''},
+            {portIndex: 1, port: "PORTB", selected: ''},
+            {portIndex: 2, port: "PORTC", selected: ''},
+            {portIndex: 3, port: "PORTD", selected: ''},
+            {portIndex: 4, port: "PORTE", selected: ''},
+            {portIndex: 5, port: "PORTF", selected: ''},
+            {portIndex: 6, port: "PORTG", selected: ''},
+        ],
+        pins: [
+            {pin: 0, selected: ''},
+            {pin: 1, selected: ''},
+            {pin: 2, selected: ''},
+            {pin: 3, selected: ''},
+            {pin: 4, selected: ''},
+            {pin: 5, selected: ''},
+            {pin: 6, selected: ''},
+            {pin: 7, selected: ''},
+        ],
+        hiLo: [
+            {pinValue: "high", selected: ''},
+            {pinValue: "low", selected: ''},
+        ],
+        thirdLeft: wordsToTranslate.colorChangeNumber,
+        thirdRight: "<input id=switchPWMColor value='' onKeyDown=addEditSwitchSubmit(event) />",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<button onClick=addEditSwitchSubmit(event)>Submit</button>"
+    };
+    if (switchID != "new") {
+        var switchStuff = radioSwitches[switchID].switchStuff;
+        var switchPWM = radioSwitches[switchID].switchPWM;
+        switch(switchStuff){
+            case 200: //pwm
+            case 201: //hue
+            case 202: //color change
+            default:
+            // todo: you are here
+        }
+    }
+    htmlOutput = templateRender("#switchDetailForm", addEditSwitchObject);
+    $("#individualDetailEdit").append(htmlOutput);
+    $("#newRadioName").focus();
 }
+
+// changes the information in the form when you choose which type of switch
+function changeSwitchData(data) {
+    var value = data.value;
+    switch (value) {
+        case "0":
+            $(".switchHide").hide();
+            $(".switchSecondRow").show();
+            break;
+        case "1":
+            $(".switchHide").hide();
+            $(".switchThirdRow").show();
+            break;
+        default:
+            $(".switchHide").hide();
+            break;
+    }
+}
+
 
 /**********************************************************
  * 

@@ -68,3 +68,45 @@
 </div>
 </script>
 
+<script id="switchDetailForm" type="text/x-jsrender" >
+<div id="detailEditDiv" class="detailEdit centerArea" >
+    {{:preTable}}
+    <table class="detailTable">
+        <tr class="detailTable">
+            <td class="center" colspan=2 >{{:topMessage}}</td>
+        </tr>
+        <tr class="detailTable switchTopRow" id="" >
+            <td class="left">{{:topLeft}}</td>
+            <td class="right"><select id=switchType onChange=changeSwitchData(this) >
+            {{for switchTypes}}
+            <option value="{{:typeIndex}}" {{:selected}} >{{:type}}</option>
+            {{/for}}
+                </select></td>
+        </tr>
+        <tr class="detailTable switchHide switchSecondRow" id="" >
+            <td class="left">{{:secondLeft}}</td>
+            <td class="right">
+            <select id=port >
+                {{for ports}}<option value="{{:portIndex}}" {{:selected}} >{{:port}}</option>{{/for}}
+            </select>
+            <select id=pin >
+                {{for pins}}<option value="{{:pin}}" {{:selected}} >{{:pin}}</option>{{/for}}
+            </select>
+            <select id=hiLo >
+                {{for hiLo}}<option value="{{:pinValue}}" {{:selected}} >{{:pinValue}}</option>{{/for}}
+            </select>
+            </td>
+        </tr>
+        <tr class="detailTable switchHide switchThirdRow" id="" >
+            <td class="left">{{:thirdLeft}}</td>
+            <td class="right">{{:thirdRight}}</td>
+        </tr>
+        <tr class="detailTable switchLastRow" id="" >
+            <td class="left">{{:bottomLeft}}</td>
+            <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
+        </tr>
+    </table>
+    {{:postTable}}
+</div>
+</script>
+
