@@ -164,6 +164,7 @@ function showRadioDetails(response) {
     data = [
         {radioID: radioSettings.radioID, }
     ];
+    $("#radioRefresh").html("");
     htmlOutput = templateRender("#radioUpdateTemplate", data);
     $("#radioRefresh").append(htmlOutput);
 
@@ -584,7 +585,7 @@ function radioChangeTweak() {
 // from readme
 // CT:xxxx - sets amount to adjust the timer.  15625? is default
 function radioChangeTweakSubmit(event) {
-    if (event.keyCode != 13 && event.keyCode != 0)
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
     var tweak = $("#clockTweak").val();
     // convert it to int and back to sanitize
@@ -622,7 +623,7 @@ function radioChangeColorSpeed() {
 }
 
 function radioColorChangeSpeedSubmit(event) {
-    if (event.keyCode != 13 && event.keyCode != 0)
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
     var ccSpeed = $("#ccSpeed").val();
     ccSpeed = parseInt(ccSpeed);
@@ -635,6 +636,7 @@ function radioColorChangeSpeedSubmit(event) {
     }
     ccSpeed = ccSpeed.toString();
     var radioCommand = "CH:" + ccSpeed;
+    console.log(radioCommand);
     radioID = radioSettings.id;
     radioCommandResult = '';
     postRadioCommand(radioCommand, radioID);
@@ -655,7 +657,7 @@ function radioChangeHueSpeed() {
 }
 
 function radioColorHueSpeedSubmit(event) {
-    if (event.keyCode != 13 && event.keyCode != 0)
+    if (event.keyCode != 13 && event.keyCode != 0 && event.keyCode != null)
         return;
     var hueSpeed = $("#hueSpeed").val();
     hueSpeed = parseInt(hueSpeed);
@@ -688,7 +690,7 @@ function radioChangeInputTiming() {
 }
 
 function radioChangeInputTimingSubmit(event) {
-    if (event.keyCode != 13 && event.keyCode != 0)
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
     var inputTimingSpeed = $("#inputTimingSpeed").val();
     inputTimingSpeed = parseInt(inputTimingSpeed);
@@ -723,13 +725,11 @@ function autoAddNewRadio() {
 }
 
 function autoAddNewRadioSubmit(event) {
-    console.log(event);
-    if (event.keyCode != 13 && event.keyCode != 0)
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
     if ($("#newRadioName").val == "")
         return;
     $("#submitWait").show();
-    console.log('hi');
     $.post("ajax.php?function=processNewRadio",
             {
                 name: $("#newRadioName").val(),
@@ -760,9 +760,6 @@ function autoAddNewRadioSubmit(event) {
 }
 
 function getRadioUpdate() {
-    console.log(event);
-    if (event.keyCode != 13 && event.keyCode != 0)
-        return;
     $("#pleaseWaitRadio").show();
     $.post("ajax.php?function=updateRadio",
             {
@@ -772,6 +769,7 @@ function getRadioUpdate() {
         if (data == "ok") {
             $("#pleaseWaitRadio").hide();
             showMessage(wordsToTranslate.changeSuccess);
+            getRadioDetails(radioID,1);
         } else {
             $("#pleaseWaitRadio").hide();
             showError(wordsToTranslate.changeError);
@@ -997,7 +995,7 @@ function postRadioCommand(radioCommand, radioID) {
         if (data == "ok") {
             showMessage(wordsToTranslate.changeSuccess);
             resetOnClick = 1;
-            getRadioDetails(radioID, 1);
+            getRadioUpdate();
         } else {
             showError(wordsToTranslate.changeError);
             resetOnClick = 1;

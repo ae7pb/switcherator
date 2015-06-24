@@ -2,8 +2,8 @@
 
 // if we are supressing radio output
 global $debug;
-$debug = true;
-//$debug = false;
+//$debug = true;
+$debug = false;
 
 global $db;
 $db = new SQLite3('../myradiodb.php');
