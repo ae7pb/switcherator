@@ -524,11 +524,11 @@ function radioChangeName() {
     resetEdit();
     var changeNameArray = {
         topLeft: wordsToTranslate.radioName,
-        topRight: "<input id=newRadioName value='" + radioSettings.name + "' onKeyPress=radioChangeNameSubmit(event) />",
+        topRight: "<input id=newRadioName value='" + radioSettings.name + "' onKeyDown=radioChangeNameSubmit(event) />",
         secondLeft: wordsToTranslate.Description,
         secondRight: "<textarea cols=21 rows=6 id=newRadioDescription >" + radioSettings.description + "</textarea>",
         thirdLeft: wordsToTranslate.Location,
-        thirdRight: "<input id=newRadioLocation value='" + radioSettings.location + "' onKeyPress=radioChangeNameSubmit(event) />",
+        thirdRight: "<input id=newRadioLocation value='" + radioSettings.location + "' onKeyDown=radioChangeNameSubmit(event) />",
         bottomLeft: "&nbsp;",
         bottomRight: "<button onClick=radioChangeNameSubmit(event)>Submit</button>"
     };
@@ -573,7 +573,7 @@ function radioChangeTweak() {
     var changeTweakArray = {
         topMessage: wordsToTranslate.clockTweakMessage,
         topLeft: wordsToTranslate.tweakAdjust,
-        topRight: "<input id=clockTweak value=0 onKeyPress=radioChangeTweakSubmit(event); />",
+        topRight: "<input id=clockTweak value=0 onKeyDown=radioChangeTweakSubmit(event); />",
         bottomLeft: "&nbsp;",
         bottomRight: "<input type=button value=Submit onClick=radioChangeTweakSubmit(event) />"
     }
@@ -613,7 +613,7 @@ function radioChangeColorSpeed() {
     var renderObject = {
         topMessage: wordsToTranslate.colorChangeSpeedMessage,
         topLeft: wordsToTranslate.ccsInput,
-        topRight: "<input id=ccSpeed value=" + parseInt(radioSettings.colorChangeSpeed, 16) + " onKeyPress=radioColorChangeSpeedSubmit(event); />",
+        topRight: "<input id=ccSpeed value=" + parseInt(radioSettings.colorChangeSpeed, 16) + " onKeyDown=radioColorChangeSpeedSubmit(event); />",
         bottomLeft: "&nbsp;",
         bottomRight: "<input type=button value=Submit onClick=radioColorChangeSpeedSubmit(event) />"
     }
@@ -646,7 +646,7 @@ function radioChangeHueSpeed() {
     var renderObject = {
         topMessage: wordsToTranslate.hueSpeedMessage,
         topLeft: wordsToTranslate.hsInput,
-        topRight: "<input id=hueSpeed value=" + parseInt(radioSettings.hueSpeed, 16) + " onKeyPress=radioColorHueSpeedSubmit(event); />",
+        topRight: "<input id=hueSpeed value=" + parseInt(radioSettings.hueSpeed, 16) + " onKeyDown=radioColorHueSpeedSubmit(event); />",
         bottomLeft: "&nbsp;",
         bottomRight: "<input type=button value=Submit onClick=radioColorHueSpeedSubmit(event) />"
     }
@@ -679,7 +679,7 @@ function radioChangeInputTiming() {
     var renderObject = {
         topMessage: wordsToTranslate.inputTimingMessage,
         topLeft: wordsToTranslate.itMessage,
-        topRight: "<input id=inputTimingSpeed value=" + parseInt(radioSettings.inputMessageTiming, 16) + " onKeyPress=radioChangeInputTimingSubmit(event); />",
+        topRight: "<input id=inputTimingSpeed value=" + parseInt(radioSettings.inputMessageTiming, 16) + " onKeyDown=radioChangeInputTimingSubmit(event); />",
         bottomLeft: "&nbsp;",
         bottomRight: "<input type=button value=Submit onClick=radioChangeInputTimingSubmit(event) />"
     }
@@ -710,11 +710,11 @@ function radioChangeInputTimingSubmit(event) {
 function autoAddNewRadio() {
     var newRadioObject = {
         topLeft: wordsToTranslate.radioName,
-        topRight: "<input id=newRadioName value='' onKeyPress=autoAddNewRadioSubmit(event) />",
+        topRight: "<input id=newRadioName value='' onKeyDown=autoAddNewRadioSubmit(event) />",
         secondLeft: wordsToTranslate.Description,
         secondRight: "<textarea cols=21 rows=6 id=newRadioDescription ></textarea>",
         thirdLeft: wordsToTranslate.Location,
-        thirdRight: "<input id=newRadioLocation value='' onKeyPress=autoAddNewRadioSubmit(event) />",
+        thirdRight: "<input id=newRadioLocation value='' onKeyDown=autoAddNewRadioSubmit(event) />",
         bottomLeft: "&nbsp;",
         bottomRight: "<button onClick=autoAddNewRadioSubmit(event)>Submit</button>"
     };
