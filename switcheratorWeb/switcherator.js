@@ -208,6 +208,7 @@ function showRadioDetails(response) {
                 // 200 = single color pwm
                 textColor = "black";
                 colorNum = parseInt(thisSwitch.switchPWM, 10);
+                if(radioColors[colorNum] != null) {
                 red = parseInt(radioColors[colorNum]["red"]);
                 green = parseInt(radioColors[colorNum]["green"]);
                 blue = parseInt(radioColors[colorNum]["blue"]);
@@ -215,6 +216,9 @@ function showRadioDetails(response) {
                     textColor = "white";
                 switchColor = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
                         ("0" + blue.toString(16)).substr(-2);
+            } else {
+                switchColor = "No color set";
+            }
                 switchArray.push({colorNum: colorNum, switchID: thisSwitch.id, switchNumber: thisSwitch.switchNumber,
                     switchPWM: thisSwitch.switchPWM, switchColor: switchColor, textColor: textColor, switchType: switchString});
             } else {
