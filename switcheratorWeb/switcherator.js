@@ -5,7 +5,6 @@
  * Creative Commons Attribution
  */
 
-// TODO: Show menu for new radio
 
 
 
@@ -20,7 +19,6 @@ var radioColors;
 var radioTimeLimits;
 var ports = ["PORTA", "PORTB", "PORTC", "PORTD", "PORTE", "PORTF", "PORTG"];
 var resetOnClick = 0;
-var radioCommandResult;
 var debugMePlease = 1;
 
 /*
@@ -480,7 +478,10 @@ function showRadioDetails(response) {
     htmlOutput = templateRender("#radioViewTimeLimitTemplate", timeLimitArray);
     $("#radioTimeLimits").append(htmlOutput);
 
-
+    // if we have maxed out on the switches then we need to hide the new switch form
+    if (radioSwitches.length == radioSettings.switchCount) {
+        $("#radioSwitches-n").hide();
+    }
 
 
     $("#radioSettings").data("hide", "hidden");
@@ -605,7 +606,6 @@ function radioChangeTweakSubmit(event) {
     }
     var radioCommand = "CT:" + tweak;
     radioID = radioSettings.id;
-    radioCommandResult = '';
     postRadioCommand(radioCommand, radioID);
 }
 
@@ -641,7 +641,6 @@ function radioColorChangeSpeedSubmit(event) {
     ccSpeed = ccSpeed.toString(16);
     var radioCommand = "CH:" + ccSpeed;
     radioID = radioSettings.id;
-    radioCommandResult = '';
     postRadioCommand(radioCommand, radioID);
 }
 
@@ -675,7 +674,6 @@ function radioColorHueSpeedSubmit(event) {
     hueSpeed = hueSpeed.toString(16);
     var radioCommand = "HS:" + hueSpeed;
     radioID = radioSettings.id;
-    radioCommandResult = '';
     postRadioCommand(radioCommand, radioID);
 }
 
@@ -710,7 +708,6 @@ function radioChangeInputTimingSubmit(event) {
     inputTimingSpeed = inputTimingSpeed.toString(16);
     var radioCommand = "IT:" + inputTimingSpeed;
     radioID = radioSettings.id;
-    radioCommandResult = '';
     postRadioCommand(radioCommand, radioID);
 }
 
@@ -937,21 +934,22 @@ function addEditSwitch(switchID) {
             {pin: 7, selected: ''},
         ],
         hiLo: [
-            {pinValue: "high", selected: ''},
-            {pinValue: "low", selected: ''},
+            {pinID: 1, pinValue: "high", selected: ''},
+            {pinID: 0, pinValue: "low", selected: ''},
         ],
         thirdLeft: wordsToTranslate.colorChangeNumber,
-        thirdRight: "<input id=switchPWMColor value='' onKeyDown=addEditSwitchSubmit(event) />",
+        thirdRight: "<input id='switchPWMColor' onKeyDown=\"addEditSwitchSubmit(event,'" + switchID + "' )\" >",
         bottomLeft: "&nbsp;",
-        bottomRight: "<button onClick=addEditSwitchSubmit(event)>Submit</button>"
+        bottomRight: "<button onClick=addEditSwitchSubmit(event,'" + switchID + "') >Submit</button>",
+        switchID: switchID,
     };
-   htmlOutput = templateRender("#switchDetailForm", addEditSwitchObject);
+    htmlOutput = templateRender("#switchDetailForm", addEditSwitchObject);
     $("#individualDetailEdit").append(htmlOutput);
     $("#newRadioName").focus();
     if (switchID != "new") {
         var switchStuff = radioSwitches[switchID].switchStuff;
         var switchPWM = radioSwitches[switchID].switchPWM;
-        switch(switchStuff){
+        switch (switchStuff) {
             case 200: //pwm
                 $(".switchSecondRow").show();
                 $("#switchType").val(1);
@@ -974,9 +972,9 @@ function addEditSwitch(switchID) {
                 } else {
                     hiLo = 1;
                 }
-               $("#port").val(port);
-               $("#pin").val(pin);
-               $("#hiLo").val(hiLo);
+                $("#port").val(port);
+                $("#pin").val(pin);
+                $("#hiLo").val(hiLo);
         }
     }
 }
@@ -1000,36 +998,42 @@ function changeSwitchData(data) {
     }
 }
 
-function addEditSwitchSubmit() {
+// PS:P#S#H - PWM setup - p# is color change num, sw #then H=Hue, C=color change, 0=static color
+function addEditSwitchSubmit(event, switchID) {
     if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
+    // need to figure out an open switch number
+    if (switchID == "new") {
+        for (var x = 0; x < radioSettings.switchCount; x++) {
+            if (radioSwitches[x] == null) {
+                switchID = x;
+                break;
+            }
+        }
+    }
+    switchID = ("0" + switchID).slice(-2);
     var switchType = $("#switchType").val();
-// TODO; you are here;
-    
-    $("#switchType").val(1);
-                $("#switchPWMColor").val(switchPWM);
-                break;
-            case 201: //hue
-                $("#switchType").val(2);
-                break;
-            case 202: //color change
-                $("#switchType").val(3);
-                break;
-            default:
-                $("#switchType").val(0);
-                var port, getPin, pin, hiLo;
-                port = (Math.floor(thisSwitch.switchStuff / 16));
-                getPin = thisSwitch.switchStuff % 16;
-                pin = Math.floor(getPin / 2);
-                if (getPin % 2 == 0) {
-                    hiLo = 0;
-                } else {
-                    hiLo = 1;
-                }
-               $("#port").val(port);
-               $("#pin").val(pin);
-               $("#hiLo").val(hiLo);
- 
+    var radioCommand = "";
+    var pwmColor = $("#switchPWMColor").val();
+    pwmColor = ("00" + pwmColor).slice(-2);
+    radioCommand = "PS:" + pwmColor + switchID;
+    switch (switchType) {
+        case "1": // pwm single color
+            radioCommand = radioCommand + "0";
+            break;
+        case "2": // smooth hue pwm
+            radioCommand = radioCommand + "H";
+            break;
+        case "3": // color change pwm
+            radioCommand = radioCommand + "C";
+            break;
+        default: // regular switch
+            var thisPortArray = ["A", "B", "C", "D", "E", "F", "G"];
+            radioCommand = "NS:" + switchID + thisPortArray[$("#port").val()] + $("#pin").val() + $("#hiLo").val();
+            break;
+    }
+    showMessage(radioCommand);
+    postRadioCommand(radioCommand, radioID);
 }
 
 /**********************************************************
