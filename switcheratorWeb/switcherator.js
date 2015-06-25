@@ -775,7 +775,7 @@ function getRadioUpdate() {
         if (data == "ok") {
             $("#pleaseWaitRadio").hide();
             showMessage(wordsToTranslate.changeSuccess);
-            getRadioDetails(radioID, 1);
+            getRadioDetails(radioSettings.id, 1);
         } else {
             $("#pleaseWaitRadio").hide();
             showError(wordsToTranslate.changeError);
