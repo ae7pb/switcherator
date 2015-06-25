@@ -244,10 +244,11 @@ function showRadioDetails(response) {
     $("#radioSwitches").append(htmlOutput);
     htmlOutput = templateRender("#radioViewSwitchTemplate", switchArray);
     $("#radioSwitches").append(htmlOutput);
+    
+    
     /*
      * Radio programs boxes
      */
-
 
     var programDays, dayInt, programStart, hour, minute, programDuration, switchArray, programSwitches;
     var Sun, Mon, Tue, Wed, Thu, Fri, Sat;
@@ -1067,7 +1068,79 @@ function viewRadioPrograms() {
 }
 
 function addEditProgram(programID) {
+    resetEdit();
+    
+  /*  
+    var programDays, dayInt, programStart, hour, minute, programDuration, switchArray, programSwitches;
+    var Sun, Mon, Tue, Wed, Thu, Fri, Sat;
+    var programArray = [];
+    radioPrograms.forEach(function (thisProgram) {
+        // programNumber, days (0b01111111 = sun-sat), time (seconds from midnight), duration(seconds), 
+        // switches(ff=blank), rollover(next program that houses more switches)
+        dayInt = parseInt(thisProgram.days, 10);
+        if (dayInt & 0x40)
+            Sun = 1;
+        else
+            Sun = 0;
+        if (dayInt & 0x20)
+            Mon = 1;
+        else
+            Mon = 0;
+        if (dayInt & 0x10)
+            Tue = 1;
+        else
+            Tue = 0;
+        if (dayInt & 0x08)
+            Wed = 1;
+        else
+            Wed = 0;
+        if (dayInt & 0x04)
+            Thu = 1;
+        else
+            Thu = 0;
+        if (dayInt & 0x02)
+            Fri = 1;
+        else
+            Fri = 0;
+        if (dayInt & 0x01)
+            Sat = 1;
+        else
+            Sat = 0;
+        hour = Math.floor((parseInt(thisProgram.time)) / 60);
+        minute = (parseInt(thisProgram.time)) % 60;
+        programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
+        programDuration = (Math.floor((parseInt(thisProgram.duration)) / 60)).toString(10);
+        switchArray = thisProgram.switches.split(",");
+        programSwitches = "";
+        for (var x = 0; x < switchArray.length; x++) {
+            if (switchArray[x] !== "ff") {
+                if (x > 0)
+                    programSwitches += ",";
+                programSwitches += (parseInt(switchArray[x], 16)).toString(10);
+            }
+        }
+        programArray.push({
+            id: thisProgram.id,
+            programNumber: thisProgram.programNumber,
+            programStart: programStart,
+            programDuration: programDuration,
+            Sun: Sun,
+            Mon: Mon,
+            Tue: Tue,
+            Wed: Wed,
+            Thu: Thu,
+            Fri: Fri,
+            Sat: Sat,
+            programSwitches: programSwitches
+        });
 
+    });
+    $("#radioPrograms").html("");
+    htmlOutput = templateRender("#radioViewProgramsTemplate", "");
+    $("#radioPrograms").append(htmlOutput);
+    htmlOutput = templateRender("#radioViewProgramTemplate", programArray);
+    $("#radioPrograms").append(htmlOutput);
+*/
 }
 
 

@@ -110,3 +110,50 @@
 </div>
 </script>
 
+<div id="detailEditDiv" class="detailEdit centerArea" >
+    {{:preTable}}
+    <table class="detailTable">
+        <tr class="detailTable">
+            <td class="center" colspan=2 >{{:topMessage}}</td>
+        </tr>
+        <tr class="detailTable switchTopRow" id="" >
+            <td class="left">{{:topLeft}}</td>
+            <td class="right">
+                <input id="sunCheckbox" type="checkbox" {{:sunChecked}} class="programCheckbox" />Sun<br/>
+                <input id="monCheckbox" type="checkbox" {{:monChecked}} class="programCheckbox" />Mon<br/>
+                <input id="tueCheckbox" type="checkbox" {{:tueChecked}} class="programCheckbox" />Tue<br/>
+                <input id="wedCheckbox" type="checkbox" {{:wedChecked}} class="programCheckbox" />Wed<br/>
+                <input id="thuCheckbox" type="checkbox" {{:thuChecked}} class="programCheckbox" />Thu<br/>
+                <input id="friCheckbox" type="checkbox" {{:friChecked}} class="programCheckbox" />Fri<br/>
+                <input id="satCheckbox" type="checkbox" {{:satChecked}} class="programCheckbox" />Sat<br/>
+                <input id="allCheckbox" type="checkbox" {{:allChecked}} onclick="programCheckboxToggle(this)" />All<br/>
+                
+                </td>
+        </tr>
+        <tr class="detailTable switchHide switchSecondRow" id="" >
+            <td class="left">{{:secondLeft}}</td>
+            <td class="right">
+            <select id=port >
+                {{for ports}}<option value="{{:portIndex}}" {{:selected}} >{{:port}}</option>{{/for}}
+            </select>
+            <select id=pin >
+                {{for pins}}<option value="{{:pin}}" {{:selected}} >{{:pin}}</option>{{/for}}
+            </select>
+            <select id=hiLo >
+                {{for hiLo}}<option value="{{:pinID}}" {{:selected}} >{{:pinValue}}</option>{{/for}}
+            </select>
+            </td>
+        </tr>
+        <tr class="detailTable switchHide switchThirdRow" id="" >
+            <td class="left">{{:thirdLeft}}</td>
+            <td class="right">{{:thirdRight}}</td>
+        </tr>
+        <tr class="detailTable switchLastRow" id="" >
+            <td class="left">{{:bottomLeft}}</td>
+            <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
+        </tr>
+    </table>
+    {{:postTable}}
+</div>
+<script id="programDetailForm" type="text/x-jsrender" >
+</script>
