@@ -42,12 +42,12 @@
 
 <script id="radioViewSwitchTemplate" type="text/x-jsrender" >
 <div id=radioSwitches-{{:switchID}} class='radioSwitchesChild radioSwitchesSubChild detailField'
-     onClick=addEditSwitch({{:switchID}})>
+     onClick=addEditSwitch({{:switchNumber}})>
         Switch #{{:switchNumber}}<br/>
         {{if switchType == 200 }}
             Single color PWM<br/>
             color #{{:switchPWM}}
-            <span style='background-color: #{{:switchColor}}; color: {{:textColor}}' >0x{{:switchColor}}</span>
+            <span style='background-color: {{:switchColor}}; color: {{:textColor}}' >{{:switchColor}}</span>
     
             {{else switchType == 201}}
             Activate smooth hue color change
