@@ -906,11 +906,11 @@ function viewRadioSwitches() {
 
 function addEditSwitch(switchID) {
     resetEdit();
-    // TODO: figure out switch fields here
     var addEditSwitchObject = {
         topMessage: wordsToTranslate.switchMessage,
         topLeft: wordsToTranslate.switchType,
         switchTypes: [
+            {typeIndex: "x", type: wordsToTranslate.switchSelect, selected: '', },
             {typeIndex: 0, type: wordsToTranslate.switchSwitch, selected: '', },
             {typeIndex: 1, type: wordsToTranslate.switchSingleColor, selected: '', },
             {typeIndex: 2, type: wordsToTranslate.switchSmoothHue, selected: '', },
@@ -945,21 +945,42 @@ function addEditSwitch(switchID) {
         bottomLeft: "&nbsp;",
         bottomRight: "<button onClick=addEditSwitchSubmit(event)>Submit</button>"
     };
+   htmlOutput = templateRender("#switchDetailForm", addEditSwitchObject);
+    $("#individualDetailEdit").append(htmlOutput);
+    $("#newRadioName").focus();
     if (switchID != "new") {
         var switchStuff = radioSwitches[switchID].switchStuff;
         var switchPWM = radioSwitches[switchID].switchPWM;
         switch(switchStuff){
             case 200: //pwm
+                $(".switchSecondRow").show();
+                $("#switchType").val(1);
+                $("#switchPWMColor").val(switchPWM);
+                break;
             case 201: //hue
+                $("#switchType").val(2);
+                break;
             case 202: //color change
+                $("#switchType").val(3);
+                break;
             default:
-            // todo: you are here
+                $("#switchType").val(0);
+                var port, getPin, pin, hiLo;
+                port = (Math.floor(thisSwitch.switchStuff / 16));
+                getPin = thisSwitch.switchStuff % 16;
+                pin = Math.floor(getPin / 2);
+                if (getPin % 2 == 0) {
+                    hiLo = 0;
+                } else {
+                    hiLo = 1;
+                }
+               $("#port").val(port);
+               $("#pin").val(pin);
+               $("#hiLo").val(hiLo);
         }
     }
-    htmlOutput = templateRender("#switchDetailForm", addEditSwitchObject);
-    $("#individualDetailEdit").append(htmlOutput);
-    $("#newRadioName").focus();
 }
+
 
 // changes the information in the form when you choose which type of switch
 function changeSwitchData(data) {
@@ -979,6 +1000,37 @@ function changeSwitchData(data) {
     }
 }
 
+function addEditSwitchSubmit() {
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
+        return;
+    var switchType = $("#switchType").val();
+// TODO; you are here;
+    
+    $("#switchType").val(1);
+                $("#switchPWMColor").val(switchPWM);
+                break;
+            case 201: //hue
+                $("#switchType").val(2);
+                break;
+            case 202: //color change
+                $("#switchType").val(3);
+                break;
+            default:
+                $("#switchType").val(0);
+                var port, getPin, pin, hiLo;
+                port = (Math.floor(thisSwitch.switchStuff / 16));
+                getPin = thisSwitch.switchStuff % 16;
+                pin = Math.floor(getPin / 2);
+                if (getPin % 2 == 0) {
+                    hiLo = 0;
+                } else {
+                    hiLo = 1;
+                }
+               $("#port").val(port);
+               $("#pin").val(pin);
+               $("#hiLo").val(hiLo);
+ 
+}
 
 /**********************************************************
  * 

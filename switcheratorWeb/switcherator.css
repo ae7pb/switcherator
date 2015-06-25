@@ -164,3 +164,7 @@ table.detailTable  {
 #submitWait {
     display:        none;
 }
+.switchHide {
+    display: none;
+}
+
