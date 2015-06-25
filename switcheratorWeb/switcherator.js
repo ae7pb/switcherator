@@ -1032,8 +1032,7 @@ function addEditSwitchSubmit(event, switchID) {
             radioCommand = "NS:" + switchID + thisPortArray[$("#port").val()] + $("#pin").val() + $("#hiLo").val();
             break;
     }
-    showMessage(radioCommand);
-    postRadioCommand(radioCommand, radioID);
+    postRadioCommand(radioCommand, radioSettings.id);
 }
 
 /**********************************************************
