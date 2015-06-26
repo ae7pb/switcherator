@@ -214,7 +214,7 @@ function showRadioDetails(response) {
                     blue = parseInt(radioColors[colorNum]["blue"]);
                     if (red < 75 || green < 75 || blue < 75)
                         textColor = "white";
-                    switchColor = "#"+("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
+                    switchColor = "#" + ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
                             ("0" + blue.toString(16)).substr(-2);
                 } else {
                     switchColor = wordsToTranslate.noColorSet;
@@ -244,8 +244,8 @@ function showRadioDetails(response) {
     $("#radioSwitches").append(htmlOutput);
     htmlOutput = templateRender("#radioViewSwitchTemplate", switchArray);
     $("#radioSwitches").append(htmlOutput);
-    
-    
+
+
     /*
      * Radio programs boxes
      */
@@ -310,6 +310,7 @@ function showRadioDetails(response) {
             Thu: Thu,
             Fri: Fri,
             Sat: Sat,
+            dayInt: dayInt,
             programSwitches: programSwitches
         });
 
@@ -1005,7 +1006,115 @@ function changeSwitchData(data) {
 }
 
 // PS:P#S#H - PWM setup - p# is color change num, sw #then H=Hue, C=color change, 0=static color
-function addEditSwitchSubmit(event, switchID) {
+function addEditSwitchSubmit(event, programID) {
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
+        return;
+    // need to figure out an open switch number
+    if (programID == "new") {
+        for (var x = 0; x < radioSettings.programCount; x++) {
+            if (radioPrograms[x] == null) {
+                programID = x;
+                break;
+            }
+        }
+    }
+    programID = ("0" + programID).slice(-2);
+    var duraction = $("#programEditDuration").val();
+    var startTime = $("#programEditStartTime").val();
+    var switches = $("#programSwitchesSelect").val();
+    var test = $("#thuCheckbox").prop("checked");
+    console.log(test);
+    var radioCommand = "";
+    
+    
+    //postRadioCommand(radioCommand, radioSettings.id);
+}
+
+/**********************************************************
+ * 
+ * Radio Programs Area
+ * 
+ **********************************************************/
+
+
+/*
+ * Shows the sub navigation for the radio programs
+ */
+function viewRadioPrograms() {
+    if ($("#radioPrograms").data("hide") == "shown") {
+        showHeaderSections();
+        $("#detailEditDiv").remove();
+        $(".radioProgramsSubChild").hide();
+        $("#radioPrograms").data("hide", "hidden");
+        $("#radioProgramsMsg").text("Click to view programs");
+    } else {
+        hideHeaderSections();
+        $("#radioPrograms-v").show();
+        $(".radioProgramsSubChild").show();
+        $("#radioPrograms").data("hide", "shown");
+        $("#radioProgramsMsg").text("Click to hide programs");
+    }
+}
+
+function addEditProgram(programID) {
+    resetEdit();
+    var theseSwitches = [];
+    radioSwitches.forEach(function(thisSwitch) {
+        theseSwitches.push({switchNumber: thisSwitch.switchNumber});
+    });
+    if (radioPrograms[programID] != null) {
+        var Sun, Mon, Tue, Wed, Thu, Fri, Sat, all;
+        if (radioPrograms[programID].dayInt & 0x40)
+            Sun = "checked";
+        if (radioPrograms[programID].dayInt & 0x20)
+            Mon = "checked";
+        if (radioPrograms[programID].dayInt & 0x10)
+            Tue = "checked";
+        if (radioPrograms[programID].dayInt & 0x08)
+            Wed = "checked";
+        if (radioPrograms[programID].dayInt & 0x04)
+            Thu = "checked";
+        if (radioPrograms[programID].dayInt & 0x02)
+            Fri = "checked";
+        if (radioPrograms[programID].dayInt & 0x01)
+            Sat = "checked";
+        if (radioPrograms[programID].dayInt & 0x7F)
+            all = "checked";
+        var programEditObject = {
+            sunChecked: Sun,
+            monChecked: Mon,
+            tueChecked: Tue,
+            wedChecked: Wed,
+            thuChecked: Thu,
+            friChecked: Fri,
+            satChecked: Sat,
+            allChecked: all,
+            startTime: radioPrograms[programID].programStart,
+            duration: radioPrograms[programID].programDuration,
+            programNumber: radioPrograms[programID].programNumber,
+            programID: programID,
+            programSwitches: radioPrograms[programID].programSwitches,
+            topLeft: wordsToTranslate.programDaysRun,
+            secondLeft: wordsToTranslate.programStartTime,
+            thirdLeft: wordsToTranslate.programDuration,
+            fourthLeft: wordsToTranslate.programSwitches,
+        };
+    } else {
+
+        var programEditObject = {
+            programID: programID,
+            topLeft: wordsToTranslate.programDaysRun,
+            secondLeft: wordsToTranslate.programStartTime,
+            thirdLeft: wordsToTranslate.programDuration,
+            fourthLeft: wordsToTranslate.programSwitches,
+            switches: theseSwitches,
+        };
+    };
+    htmlOutput = templateRender("#programDetailForm", programEditObject);
+    $("#individualDetailEdit").append(htmlOutput);
+}
+
+function addEditProgramSubmit(event, switchID) {
     if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
     // need to figure out an open switch number
@@ -1040,109 +1149,6 @@ function addEditSwitchSubmit(event, switchID) {
     }
     postRadioCommand(radioCommand, radioSettings.id);
 }
-
-/**********************************************************
- * 
- * Radio Programs Area
- * 
- **********************************************************/
-
-
-/*
- * Shows the sub navigation for the radio programs
- */
-function viewRadioPrograms() {
-    if ($("#radioPrograms").data("hide") == "shown") {
-        showHeaderSections();
-        $("#detailEditDiv").remove();
-        $(".radioProgramsSubChild").hide();
-        $("#radioPrograms").data("hide", "hidden");
-        $("#radioProgramsMsg").text("Click to view programs");
-    } else {
-        hideHeaderSections();
-        $("#radioPrograms-v").show();
-        $(".radioProgramsSubChild").show();
-        $("#radioPrograms").data("hide", "shown");
-        $("#radioProgramsMsg").text("Click to hide programs");
-    }
-}
-
-function addEditProgram(programID) {
-    resetEdit();
-    
-  /*  
-    var programDays, dayInt, programStart, hour, minute, programDuration, switchArray, programSwitches;
-    var Sun, Mon, Tue, Wed, Thu, Fri, Sat;
-    var programArray = [];
-    radioPrograms.forEach(function (thisProgram) {
-        // programNumber, days (0b01111111 = sun-sat), time (seconds from midnight), duration(seconds), 
-        // switches(ff=blank), rollover(next program that houses more switches)
-        dayInt = parseInt(thisProgram.days, 10);
-        if (dayInt & 0x40)
-            Sun = 1;
-        else
-            Sun = 0;
-        if (dayInt & 0x20)
-            Mon = 1;
-        else
-            Mon = 0;
-        if (dayInt & 0x10)
-            Tue = 1;
-        else
-            Tue = 0;
-        if (dayInt & 0x08)
-            Wed = 1;
-        else
-            Wed = 0;
-        if (dayInt & 0x04)
-            Thu = 1;
-        else
-            Thu = 0;
-        if (dayInt & 0x02)
-            Fri = 1;
-        else
-            Fri = 0;
-        if (dayInt & 0x01)
-            Sat = 1;
-        else
-            Sat = 0;
-        hour = Math.floor((parseInt(thisProgram.time)) / 60);
-        minute = (parseInt(thisProgram.time)) % 60;
-        programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
-        programDuration = (Math.floor((parseInt(thisProgram.duration)) / 60)).toString(10);
-        switchArray = thisProgram.switches.split(",");
-        programSwitches = "";
-        for (var x = 0; x < switchArray.length; x++) {
-            if (switchArray[x] !== "ff") {
-                if (x > 0)
-                    programSwitches += ",";
-                programSwitches += (parseInt(switchArray[x], 16)).toString(10);
-            }
-        }
-        programArray.push({
-            id: thisProgram.id,
-            programNumber: thisProgram.programNumber,
-            programStart: programStart,
-            programDuration: programDuration,
-            Sun: Sun,
-            Mon: Mon,
-            Tue: Tue,
-            Wed: Wed,
-            Thu: Thu,
-            Fri: Fri,
-            Sat: Sat,
-            programSwitches: programSwitches
-        });
-
-    });
-    $("#radioPrograms").html("");
-    htmlOutput = templateRender("#radioViewProgramsTemplate", "");
-    $("#radioPrograms").append(htmlOutput);
-    htmlOutput = templateRender("#radioViewProgramTemplate", programArray);
-    $("#radioPrograms").append(htmlOutput);
-*/
-}
-
 
 /**********************************************************
  * 
