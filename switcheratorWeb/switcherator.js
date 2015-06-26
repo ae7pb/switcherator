@@ -251,7 +251,7 @@ function showRadioDetails(response) {
      */
 
     var programDays, dayInt, programStart, hour, minute, programDuration, switchArray, programSwitches;
-    var Sun, Mon, Tue, Wed, Thu, Fri, Sat;
+    var Sun, Mon, Tue, Wed, Thu, Fri, Sat, overflow;
     var programArray = [];
     radioPrograms.forEach(function (thisProgram) {
         // programNumber, days (0b01111111 = sun-sat), time (seconds from midnight), duration(seconds), 
@@ -291,12 +291,22 @@ function showRadioDetails(response) {
         programDuration = (Math.floor((parseInt(thisProgram.duration)) / 60)).toString(10);
         switchArray = thisProgram.switches.split(",");
         programSwitches = "";
+        if(parseInt(thisProgram.rollover) < 255)
+            overflow = wordsToTranslate.overflow + "#" + thisProgram.rollover;
+        else
+            overflow = "";
         for (var x = 0; x < switchArray.length; x++) {
             if (switchArray[x] !== "ff") {
                 if (x > 0)
                     programSwitches += ",";
                 programSwitches += (parseInt(switchArray[x], 16)).toString(10);
             }
+        }
+        // see if this is an overflow program
+        if(parseInt(thisProgram.time) == 0xFEFF) {
+            programStart = wordsToTranslate.overflow;
+            programDuration = wordsToTranslate.overflow;
+            Sun = Mon = Tue = Wed = Thu = Fri = Sat = "";
         }
         programArray.push({
             id: thisProgram.id,
@@ -311,7 +321,8 @@ function showRadioDetails(response) {
             Fri: Fri,
             Sat: Sat,
             dayInt: dayInt,
-            programSwitches: programSwitches
+            programSwitches: programSwitches,
+            overflow: overflow,
         });
 
     });
@@ -1059,9 +1070,10 @@ function viewRadioPrograms() {
 function addEditProgram(programID) {
     resetEdit();
     var theseSwitches = [];
-    radioSwitches.forEach(function(thisSwitch) {
-        theseSwitches.push({switchNumber: thisSwitch.switchNumber});
-    });
+    var x;
+    for(x=0;x<radioSettings.switchCount;x++) {
+        theseSwitches.push({switchNumber: x});
+    }
     if (radioPrograms[programID] != null) {
         var Sun, Mon, Tue, Wed, Thu, Fri, Sat, all;
         if (radioPrograms[programID].dayInt & 0x40)
@@ -1080,6 +1092,27 @@ function addEditProgram(programID) {
             Sat = "checked";
         if (radioPrograms[programID].dayInt & 0x7F)
             all = "checked";
+        var tempSwitchArray = [];
+        var selectedSwitches = [];
+        tempSwitchArray = radioPrograms[programID].switches.split(",");
+        tempSwitchArray.forEach(function(thisSwitch) {
+            if(parseInt(thisSwitch) < 255)
+                selectedSwitches.push(parseInt(thisSwitch));
+        });
+        if(parseInt(radioPrograms[programID].rollover) < 255) {
+            selectedSwitches = getOverflowSwitches(radioPrograms[programID].rollover, selectedSwitches);
+        }
+        selectedSwitches.forEach(function(thisSwitch) {
+            theseSwitches[thisSwitch] = {switchNumber: thisSwitch, switchSelected: "selected"};
+        });
+
+        var hour = Math.floor(parseInt(radioPrograms[programID].time)/60);
+        var minute = Math.floor(parseInt(radioPrograms[programID].time)%60);
+        var startTime = hour.toString()+":"+  ( "0" + minute.toString().substr(-2));
+        minute = Math.floor(parseInt(radioPrograms[programID].duration)/60);
+        var seconds = Math.floor(parseInt(radioPrograms[programID].duration)%60);
+        var duration = minute.toString()+":"+("0" + seconds.toString().substr(-2));
+        console.log(radioPrograms[programID]);
         var programEditObject = {
             sunChecked: Sun,
             monChecked: Mon,
@@ -1089,8 +1122,8 @@ function addEditProgram(programID) {
             friChecked: Fri,
             satChecked: Sat,
             allChecked: all,
-            startTime: radioPrograms[programID].programStart,
-            duration: radioPrograms[programID].programDuration,
+            startTime: startTime,
+            duration: duration,
             programNumber: radioPrograms[programID].programNumber,
             programID: programID,
             programSwitches: radioPrograms[programID].programSwitches,
@@ -1098,6 +1131,7 @@ function addEditProgram(programID) {
             secondLeft: wordsToTranslate.programStartTime,
             thirdLeft: wordsToTranslate.programDuration,
             fourthLeft: wordsToTranslate.programSwitches,
+            switches: theseSwitches,
         };
     } else {
 
@@ -1113,6 +1147,32 @@ function addEditProgram(programID) {
     htmlOutput = templateRender("#programDetailForm", programEditObject);
     $("#individualDetailEdit").append(htmlOutput);
 }
+
+// little helper to get us all of the overflow switches
+function getOverflowSwitches(programID,switchArray) {
+    var thisProgramID = -1;
+    for(var x = 0; x<radioPrograms.count; x++) {
+        if(radioPrograms[x].programNumber == programID) {
+            thisProgramID = x;
+            break
+        }
+    }
+    if(thisProgramID == -1)
+        return switchArray;
+    var theseSwitches = radioPrograms[thisProgramID].switches.split(",");
+    var tempSwitchArray = [];
+    tempSwitchArray = radioPrograms[thisProgramID].switches.split(",");
+    tempSwitchArray.forEach(function(thisSwitch) {
+        if(parseInt(thisSwitch) < 255)
+            switchArray.push(parseInt(thisSwitch));
+    });
+        if(parseInt(radioPrograms[thisProgramID].rollover) < 255) {
+            switchArray = getOverflowSwitches(radioPrograms[thisProgramID].rollover, switchArray);
+        }
+    return switchArray;
+} 
+ 
+
 
 function addEditProgramSubmit(event, switchID) {
     if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
