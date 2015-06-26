@@ -1017,28 +1017,40 @@ function changeSwitchData(data) {
 }
 
 // PS:P#S#H - PWM setup - p# is color change num, sw #then H=Hue, C=color change, 0=static color
-function addEditSwitchSubmit(event, programID) {
+function addEditSwitchSubmit(event, switchID) {
     if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
     // need to figure out an open switch number
-    if (programID == "new") {
-        for (var x = 0; x < radioSettings.programCount; x++) {
-            if (radioPrograms[x] == null) {
-                programID = x;
+    if (switchID == "new") {
+        for (var x = 0; x < radioSettings.switchCount; x++) {
+            if (radioSwitches[x] == null) {
+                switchID = x;
                 break;
             }
         }
     }
-    programID = ("0" + programID).slice(-2);
-    var duraction = $("#programEditDuration").val();
-    var startTime = $("#programEditStartTime").val();
-    var switches = $("#programSwitchesSelect").val();
-    var test = $("#thuCheckbox").prop("checked");
-    console.log(test);
+    var switchType = $("#switchType").val();
     var radioCommand = "";
-    
-    
-    //postRadioCommand(radioCommand, radioSettings.id);
+    var pwmColor = $("#switchPWMColor").val();
+    pwmColor = ("00" + pwmColor).slice(-2);
+    radioCommand = "PS:" + pwmColor + switchID;
+    switch (switchType) {
+        case "1": // pwm single color
+            radioCommand = radioCommand + "0";
+            break;
+        case "2": // smooth hue pwm
+            radioCommand = radioCommand + "H";
+            break;
+        case "3": // color change pwm
+            radioCommand = radioCommand + "C";
+            break;
+        default: // regular switch
+            var thisPortArray = ["A", "B", "C", "D", "E", "F", "G"];
+            radioCommand = "NS:" + switchID + thisPortArray[$("#port").val()] + $("#pin").val() + $("#hiLo").val();
+            break;
+    }
+   
+    postRadioCommand(radioCommand, radioSettings.id);
 }
 
 /**********************************************************
@@ -1076,21 +1088,21 @@ function addEditProgram(programID) {
     }
     if (radioPrograms[programID] != null) {
         var Sun, Mon, Tue, Wed, Thu, Fri, Sat, all;
-        if (radioPrograms[programID].dayInt & 0x40)
+        if (radioPrograms[programID].days & 0x40)
             Sun = "checked";
-        if (radioPrograms[programID].dayInt & 0x20)
+        if (radioPrograms[programID].days & 0x20)
             Mon = "checked";
-        if (radioPrograms[programID].dayInt & 0x10)
+        if (radioPrograms[programID].days & 0x10)
             Tue = "checked";
-        if (radioPrograms[programID].dayInt & 0x08)
+        if (radioPrograms[programID].days & 0x08)
             Wed = "checked";
-        if (radioPrograms[programID].dayInt & 0x04)
+        if (radioPrograms[programID].days & 0x04)
             Thu = "checked";
-        if (radioPrograms[programID].dayInt & 0x02)
+        if (radioPrograms[programID].days & 0x02)
             Fri = "checked";
-        if (radioPrograms[programID].dayInt & 0x01)
+        if (radioPrograms[programID].days & 0x01)
             Sat = "checked";
-        if (radioPrograms[programID].dayInt & 0x7F)
+        if (radioPrograms[programID].days & 0x7F)
             all = "checked";
         var tempSwitchArray = [];
         var selectedSwitches = [];
@@ -1112,7 +1124,6 @@ function addEditProgram(programID) {
         minute = Math.floor(parseInt(radioPrograms[programID].duration)/60);
         var seconds = Math.floor(parseInt(radioPrograms[programID].duration)%60);
         var duration = minute.toString()+":"+("0" + seconds.toString().substr(-2));
-        console.log(radioPrograms[programID]);
         var programEditObject = {
             sunChecked: Sun,
             monChecked: Mon,
@@ -1174,40 +1185,58 @@ function getOverflowSwitches(programID,switchArray) {
  
 
 
-function addEditProgramSubmit(event, switchID) {
+function addEditProgramSubmit(event, programID) {
     if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
     // need to figure out an open switch number
-    if (switchID == "new") {
-        for (var x = 0; x < radioSettings.switchCount; x++) {
-            if (radioSwitches[x] == null) {
-                switchID = x;
+    if (programID == "new") {
+        for (var x = 0; x < radioSettings.programCount; x++) {
+            if (radioPrograms[x] == null) {
+                programID = x;
                 break;
             }
         }
     }
-    switchID = ("0" + switchID).slice(-2);
-    var switchType = $("#switchType").val();
-    var radioCommand = "";
-    var pwmColor = $("#switchPWMColor").val();
-    pwmColor = ("00" + pwmColor).slice(-2);
-    radioCommand = "PS:" + pwmColor + switchID;
-    switch (switchType) {
-        case "1": // pwm single color
-            radioCommand = radioCommand + "0";
-            break;
-        case "2": // smooth hue pwm
-            radioCommand = radioCommand + "H";
-            break;
-        case "3": // color change pwm
-            radioCommand = radioCommand + "C";
-            break;
-        default: // regular switch
-            var thisPortArray = ["A", "B", "C", "D", "E", "F", "G"];
-            radioCommand = "NS:" + switchID + thisPortArray[$("#port").val()] + $("#pin").val() + $("#hiLo").val();
-            break;
+    programID = ("0" + programID).slice(-2);
+    var duration = $("#programEditDuration").val();
+    var startTime = $("#programEditStartTime").val();
+    var time = startTime.match(/(\d+)(:(\d\d))?\s*(p?)/i); 
+
+    var hours = parseInt(time[1],10);    
+    if (hours == 24 && !time[4]) {
+          hours = 0;
     }
-    postRadioCommand(radioCommand, radioSettings.id);
+    else {
+        hours += (hours < 12 && time[4])? 12 : 0;
+    }   
+    var minutes = (parseInt(time[3],10) || 0);
+    console.log(hours+":"+minutes);
+    console.log(time);
+    var dayInt = 0;
+    if($("#sunCheckbox").prop("checked"))
+        dayInt |= 0x40;
+    if($("#monCheckbox").prop("checked"))
+        dayInt |= 0x20;
+    if($("#tueCheckbox").prop("checked"))
+        dayInt |= 0x10;
+    if($("#wedCheckbox").prop("checked"))
+        dayInt |= 0x08;
+    if($("#thuCheckbox").prop("checked"))
+        dayInt |= 0x04;
+    if($("#friCheckbox").prop("checked"))
+        dayInt |= 0x02;
+    if($("#satCheckbox").prop("checked"))
+        dayInt |= 0x01;
+    dayInt = ("0" + dayInt.toString(16)).slice(-2);
+    radioCommand = "PE:"+programID
+    var switches = $("#programSwitchesSelect").val();
+    switches.forEach(function(thisSwitch) {
+        
+    });
+    
+    var radioCommand = "";
+    
+//    postRadioCommand(radioCommand, radioSettings.id);
 }
 
 /**********************************************************
