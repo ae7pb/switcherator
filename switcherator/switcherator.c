@@ -330,6 +330,9 @@ void checkCommand(char * commandReceived) {
         case 0x5049: //PI
             programDisplay(commandReceived);
             break;
+        case 0x5045: //PE
+            programEdit(commandReceived);
+            break;
         case 0x5353: //SS
             startSwitch(commandReceived);
             break;
@@ -1563,13 +1566,13 @@ void programDisplay(char * commandReceived) {
     char weekdays = 0;
     weekdays = weeklyProgram[programNumber][0];
     strcat(statusMsg, "T-");
-    itoa(hours, tempIntString, 10);
+    returnInt(hours, tempIntString);
     strcat(statusMsg, tempIntString);
     strcat(statusMsg, ":");
-    itoa(minutes, tempIntString, 10);
+    returnInt(minutes, tempIntString);
     strcat(statusMsg, tempIntString);
     strcat(statusMsg, " Dur:");
-    itoa(duration, tempLongString, 10);
+    returnInt(duration, tempLongString);
     strcat(statusMsg, tempLongString);
     strcat(statusMsg, " D:");
     char dayString[8];
@@ -1578,6 +1581,30 @@ void programDisplay(char * commandReceived) {
     sendMessage(statusMsg);
 #endif
 }
+
+// programs and such kept in EEPROM
+// 1 byte day of week mask or 0 for everyday
+// 2 byte start time (seconds in day), 2 bytes duration (seconds), 1 byte additional program
+// If more than 4 switches are desired it will roll over to an additional program
+// DssddSSSSP
+// 0123456789   
+// programEdit - directly edits a program and assums that you know what you are doing
+// PE:##ddssssddddswswswswPP - day of the week mask, start time (seconds in day), duration(seconds), 4 switches, 
+// 0123456789012345678901234       next program (if you need more than 4 switches
+// THIS FUNCTION IS TRUSTING YOU so DON'T DO IT IF YOU AREN'T COMFORTABLE
+void programEdit(char * commandReceived) {
+    int programNumber = getHexInt(commandReceived,3,2);
+    int whichCharacter;
+    int x;
+    int temp;
+    for (x = 0; x<10; x++) {
+        whichCharacter = (x*2)+ 5;
+        temp = getHexInt(commandReceived,whichCharacter,2);
+        weeklyProgram[programNumber][x] = temp;
+    }
+    ok();
+}
+
 
 void processDays(int weekdays, char * dayString) {
     dayString[0] = 0;

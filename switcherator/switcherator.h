@@ -155,6 +155,7 @@ void programSetDays(char * commandReceived);
 void programSetTime(char * commandReceived);
 void programDisplay(char * commandReceived);
 void processDays(int weekdays, char * dayString);
+void programEdit(char * commandReceived);
 int  programGetSwitches(int programNumber, char * switches);
 void startProgram(char * commandReceived);
 void startTheProgram(int programNumber, int duration,long time);
