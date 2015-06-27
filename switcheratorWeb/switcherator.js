@@ -289,21 +289,18 @@ function showRadioDetails(response) {
     minute = (parseInt(thisProgram.time)) % 60;
     programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
     programDuration = (Math.floor((parseInt(thisProgram.duration)) / 60)).toString(10);
-    switchArray = thisProgram.switches.split(",");
     programSwitches = "";
-    if(parseInt(thisProgram.rollover) < 255)
-        overflow = wordsToTranslate.overflow + "#" + thisProgram.rollover;
-    else
-        overflow = "";
-    for (var x = 0; x < switchArray.length; x++) {
-        if (switchArray[x] !== "ff") {
-            if (x > 0)
-                programSwitches += ",";
-            programSwitches += (parseInt(switchArray[x], 16)).toString(10);
-        }
+    switchArray = [];
+    switchArray = getOverflowSwitches(thisProgram.programNumber, switchArray);
+    for(var x = 0; x < switchArray.length; x++) {
+        if(x > 0)
+            programSwitches += ", ";
+        programSwitches += (parseInt(switchArray[x], 16)).toString(10);
     }
+
     // see if this is an overflow program
     if(parseInt(thisProgram.time) == 0xFEFF) {
+        return;
         programStart = wordsToTranslate.overflow;
         programDuration = wordsToTranslate.overflow;
         Sun = Mon = Tue = Wed = Thu = Fri = Sat = "";
@@ -1160,10 +1157,9 @@ function addEditProgram(programID) {
 }
 
 // little helper to get us all of the overflow switches
-// TODO: this is broken.
 function getOverflowSwitches(programID,switchArray) {
     var thisProgramID = -1;
-    for(var x = 0; x<radioPrograms.count; x++) {
+    for(var x = 0; x<radioPrograms.length; x++) {
         if(radioPrograms[x].programNumber == programID) {
             thisProgramID = x;
             break
@@ -1171,7 +1167,6 @@ function getOverflowSwitches(programID,switchArray) {
     }
     if(thisProgramID == -1)
         return switchArray;
-    var theseSwitches = radioPrograms[thisProgramID].switches.split(",");
     var tempSwitchArray = [];
     tempSwitchArray = radioPrograms[thisProgramID].switches.split(",");
     tempSwitchArray.forEach(function(thisSwitch) {
