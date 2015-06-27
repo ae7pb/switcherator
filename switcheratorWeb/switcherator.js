@@ -26,23 +26,23 @@ var debugMePlease = 1;
  */
 $(document).ready(function () {
     $.get("ajax.php",
-            {function: "getRadios"},
-    function (response) {
-        radioDivs(response)
-    },
-            "json");
+        {function: "getRadios"},
+        function (response) {
+            radioDivs(response)
+        },
+        "json");
     navigationBar(null);
 
 });
 
 $(document).on('click', function () {
     if (resetOnClick == 1)
-        resetOnClick = 2;
+    resetOnClick = 2;
     else if (resetOnClick == 2) {
         resetOnClick = 0;
         $("#messageBar").hide();
         $("#errorBar").hide();
-//        $("#detailEditDiv").remove();
+        //        $("#detailEditDiv").remove();
         $("#debugSection").hide();
     }
 });
@@ -79,10 +79,10 @@ function radioDivs(response) {
         var output = radio.name;
         var radioNum = radio.id;
         var radioListings = [
-            {radioNum: radioNum, output: output}
-        ];
-        var htmlOutput = templateRender("#radioListTemplate", radioListings);
-        $("#radioList").append(htmlOutput);
+    {radioNum: radioNum, output: output}
+    ];
+    var htmlOutput = templateRender("#radioListTemplate", radioListings);
+    $("#radioList").append(htmlOutput);
     })
 }
 /*
@@ -101,11 +101,11 @@ function getRadioDetails(radioNum, updateMe) {
     $.get("ajax.php"
             , {function: "radioDetails",
                 radioID: radioNum}
-    , function (response) {
-        showRadioDetails(response)
-    }
-    , "json"
-            );
+                , function (response) {
+                    showRadioDetails(response)
+                }
+                , "json"
+         );
 
 }
 
@@ -120,9 +120,9 @@ function goBackToRadioList() {
     $("#pleaseWaitRadio").hide();
     $("#detailEditDiv").remove();
     $(".detailField").remove()
-    $("#radioList").children('div').each(function () {
-        $(this).show();
-    })
+        $("#radioList").children('div').each(function () {
+            $(this).show();
+        })
 }
 
 
@@ -161,7 +161,7 @@ function showRadioDetails(response) {
 
 
     data = [
-        {radioID: radioSettings.radioID, }
+    {radioID: radioSettings.radioID, }
     ];
     $("#radioRefresh").html("");
     htmlOutput = templateRender("#radioUpdateTemplate", data);
@@ -180,13 +180,13 @@ function showRadioDetails(response) {
     // how long we wait before we send the next message
     var inputTiming = parseInt(radioSettings.inputMessageTiming, 16);
     var data = [
-        {clockTweak: clockTweak,
-            colorChangeSpeed: colorChangeSpeed,
-            hueSpeed: hueSpeed,
-            inputTiming: inputTiming
-        }
+    {clockTweak: clockTweak,
+        colorChangeSpeed: colorChangeSpeed,
+        hueSpeed: hueSpeed,
+        inputTiming: inputTiming
+    }
     ]
-    $("#radioSettings").html("");
+        $("#radioSettings").html("");
     htmlOutput = templateRender("#radioViewSettingsTemplate", radioSettings);
     $("#radioSettings").append(htmlOutput);
     htmlOutput = templateRender("#radioOtherSettingsTemplate", data);
@@ -213,9 +213,9 @@ function showRadioDetails(response) {
                     green = parseInt(radioColors[colorNum]["green"]);
                     blue = parseInt(radioColors[colorNum]["blue"]);
                     if (red < 75 || green < 75 || blue < 75)
-                        textColor = "white";
-                    switchColor = "#" + ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
-                            ("0" + blue.toString(16)).substr(-2);
+        textColor = "white";
+    switchColor = "#" + ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
+        ("0" + blue.toString(16)).substr(-2);
                 } else {
                     switchColor = wordsToTranslate.noColorSet;
                 }
@@ -258,72 +258,72 @@ function showRadioDetails(response) {
         // switches(ff=blank), rollover(next program that houses more switches)
         dayInt = parseInt(thisProgram.days, 10);
         if (dayInt & 0x40)
-            Sun = 1;
+        Sun = 1;
         else
-            Sun = 0;
-        if (dayInt & 0x20)
-            Mon = 1;
-        else
-            Mon = 0;
-        if (dayInt & 0x10)
-            Tue = 1;
-        else
-            Tue = 0;
-        if (dayInt & 0x08)
-            Wed = 1;
-        else
-            Wed = 0;
-        if (dayInt & 0x04)
-            Thu = 1;
-        else
-            Thu = 0;
-        if (dayInt & 0x02)
-            Fri = 1;
-        else
-            Fri = 0;
-        if (dayInt & 0x01)
-            Sat = 1;
-        else
-            Sat = 0;
-        hour = Math.floor((parseInt(thisProgram.time)) / 60);
-        minute = (parseInt(thisProgram.time)) % 60;
-        programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
-        programDuration = (Math.floor((parseInt(thisProgram.duration)) / 60)).toString(10);
-        switchArray = thisProgram.switches.split(",");
-        programSwitches = "";
-        if(parseInt(thisProgram.rollover) < 255)
-            overflow = wordsToTranslate.overflow + "#" + thisProgram.rollover;
-        else
-            overflow = "";
-        for (var x = 0; x < switchArray.length; x++) {
-            if (switchArray[x] !== "ff") {
-                if (x > 0)
-                    programSwitches += ",";
-                programSwitches += (parseInt(switchArray[x], 16)).toString(10);
-            }
+        Sun = 0;
+    if (dayInt & 0x20)
+        Mon = 1;
+    else
+        Mon = 0;
+    if (dayInt & 0x10)
+        Tue = 1;
+    else
+        Tue = 0;
+    if (dayInt & 0x08)
+        Wed = 1;
+    else
+        Wed = 0;
+    if (dayInt & 0x04)
+        Thu = 1;
+    else
+        Thu = 0;
+    if (dayInt & 0x02)
+        Fri = 1;
+    else
+        Fri = 0;
+    if (dayInt & 0x01)
+        Sat = 1;
+    else
+        Sat = 0;
+    hour = Math.floor((parseInt(thisProgram.time)) / 60);
+    minute = (parseInt(thisProgram.time)) % 60;
+    programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
+    programDuration = (Math.floor((parseInt(thisProgram.duration)) / 60)).toString(10);
+    switchArray = thisProgram.switches.split(",");
+    programSwitches = "";
+    if(parseInt(thisProgram.rollover) < 255)
+        overflow = wordsToTranslate.overflow + "#" + thisProgram.rollover;
+    else
+        overflow = "";
+    for (var x = 0; x < switchArray.length; x++) {
+        if (switchArray[x] !== "ff") {
+            if (x > 0)
+                programSwitches += ",";
+            programSwitches += (parseInt(switchArray[x], 16)).toString(10);
         }
-        // see if this is an overflow program
-        if(parseInt(thisProgram.time) == 0xFEFF) {
-            programStart = wordsToTranslate.overflow;
-            programDuration = wordsToTranslate.overflow;
-            Sun = Mon = Tue = Wed = Thu = Fri = Sat = "";
-        }
-        programArray.push({
-            id: thisProgram.id,
-            programNumber: thisProgram.programNumber,
-            programStart: programStart,
-            programDuration: programDuration,
-            Sun: Sun,
-            Mon: Mon,
-            Tue: Tue,
-            Wed: Wed,
-            Thu: Thu,
-            Fri: Fri,
-            Sat: Sat,
-            dayInt: dayInt,
-            programSwitches: programSwitches,
-            overflow: overflow,
-        });
+    }
+    // see if this is an overflow program
+    if(parseInt(thisProgram.time) == 0xFEFF) {
+        programStart = wordsToTranslate.overflow;
+        programDuration = wordsToTranslate.overflow;
+        Sun = Mon = Tue = Wed = Thu = Fri = Sat = "";
+    }
+    programArray.push({
+        id: thisProgram.id,
+        programNumber: thisProgram.programNumber,
+        programStart: programStart,
+        programDuration: programDuration,
+        Sun: Sun,
+        Mon: Mon,
+        Tue: Tue,
+        Wed: Wed,
+        Thu: Thu,
+        Fri: Fri,
+        Sat: Sat,
+        dayInt: dayInt,
+        programSwitches: programSwitches,
+        overflow: overflow,
+    });
 
     });
     $("#radioPrograms").html("");
@@ -346,7 +346,7 @@ function showRadioDetails(response) {
     // dur in seconds, poll time in secs or  0 for continuous. w = which rgb (mask);)
 
     var inputPinStuff, inputLow, inputHigh, inputType, inputValues, inputSwitchOrProgram, inputPollTime, inputWhichRGB,
-            port, pin, getPin, portPin, switchOrProgText, switchNum;
+        port, pin, getPin, portPin, switchOrProgText, switchNum;
     var inputArray = [];
     radioInputs.forEach(function (thisInput) {
         inputPinStuff = parseInt(thisInput.pinStuff, 10);
@@ -358,13 +358,13 @@ function showRadioDetails(response) {
         if (inputHigh == 255 || inputLow == 255) {
             inputType = 1;
             if (inputHigh == 255)
-                inputValues = 1;
+        inputValues = 1;
             else
-                inputValues = 0;
+        inputValues = 0;
         } else {
             inputType = 0;
             inputValues = (Math.floor(inputHigh * 100 / 254)).toString(10) + "%-" +
-                    (Math.floor(inputLow * 100 / 254)).toString(10) + "%";
+        (Math.floor(inputLow * 100 / 254)).toString(10) + "%";
         }
         inputSwitchOrProgram = parseInt(thisInput.whichSwitchOrProgram, 10);
         if (inputSwitchOrProgram > 127) {
@@ -413,16 +413,16 @@ function showRadioDetails(response) {
         blue = parseInt(thisColor.blue);
         textColor = "black";
         if (red < 75 || green < 75 || blue < 75)
-            textColor = "white";
-        colorText = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
-                ("0" + blue.toString(16)).substr(-2);
-        colorArray.push({
-            id: thisColor.id,
-            colorChangeNumber: thisColor.colorChangeNumber,
-            color: colorText,
-            textColor: textColor,
-            changeAble: thisColor.ifChangeable,
-        })
+        textColor = "white";
+    colorText = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
+        ("0" + blue.toString(16)).substr(-2);
+    colorArray.push({
+        id: thisColor.id,
+        colorChangeNumber: thisColor.colorChangeNumber,
+        color: colorText,
+        textColor: textColor,
+        changeAble: thisColor.ifChangeable,
+    })
     });
     $("#radioColors").html("");
     htmlOutput = templateRender("#radioViewColorsTemplate", "");
@@ -448,46 +448,46 @@ function showRadioDetails(response) {
         stopMessage = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
         dayInt = parseInt(thisLimit.days, 10);
         if (dayInt & 0x40)
-            Sun = 1;
+        Sun = 1;
         else
-            Sun = 0;
-        if (dayInt & 0x20)
-            Mon = 1;
-        else
-            Mon = 0;
-        if (dayInt & 0x10)
-            Tue = 1;
-        else
-            Tue = 0;
-        if (dayInt & 0x08)
-            Wed = 1;
-        else
-            Wed = 0;
-        if (dayInt & 0x04)
-            Thu = 1;
-        else
-            Thu = 0;
-        if (dayInt & 0x02)
-            Fri = 1;
-        else
-            Fri = 0;
-        if (dayInt & 0x01)
-            Sat = 1;
-        else
-            Sat = 0;
-        timeLimitArray.push({
-            id: thisLimit.id,
-            limitNumber: thisLimit.limitNumber,
-            startMessage: startMessage,
-            stopMessage: stopMessage,
-            Sun: Sun,
-            Mon: Mon,
-            Tue: Tue,
-            Wed: Wed,
-            Thu: Thu,
-            Fri: Fri,
-            Sat: Sat,
-        })
+        Sun = 0;
+    if (dayInt & 0x20)
+        Mon = 1;
+    else
+        Mon = 0;
+    if (dayInt & 0x10)
+        Tue = 1;
+    else
+        Tue = 0;
+    if (dayInt & 0x08)
+        Wed = 1;
+    else
+        Wed = 0;
+    if (dayInt & 0x04)
+        Thu = 1;
+    else
+        Thu = 0;
+    if (dayInt & 0x02)
+        Fri = 1;
+    else
+        Fri = 0;
+    if (dayInt & 0x01)
+        Sat = 1;
+    else
+        Sat = 0;
+    timeLimitArray.push({
+        id: thisLimit.id,
+        limitNumber: thisLimit.limitNumber,
+        startMessage: startMessage,
+        stopMessage: stopMessage,
+        Sun: Sun,
+        Mon: Mon,
+        Tue: Tue,
+        Wed: Wed,
+        Thu: Thu,
+        Fri: Fri,
+        Sat: Sat,
+    })
     })
     $("#radioTimeLimits").html("");
     htmlOutput = templateRender("#radioViewTimeLimitsTemplate", "");
@@ -566,27 +566,27 @@ function radioChangeNameSubmit(event) {
     $.post("ajax.php?function=radioChangeName",
             {
                 radioID: radioSettings.id,
-                name: $("#newRadioName").val(),
-                description: $("#newRadioDescription").val(),
-                location: $("#newRadioLocation").val()
+        name: $("#newRadioName").val(),
+        description: $("#newRadioDescription").val(),
+        location: $("#newRadioLocation").val()
             }
-    , function (data) {
-        if (data == "ok") {
-            radioSettings.name = $("#newRadioName").val();
-            radioSettings.description = $("#newRadioDescription").val();
-            radioSettings.location = $("#newRadioLocation").val();
-            $("#radio-" + radioSettings.id).html(radioSettings.name);
-            $("#radioNameSpan").html(radioSettings.name);
-            showMessage(wordsToTranslate.nameChanged);
-        } else {
-            showError(wordsToTranslate.nameChangeError);
-        }
-    },
+            , function (data) {
+                if (data == "ok") {
+                    radioSettings.name = $("#newRadioName").val();
+                    radioSettings.description = $("#newRadioDescription").val();
+                    radioSettings.location = $("#newRadioLocation").val();
+                    $("#radio-" + radioSettings.id).html(radioSettings.name);
+                    $("#radioNameSpan").html(radioSettings.name);
+                    showMessage(wordsToTranslate.nameChanged);
+                } else {
+                    showError(wordsToTranslate.nameChangeError);
+                }
+            },
             "text"
-            ).error(function () {
-        showError(wordsToTranslate.nameChangeError);
-    });
-    resetOnClick = 1;
+          ).error(function () {
+              showError(wordsToTranslate.nameChangeError);
+          });
+            resetOnClick = 1;
 }
 
 function radioChangeTweak() {
@@ -701,7 +701,7 @@ function radioChangeInputTiming() {
         topMessage: wordsToTranslate.inputTimingMessage,
         topLeft: wordsToTranslate.itMessage,
         topRight: "<input id=inputTimingSpeed value=" + parseInt(radioSettings.inputMessageTiming, 16) +
-                " onKeyDown=radioChangeInputTimingSubmit(event); />",
+            " onKeyDown=radioChangeInputTimingSubmit(event); />",
         bottomLeft: "&nbsp;",
         bottomRight: "<input type=button value=Submit onClick=radioChangeInputTimingSubmit(event) />"
     }
@@ -755,30 +755,30 @@ function autoAddNewRadioSubmit(event) {
     $.post("ajax.php?function=processNewRadio",
             {
                 name: $("#newRadioName").val(),
-                description: $("#newRadioDescription").val(),
-                location: $("#newRadioLocation").val()
+        description: $("#newRadioDescription").val(),
+        location: $("#newRadioLocation").val()
             }
-    , function (data) {
-        if (data == "ok") {
-            $("#submitWait").hide();
-            reloadRadios();
-            showMessage(wordsToTranslate.changeSuccess);
-            $("individualDetailEdit").empty();
-        } else {
-            $("#submitWait").hide();
-            showError(wordsToTranslate.changeError);
-            if (debugMePlease == 1) {
-                $("#debugSection").html(data);
-                $("#debugSection").show();
-            }
-        }
-    },
-            "text"
-            ).error(function () {
-        $("#submitWait").hide();
-        showError(wordsToTranslate.nameChangeError);
-    });
-    resetOnClick = 1;
+            , function (data) {
+                if (data == "ok") {
+                    $("#submitWait").hide();
+                    reloadRadios();
+                    showMessage(wordsToTranslate.changeSuccess);
+                    $("individualDetailEdit").empty();
+                } else {
+                    $("#submitWait").hide();
+                    showError(wordsToTranslate.changeError);
+                    if (debugMePlease == 1) {
+                        $("#debugSection").html(data);
+                        $("#debugSection").show();
+                    }
+                }
+            },
+                "text"
+                    ).error(function () {
+                        $("#submitWait").hide();
+                        showError(wordsToTranslate.nameChangeError);
+                    });
+            resetOnClick = 1;
 
 }
 
@@ -788,26 +788,26 @@ function getRadioUpdate() {
             {
                 radioID: radioSettings.id,
             }
-    , function (data) {
-        if (data == "ok") {
-            $("#pleaseWaitRadio").hide();
-            showMessage(wordsToTranslate.changeSuccess);
-            getRadioDetails(radioSettings.id, 1);
-        } else {
-            $("#pleaseWaitRadio").hide();
-            showError(wordsToTranslate.changeError);
-            if (debugMePlease == 1) {
-                $("#debugSection").html(data);
-                $("#debugSection").show();
-            }
-        }
-    },
+            , function (data) {
+                if (data == "ok") {
+                    $("#pleaseWaitRadio").hide();
+                    showMessage(wordsToTranslate.changeSuccess);
+                    getRadioDetails(radioSettings.id, 1);
+                } else {
+                    $("#pleaseWaitRadio").hide();
+                    showError(wordsToTranslate.changeError);
+                    if (debugMePlease == 1) {
+                        $("#debugSection").html(data);
+                        $("#debugSection").show();
+                    }
+                }
+            },
             "text"
-            ).error(function () {
-        $("#pleaseWaitRadio").hide();
-        showError(wordsToTranslate.changeError);
-    });
-    resetOnClick = 1;
+          ).error(function () {
+              $("#pleaseWaitRadio").hide();
+              showError(wordsToTranslate.changeError);
+          });
+            resetOnClick = 1;
 
 }
 
@@ -815,9 +815,9 @@ function getRadioUpdate() {
 function reloadRadios() {
     $.get("ajax.php",
             {function: "getRadios"},
-    function (response) {
-        radioDivs(response)
-    },
+            function (response) {
+                radioDivs(response)
+            },
             "json");
 }
 
@@ -864,31 +864,31 @@ function manuallyAddNewRadioSubmit(event) {
     $.post("ajax.php?function=processExistingRadio",
             {
                 name: $("#newRadioName").val(),
-                description: $("#newRadioDescription").val(),
-                location: $("#newRadioLocation").val(),
-                channel: $("#newRadioChannel").val(),
+        description: $("#newRadioDescription").val(),
+        location: $("#newRadioLocation").val(),
+        channel: $("#newRadioChannel").val(),
             }
-    , function (data) {
-        if (data == "ok") {
-            $("#submitWait").hide();
-            reloadRadios();
-            showMessage(wordsToTranslate.changeSuccess);
-            $("individualDetailEdit").empty();
-        } else {
-            $("#submitWait").hide();
-            showError(wordsToTranslate.changeError);
-            if (debugMePlease == 1) {
-                $("#debugSection").html(data);
-                $("#debugSection").show();
-            }
-        }
-    },
-            "text"
-            ).error(function () {
-        $("#submitWait").hide();
-        showError(wordsToTranslate.nameChangeError);
-    });
-    resetOnClick = 1;
+            , function (data) {
+                if (data == "ok") {
+                    $("#submitWait").hide();
+                    reloadRadios();
+                    showMessage(wordsToTranslate.changeSuccess);
+                    $("individualDetailEdit").empty();
+                } else {
+                    $("#submitWait").hide();
+                    showError(wordsToTranslate.changeError);
+                    if (debugMePlease == 1) {
+                        $("#debugSection").html(data);
+                        $("#debugSection").show();
+                    }
+                }
+            },
+                "text"
+                    ).error(function () {
+                        $("#submitWait").hide();
+                        showError(wordsToTranslate.nameChangeError);
+                    });
+            resetOnClick = 1;
 
 
 }
@@ -924,35 +924,35 @@ function addEditSwitch(switchID) {
         topMessage: wordsToTranslate.switchMessage,
         topLeft: wordsToTranslate.switchType,
         switchTypes: [
-            {typeIndex: "x", type: wordsToTranslate.switchSelect, selected: '', },
-            {typeIndex: 0, type: wordsToTranslate.switchSwitch, selected: '', },
-            {typeIndex: 1, type: wordsToTranslate.switchSingleColor, selected: '', },
-            {typeIndex: 2, type: wordsToTranslate.switchSmoothHue, selected: '', },
-            {typeIndex: 3, type: wordsToTranslate.colorRotation, selected: '', },
+        {typeIndex: "x", type: wordsToTranslate.switchSelect, selected: '', },
+        {typeIndex: 0, type: wordsToTranslate.switchSwitch, selected: '', },
+        {typeIndex: 1, type: wordsToTranslate.switchSingleColor, selected: '', },
+        {typeIndex: 2, type: wordsToTranslate.switchSmoothHue, selected: '', },
+        {typeIndex: 3, type: wordsToTranslate.colorRotation, selected: '', },
         ],
         secondLeft: wordsToTranslate.portPin,
         ports: [
-            {portIndex: 0, port: "PORTA", selected: ''},
-            {portIndex: 1, port: "PORTB", selected: ''},
-            {portIndex: 2, port: "PORTC", selected: ''},
-            {portIndex: 3, port: "PORTD", selected: ''},
-            {portIndex: 4, port: "PORTE", selected: ''},
-            {portIndex: 5, port: "PORTF", selected: ''},
-            {portIndex: 6, port: "PORTG", selected: ''},
+        {portIndex: 0, port: "PORTA", selected: ''},
+        {portIndex: 1, port: "PORTB", selected: ''},
+        {portIndex: 2, port: "PORTC", selected: ''},
+        {portIndex: 3, port: "PORTD", selected: ''},
+        {portIndex: 4, port: "PORTE", selected: ''},
+        {portIndex: 5, port: "PORTF", selected: ''},
+        {portIndex: 6, port: "PORTG", selected: ''},
         ],
         pins: [
-            {pin: 0, selected: ''},
-            {pin: 1, selected: ''},
-            {pin: 2, selected: ''},
-            {pin: 3, selected: ''},
-            {pin: 4, selected: ''},
-            {pin: 5, selected: ''},
-            {pin: 6, selected: ''},
-            {pin: 7, selected: ''},
+        {pin: 0, selected: ''},
+        {pin: 1, selected: ''},
+        {pin: 2, selected: ''},
+        {pin: 3, selected: ''},
+        {pin: 4, selected: ''},
+        {pin: 5, selected: ''},
+        {pin: 6, selected: ''},
+        {pin: 7, selected: ''},
         ],
         hiLo: [
-            {pinID: 1, pinValue: "high", selected: ''},
-            {pinID: 0, pinValue: "low", selected: ''},
+        {pinID: 1, pinValue: "high", selected: ''},
+        {pinID: 0, pinValue: "low", selected: ''},
         ],
         thirdLeft: wordsToTranslate.colorChangeNumber,
         thirdRight: "<input id='switchPWMColor' onKeyDown=\"addEditSwitchSubmit(event,'" + switchID + "' )\" >",
@@ -1049,7 +1049,7 @@ function addEditSwitchSubmit(event, switchID) {
             radioCommand = "NS:" + switchID + thisPortArray[$("#port").val()] + $("#pin").val() + $("#hiLo").val();
             break;
     }
-   
+
     postRadioCommand(radioCommand, radioSettings.id);
 }
 
@@ -1109,7 +1109,7 @@ function addEditProgram(programID) {
         tempSwitchArray = radioPrograms[programID].switches.split(",");
         tempSwitchArray.forEach(function(thisSwitch) {
             if(parseInt(thisSwitch) < 255)
-                selectedSwitches.push(parseInt(thisSwitch));
+            selectedSwitches.push(parseInt(thisSwitch));
         });
         if(parseInt(radioPrograms[programID].rollover) < 255) {
             selectedSwitches = getOverflowSwitches(radioPrograms[programID].rollover, selectedSwitches);
@@ -1175,20 +1175,24 @@ function getOverflowSwitches(programID,switchArray) {
     tempSwitchArray = radioPrograms[thisProgramID].switches.split(",");
     tempSwitchArray.forEach(function(thisSwitch) {
         if(parseInt(thisSwitch) < 255)
-            switchArray.push(parseInt(thisSwitch));
+        switchArray.push(parseInt(thisSwitch));
     });
-        if(parseInt(radioPrograms[thisProgramID].rollover) < 255) {
-            switchArray = getOverflowSwitches(radioPrograms[thisProgramID].rollover, switchArray);
-        }
+    if(parseInt(radioPrograms[thisProgramID].rollover) < 255) {
+        switchArray = getOverflowSwitches(radioPrograms[thisProgramID].rollover, switchArray);
+    }
     return switchArray;
 } 
- 
 
+
+// programEdit - directly edits a program and assums that you know what you are doing
+// PE:##ddssssddddswswswswPP - day of the week mask, start time (seconds in day), duration(seconds), 4 switches, 
+// 0123456789012345678901234       next program (if you need more than 4 switches
+// THIS FUNCTION IS TRUSTING YOU so DON'T DO IT IF YOU AREN'T COMFORTABLE
 
 function addEditProgramSubmit(event, programID) {
     if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
         return;
-    // need to figure out an open switch number
+    // need to figure out an open program number
     if (programID == "new") {
         for (var x = 0; x < radioSettings.programCount; x++) {
             if (radioPrograms[x] == null) {
@@ -1204,14 +1208,20 @@ function addEditProgramSubmit(event, programID) {
 
     var hours = parseInt(time[1],10);    
     if (hours == 24 && !time[4]) {
-          hours = 0;
+        hours = 0;
     }
     else {
         hours += (hours < 12 && time[4])? 12 : 0;
     }   
     var minutes = (parseInt(time[3],10) || 0);
-    console.log(hours+":"+minutes);
-    console.log(time);
+    startTime = (hours * 60) + minutes;
+    startTime = ("0000" + startTime.toString(16)).slice(-4);
+    var time = duration.match(/(\d+)(:(\d\d))?\s*(p?)/i); 
+
+    minutes = parseInt(time[1],10);    
+    var seconds = (parseInt(time[3],10) || 0);
+    duration = (minutes * 60) + seconds;
+    duration = ("0000" + duration.toString(16)).slice(-4);
     var dayInt = 0;
     if($("#sunCheckbox").prop("checked"))
         dayInt |= 0x40;
@@ -1228,16 +1238,63 @@ function addEditProgramSubmit(event, programID) {
     if($("#satCheckbox").prop("checked"))
         dayInt |= 0x01;
     dayInt = ("0" + dayInt.toString(16)).slice(-2);
-    radioCommand = "PE:"+programID
+    radioCommand = "PE:"+programID+startTime+duration;
     var switches = $("#programSwitchesSelect").val();
-    switches.forEach(function(thisSwitch) {
-        
-    });
-    
-    var radioCommand = "";
-    
-//    postRadioCommand(radioCommand, radioSettings.id);
+    for(x = 0; x < 3; x ++) {
+        var thisSwitch = switches.shift();
+        if(thisSwitch == "") {
+            radioCommand = radioCommand + "FF";
+        } else {
+            thisSwitch = ("0" + thisSwitch.toString(16)).slice(-2);
+            radioCommand = radioCommand + thisSwitch;
+        }
+    }
+    if(switches.length > 0)
+        makeOverflowProgram(switches);
+    console.log(radioCommand);    
+
+    //    postRadioCommand(radioCommand, radioSettings.id);
 }
+
+// create an overflow program for extra switches
+function makeOverflowProgram (switches) {
+    var programNum = -1;
+    // need to figure out an open program number
+    for (var x = radioSettings.programCount; x>0; x--) {
+        if (radioPrograms[x] == null) {
+            programNum = x;
+            break;
+        }
+    }
+    if(programNum == -1) { // didn't find a program
+        // can't do more switches.  sorry
+        // this should be rare anyway
+        switches = [];
+        return;
+    }
+    // We have an empty program.  we will update the information through the import so we just want to make
+    // sure we don't use the same overflow twice
+    radioPrograms[programNum] = {nothingToSee: "here"};
+    programNum = ("0" + programNum.toString(16)).slice(-2);
+    // PE:##ddssssddddswswswswPP - day of the week mask, start time (seconds in day), duration(seconds), 4 switches, 
+    var overflowRadioCommand =  "PE:" + programNum + "FFFEFFFFFF"; //  basic setup for overflow program
+    for(x = 0; x < 3; x ++) {
+        var thisSwitch = switches.shift();
+        if(typeof thisSwitch == "undefined") {
+            overflowRadioCommand = overflowRadioCommand + "FF";
+        } else {
+            thisSwitch = ("0" + thisSwitch.toString(16)).slice(-2);
+            overflowRadioCommand = overflowRadioCommand + thisSwitch;
+        }
+    }
+    if(switches.length > 0)
+        var overflowNum = makeOverflowProgram(switches);
+    else 
+        var overflowNum = 255;
+    overFlowRadioCommand = overflowRadioCommand + (("0" + overflowNum).split(-2));
+    console.log(overflowRadioCommand);
+}
+
 
 /**********************************************************
  * 
@@ -1348,7 +1405,7 @@ function showMessage(message) {
 
 function showError(message) {
     $("#errorBar").html(message)
-    $("#errorBar").show();
+        $("#errorBar").show();
 }
 
 function hideHeaderSections() {
@@ -1365,28 +1422,28 @@ function postRadioCommand(radioCommand, radioID) {
     $.post("ajax.php?function=sendRadioCommand",
             {
                 radioID: radioID,
-                command: radioCommand,
+        command: radioCommand,
             }
-    , function (data) {
-        $("#submitWait").hide();
-        if (data == "ok") {
-            showMessage(wordsToTranslate.changeSuccess);
-            resetOnClick = 1;
-            getRadioUpdate();
-        } else {
-            showError(wordsToTranslate.changeError);
-            resetOnClick = 1;
-            if (debugMePlease == 1) {
-                $("#debugSection").html(data);
-                $("#debugSection").show();
-            }
-        }
-    },
+            , function (data) {
+                $("#submitWait").hide();
+                if (data == "ok") {
+                    showMessage(wordsToTranslate.changeSuccess);
+                    resetOnClick = 1;
+                    getRadioUpdate();
+                } else {
+                    showError(wordsToTranslate.changeError);
+                    resetOnClick = 1;
+                    if (debugMePlease == 1) {
+                        $("#debugSection").html(data);
+                        $("#debugSection").show();
+                    }
+                }
+            },
             "text"
-            ).error(function () {
-        showError(wordsToTranslate.changeError);
-        resetOnClick = 1;
-    })
+                ).error(function () {
+                    showError(wordsToTranslate.changeError);
+                    resetOnClick = 1;
+                })
 
 }
 
@@ -1400,7 +1457,7 @@ function postRadioCommand(radioCommand, radioID) {
 // don't wanna type the same thing a million times
 function templateRender(templateID, Data) {
     var template = $.templates(templateID)
-    var htmlOutput = template.render(Data);
+        var htmlOutput = template.render(Data);
     return htmlOutput;
 }
 
