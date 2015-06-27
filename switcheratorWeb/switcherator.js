@@ -1160,6 +1160,7 @@ function addEditProgram(programID) {
 }
 
 // little helper to get us all of the overflow switches
+// TODO: this is broken.
 function getOverflowSwitches(programID,switchArray) {
     var thisProgramID = -1;
     for(var x = 0; x<radioPrograms.count; x++) {
@@ -1238,9 +1239,9 @@ function addEditProgramSubmit(event, programID) {
     if($("#satCheckbox").prop("checked"))
         dayInt |= 0x01;
     dayInt = ("0" + dayInt.toString(16)).slice(-2);
-    radioCommand = "PE:"+programID+startTime+duration;
+    radioCommand = "PE:"+programID+dayInt+startTime+duration;
     var switches = $("#programSwitchesSelect").val();
-    for(x = 0; x < 3; x ++) {
+    for(x = 0; x < 4; x ++) {
         var thisSwitch = switches.shift();
         if(thisSwitch == "") {
             radioCommand = radioCommand + "FF";
@@ -1249,8 +1250,18 @@ function addEditProgramSubmit(event, programID) {
             radioCommand = radioCommand + thisSwitch;
         }
     }
+    
+    // we are going to start overriding programs.  Should erase them first
+    var programEraseCommand = "CP:"+programID;
+    brieflyPostRadioCommand(programEraseCommand);
+
+
     if(switches.length > 0)
-        makeOverflowProgram(switches);
+        var overflow = makeOverflowProgram(switches);
+    else
+        var overflow = 255;
+    overflow = ("0" + overflow.toString(16)).slice(-2);
+    radioCommand = radioCommand + overflow;
     console.log(radioCommand);    
 
     //    postRadioCommand(radioCommand, radioSettings.id);
@@ -1270,7 +1281,7 @@ function makeOverflowProgram (switches) {
         // can't do more switches.  sorry
         // this should be rare anyway
         switches = [];
-        return;
+        return 255;
     }
     // We have an empty program.  we will update the information through the import so we just want to make
     // sure we don't use the same overflow twice
@@ -1278,7 +1289,7 @@ function makeOverflowProgram (switches) {
     programNum = ("0" + programNum.toString(16)).slice(-2);
     // PE:##ddssssddddswswswswPP - day of the week mask, start time (seconds in day), duration(seconds), 4 switches, 
     var overflowRadioCommand =  "PE:" + programNum + "FFFEFFFFFF"; //  basic setup for overflow program
-    for(x = 0; x < 3; x ++) {
+    for(x = 0; x < 4; x++) {
         var thisSwitch = switches.shift();
         if(typeof thisSwitch == "undefined") {
             overflowRadioCommand = overflowRadioCommand + "FF";
@@ -1291,8 +1302,10 @@ function makeOverflowProgram (switches) {
         var overflowNum = makeOverflowProgram(switches);
     else 
         var overflowNum = 255;
-    overFlowRadioCommand = overflowRadioCommand + (("0" + overflowNum).split(-2));
+    overflowRadioCommand = overflowRadioCommand + (("0" + overflowNum.toString(16)).slice(-2));
     console.log(overflowRadioCommand);
+    // brieflyPostRadioCommand(overflowRadioCommand);
+    return programNum;
 }
 
 
@@ -1446,6 +1459,22 @@ function postRadioCommand(radioCommand, radioID) {
                 })
 
 }
+
+// same as postRadioCommand but we don't care about feedback or updating
+function brieflyPostRadioCommand(radioCommand, radioID) {
+    $.post("ajax.php?function=sendRadioCommand",
+            {
+                radioID: radioID,
+    command: radioCommand,
+            }
+            , function (data) {
+            },
+            "text"
+                ).error(function () {
+                })
+
+}
+
 
 
 /**********************************************************
