@@ -72,15 +72,26 @@ function radioDetails() {
 }
 
 // gets and does a command to the radio
-function sendRadioCommand() {
-    $command = $_POST['command'];
+function sendRadioCommand($command = "") {
+    if($command == "")
+        $command = $_POST['command'];
+    if(is_array($command)) {
+        while(count($command) > 0) {
+            $thisCommand = array_shift($command);
+            $returnMe = sendRadioCommand($thisCommand);
+        }
+        if($returnMe == true)
+            return "ok";
+        else
+            return "Invalid Command.";
+    }
     $radioID = intval($_POST['radioID']);
     if (preg_match('/^[a-zA-Z0-9:-]+$/', $command) != 1)
-        return "Invalid command.";
+        return "Invalid command. $command<br>";
     include_once("functions.php");
     $response = radioCommand($radioID, $command,"ok");
     if ($response == false)
-        return "Invalid command!";
+        return "Invalid command! $command<br>";
     return "ok";
 }
 

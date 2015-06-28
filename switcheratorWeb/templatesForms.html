@@ -142,7 +142,7 @@
         </tr>
         <tr class="detailTable  "  >
             <td class="left">{{:secondLeft}}</td>
-            <td class="right"><input id="programEditStartTime" value="{{:startTime}}" 
+            <td class="right"><input type="text" id="programEditStartTime" value="{{:startTime}}" 
             onKeyDown="addEditProgramSubmit(event, '{{:programID}}' )" /></td>
         </tr>
         <tr class="detailTable  "  >
@@ -156,8 +156,8 @@
             {{for switches}}
                 <option value="{{:switchNumber}}" {{:switchSelected }} >Switch #{{:switchNumber}} </option>
             {{/for}}
-            </select>
-            {{:programNumber}}|{{:programID}}</td>
+             </select>
+        </td>
         </tr>
         <tr class="detailTable "  >
             <td class="left">&nbsp;</td>

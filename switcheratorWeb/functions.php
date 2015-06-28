@@ -19,6 +19,7 @@ function radioCommand($radioID, $command, $desiredLine = "", $shortResponse = 0)
     if ($shortResponse == 1)
         $shortSwitch = " -s 1 ";
     $commandToRun = "nrfcl -t " . $radio['rxAddress0'] . " -r " . $radio['txAddress'] . " " . $shortSwitch . $command;
+    //echo $commandToRun;
     // Sometimes we want more than one line of the result or we don't care
     if ($desiredLine == "") {
         $returnArray = array();

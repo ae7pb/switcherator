@@ -2217,7 +2217,7 @@ void memoryRead(char * commandReceived) {
 }
 
 /* dump the contents of the memory across the radio
- */
+*/
 void memoryDump(void) {
     statusMsg[0] = 0;
     int x = 0;
@@ -2286,12 +2286,18 @@ void memoryDump(void) {
         for (y = 0; y < 10; y++) {
             returnHexWithout(weeklyProgram[x][y], tempLongString);
             strcat(statusMsg, tempLongString);
-            if (strlen(statusMsg) >= 30) {
-                sendMessage(statusMsg);
-                linecount++;
-                statusMsg[1] = 0;
-                interjectLineNumber(linecount);
-            }
+            //if (strlen(statusMsg) >= 30) {
+            //    sendMessage(statusMsg);
+            //    linecount++;
+            //    statusMsg[1] = 0;
+            //    interjectLineNumber(linecount);
+            //}
+        }
+        sendMessage(statusMsg);
+        if(x < (MAX_PROGRAM-1)) {
+            linecount++;
+            statusMsg[1] = 0;
+            interjectLineNumber(linecount);
         }
     }
 
@@ -2588,7 +2594,7 @@ void advanceDay(void) {
     }
     // possibly advancing a month
     switch (globalMonth) {
-            // 30 days have september, april, june and november
+        // 30 days have september, april, june and november
         case 4:
         case 6:
         case 9:

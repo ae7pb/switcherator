@@ -287,7 +287,12 @@ function showRadioDetails(response) {
         Sat = 0;
     hour = Math.floor((parseInt(thisProgram.time)) / 60);
     minute = (parseInt(thisProgram.time)) % 60;
-    programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
+    var ampm = "AM";
+    if (hour > 12) {
+        ampm = "PM";
+        hour -= 12;
+    }
+    programStart = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2))+ " " + ampm;
     programDuration = (Math.floor((parseInt(thisProgram.duration)) / 60)).toString(10);
     programSwitches = "";
     switchArray = [];
@@ -295,7 +300,7 @@ function showRadioDetails(response) {
     for(var x = 0; x < switchArray.length; x++) {
         if(x > 0)
             programSwitches += ", ";
-        programSwitches += (parseInt(switchArray[x], 16)).toString(10);
+        programSwitches += (parseInt(switchArray[x])).toString(10);
     }
 
     // see if this is an overflow program
@@ -1099,7 +1104,7 @@ function addEditProgram(programID) {
             Fri = "checked";
         if (radioPrograms[programID].days & 0x01)
             Sat = "checked";
-        if (radioPrograms[programID].days & 0x7F)
+        if ((radioPrograms[programID].days & 0x7F) == 0x7F)
             all = "checked";
         var tempSwitchArray = [];
         var selectedSwitches = [];
@@ -1117,10 +1122,15 @@ function addEditProgram(programID) {
 
         var hour = Math.floor(parseInt(radioPrograms[programID].time)/60);
         var minute = Math.floor(parseInt(radioPrograms[programID].time)%60);
-        var startTime = hour.toString()+":"+  ( "0" + minute.toString().substr(-2));
+        var ampm = "AM";
+        if(hour > 12) {
+            hour -= 12;
+            ampm = "PM";
+        }
+        var startTime = hour.toString()+":"+  ( "0" + minute.toString()).substr(-2) + " " + ampm;
         minute = Math.floor(parseInt(radioPrograms[programID].duration)/60);
         var seconds = Math.floor(parseInt(radioPrograms[programID].duration)%60);
-        var duration = minute.toString()+":"+("0" + seconds.toString().substr(-2));
+        var duration = minute.toString();   //+":"+("0" + seconds.toString()).substr(-2);
         var programEditObject = {
             sunChecked: Sun,
             monChecked: Mon,
@@ -1154,6 +1164,7 @@ function addEditProgram(programID) {
     };
     htmlOutput = templateRender("#programDetailForm", programEditObject);
     $("#individualDetailEdit").append(htmlOutput);
+    $("#programEditStartTime").kitkatclock();
 }
 
 // little helper to get us all of the overflow switches
@@ -1179,6 +1190,16 @@ function getOverflowSwitches(programID,switchArray) {
     return switchArray;
 } 
 
+// when the "all" button gets checked
+function programCheckboxToggle(event) {
+    if(event.checked) {
+        $(".programCheckbox").prop("checked", true);
+    } else {
+        $(".programCheckbox").prop("checked", false);
+    }
+
+}
+
 
 // programEdit - directly edits a program and assums that you know what you are doing
 // PE:##ddssssddddswswswswPP - day of the week mask, start time (seconds in day), duration(seconds), 4 switches, 
@@ -1197,6 +1218,10 @@ function addEditProgramSubmit(event, programID) {
             }
         }
     }
+     // we are going to start overriding programs.  Should erase them first
+    var radioCommands = [];
+    radioCommands.push("CP:"+("0"+programID).slice(-2));
+
     programID = ("0" + programID).slice(-2);
     var duration = $("#programEditDuration").val();
     var startTime = $("#programEditStartTime").val();
@@ -1238,7 +1263,7 @@ function addEditProgramSubmit(event, programID) {
     var switches = $("#programSwitchesSelect").val();
     for(x = 0; x < 4; x ++) {
         var thisSwitch = switches.shift();
-        if(thisSwitch == "") {
+        if(typeof(thisSwitch) == "undefined") {
             radioCommand = radioCommand + "FF";
         } else {
             thisSwitch = ("0" + thisSwitch.toString(16)).slice(-2);
@@ -1246,27 +1271,26 @@ function addEditProgramSubmit(event, programID) {
         }
     }
     
-    // we are going to start overriding programs.  Should erase them first
-    var programEraseCommand = "CP:"+programID;
-    brieflyPostRadioCommand(programEraseCommand);
 
-
-    if(switches.length > 0)
-        var overflow = makeOverflowProgram(switches);
-    else
-        var overflow = 255;
+    if(switches.length > 0) {
+        var overflowArray = makeOverflowProgram(switches, radioCommands);
+        overflow = overflowArray[0];
+        radioCommands = overflowArray[1];
+    } else {
+        overflow = 255;
+    }
     overflow = ("0" + overflow.toString(16)).slice(-2);
     radioCommand = radioCommand + overflow;
-    console.log(radioCommand);    
-
-    //    postRadioCommand(radioCommand, radioSettings.id);
+    // put the commands together
+    radioCommands.push(radioCommand);
+    postRadioCommand(radioCommands, radioSettings.id);
 }
 
 // create an overflow program for extra switches
-function makeOverflowProgram (switches) {
+function makeOverflowProgram (switches, radioCommands) {
     var programNum = -1;
     // need to figure out an open program number
-    for (var x = radioSettings.programCount; x>0; x--) {
+    for (var x = (radioSettings.programCount-1); x>=0; x--) {
         if (radioPrograms[x] == null) {
             programNum = x;
             break;
@@ -1276,7 +1300,7 @@ function makeOverflowProgram (switches) {
         // can't do more switches.  sorry
         // this should be rare anyway
         switches = [];
-        return 255;
+        return [255, radioCommands];
     }
     // We have an empty program.  we will update the information through the import so we just want to make
     // sure we don't use the same overflow twice
@@ -1293,14 +1317,17 @@ function makeOverflowProgram (switches) {
             overflowRadioCommand = overflowRadioCommand + thisSwitch;
         }
     }
-    if(switches.length > 0)
-        var overflowNum = makeOverflowProgram(switches);
-    else 
-        var overflowNum = 255;
-    overflowRadioCommand = overflowRadioCommand + (("0" + overflowNum.toString(16)).slice(-2));
-    console.log(overflowRadioCommand);
-    // brieflyPostRadioCommand(overflowRadioCommand);
-    return programNum;
+
+    if(switches.length > 0) {
+        var overflowArray = makeOverflowProgram(switches, radioCommands);
+        overflow = overflowArray[0];
+        radioCommands = overflowArray[1];
+    } else {
+        overflow = 255;
+    }
+    overflowRadioCommand = overflowRadioCommand + (("0" + overflow.toString(16)).slice(-2));
+    radioCommands.push(overflowRadioCommand);    
+    return [programNum, radioCommands];
 }
 
 
@@ -1455,20 +1482,6 @@ function postRadioCommand(radioCommand, radioID) {
 
 }
 
-// same as postRadioCommand but we don't care about feedback or updating
-function brieflyPostRadioCommand(radioCommand, radioID) {
-    $.post("ajax.php?function=sendRadioCommand",
-            {
-                radioID: radioID,
-    command: radioCommand,
-            }
-            , function (data) {
-            },
-            "text"
-                ).error(function () {
-                })
-
-}
 
 
 
