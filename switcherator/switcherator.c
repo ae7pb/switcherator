@@ -62,7 +62,7 @@ static char radioReceiveBuffer[30];
 static char tempIntString[] = "00";
 static char tempLongString[] = "0000";
 static char tempHugeString[] = "000000";
-static char statusMsg[32];
+static char statusMsg[33];
 
 // HardwarePWM
 static char runHue = 0;
@@ -79,7 +79,7 @@ static char pwmOldValues[] = {0, 0, 0};
 static char pwmChangeValues[] = {0, 0, 0};
 
 // if an input is a pwm we may need to make sure the right input is on
-static int switchPWMOverride = 99;
+static int switchPWMOverride;
 
 // rotating hue
 static unsigned int currentHue;
@@ -148,6 +148,7 @@ int main(void) {
     hueSpeed = 16;
     colorChangeSpeed = 10;
     tweakTimer = TIMER_TOTAL;
+    switchPWMOverride = 99;
 
     INDICATOR_DDR |= INDICATOR_PIN;
     for (x = 0; x < 4; x++) {
@@ -895,7 +896,6 @@ void pwmSetup(char * commandReceived) {
     pwmIsSet = 1;
     pwmSwitchNumber = switchNumber;
     // pwm to output
-    ok();
 }
 
 // Turn off the PWM - called by clearing the switch
