@@ -65,7 +65,6 @@
     </div>
 </script>
 
-
 <script id="oneByTwoByTwo" type="text/x-jsrender" >
     <div id="detailEditDiv" class="detailEdit centerArea" >
         {{:preTable}}
@@ -231,7 +230,7 @@
                         <input type=radio id="digitalInputhiLoL" name="digitalInputHiLo" value="L">Low </input>
                     </span>
                     <span class="analogInput" style="display: none;" >Low %{{:fourthRightAnalogLow}}
-                            High %{{:fourthRightAnalogHigh}}
+                        High %{{:fourthRightAnalogHigh}}
                     </span>
                 </td>
             </tr>
@@ -251,4 +250,53 @@
         {{:postTable}}
     </div>
 </script>
+
+<script id="timeLimitForm" type="text/x-jsrender" >
+    <div id="detailEditDiv" class="detailEdit centerArea" >
+        {{:preTable}}
+        <table class="detailTable">
+            <tr class="detailTable">
+                <td class="center" colspan=2 >{{:topMessage}}</td>
+            </tr>
+            <tr class="detailTable">
+                <td class="left">{{:topLeft}}</td>
+                <td class="right">{{:topRight}}</td>
+            </tr>
+            <tr class="detailTable">
+                <td class="left">{{:secondLeft}}</td>
+                <td class="right">{{:secondRight}}</td>
+            </tr>
+            <tr class="detailTable">
+                <td class="left">{{:thirdLeft}}</td>
+                <td class="right">
+                    <table><tr><td>
+                                <input id="sunCheckbox" value=1 type="checkbox" {{:sunChecked}} class="limitCheckbox" /></td><td>Sun 
+                                </td><td>
+                                <input id="monCheckbox" value=1 type="checkbox" {{:monChecked}} class="limitCheckbox" /></td><td>Mon 
+                                </td></tr><tr><td>
+                                <input id="tueCheckbox" value=1 type="checkbox" {{:tueChecked}} class="limitCheckbox" /></td><td>Tue
+                                </td><td>
+                                <input id="wedCheckbox" value=1 type="checkbox" {{:wedChecked}} class="limitCheckbox" /></td><td>Wed
+                                </td></tr><tr><td>
+                                <input id="thuCheckbox" value=1 type="checkbox" {{:thuChecked}} class="limitCheckbox" /></td><td>Thu
+                                </td><td>
+                                <input id="friCheckbox" value=1 type="checkbox" {{:friChecked}} class="limitCheckbox" /></td><td>Fri
+                                </td></tr><tr><td>
+                                <input id="satCheckbox" value=1 type="checkbox" {{:satChecked}} class="limitCheckbox" /></td><td>Sat
+                                </td><td>
+                                <input id="allCheckbox" value=1 type="checkbox" {{:allChecked}} onclick="limitCheckboxToggle(this)" /></td><td>All
+                    </td></tr></table>
+
+
+                </td>
+            </tr>
+            <tr class="detailTable">
+                <td class="left">{{:bottomLeft}}</td>
+                <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
+            </tr>
+        </table>
+        {{:postTable}}
+    </div>
+</script>
+
 

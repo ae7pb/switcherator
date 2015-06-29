@@ -419,7 +419,7 @@ function showRadioDetails(response) {
     colorText = ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
         ("0" + blue.toString(16)).substr(-2);
     colorArray.push({
-        id: thisColor.id,
+        id: thisColor.colorChangeNumber,
         colorChangeNumber: thisColor.colorChangeNumber,
         color: colorText,
         textColor: textColor,
@@ -442,11 +442,11 @@ function showRadioDetails(response) {
     radioTimeLimits.forEach(function (thisLimit) {
         limitStart = parseInt(thisLimit.startTime);
         limitStop = parseInt(thisLimit.stopTime);
-        hour = Math.floor(limitStart / 60);
-        minute = limitStart % 60;
+        hour = Math.floor(limitStart / 60 / 60);
+        minute = (limitStart / 60) % 60;
         startMessage = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
-        hour = Math.floor(limitStop / 60);
-        minute = limitStop % 60;
+        hour = Math.floor(limitStop / 60 / 60);
+        minute = (limitStop / 60) % 60;
         stopMessage = hour.toString(10) + ":" + (("0" + minute.toString(10)).substr(-2));
         dayInt = parseInt(thisLimit.days, 10);
         if (dayInt & 0x40)
@@ -478,7 +478,7 @@ function showRadioDetails(response) {
     else
         Sat = 0;
     timeLimitArray.push({
-        id: thisLimit.id,
+        id: thisLimit.limitNumber,
         limitNumber: thisLimit.limitNumber,
         startMessage: startMessage,
         stopMessage: stopMessage,
@@ -1486,7 +1486,7 @@ function addEditInputSubmit(event, inputID) {
     var minutes = parseInt(time[1],10);    
     var seconds = (parseInt(time[3],10) || 0);
     duration = (minutes * 60) + seconds;
- 
+
     duration = ("0000" + duration.toString()).slice(-4);
     var pollTime = $("#inputHowOften").val();
     pollTime = ("0" + pollTime).slice(-2);
@@ -1502,7 +1502,7 @@ function addEditInputSubmit(event, inputID) {
     } else {
         var low = ("000" + $("#analogLowInput").val()).slice(-3);
         var high = ("000" + $("#analogHighInput").val()).slice(-3)
-        var radioCommand = "AI:"+inputNum+thisPortArray[port]+pin+low+high+switchOrProgram+switchOrProgramNum+duration+pollTime;
+            var radioCommand = "AI:"+inputNum+thisPortArray[port]+pin+low+high+switchOrProgram+switchOrProgramNum+duration+pollTime;
     }
     postRadioCommand(radioCommand, radioSettings.id);
 }
@@ -1550,7 +1550,6 @@ function viewRadioColors() {
 }
 
 function addEditColors(colorID) {
-    console.log(radioColors);
     resetEdit();
     if(colorID != "new") {
         var red = radioColors[colorID].red;
@@ -1560,13 +1559,14 @@ function addEditColors(colorID) {
         green = ("00" + green.toString(16)).slice(-2);   
         blue = ("00" + blue.toString(16)).slice(-2);
         var color = red + green + blue;
-        console.log(color);
+        var changeable = radioColors[colorID].ifChangeable;
     } else {
         var color = "";
+        var changeable = 1;
     }
     var addEditColorsObject = {
         topLeft: wordsToTranslate.changeColor,
-        topRight: "<input id=colorInput value='" + color + "' />",
+        topRight: "<input id='colorInput' value='" + color + "' onKeyDown='addEditColorsSubmit(event, \""+colorID+"\" )' />",
         secondLeft: wordsToTranslate.colorChangeable,
         secondRight: "<input id=colorChangeY type=radio name=colorChangeable >"+wordsToTranslate.yes+"</input>"+
             "<input id=colorChangeN type=radio name=colorChangeable >"+wordsToTranslate.no+"</input> ",
@@ -1575,9 +1575,44 @@ function addEditColors(colorID) {
     }
     htmlOutput = templateRender("#twoByThree", addEditColorsObject);
     $("#individualDetailEdit").append(htmlOutput);
- 
+    if (changeable == 1) {
+        $("#colorChangeY").prop("checked", true);
+    } else {
+        $("#colorChangeN").prop("checked", true);
+    }
 } 
 
+// CC:##rrggbbp  - color change values (hex) - ## is the color change number - p=1 = pwm only
+function addEditColorsSubmit(event, colorID) {
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
+        return;
+    // need to figure out an open program number
+    if (colorID == "new") {
+        for (var x = 0; x < radioSettings.colorChangeCount; x++) {
+            if (radioColors[x] == null) {
+                colorID = x;
+                break;
+            }
+        }
+    }
+    var reg = /^[a-gA-G0-9:-]+$/;
+    var match = $("#colorInput").val().match(reg);
+    if (match == null) {
+        showError(wordsToTranslate.invalidColor);
+        resetOnClick = 1;
+        return;
+    }
+
+
+    if ($("#colorChangeY").prop("checked") == true) {
+        var changeable = "0";
+    } else {
+        var changeable = "1";
+    }
+    var radioCommand = "CC:" + ("0" + colorID).slice(-2) + ("000000" + $("#colorInput").val()).slice(-6) +
+        changeable;
+    postRadioCommand(radioCommand, radioSettings.id);
+}
 /**********************************************************
  * 
  * Radio TimeLimits Area
@@ -1605,6 +1640,163 @@ function viewRadioTimeLimits() {
 }
 
 function addEditTimeLimits(limitID) {
+    resetEdit();
+    if(limitID != "new") {
+        if (radioTimeLimits[limitID] != null) {
+            var Sun, Mon, Tue, Wed, Thu, Fri, Sat, all;
+            if (radioTimeLimits[limitID].days & 0x40)
+                Sun = "checked";
+            if (radioTimeLimits[limitID].days & 0x20)
+                Mon = "checked";
+            if (radioTimeLimits[limitID].days & 0x10)
+                Tue = "checked";
+            if (radioTimeLimits[limitID].days & 0x08)
+                Wed = "checked";
+            if (radioTimeLimits[limitID].days & 0x04)
+                Thu = "checked";
+            if (radioTimeLimits[limitID].days & 0x02)
+                Fri = "checked";
+            if (radioTimeLimits[limitID].days & 0x01)
+                Sat = "checked";
+            if ((radioTimeLimits[limitID].days & 0x7F) == 0x7F)
+                all = "checked";
+            var startTime = radioTimeLimits[limitID].startTime;
+            var stopTime = radioTimeLimits[limitID].stopTime;
+            var hour = Math.floor(startTime / 60 / 60);
+            var minute = (startTime / 60) % 60;
+            var ampm = "AM";
+            if (hour > 12) {
+                hour -= 12;
+                ampm = "PM";
+            }
+            startTime = hour.toString() + ":" + ("00" + minute.toString()).slice(-2) + " " + ampm;
+            ampm = "AM";
+            hour = Math.floor(stopTime / 60 / 60);
+            minute = (stopTime / 60) % 60;
+            if (hour > 12) {
+                hour =- 12;
+                ampm = "PM";
+            }
+            stopTime = hour.toString() + ":" + ("00" + minute.toString()).slice(-2) + " " + ampm;
+        } 
+    } else {
+        var Sun, Mon, Tue, Wed, Thu, Fri, Sat, all, startTime, stopTime;
+    }
+    var addEditLimitsObject = {
+        topMessage: wordsToTranslate.timeLimitMessage,
+        topLeft: wordsToTranslate.limitStart,
+        topRight: "<input id='startTimeInput' value='" + startTime + 
+            "' onKeyDown='addEditTimeLimitsSubmit(event, \""+limitID+"\" )' />",
+        secondLeft: wordsToTranslate.limitStop,
+        secondRight: "<input id='stopTimeInput' value='" + stopTime + 
+            "' onKeyDown='addEditTimeLimitsSubmit(event, \""+limitID+"\" )' />",
+        thirdLeft: wordsToTranslate.limitDays,
+        thirdRight: "",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<button onClick=addEditTimeLimitsSubmit(event,'" + limitID + "') >Submit</button>",
+        sunChecked: Sun,
+        monChecked: Mon,
+        tueChecked: Tue,
+        wedChecked: Wed,
+        thuChecked: Thu,
+        friChecked: Fri,
+        satChecked: Sat,
+        allChecked: all,
+    }
+    htmlOutput = templateRender("#timeLimitForm", addEditLimitsObject);
+    $("#individualDetailEdit").append(htmlOutput);
+    $("#startTimeInput").kitkatclock();
+    $("#stopTimeInput").kitkatclock();
+}
+
+// TL:##HHMMHHMMdddddd - Time Limits - Replace first H with x to clear or ? to inquire ** Only works on programs
+function addEditTimeLimitsSubmit(event, limitID) {
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
+        return;
+    // need to figure out an open program number
+    if (limitID == "new") {
+        for (var x = 0; x < radioSettings.timeLimitCount; x++) {
+            if (radioTimeLimits[x] == null) {
+                limitID = x;
+                break;
+            }
+        }
+    }
+    var startTime = $("#startTimeInput").val();
+    var stopTime = $("#stopTimeInput").val();
+    var time = startTime.match(/(\d+)(:(\d\d))?\s*(p?)/i); 
+
+    var hours = parseInt(time[1],10);    
+    if (hours == 24 && !time[4]) {
+        hours = 0;
+    }
+    else {
+        hours += (hours < 12 && time[4])? 12 : 0;
+    }   
+    var minutes = (parseInt(time[3],10) || 0);
+    startTime = ("00" + hours.toString()).slice(-2) + ("00" + minutes.toString()).slice(-2);
+
+    time = stopTime.match(/(\d+)(:(\d\d))?\s*(p?)/i); 
+
+    hours = parseInt(time[1],10);    
+    if (hours == 24 && !time[4]) {
+        hours = 0;
+    }
+    else {
+        hours += (hours < 12 && time[4])? 12 : 0;
+    }   
+    minutes = (parseInt(time[3],10) || 0);
+    stopTime = ("00" + hours.toString()).slice(-2) + ("00" + minutes.toString()).slice(-2);
+
+
+
+    var dayString = "";
+    if($("#sunCheckbox").prop("checked")){
+        dayString += "1";
+    } else {
+        dayString += "0";
+    }
+    if($("#monCheckbox").prop("checked")){
+        dayString += "1";
+    } else {
+        dayString += "0";
+    }
+    if($("#tueCheckbox").prop("checked")){
+        dayString += "1";
+    } else {
+        dayString += "0";
+    }
+    if($("#wedCheckbox").prop("checked")){
+        dayString += "1";
+    } else {
+        dayString += "0";
+    } 
+    if($("#thuCheckbox").prop("checked")){
+        dayString += "1";
+    } else {
+        dayString += "0";
+    }  if($("#friCheckbox").prop("checked")){
+        dayString += "1";
+    } else {
+        dayString += "0";
+    }   
+    if($("#satCheckbox").prop("checked")){
+        dayString += "1";
+    } else {
+        dayString += "0";
+    }
+
+    var radioCommand = "TL:" + ("0" + limitID).slice(-2) + startTime + stopTime + dayString;
+    postRadioCommand(radioCommand, radioSettings.id);
+}
+
+/// when the "all" button gets checked
+function limitCheckboxToggle(event) {
+    if(event.checked) {
+        $(".limitCheckbox").prop("checked", true);
+    } else {
+        $(".limitCheckbox").prop("checked", false);
+    }
 
 }
 
