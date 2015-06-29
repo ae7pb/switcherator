@@ -5,167 +5,232 @@
 <script id="twoByFour" type="text/x-jsrender" >
 
     <div id=detailEditDiv class='detailEdit centerArea'>
-    {{:preTable}}
-    <table class=detailTable>
-    <tr class=detailTable>
-    <td class=left >{{:topLeft}}</td>
-    <td class=right>{{:topRight}}</td>
-    </tr><tr class=detailTable>
-    <td class=left>{{:secondLeft}}</td>
-    <td class=right>{{:secondRight}}</td>
-    </tr><tr class=detailTable>
-    <td class=left>{{:thirdLeft}}</td>
-    <td class=right>{{:thirdRight}}</td>
-    </tr><tr class=detailTable>
-    <td class=left>{{:bottomLeft}}</td>
-    <td class=right>{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
-    </tr>
-    </table>{{:postTable}}
+        {{:preTable}}
+        <table class=detailTable>
+            <tr class=detailTable>
+                <td class=left >{{:topLeft}}</td>
+                <td class=right>{{:topRight}}</td>
+                </tr><tr class=detailTable>
+                <td class=left>{{:secondLeft}}</td>
+                <td class=right>{{:secondRight}}</td>
+                </tr><tr class=detailTable>
+                <td class=left>{{:thirdLeft}}</td>
+                <td class=right>{{:thirdRight}}</td>
+                </tr><tr class=detailTable>
+                <td class=left>{{:bottomLeft}}</td>
+                <td class=right>{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
+            </tr>
+        </table>{{:postTable}}
     </div>
 </script>
 <script id="twoByFive" type="text/x-jsrender" >
     <div id=detailEditDiv class='detailEdit centerArea'>
-    {{:preTable}}
-    <table class=detailTable>
-    <tr class=detailTable>
-    <td class=left >{{:topLeft}}</td>
-    <td class=right>{{:topRight}}</td>
-    </tr><tr class=detailTable>
-    <td class=left>{{:secondLeft}}</td>
-    <td class=right>{{:secondRight}}</td>
-    </tr><tr class=detailTable>
-    <td class=left>{{:thirdLeft}}</td>
-    <td class=right>{{:thirdRight}}</td>
-    </tr><tr class=detailTable>
-    <td class=left>{{:fourthLeft}}</td>
-    <td class=right>{{:fourthRight}}</td>
-    </tr><tr class=detailTable>
-    <td class=left>{{:bottomLeft}}</td>
-    <td class=right>{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
-    </tr>
-    </table>{{:postTable}}
+        {{:preTable}}
+        <table class=detailTable>
+            <tr class=detailTable>
+                <td class=left >{{:topLeft}}</td>
+                <td class=right>{{:topRight}}</td>
+                </tr><tr class=detailTable>
+                <td class=left>{{:secondLeft}}</td>
+                <td class=right>{{:secondRight}}</td>
+                </tr><tr class=detailTable>
+                <td class=left>{{:thirdLeft}}</td>
+                <td class=right>{{:thirdRight}}</td>
+                </tr><tr class=detailTable>
+                <td class=left>{{:fourthLeft}}</td>
+                <td class=right>{{:fourthRight}}</td>
+                </tr><tr class=detailTable>
+                <td class=left>{{:bottomLeft}}</td>
+                <td class=right>{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
+            </tr>
+        </table>{{:postTable}}
     </div>
 </script>
 
 
 <script id="oneByTwoByTwo" type="text/x-jsrender" >
     <div id="detailEditDiv" class="detailEdit centerArea" >
-    {{:preTable}}
-    <table class="detailTable">
-    <tr class="detailTable">
-    <td class="center" colspan=2 >{{:topMessage}}</td>
-    </tr>
-    <tr class="detailTable">
-    <td class="left">{{:topLeft}}</td>
-    <td class="right">{{:topRight}}</td>
-    </tr>
-    <tr class="detailTable">
-    <td class="left">{{:bottomLeft}}</td>
-    <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
-    </tr>
-    </table>
-    {{:postTable}}
+        {{:preTable}}
+        <table class="detailTable">
+            <tr class="detailTable">
+                <td class="center" colspan=2 >{{:topMessage}}</td>
+            </tr>
+            <tr class="detailTable">
+                <td class="left">{{:topLeft}}</td>
+                <td class="right">{{:topRight}}</td>
+            </tr>
+            <tr class="detailTable">
+                <td class="left">{{:bottomLeft}}</td>
+                <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
+            </tr>
+        </table>
+        {{:postTable}}
     </div>
 </script>
 
 <script id="switchDetailForm" type="text/x-jsrender" >
-<div id="detailEditDiv" class="detailEdit centerArea" >
-    {{:preTable}}
-    <table class="detailTable">
-        <tr class="detailTable">
-            <td class="center" colspan=2 >{{:topMessage}}</td>
-        </tr>
-        <tr class="detailTable switchTopRow"  >
-            <td class="left">{{:topLeft}}</td>
-            <td class="right"><select id=switchType onChange=changeSwitchData(this) >
-            {{for switchTypes}}
-            <option value="{{:typeIndex}}" {{:selected}} >{{:type}}</option>
-            {{/for}}
+    <div id="detailEditDiv" class="detailEdit centerArea" >
+        {{:preTable}}
+        <table class="detailTable">
+            <tr class="detailTable">
+                <td class="center" colspan=2 >{{:topMessage}}</td>
+            </tr>
+            <tr class="detailTable switchTopRow"  >
+                <td class="left">{{:topLeft}}</td>
+                <td class="right"><select id=switchType onChange=changeSwitchData(this) >
+                        {{for switchTypes}}
+                        <option value="{{:typeIndex}}" {{:selected}} >{{:type}}</option>
+                        {{/for}}
                 </select></td>
-        </tr>
-        <tr class="detailTable switchHide switchSecondRow"  >
-            <td class="left">{{:secondLeft}}</td>
-            <td class="right">
-            <select id=port >
-                {{for ports}}<option value="{{:portIndex}}" {{:selected}} >{{:port}}</option>{{/for}}
-            </select>
-            <select id=pin >
-                {{for pins}}<option value="{{:pin}}" {{:selected}} >{{:pin}}</option>{{/for}}
-            </select>
-            <select id=hiLo >
-                {{for hiLo}}<option value="{{:pinID}}" {{:selected}} >{{:pinValue}}</option>{{/for}}
-            </select>
-            </td>
-        </tr>
-        <tr class="detailTable switchHide switchThirdRow"  >
-            <td class="left">{{:thirdLeft}}</td>
-            <td class="right">{{:thirdRight}}</td>
-        </tr>
-        <tr class="detailTable switchLastRow"  >
-            <td class="left">{{:bottomLeft}}</td>
-            <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
-        </tr>
-    </table>
-    {{:postTable}}
-</div>
+            </tr>
+            <tr class="detailTable switchHide switchSecondRow"  >
+                <td class="left">{{:secondLeft}}</td>
+                <td class="right">
+                    <select id=port >
+                        {{for ports}}<option value="{{:portIndex}}" {{:selected}} >{{:port}}</option>{{/for}}
+                    </select>
+                    <select id=pin >
+                        {{for pins}}<option value="{{:pin}}" {{:selected}} >{{:pin}}</option>{{/for}}
+                    </select>
+                    <select id=hiLo >
+                        {{for hiLo}}<option value="{{:pinID}}" {{:selected}} >{{:pinValue}}</option>{{/for}}
+                    </select>
+                </td>
+            </tr>
+            <tr class="detailTable switchHide switchThirdRow"  >
+                <td class="left">{{:thirdLeft}}</td>
+                <td class="right">{{:thirdRight}}</td>
+            </tr>
+            <tr class="detailTable switchLastRow"  >
+                <td class="left">{{:bottomLeft}}</td>
+                <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
+            </tr>
+        </table>
+        {{:postTable}}
+    </div>
 </script>
 
 <script id="programDetailForm" type="text/x-jsrender" >
-<div id="detailEditDiv" class="detailEdit centerArea" >
-    {{:preTable}}
-    <table class="detailTable">
-        <tr class="detailTable">
-            <td class="center" colspan=2 >{{:topMessage}}</td>
-        </tr>
-        <tr class="detailTable "  >
-            <td class="left">{{:topLeft}}</td>
-            <td class="right">
-                <table><tr><td>
-                        <input id="sunCheckbox" value=1 type="checkbox" {{:sunChecked}} class="programCheckbox" /></td><td>Sun 
-                        </td><td>
-                        <input id="monCheckbox" value=1 type="checkbox" {{:monChecked}} class="programCheckbox" /></td><td>Mon 
-                        </td></tr><tr><td>
-                        <input id="tueCheckbox" value=1 type="checkbox" {{:tueChecked}} class="programCheckbox" /></td><td>Tue
-                        </td><td>
-                        <input id="wedCheckbox" value=1 type="checkbox" {{:wedChecked}} class="programCheckbox" /></td><td>Wed
-                        </td></tr><tr><td>
-                        <input id="thuCheckbox" value=1 type="checkbox" {{:thuChecked}} class="programCheckbox" /></td><td>Thu
-                        </td><td>
-                        <input id="friCheckbox" value=1 type="checkbox" {{:friChecked}} class="programCheckbox" /></td><td>Fri
-                        </td></tr><tr><td>
-                        <input id="satCheckbox" value=1 type="checkbox" {{:satChecked}} class="programCheckbox" /></td><td>Sat
-                        </td><td>
-                        <input id="allCheckbox" value=1 type="checkbox" {{:allChecked}} onclick="programCheckboxToggle(this)" /></td><td>All
-                        </td></tr></table>
+    <div id="detailEditDiv" class="detailEdit centerArea" >
+        {{:preTable}}
+        <table class="detailTable">
+            <tr class="detailTable">
+                <td class="center" colspan=2 >{{:topMessage}}</td>
+            </tr>
+            <tr class="detailTable "  >
+                <td class="left">{{:topLeft}}</td>
+                <td class="right">
+                    <table><tr><td>
+                                <input id="sunCheckbox" value=1 type="checkbox" {{:sunChecked}} class="programCheckbox" /></td><td>Sun 
+                                </td><td>
+                                <input id="monCheckbox" value=1 type="checkbox" {{:monChecked}} class="programCheckbox" /></td><td>Mon 
+                                </td></tr><tr><td>
+                                <input id="tueCheckbox" value=1 type="checkbox" {{:tueChecked}} class="programCheckbox" /></td><td>Tue
+                                </td><td>
+                                <input id="wedCheckbox" value=1 type="checkbox" {{:wedChecked}} class="programCheckbox" /></td><td>Wed
+                                </td></tr><tr><td>
+                                <input id="thuCheckbox" value=1 type="checkbox" {{:thuChecked}} class="programCheckbox" /></td><td>Thu
+                                </td><td>
+                                <input id="friCheckbox" value=1 type="checkbox" {{:friChecked}} class="programCheckbox" /></td><td>Fri
+                                </td></tr><tr><td>
+                                <input id="satCheckbox" value=1 type="checkbox" {{:satChecked}} class="programCheckbox" /></td><td>Sat
+                                </td><td>
+                                <input id="allCheckbox" value=1 type="checkbox" {{:allChecked}} onclick="programCheckboxToggle(this)" /></td><td>All
+                    </td></tr></table>
 
-            </td>
-        </tr>
-        <tr class="detailTable  "  >
-            <td class="left">{{:secondLeft}}</td>
-            <td class="right"><input type="text" id="programEditStartTime" value="{{:startTime}}" 
-            onKeyDown="addEditProgramSubmit(event, '{{:programID}}' )" /></td>
-        </tr>
-        <tr class="detailTable  "  >
-            <td class="left">{{:thirdLeft}}</td>
-            <td class="right"><input id="programEditDuration" value="{{:duration}}"
-            onKeyDown="addEditProgramSubmit(event, '{{:programID}}' )" /></td>
-        </tr>
-        <tr class="detailTable  "  >
-            <td class="left">{{:fourthLeft}}</td>
-            <td class="right"><select multiple id="programSwitchesSelect" >
-            {{for switches}}
-                <option value="{{:switchNumber}}" {{:switchSelected }} >Switch #{{:switchNumber}} </option>
-            {{/for}}
-             </select>
-        </td>
-        </tr>
-        <tr class="detailTable "  >
-            <td class="left">&nbsp;</td>
-            <td class="right"><button 
-            onClick=addEditProgramSubmit(event,'{{:programID}}') >Submit</button>
+                </td>
+            </tr>
+            <tr class="detailTable  "  >
+                <td class="left">{{:secondLeft}}</td>
+                <td class="right"><input type="text" id="programEditStartTime" value="{{:startTime}}" 
+                    onKeyDown="addEditProgramSubmit(event, '{{:programID}}' )" /></td>
+            </tr>
+            <tr class="detailTable  "  >
+                <td class="left">{{:thirdLeft}}</td>
+                <td class="right"><input id="programEditDuration" value="{{:duration}}"
+                    onKeyDown="addEditProgramSubmit(event, '{{:programID}}' )" /></td>
+            </tr>
+            <tr class="detailTable  "  >
+                <td class="left">{{:fourthLeft}}</td>
+                <td class="right"><select multiple id="programSwitchesSelect" >
+                        {{for switches}}
+                        <option value="{{:switchNumber}}" {{:switchSelected }} >Switch #{{:switchNumber}} </option>
+                        {{/for}}
+                    </select>
+                </td>
+            </tr>
+            <tr class="detailTable "  >
+                <td class="left">&nbsp;</td>
+                <td class="right"><button 
+                        onClick=addEditProgramSubmit(event,'{{:programID}}') >Submit</button>
                     <span id=submitWait ><img src=img/loading.gif /></span></td>
-        </tr>
-    </table>
-    {{:postTable}}
-</div>
+            </tr>
+        </table>
+        {{:postTable}}
+    </div>
 </script>
+
+<script id="inputDetailForm" type="text/x-jsrender" >
+    <div id="detailEditDiv" class="detailEdit centerArea" >
+        {{:preTable}}
+        <table class="detailTable">
+            <tr class="detailTable">
+                <td class="center" colspan=2 >{{:topMessage}}</td>
+            </tr>
+            <tr class="detailTable inputTopRow"  >
+                <td class="left">{{:topLeft}}</td>
+                <td class="right"><select id=inputType onChange=changeInputData(this) >
+                        {{for inputTypes}}
+                        <option value="{{:typeIndex}}" {{:selected}} >{{:type}}</option>
+                        {{/for}}
+                </select></td>
+            </tr>
+            <tr class="detailTable inputHide inputSecondRow"  >
+                <td class="left">{{:secondLeft}}</td>
+                <td class="right">
+                    <select id=port >
+                        {{for ports}}<option value="{{:portIndex}}" {{:selected}} >{{:port}}</option>{{/for}}
+                    </select>
+                    <select id=pin >
+                        {{for pins}}<option value="{{:pin}}" {{:selected}} >{{:pin}}</option>{{/for}}
+                    </select>
+                </td>
+            </tr>
+            <tr class="detailTable inputHide inputThirdRow"  >
+                <td class="left">{{:thirdLeft}}</td>
+                <td class="right">{{:thirdRight}} <input id=inputSwitchProgram type=radio value='S' >Switch 
+                    <input id=inputSwitchProgram type=radio value='P' >Program
+                </td>
+            </tr>
+            <tr class="detailTable inputFourthRow"  >
+                <td class="left">
+                    <span class="digitalInput" style="display: none;" >{{:fourthLeftDigital}}</span>
+                    <span class="analogInput" style="display: none;" >{{:fourthLeftAnalog}}</span>
+                </td>
+                <td class="right">
+                    <span class="digitalInput" style="display: none;" >{{:fourthRightDigital}}
+                        <input type=radio id="digitalInputHiLo" value="H">High 
+                        <input type=radio id="digitalInputhiLo" value="L">Low
+                    </span>
+                    <span class="analogInput" style="display: none;" >Low percentage{{:fourthRightAnalogLow}}
+                            High percentage{{:fourthRightAnalogHigh}}
+                    </span>
+                </td>
+            </tr>
+            <tr class="detailTable inputFifthRow"  >
+                <td class="left">{{:fifthLeft}}</td>
+                <td class="right">{{:fifthRight}}</td>
+            </tr>
+            <tr class="detailTable inputSixthRow"  >
+                <td class="left">{{:sixthLeft}}</td>
+                <td class="right">{{:sixthRight}}</td>
+            </tr>
+            <tr class="detailTable inputLastRow"  >
+                <td class="left">{{:bottomLeft}}</td>
+                <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>
+            </tr>
+        </table>
+        {{:postTable}}
+    </div>
+</script>
+

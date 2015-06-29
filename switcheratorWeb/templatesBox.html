@@ -87,7 +87,7 @@ Click to add new input</div>
 </script>
 <script id="radioViewInputTemplate" type="text/x-jsrender" >
 <div id=radioInputs-{{:id}}   class='radioInputsChild radioInputsSubChild detailField' 
-    onclick=addEditInput({{:id}}}) >
+    onclick=addEditInput('{{:id}}') >
     {{if inputType == 1}}
     Digital #{{:inputNumber}} 
     {{:portPin}} 

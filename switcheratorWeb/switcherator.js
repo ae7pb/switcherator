@@ -385,7 +385,7 @@ function showRadioDetails(response) {
         pin = Math.floor(getPin / 2);
         portPin = ports[port] + pin.toString(10);
         inputArray.push({
-            id: thisInput.id,
+            id: thisInput.inputNumber,
             inputType: inputType,
             inputNumber: thisInput.inputNumber,
             portPin: portPin,
@@ -1358,7 +1358,80 @@ function viewRadioInputs() {
 }
 
 function addEditInput(inputID) {
+    resetEdit();
+    console.log(radioInputs);
+    var duration = parseInt(radioInputs[inputID].duration);
+    var minutes =  Math.floor(duration / 60);
+    var seconds = duration % 60;
+    var durationText = minutes.toString()+":"+("0" + seconds.toString()).slice(-2);
+    var addEditinputObject = {
+        topMessage: wordsToTranslate.inputMessage,
+        topLeft: wordsToTranslate.inputType,
+        inputTypes: [
+        {typeIndex: "x", type: wordsToTranslate.inputSelect, selected: '', },
+        {typeIndex: 0, type: wordsToTranslate.inputDigital, selected: '', },
+        {typeIndex: 1, type: wordsToTranslate.inputAnalog, selected: '', },
+        ],
+        secondLeft: wordsToTranslate.inputPortPin,
+        ports: [
+        {portIndex: 0, port: "PORTA", selected: ''},
+        {portIndex: 1, port: "PORTB", selected: ''},
+        {portIndex: 2, port: "PORTC", selected: ''},
+        {portIndex: 3, port: "PORTD", selected: ''},
+        {portIndex: 4, port: "PORTE", selected: ''},
+        {portIndex: 5, port: "PORTF", selected: ''},
+        {portIndex: 6, port: "PORTG", selected: ''},
+        ],
+        pins: [
+        {pin: 0, selected: ''},
+        {pin: 1, selected: ''},
+        {pin: 2, selected: ''},
+        {pin: 3, selected: ''},
+        {pin: 4, selected: ''},
+        {pin: 5, selected: ''},
+        {pin: 6, selected: ''},
+        {pin: 7, selected: ''},
+        ],
+        thirdLeft: wordsToTranslate.inputSwitchProgram,
+        thirdRight: "<input id='inputSwitchProgramNum' size=5 onKeyDown=\"addEditInputSubmit(event,'" + inputID + "' )\" >",
+        fourthLeftDigital: wordsToTranslate.digitalInputHiLo,
+        fourthRightDigital:  , 
+        fourthLeftAnalog: wordsToTranslate.analogInputHiLo,
+        fourthRightAnalogLow: "<input size=5 value='"+radioInputs[inputID].lowPercent+"' id='analogLowInput' />",
+        fourthRightAnalogHigh: "<input size=5 value='"+radioInputs[inputID].highPercent+"' id='analogHighInput' />",
+        fifthLeft: wordsToTranslate.inputDuration,
+        fifthRight: "<input id='inputDuration' size=5 onKeyDown=\"addEditInputSubmit(event,'" + inputID + "' )\" "+
+            " value='"+durationText+"' >",
+        sixthLeft: wordsToTranslate.inputHowOften,
+        sixthRight: "<input id='inputHowOften' size=5 onKeyDown=\"addEditInputSubmit(event,'" + inputID + "' )\" "+ 
+            "value='"+radioInputs[inputID].pollTime+"' >",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<button onClick=addEditInputSubmit(event,'" + inputID + "') >Submit</button>",
+        inputNumber: inputID,
+    };
+    htmlOutput = templateRender("#inputDetailForm", addEditinputObject);
+    $("#individualDetailEdit").append(htmlOutput);
+    $("#newRadioName").focus();
+    if (inputID != "new") {
+        var inputStuff = radioInputs[inputID].inputStuff;
+        var inputPWM = radioInputs[inputID].inputPWM;
 
+        $(".inputSecondRow").show();
+        $("#inputType").val(0);
+        var port, getPin, pin, hiLo;
+        port = (Math.floor(radioInputs[inputID].inputStuff / 16));
+        getPin = radioInputs[inputID].inputStuff % 16;
+        pin = Math.floor(getPin / 2);
+        if (getPin % 2 == 0) {
+            hiLo = 0;
+        } else {
+            hiLo = 1;
+        }
+        $("#port").val(port);
+        $("#pin").val(pin);
+        $("#hiLo").val(hiLo);
+
+    }
 }
 
 /**********************************************************
