@@ -1550,8 +1550,33 @@ function viewRadioColors() {
 }
 
 function addEditColors(colorID) {
-
-}
+    console.log(radioColors);
+    resetEdit();
+    if(colorID != "new") {
+        var red = radioColors[colorID].red;
+        var green = radioColors[colorID].green;
+        var blue = radioColors[colorID].blue;
+        red = ("00" + red.toString(16)).slice(-2);
+        green = ("00" + green.toString(16)).slice(-2);   
+        blue = ("00" + blue.toString(16)).slice(-2);
+        var color = red + green + blue;
+        console.log(color);
+    } else {
+        var color = "";
+    }
+    var addEditColorsObject = {
+        topLeft: wordsToTranslate.changeColor,
+        topRight: "<input id=colorInput value='" + color + "' />",
+        secondLeft: wordsToTranslate.colorChangeable,
+        secondRight: "<input id=colorChangeY type=radio name=colorChangeable >"+wordsToTranslate.yes+"</input>"+
+            "<input id=colorChangeN type=radio name=colorChangeable >"+wordsToTranslate.no+"</input> ",
+        bottomLeft: "&nbsp;",
+        bottomRight: "<button onClick=addEditColorsSubmit(event,'" + colorID + "') >Submit</button>",
+    }
+    htmlOutput = templateRender("#twoByThree", addEditColorsObject);
+    $("#individualDetailEdit").append(htmlOutput);
+ 
+} 
 
 /**********************************************************
  * 
