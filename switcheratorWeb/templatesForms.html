@@ -198,8 +198,8 @@
             </tr>
             <tr class="detailTable inputHide inputThirdRow"  >
                 <td class="left">{{:thirdLeft}}</td>
-                <td class="right">{{:thirdRight}} <input id=inputSwitchProgram type=radio value='S' >Switch 
-                    <input id=inputSwitchProgram type=radio value='P' >Program
+                <td class="right">{{:thirdRight}} <input id="inputSwitchProgramS" name=inputSwitchProgram type=radio value='S' >Switch</input> 
+                    <input id="inputSwitchProgramP" name=inputSwitchProgram type=radio value='P' >Program</input>
                 </td>
             </tr>
             <tr class="detailTable inputFourthRow"  >
@@ -209,11 +209,11 @@
                 </td>
                 <td class="right">
                     <span class="digitalInput" style="display: none;" >{{:fourthRightDigital}}
-                        <input type=radio id="digitalInputHiLo" value="H">High 
-                        <input type=radio id="digitalInputhiLo" value="L">Low
+                        <input type=radio id="digitalInputHiLoH" name="digitalInputHiLo" value="H">High </input>
+                        <input type=radio id="digitalInputhiLoL" name="digitalInputHiLo" value="L">Low </input>
                     </span>
-                    <span class="analogInput" style="display: none;" >Low percentage{{:fourthRightAnalogLow}}
-                            High percentage{{:fourthRightAnalogHigh}}
+                    <span class="analogInput" style="display: none;" >Low %{{:fourthRightAnalogLow}}
+                            High %{{:fourthRightAnalogHigh}}
                     </span>
                 </td>
             </tr>

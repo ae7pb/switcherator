@@ -1218,7 +1218,7 @@ function addEditProgramSubmit(event, programID) {
             }
         }
     }
-     // we are going to start overriding programs.  Should erase them first
+    // we are going to start overriding programs.  Should erase them first
     var radioCommands = [];
     radioCommands.push("CP:"+("0"+programID).slice(-2));
 
@@ -1270,7 +1270,7 @@ function addEditProgramSubmit(event, programID) {
             radioCommand = radioCommand + thisSwitch;
         }
     }
-    
+
 
     if(switches.length > 0) {
         var overflowArray = makeOverflowProgram(switches, radioCommands);
@@ -1359,11 +1359,19 @@ function viewRadioInputs() {
 
 function addEditInput(inputID) {
     resetEdit();
-    console.log(radioInputs);
-    var duration = parseInt(radioInputs[inputID].duration);
-    var minutes =  Math.floor(duration / 60);
-    var seconds = duration % 60;
-    var durationText = minutes.toString()+":"+("0" + seconds.toString()).slice(-2);
+    if(inputID == "new") {
+        var duration, minutes, seconds, durationText, lowPercent, highPercent, pollTime;
+        pollTime = "";
+        durationText = "";
+    } else {
+        var duration = parseInt(radioInputs[inputID].duration);
+        var minutes =  Math.floor(duration / 60);
+        var seconds = duration % 60;
+        var durationText = minutes.toString()+":"+("0" + seconds.toString()).slice(-2);
+        var lowPercent = Math.floor((parseInt(radioInputs[inputID].lowPercent))*100/255);
+        var highPercent = Math.floor((parseInt(radioInputs[inputID].highPercent))*100/255);
+        var pollTime = radioInputs[inputID].pollTime;
+    }
     var addEditinputObject = {
         topMessage: wordsToTranslate.inputMessage,
         topLeft: wordsToTranslate.inputType,
@@ -1395,16 +1403,16 @@ function addEditInput(inputID) {
         thirdLeft: wordsToTranslate.inputSwitchProgram,
         thirdRight: "<input id='inputSwitchProgramNum' size=5 onKeyDown=\"addEditInputSubmit(event,'" + inputID + "' )\" >",
         fourthLeftDigital: wordsToTranslate.digitalInputHiLo,
-        fourthRightDigital:  , 
+        fourthRightDigital:  "", 
         fourthLeftAnalog: wordsToTranslate.analogInputHiLo,
-        fourthRightAnalogLow: "<input size=5 value='"+radioInputs[inputID].lowPercent+"' id='analogLowInput' />",
-        fourthRightAnalogHigh: "<input size=5 value='"+radioInputs[inputID].highPercent+"' id='analogHighInput' />",
+        fourthRightAnalogLow: "<input size=5 value='"+lowPercent+"' id='analogLowInput' />",
+        fourthRightAnalogHigh: "<input size=5 value='"+highPercent+"' id='analogHighInput' />",
         fifthLeft: wordsToTranslate.inputDuration,
         fifthRight: "<input id='inputDuration' size=5 onKeyDown=\"addEditInputSubmit(event,'" + inputID + "' )\" "+
             " value='"+durationText+"' >",
         sixthLeft: wordsToTranslate.inputHowOften,
         sixthRight: "<input id='inputHowOften' size=5 onKeyDown=\"addEditInputSubmit(event,'" + inputID + "' )\" "+ 
-            "value='"+radioInputs[inputID].pollTime+"' >",
+            "value='" + pollTime + "' >",
         bottomLeft: "&nbsp;",
         bottomRight: "<button onClick=addEditInputSubmit(event,'" + inputID + "') >Submit</button>",
         inputNumber: inputID,
@@ -1413,11 +1421,16 @@ function addEditInput(inputID) {
     $("#individualDetailEdit").append(htmlOutput);
     $("#newRadioName").focus();
     if (inputID != "new") {
-        var inputStuff = radioInputs[inputID].inputStuff;
-        var inputPWM = radioInputs[inputID].inputPWM;
-
-        $(".inputSecondRow").show();
-        $("#inputType").val(0);
+        var pinStuff = radioInputs[inputID].pinStuff;
+        if(radioInputs[inputID].lowPercent == 255 || radioInputs[inputID].highPercent == 255) {
+            $("#inputType").val(0);
+            $(".digitalInput").show();
+            $("#digitalInputHiLoH").prop("checked", true);
+        } else {
+            $("#inputType").val(1);
+            $(".analogInput").show();
+            $("#digitalInputHiLoL").prop("checked", true);
+        }
         var port, getPin, pin, hiLo;
         port = (Math.floor(radioInputs[inputID].inputStuff / 16));
         getPin = radioInputs[inputID].inputStuff % 16;
@@ -1427,12 +1440,88 @@ function addEditInput(inputID) {
         } else {
             hiLo = 1;
         }
+        var port, getPin, pin, hiLo;
+        port = (Math.floor(radioInputs[inputID].pinStuff / 16));
+        getPin = radioInputs[inputID].pinStuff % 16;
+        pin = Math.floor(getPin / 2);
         $("#port").val(port);
         $("#pin").val(pin);
-        $("#hiLo").val(hiLo);
-
+        var switchOrProgram = parseInt(radioInputs[inputID].whichSwitchOrProgram);
+        if(switchOrProgram >= 128) {
+            $("#inputSwitchProgramP").prop("checked", true);
+            switchOrProgram -= 128;
+        } else {
+            $("#inputSwitchProgramS").prop("checked", true);
+        }
+        $("#inputSwitchProgramNum").val(switchOrProgram);
     }
 }
+
+//AI:##PpLLLHHH?##DuraPO - Analog input - ## input num, port/pin, LLL%,HHH%,? = (s)witch or (p)rogram, ## num, dur/poll time in seconds
+//DI:##Ppx?##DuraPO - Digital input. x=H/L for what activates switch
+function addEditInputSubmit(event, inputID) {
+    if (event.keyCode != 13 && event.keyCode != null && event.keyCode != 0)
+        return;
+    // need to figure out an open program number
+    if (inputID == "new") {
+        for (var x = 0; x < radioSettings.inputCount; x++) {
+            if (radioInputs[x] == null) {
+                inputID = x;
+                break;
+            }
+        }
+    }
+    var inputNum = ("0" + inputID.toString()).slice(-2);
+    var thisPortArray = ["A", "B", "C", "D", "E", "F", "G"];
+    if($("#inputSwitchProgramP").prop("checked") == true) {
+        var switchOrProgram = "P";
+    } else {
+        var switchOrProgram = "S";
+    }
+    var switchOrProgramNum = $("#inputSwitchProgramNum").val();
+    switchOrProgramNum = ("00" + switchOrProgramNum).slice(-2);
+    var duration = $("#inputDuration").val();
+    var time = duration.match(/(\d+)(:(\d\d))?\s*(p?)/i); 
+
+    var minutes = parseInt(time[1],10);    
+    var seconds = (parseInt(time[3],10) || 0);
+    duration = (minutes * 60) + seconds;
+ 
+    duration = ("0000" + duration.toString()).slice(-4);
+    var pollTime = $("#inputHowOften").val();
+    pollTime = ("0" + pollTime).slice(-2);
+    var port = $("#port").val();
+    var pin = $("#pin").val();
+    if($("#inputType").val() == 0) {
+        if($("#digitalInputHiLoH").prop("checked") == true) {
+            var hiLo = "H";
+        } else {
+            var hiLo = "L";
+        }
+        var radioCommand = "DI:"+inputNum+thisPortArray[port]+pin+hiLo+switchOrProgram+switchOrProgramNum+duration+pollTime;
+    } else {
+        var low = ("000" + $("#analogLowInput").val()).slice(-3);
+        var high = ("000" + $("#analogHighInput").val()).slice(-3)
+        var radioCommand = "AI:"+inputNum+thisPortArray[port]+pin+low+high+switchOrProgram+switchOrProgramNum+duration+pollTime;
+    }
+    postRadioCommand(radioCommand, radioSettings.id);
+}
+
+
+// choose which type of input and show/hide options based on it
+function changeInputData(event) {
+    if($("#inputType").val() == 0) {
+        $(".digitalInput").show();
+        $(".analogInput").hide();
+    } else if ($("#inputType").val() == 1) {
+        $(".digitalInput").hide();
+        $(".analogInput").show();
+    } else {
+        $(".digitalInput").hide();
+        $(".analogInput").hide();
+    }
+}
+
 
 /**********************************************************
  * 
