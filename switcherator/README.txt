@@ -22,7 +22,7 @@ PE:##ddssssddddswswswswPP - programEdit - directly edits a program and assumes t
             day of the week mask, start time (minutes in day), duration(seconds), 4 switches, 
             next program (if you need more than 4 switches
             THIS FUNCTION IS TRUSTING YOU so DON'T DO IT IF YOU AREN'T COMFORTABLE
-PS:P#S#H - PWM setup - p# is color change num, sw #then H=Hue, C=color change, 0=static color
+PS:P#S#H - PWM setup - p# is color change num (or brightness/16 for hue), sw #then H=Hue, C=color change, 0=static color
 WD:d - PWM Direction d=1 high, x shows it
 CH:vvvv - Color Change speed - default 10=1 second in 1/10ths
 HS:xx - Hue Speed - smooth number.  16 default

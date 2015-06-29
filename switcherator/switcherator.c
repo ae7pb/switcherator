@@ -4,7 +4,6 @@
 #ifndef F_CPU
 #define F_CPU 16000000
 #endif
-
 // TODO: deal with pulse width sonar thingie
 
 // If you want the hex smaller
@@ -83,13 +82,14 @@ static char pwmChangeValues[] = {0, 0, 0};
 static int switchPWMOverride = 99;
 
 // rotating hue
-static unsigned int currentHue = 0;
-static unsigned int hueSpeed = 16;
-static unsigned int hueCount = 0;
-static unsigned char littleCount = 0;
-static unsigned int colorChangeSpeed = 10; // how many 1/10 seconds in each color change
-static unsigned int colorChangeCount = 0;
-static unsigned char currentColor = 0;
+static unsigned int currentHue;
+static unsigned int hueSpeed;
+static unsigned int hueCount;
+static unsigned int hueBright;
+static unsigned char littleCount;
+static unsigned int colorChangeSpeed; // how many 1/10 seconds in each color change
+static unsigned int colorChangeCount;
+static unsigned char currentColor;
 #define Red OCR2B
 #define Green OCR0B
 #define Blue OCR0A
@@ -847,7 +847,7 @@ void getPort(int switchNumber, char * port, char * pin, char * direction) {
 
 // PWM setup.  This is initially  geared for the 328p but the framework
 // exists for other chips
-// PS:P#S#H
+// PS:P#S#H - p# is color change num or hue brightness, s# is switch, H = hue/colorchange/solid color
 // 012345678
 
 void pwmSetup(char * commandReceived) {
@@ -869,6 +869,11 @@ void pwmSetup(char * commandReceived) {
     // set up a hue pwm
     if (commandReceived[7] == 'H' || commandReceived[7] == 'h' || commandReceived[7] == '1') {
         switchStuff[switchNumber] = 201;
+        if(whichColorChange > 16)
+            whichColorChange = 16;
+        if(whichColorChange == 0)
+            whichColorChange = 16;
+        switchPWM[switchNumber] = whichColorChange;
     } else if (commandReceived[7] == 'C' || commandReceived[7] == 'c') {
         switchStuff[switchNumber] = 202;
     } else {
@@ -1154,9 +1159,9 @@ void runHueFunction(void) {
         blue = 0;
         currentHue = 0;
     }
-    Red = red;
-    Green = green;
-    Blue = blue;
+    Red = (red * 16 / hueBright);
+    Green = (green * 16 / hueBright);
+    Blue = (blue * 16 / hueBright);
     currentHue++;
 }
 
@@ -2741,6 +2746,7 @@ void switchOnOff(void) {
                         Red = 0;
                         Green = 0;
                         Blue = 0;
+                        hueBright = switchPWM[x];
                         runHue = 0;
                     } else if (switchStuff[x] == 202) {
                         Red = 0;
