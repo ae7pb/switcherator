@@ -74,6 +74,7 @@ function navigationBar(radioText) {
 function radioDivs(response) {
     if (response == null)
         return;
+    radioList = response;
     $("#radioList").html("");
     response.forEach(function (radio) {
         var output = radio.name;
@@ -1880,7 +1881,46 @@ function postRadioCommand(radioCommand, radioID) {
 
 }
 
-
+// Set the clocks on all the radios (done server side)
+function updateTime(whichRadio) {
+    if(typeof(whichRadio) == "undefined"){
+        var stuff = [];
+        radioList.forEach(function(thisOne) {
+            stuff.push( { id: thisOne.id , name: thisOne.name } );
+        });
+        var listBuild = { stuff: stuff};
+        whichRadio = 1;
+        var htmlOutput = templateRender("#radioSetTimeTemplate", listBuild);
+            $("#individualDetailEdit").append(htmlOutput);
+    }
+    if(whichRadio > radioList.length) {
+        return;
+    }
+    $("#updateTimeWait").show();
+    $("#updateTime").hide();
+    $("#pws-"+whichRadio).show();
+    $.post("ajax.php?function=updateTime",
+            { radioID: whichRadio }
+            , function (data) {
+                $("#updateTimeWait").hide();
+                $("#updateTime").show();
+                if (data == "ok") {
+                    $("#stField-"+whichRadio).text(wordsToTranslate.timeUpdated);
+                    resetOnClick = 1;
+                    updateTime(whichRadio + 1);
+                } else {
+                    $("#stField-"+whichRadio).text(wordsToTranslate.timeError);
+                    resetOnClick = 1;
+                    if (debugMePlease == 1) {
+                        $("debugSection").html(data);
+                        $("debugSection").show();
+                    }
+                    updateTime(whichRadio + 1);
+                }
+            },
+            "text"
+         )
+}
 
 
 /**********************************************************

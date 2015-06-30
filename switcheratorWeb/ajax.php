@@ -165,4 +165,15 @@ function updateRadio() {
     return processRadio($_POST['radioID']);
 }
 
+
+function updateTime() {
+    $radioID = intval($_POST['radioID']);
+    include_once("functions.php");
+    $response = radioCommand($radioID, "","/");
+    if ($response == false)
+        return "fail";
+    return "ok";
+}
+
+
 ?>

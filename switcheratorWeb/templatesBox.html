@@ -7,6 +7,20 @@
     Click to refresh radio data</div>
 </script>
 
+<script id="radioSetTimeTemplate" type="text/x-jsrender" >
+    <div id="setTimeDiv" class="headersection centerArea detailEdit" >
+        <table class="setTimeTable" >
+            {{for stuff}}
+            <tr class='setTimeRow str-{{:id}}' >
+                <td class='setTimeField stLeft' >{{:name}}</td>
+                <td class='setTimeField stRight' id='stField-{{:id}}' ><img id='pws-{{:id}}'
+                    src="img/loading.gif" ></img></td>
+            </tr>
+            {{/for}}
+        </table>
+    </div>
+</script>
+
 <script id="radioViewSettingsTemplate" type="text/x-jsrender" >
     <div id=radioSettings-0 class='radioSettingsChild detailField headerSection' onclick=viewRadioSettings() >
     <span id=radioSettingsMsg >Click to view Settings</span></div>

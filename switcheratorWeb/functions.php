@@ -41,6 +41,9 @@ function radioCommand($radioID, $command, $desiredLine = "", $shortResponse = 0)
     return false;
 }
 
+
+
+
 /* Get the information for the radio
  */
 
