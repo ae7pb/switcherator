@@ -118,6 +118,14 @@
                 <td class="left">{{:thirdLeft}}</td>
                 <td class="right">{{:thirdRight}}</td>
             </tr>
+            <tr class="detailTable switchHide switchFourthRow"  >
+                <td class="left">{{:fourthLeft}}</td>
+                <td class="right">
+                    <select id=brightness >
+                        {{for brightness}}<option value="{{:bright}}" >Brightness {{:bright}}</option>{{/for}}
+                    </select>
+                </td>
+            </tr>
             <tr class="detailTable switchLastRow"  >
                 <td class="left">{{:bottomLeft}}</td>
                 <td class="right">{{:bottomRight}}<span id=submitWait ><img src=img/loading.gif /></span></td>

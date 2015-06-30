@@ -212,15 +212,19 @@ function showRadioDetails(response) {
                     red = parseInt(radioColors[colorNum]["red"]);
                     green = parseInt(radioColors[colorNum]["green"]);
                     blue = parseInt(radioColors[colorNum]["blue"]);
-                    if (red < 75 || green < 75 || blue < 75)
-        textColor = "white";
-    switchColor = "#" + ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
-        ("0" + blue.toString(16)).substr(-2);
+                    if (red < 75 || green < 75 || blue < 75) {
+                        textColor = "white";
+                    }
+                    switchColor = "#" + ("0" + red.toString(16)).substr(-2) + ("0" + green.toString(16)).substr(-2) +
+                       ("0" + blue.toString(16)).substr(-2);
                 } else {
                     switchColor = wordsToTranslate.noColorSet;
                 }
                 switchArray.push({colorNum: colorNum, switchID: thisSwitch.id, switchNumber: thisSwitch.switchNumber,
                     switchPWM: thisSwitch.switchPWM, switchColor: switchColor, textColor: textColor, switchType: switchString});
+            } else if (switchStuff == 201) {
+                switchArray.push({switchType: switchString, switchID: thisSwitch.id, switchNumber: thisSwitch.switchNumber, 
+                    switchPWM: thisSwitch.switchPWM,});
             } else {
                 switchArray.push({switchType: switchString, switchID: thisSwitch.id, switchNumber: thisSwitch.switchNumber});
             }
@@ -956,8 +960,14 @@ function addEditSwitch(switchID) {
         {pinID: 1, pinValue: "high", selected: ''},
         {pinID: 0, pinValue: "low", selected: ''},
         ],
+        brightness: [
+        {bright: 16},{bright: 15},{bright: 14},{bright: 13},{bright: 12},{bright: 11},
+        {bright: 10},{bright: 9},{bright: 8},{bright: 7},{bright: 6},{bright: 5},
+        {bright: 4},{bright: 3},{bright: 2},{bright: 1},
+        ],
         thirdLeft: wordsToTranslate.colorChangeNumber,
         thirdRight: "<input id='switchPWMColor' onKeyDown=\"addEditSwitchSubmit(event,'" + switchID + "' )\" >",
+        fourthLeft: wordsToTranslate.brightnessMessage,
         bottomLeft: "&nbsp;",
         bottomRight: "<button onClick=addEditSwitchSubmit(event,'" + switchID + "') >Submit</button>",
         switchID: switchID,
@@ -976,6 +986,8 @@ function addEditSwitch(switchID) {
                 break;
             case 201: //hue
                 $("#switchType").val(2);
+                $(".switchFourthRow").show();
+                $("#brightness").val(switchPWM);
                 break;
             case 202: //color change
                 $("#switchType").val(3);
@@ -1012,6 +1024,10 @@ function changeSwitchData(data) {
             $(".switchHide").hide();
             $(".switchThirdRow").show();
             break;
+        case "2":
+            $(".switchHide").hide();
+            $(".switchFourthRow").show();
+            break;
         default:
             $(".switchHide").hide();
             break;
@@ -1034,6 +1050,10 @@ function addEditSwitchSubmit(event, switchID) {
     var switchType = $("#switchType").val();
     var radioCommand = "";
     var pwmColor = $("#switchPWMColor").val();
+    if(switchType == "2") {
+        pwmColor = $("#brightness").val();
+    }
+    switchID = ("00" + switchID).slice(-2);
     pwmColor = ("00" + pwmColor).slice(-2);
     radioCommand = "PS:" + pwmColor + switchID;
     switch (switchType) {
@@ -1051,7 +1071,6 @@ function addEditSwitchSubmit(event, switchID) {
             radioCommand = "NS:" + switchID + thisPortArray[$("#port").val()] + $("#pin").val() + $("#hiLo").val();
             break;
     }
-
     postRadioCommand(radioCommand, radioSettings.id);
 }
 
