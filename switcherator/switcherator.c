@@ -1159,9 +1159,12 @@ void runHueFunction(void) {
         blue = 0;
         currentHue = 0;
     }
-    Red = (red * 16 / hueBright);
-    Green = (green * 16 / hueBright);
-    Blue = (blue * 16 / hueBright);
+    red = (red * hueBright) / 16;
+    green = (green * hueBright) / 16;
+    blue = (blue * hueBright) / 16;
+    Red = red;
+    Green = green;
+    Blue = blue;
     currentHue++;
 }
 
