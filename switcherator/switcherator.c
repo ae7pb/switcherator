@@ -57,6 +57,10 @@ static char switchStuff[NUM_SWITCHES];
 // mean different colors.
 static char switchPWM[NUM_SWITCHES];
 
+// So the hue overrides the pwm so I want this to stop the hue when pwm is in use like an input
+static char PWMInUse;
+
+
 // strings
 static char radioReceiveBuffer[30];
 static char tempIntString[] = "00";
@@ -149,6 +153,8 @@ int main(void) {
     colorChangeSpeed = 10;
     tweakTimer = TIMER_TOTAL;
     switchPWMOverride = 99;
+    PWMInUse = 0;
+
 
     INDICATOR_DDR |= INDICATOR_PIN;
     for (x = 0; x < 4; x++) {
@@ -1080,6 +1086,10 @@ void runColorFunction(void) {
     if (colorChangeCount < colorChangeSpeed)
         return;
     int colorTimeouter = 0;
+    // do not override a pwm like an input
+    if(PWMInUse > 0) {
+        return;
+    }
     while (1) {
         colorChangeCount = 0;
         currentColor++;
@@ -1128,6 +1138,11 @@ void runHueFunction(void) {
     if (hueCount < hueSpeed) {
         return;
     }
+    // do not override a pwm like an input
+    if(PWMInUse > 0) {
+        return;
+    }
+    
     hueCount = 0;
     if (currentHue < 0x00ff) {
         red = 255;
@@ -2745,6 +2760,7 @@ void switchOnOff(void) {
                         Red = 0;
                         Green = 0;
                         Blue = 0;
+                        PWMInUse = 0;
                     } else if (switchStuff[x] == 201) {
                         Red = 0;
                         Green = 0;
@@ -2773,6 +2789,7 @@ void switchOnOff(void) {
                         Red = red;
                         Green = green;
                         Blue = blue;
+                        PWMInUse = 1;
                     } else if (switchStuff[x] == 202) {
                         runColorChanges = 1;
                     } else {
