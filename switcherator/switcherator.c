@@ -918,7 +918,7 @@ void pwmClear(int switchNumber) {
     runHue = 0;
     runColorChanges = 0;
     pwmIsSet = 0;
-
+    PWMInUse = 0;
 }
 
 // Sets up the direction of the pwm
