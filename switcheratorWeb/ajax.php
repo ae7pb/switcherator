@@ -92,6 +92,9 @@ function sendRadioCommand($command = "") {
     $response = radioCommand($radioID, $command,"ok");
     if ($response == false)
         return "Invalid command! $command<br>";
+    if(isset($_POST['save'])) {
+        radioCommand($radioID, "SA");
+    }
     return "ok";
 }
 

@@ -5,7 +5,10 @@
  * Creative Commons Attribution
  */
 
-
+/*
+ * TODO: Radio name entry doesn't disappear after radio added
+ * TODO: radio updates are not being saved
+ */
 
 
 /*
@@ -1856,7 +1859,8 @@ function postRadioCommand(radioCommand, radioID) {
     $.post("ajax.php?function=sendRadioCommand",
             {
                 radioID: radioID,
-        command: radioCommand,
+                command: radioCommand,
+                save: 1,
             }
             , function (data) {
                 $("#submitWait").hide();

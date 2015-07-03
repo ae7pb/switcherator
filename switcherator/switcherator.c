@@ -743,10 +743,13 @@ void startSwitch(char * commandReceived) {
             Red = red;
             Green = green;
             Blue = blue;
+            PWMInUse = 1;
         } else if (switchStuff[switchNumber] == 202) {
             runColorChanges = 1;
+            PWMInUse = 0;
         } else {
             runHue = 1;
+            hueBright = switchPWM[switchNumber];
         }
 
     } else {
@@ -2684,6 +2687,9 @@ void timerCheck(void) {
         if ((switchStatus[x] > 0) && (switchStatus[x] < weeklySeconds)) {
             switchChanged = 1;
             switchStatus[x] = 0;
+            if(switchStuff[x] == 200) {
+                PWMInUse = 0;
+            }
         }
     }
     // see if something should turn on
@@ -2795,6 +2801,7 @@ void switchOnOff(void) {
                     } else {
                         // get the hue cycle going
                         runHue = 1;
+                        hueBright = switchPWM[x];
                     }
                 }
                 continue;
