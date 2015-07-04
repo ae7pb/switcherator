@@ -236,9 +236,6 @@ int main(void) {
         if (runHue == 1 && immediateChange == 0) {
             runHueFunction();
         }
-        if (runColorChanges == 1 && immediateChange == 0) {
-            runColorFunction();
-        }
 
         // override for immediate change in color
         if (immediateChange > 0 && weeklySeconds > immediateChange) {
@@ -251,7 +248,7 @@ int main(void) {
             if (failCondition > 0) {
                 flashFail();
             }
-            if (runColorChanges == 1) {
+            if (runColorChanges == 1 && immediateChange == 0) {
                 runColorFunction();
             }
         }
